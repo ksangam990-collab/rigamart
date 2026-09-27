@@ -18,13 +18,14 @@ export default function Logo({
 }) {
   // Dimension scales
   const scales = {
-    sm: { height: 28, iconSize: 28, fullWidth: 130 },
-    md: { height: 36, iconSize: 36, fullWidth: 165 },
-    lg: { height: 44, iconSize: 44, fullWidth: 200 },
-    xl: { height: 52, iconSize: 52, fullWidth: 240 }
+    sm: { height: 26, iconSize: 26, fullWidth: 125, textClass: 'text-base', iconClass: 'w-6 h-6' },
+    md: { height: 36, iconSize: 36, fullWidth: 165, textClass: 'text-xl', iconClass: 'w-9 h-9' },
+    lg: { height: 44, iconSize: 44, fullWidth: 200, textClass: 'text-2xl', iconClass: 'w-11 h-11' },
+    xl: { height: 52, iconSize: 52, fullWidth: 240, textClass: 'text-3xl', iconClass: 'w-13 h-13' },
+    responsive: { height: 32, iconSize: 32, fullWidth: 150, textClass: 'text-lg sm:text-xl md:text-2xl', iconClass: 'w-7 h-7 sm:w-9 sm:h-9' }
   };
 
-  const currentScale = scales[size] || scales.md;
+  const currentScale = scales[size] || scales.responsive;
 
   // Color tokens
   const blueGradientStart = monochrome ? 'currentColor' : '#2563EB';
@@ -64,35 +65,19 @@ export default function Logo({
             <stop offset="0%" stopColor={blueGradientStart} />
             <stop offset="100%" stopColor={blueGradientEnd} />
           </linearGradient>
-          <linearGradient id={`${gradId}-saffron`} x1="16" y1="30" x2="30" y2="14" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor={saffronColor} />
-            <stop offset="100%" stopColor={saffronGradEnd} />
-          </linearGradient>
         </defs>
 
-        {/* Squircle App Icon Container */}
-        <rect width="40" height="40" rx="10.5" fill={`url(#${gradId}-bg)`} />
+        {/* Element 1: Royal Blue Squircle App Icon Container */}
+        <rect width="40" height="40" rx="10" fill={`url(#${gradId}-bg)`} />
 
-        {/* White R Stem */}
-        <rect x="9.5" y="9" width="4.8" height="22" rx="2.4" fill={rLetterColor} />
-
-        {/* White R Upper Loop */}
+        {/* Element 2: Solid White R Silhouette Glyph */}
         <path
-          d="M11.5 11.5H20.5C24.366 11.5 27.5 14.4101 27.5 18C27.5 21.5899 24.366 24.5 20.5 24.5H11.5"
-          stroke={rLetterColor}
-          strokeWidth="4.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          d="M11 9C11 7.9 11.9 7 13 7H23C27.4 7 31 10.4 31 14.8C31 18.5 28.5 21.6 25 22.4L31.2 31.6C31.8 32.5 31.1 33.7 30 33.7H25.5C24.8 33.7 24.2 33.3 23.8 32.7L18.5 23.5H16.5V32.5C16.5 33.3 15.8 34 15 34H12.5C11.7 34 11 33.3 11 32.5V9ZM16.5 18H22C24 18 25.5 16.5 25.5 14.7C25.5 12.9 24 11.4 22 11.4H16.5V18Z"
+          fill={rLetterColor}
         />
 
-        {/* Saffron Upward Pulse / Growth Arrow */}
-        <path
-          d="M15.5 30.5C18 30.5 20 28.5 22.5 24L28.5 14.5M28.5 14.5H22.5M28.5 14.5V20.5"
-          stroke={`url(#${gradId}-saffron)`}
-          strokeWidth="4.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        {/* Subtle Saffron Accent Spark */}
+        <circle cx="31.5" cy="8.5" r="3" fill={saffronColor} />
       </svg>
     );
   }
@@ -102,12 +87,10 @@ export default function Logo({
     <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
       {/* Icon Mark */}
       <svg
-        width={currentScale.iconSize}
-        height={currentScale.iconSize}
         viewBox="0 0 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="shrink-0 transition-transform duration-200 group-hover:scale-105"
+        className={`shrink-0 transition-transform duration-200 group-hover:scale-105 ${currentScale.iconClass}`}
         aria-hidden="true"
       >
         <defs>
@@ -115,34 +98,19 @@ export default function Logo({
             <stop offset="0%" stopColor={blueGradientStart} />
             <stop offset="100%" stopColor={blueGradientEnd} />
           </linearGradient>
-          <linearGradient id={`${gradId}-full-saffron`} x1="16" y1="30" x2="30" y2="14" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor={saffronColor} />
-            <stop offset="100%" stopColor={saffronGradEnd} />
-          </linearGradient>
         </defs>
 
-        <rect width="40" height="40" rx="10.5" fill={`url(#${gradId}-full-bg)`} />
-        <rect x="9.5" y="9" width="4.8" height="22" rx="2.4" fill={rLetterColor} />
+        <rect width="40" height="40" rx="10" fill={`url(#${gradId}-full-bg)`} />
         <path
-          d="M11.5 11.5H20.5C24.366 11.5 27.5 14.4101 27.5 18C27.5 21.5899 24.366 24.5 20.5 24.5H11.5"
-          stroke={rLetterColor}
-          strokeWidth="4.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          d="M11 9C11 7.9 11.9 7 13 7H23C27.4 7 31 10.4 31 14.8C31 18.5 28.5 21.6 25 22.4L31.2 31.6C31.8 32.5 31.1 33.7 30 33.7H25.5C24.8 33.7 24.2 33.3 23.8 32.7L18.5 23.5H16.5V32.5C16.5 33.3 15.8 34 15 34H12.5C11.7 34 11 33.3 11 32.5V9ZM16.5 18H22C24 18 25.5 16.5 25.5 14.7C25.5 12.9 24 11.4 22 11.4H16.5V18Z"
+          fill={rLetterColor}
         />
-        <path
-          d="M15.5 30.5C18 30.5 20 28.5 22.5 24L28.5 14.5M28.5 14.5H22.5M28.5 14.5V20.5"
-          stroke={`url(#${gradId}-full-saffron)`}
-          strokeWidth="4.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        <circle cx="31.5" cy="8.5" r="3" fill={saffronColor} />
       </svg>
 
       {/* Styled Wordmark */}
       <span
-        className="font-sans font-extrabold tracking-tight flex items-baseline"
-        style={{ fontSize: `${currentScale.height * 0.65}px`, lineHeight: 1 }}
+        className={`font-sans font-extrabold tracking-tight flex items-baseline leading-none ${currentScale.textClass}`}
       >
         <span style={{ color: wordmarkLeadColor }}>Riga</span>
         <span style={{ color: wordmarkTailColor }}>mart</span>

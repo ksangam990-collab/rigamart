@@ -56,7 +56,7 @@ export default function Navbar() {
           {/* Brand Logo */}
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center group">
-              <Logo variant="full" size="md" />
+              <Logo variant="full" size="responsive" />
             </Link>
           </div>
 
@@ -183,7 +183,7 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2">
                 <Link
                   to="/login"
                   className="px-3.5 py-1.5 text-sm font-semibold text-gray-700 hover:text-brand-600 transition-colors"
@@ -203,6 +203,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-gray-600 hover:text-gray-900 rounded-lg"
+              aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -228,6 +229,91 @@ export default function Navbar() {
             </button>
           </form>
         </div>
+
+        {/* Mobile Slide-Down Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-100 py-3 px-2 space-y-2 bg-white">
+            {isAuthenticated ? (
+              <div className="space-y-1">
+                <div className="px-3 py-2 bg-gray-50 rounded-lg">
+                  <div className="text-xs text-gray-500">Signed in as</div>
+                  <div className="text-sm font-semibold text-gray-900">{user?.name || user?.email}</div>
+                  <span className="inline-block mt-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-brand-50 text-brand-600">
+                    {user?.role}
+                  </span>
+                </div>
+                <Link
+                  to="/my-orders"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg"
+                >
+                  <Package className="w-4 h-4 text-gray-500" />
+                  My Orders
+                </Link>
+                {(user?.role === 'seller' || user?.role === 'admin') && (
+                  <Link
+                    to="/seller/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg"
+                  >
+                    <Store className="w-4 h-4 text-indigo-500" />
+                    Seller Dashboard
+                  </Link>
+                )}
+                {user?.role === 'admin' && (
+                  <Link
+                    to="/admin/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                    Admin Portal
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2 pt-1 pb-2">
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-center"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg transition-colors shadow-sm text-center"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+            <div className="border-t border-gray-100 pt-2 space-y-1 text-xs text-gray-600">
+              <Link
+                to="/catalog"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-1.5 hover:text-brand-600"
+              >
+                📦 Explore All Products
+              </Link>
+              <Link
+                to="/wishlist"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-1.5 hover:text-brand-600"
+              >
+                ❤️ Saved Wishlist ({wishlistCount})
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

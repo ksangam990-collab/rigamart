@@ -1,26 +1,17 @@
 <svg width="64" height="64" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="rm-fav-bg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+    <linearGradient id="rm-monolith-bg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#2563EB"/>
       <stop offset="100%" stop-color="#1D4ED8"/>
     </linearGradient>
-    <linearGradient id="rm-fav-saffron" x1="16" y1="30" x2="30" y2="14" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FF7A00"/>
-      <stop offset="100%" stop-color="#FF5400"/>
-    </linearGradient>
   </defs>
 
-  <!-- App Icon Squircle Container -->
-  <rect width="40" height="40" rx="10.5" fill="url(#rm-fav-bg)"/>
+  <!-- Element 1: Royal Blue Squircle -->
+  <rect width="40" height="40" rx="10" fill="url(#rm-monolith-bg)"/>
 
-  <!-- Pure White R Stem -->
-  <rect x="9.5" y="9" width="4.8" height="22" rx="2.4" fill="#FFFFFF"/>
+  <!-- Element 2: Solid White R Silhouette Glyph -->
+  <path d="M11 9C11 7.9 11.9 7 13 7H23C27.4 7 31 10.4 31 14.8C31 18.5 28.5 21.6 25 22.4L31.2 31.6C31.8 32.5 31.1 33.7 30 33.7H25.5C24.8 33.7 24.2 33.3 23.8 32.7L18.5 23.5H16.5V32.5C16.5 33.3 15.8 34 15 34H12.5C11.7 34 11 33.3 11 32.5V9ZM16.5 18H22C24 18 25.5 16.5 25.5 14.7C25.5 12.9 24 11.4 22 11.4H16.5V18Z" fill="#FFFFFF"/>
 
-  <!-- Pure White R Loop -->
-  <path d="M11.5 11.5H20.5C24.366 11.5 27.5 14.4101 27.5 18C27.5 21.5899 24.366 24.5 20.5 24.5H11.5" 
-        stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Indian Saffron Upward Growth Pulse Arrow -->
-  <path d="M15.5 30.5C18 30.5 20 28.5 22.5 24L28.5 14.5M28.5 14.5H22.5M28.5 14.5V20.5" 
-        stroke="url(#rm-fav-saffron)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Subtle Saffron Accent Spark -->
+  <circle cx="31.5" cy="8.5" r="3" fill="#FF7A00"/>
 </svg>
