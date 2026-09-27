@@ -2,8 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --brand-primary: #2563EB;
+  --brand-primary-dark: #1D4ED8;
+  --brand-saffron: #FF7A00;
+  --brand-saffron-hover: #EA580C;
+}
+
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gray-50 text-gray-900 font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
+

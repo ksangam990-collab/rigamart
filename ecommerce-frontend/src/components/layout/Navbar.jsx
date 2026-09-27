@@ -15,6 +15,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { logoutUser } from '../../features/auth/authSlice.js';
+import Logo from '../common/Logo.jsx';
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,13 +55,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Brand Logo */}
           <div className="flex items-center gap-6">
-            <Link to="/" className="flex items-center gap-2 group">
-              <span className="bg-brand-600 text-white font-extrabold text-xl w-9 h-9 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                R
-              </span>
-              <span className="text-2xl font-black tracking-tight text-gray-900 group-hover:text-brand-600 transition-colors">
-                RIGAMART
-              </span>
+            <Link to="/" className="flex items-center group">
+              <Logo variant="full" size="md" />
             </Link>
           </div>
 

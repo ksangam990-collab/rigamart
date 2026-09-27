@@ -1,10 +1,11 @@
 import React from 'react';
 import { ShieldCheck, Truck, RotateCcw, CreditCard } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Logo from '../common/Logo.jsx';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 text-sm mt-16 border-t border-gray-800">
+    <footer className="bg-gray-900 text-gray-300 text-sm mt-16 border-t border-gray-800 font-sans">
       {/* 4 E-Commerce Trust Badges */}
       <div className="border-b border-gray-800 py-8 bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
@@ -34,12 +35,17 @@ export default function Footer() {
       {/* Main Footer Links */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
         <div>
-          <h3 className="text-white font-bold text-sm tracking-wider uppercase mb-4">About Rigamart</h3>
+          <div className="mb-4">
+            <Logo variant="full" size="md" wordmarkColor="white" />
+          </div>
+          <p className="text-xs text-gray-400 mb-4 leading-relaxed">
+            India's trusted multi-vendor marketplace connecting millions of customers to verified sellers nationwide.
+          </p>
           <ul className="space-y-2 text-xs">
             <li><Link to="/" className="hover:text-white transition-colors">About Us</Link></li>
             <li><Link to="/" className="hover:text-white transition-colors">Careers</Link></li>
             <li><Link to="/" className="hover:text-white transition-colors">Press & Media</Link></li>
-            <li><Link to="/" className="hover:text-white transition-colors">Rigamart Wholesale</Link></li>
+            <li><Link to="/" className="hover:text-white transition-colors">Wholesale Program</Link></li>
           </ul>
         </div>
 
