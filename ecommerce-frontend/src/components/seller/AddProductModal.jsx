@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, Plus, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import api from '../../utils/api.js';
+import { modalBackdropVariants, modalContentVariants } from '../../utils/animations.js';
 
 export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
   const [categories, setCategories] = useState([]);
@@ -35,8 +37,6 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
         .catch(() => {});
     }
   }, [isOpen]);
-
-  if (!isOpen) return null;
 
   const handleAddVariant = () => {
     setVariants((prev) => [
@@ -123,14 +123,31 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative space-y-6 my-8">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
-        >
-          <X className="w-5 h-5" />
-        </button>
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <motion.div
+            variants={modalBackdropVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            onClick={onClose}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+          />
+          <motion.div
+            variants={modalContentVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative space-y-6 my-8 z-10"
+          >
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={onClose}
+              className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
 
         <div>
           <h2 className="text-xl font-black text-gray-900">List New Product on Rigamart</h2>
@@ -367,7 +384,9 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
             </button>
           </div>
         </form>
-      </div>
-    </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 }

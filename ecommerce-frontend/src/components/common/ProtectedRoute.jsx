@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
+import Logo from './Logo.jsx';
 
 /**
  * Route Guard for authenticated users with role-based access control
@@ -12,8 +13,11 @@ export default function ProtectedRoute({ children, allowedRoles }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+      <div className="min-h-[70vh] flex flex-col items-center justify-center bg-gray-50 gap-3">
+        <div className="w-10 h-10 animate-pulse">
+          <Logo variant="icon" size="sm" />
+        </div>
+        <span className="text-xs text-gray-400 font-medium">Verifying credentials...</span>
       </div>
     );
   }

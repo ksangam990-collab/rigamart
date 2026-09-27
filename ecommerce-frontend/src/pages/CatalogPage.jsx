@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Filter, SlidersHorizontal, ArrowUpDown, Loader2, Sparkles, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Filter, SlidersHorizontal, ArrowUpDown, Sparkles, X, ChevronRight } from 'lucide-react';
 import api from '../utils/api.js';
 import ProductCard from '../components/product/ProductCard.jsx';
+import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
+import {
+  staggerContainer,
+  staggerItem,
+  modalBackdropVariants
+} from '../utils/animations.js';
 
 export default function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -100,26 +107,27 @@ export default function CatalogPage() {
             )}
           </h1>
           <p className="text-xs text-gray-500 mt-1">
-            Showing {products.length} of {pagination.total} verified products
+            {isLoading ? 'Searching catalog...' : `Showing ${products.length} of ${pagination.total} verified products`}
           </p>
         </div>
 
         {/* Sort & Mobile Filter Toggle */}
         <div className="flex items-center gap-3">
-          <button
+          <motion.button
+            whileTap={{ scale: 0.94 }}
             onClick={() => setMobileFilterOpen(true)}
             className="lg:hidden px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors"
           >
             <Filter className="w-4 h-4" />
             Filters
-          </button>
+          </motion.button>
 
           <div className="flex items-center gap-2">
             <ArrowUpDown className="w-4 h-4 text-gray-400" />
             <select
               value={selectedSort}
               onChange={(e) => updateFilter('sort', e.target.value)}
-              className="bg-white border border-gray-200 text-xs font-semibold text-gray-700 py-2 px-3 rounded-lg outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+              className="bg-white border border-gray-200 text-xs font-semibold text-gray-700 py-2 px-3 rounded-lg outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all cursor-pointer"
             >
               <option value="newest">Newest Arrivals</option>
               <option value="price-asc">Price: Low to High</option>
@@ -151,10 +159,10 @@ export default function CatalogPage() {
           {/* Categories Filter */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 mb-3">Categories</h3>
-            <div className="space-y-1.5 max-h-56 overflow-y-auto pr-2">
+            <div className="space-y-1 max-h-60 overflow-y-auto pr-2">
               <button
                 onClick={() => updateFilter('category', '')}
-                className={`w-full text-left text-xs py-1 px-2 rounded-md font-medium transition-colors ${
+                className={`w-full text-left text-xs py-1.5 px-2 rounded-md font-medium transition-colors ${
                   !selectedCategory
                     ? 'bg-brand-50 text-brand-700 font-bold'
                     : 'text-gray-600 hover:bg-gray-100'
@@ -166,13 +174,13 @@ export default function CatalogPage() {
                 <button
                   key={c._id}
                   onClick={() => updateFilter('category', c.slug || c._id)}
-                  className={`w-full text-left text-xs py-1 px-2 rounded-md font-medium transition-colors flex items-center justify-between ${
+                  className={`w-full text-left text-xs py-1.5 px-2 rounded-md font-medium transition-colors truncate ${
                     selectedCategory === (c.slug || c._id)
                       ? 'bg-brand-50 text-brand-700 font-bold'
                       : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
-                  <span className="truncate">{c.name}</span>
+                  {c.name}
                 </button>
               ))}
             </div>
@@ -199,12 +207,13 @@ export default function CatalogPage() {
                   className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded text-xs outline-none focus:bg-white focus:border-brand-500"
                 />
               </div>
-              <button
+              <motion.button
+                whileTap={{ scale: 0.96 }}
                 type="submit"
                 className="w-full py-1.5 bg-gray-900 hover:bg-brand-600 text-white text-xs font-semibold rounded transition-colors"
               >
                 Apply Range
-              </button>
+              </motion.button>
             </form>
           </div>
 
@@ -232,109 +241,155 @@ export default function CatalogPage() {
         {/* Main Product Grid Column */}
         <main className="lg:col-span-3 space-y-8">
           {isLoading ? (
-            <div className="py-24 flex flex-col items-center justify-center gap-3">
-              <Loader2 className="w-10 h-10 animate-spin text-brand-600" />
-              <p className="text-xs text-gray-400 font-medium">Fetching verified catalog...</p>
+            /* Skeleton Loading Grid matching real layout */
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 p-8 space-y-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25 }}
+              className="text-center py-20 bg-white rounded-2xl border border-gray-200 p-8 space-y-4 shadow-sm"
+            >
               <div className="w-16 h-16 rounded-full bg-brand-50 text-brand-600 mx-auto flex items-center justify-center">
-                <Sparkles className="w-8 h-8" />
+                <Sparkles className="w-8 h-8 text-brand-600" />
               </div>
               <h3 className="text-lg font-bold text-gray-900">No matching products found</h3>
               <p className="text-xs text-gray-500 max-w-sm mx-auto">
                 We couldn't find any products matching your active filters or keywords. Try expanding your search or clearing filters.
               </p>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={clearAllFilters}
-                className="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg transition-colors"
+                className="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg transition-colors shadow-sm"
               >
                 Clear All Filters
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            /* Staggered Animated Products Grid */
+            <motion.div
+              variants={staggerContainer(0.04)}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6"
+            >
               {products.map((p) => (
-                <ProductCard key={p._id} product={p} />
+                <motion.div key={p._id} variants={staggerItem}>
+                  <ProductCard product={p} />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
           {/* Pagination Controls */}
           {pagination.pages > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-6 border-t border-gray-200">
-              <button
+            <div className="flex items-center justify-center gap-2 pt-6">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
                 disabled={pagination.page <= 1}
                 onClick={() => updateFilter('page', String(pagination.page - 1))}
-                className="px-3.5 py-2 border border-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-50 disabled:opacity-40"
+                className="px-3.5 py-2 border border-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-colors"
               >
                 Previous
-              </button>
+              </motion.button>
               <span className="text-xs font-bold text-gray-700 px-3">
                 Page {pagination.page} of {pagination.pages}
               </span>
-              <button
+              <motion.button
+                whileTap={{ scale: 0.95 }}
                 disabled={pagination.page >= pagination.pages}
                 onClick={() => updateFilter('page', String(pagination.page + 1))}
-                className="px-3.5 py-2 border border-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-50 disabled:opacity-40"
+                className="px-3.5 py-2 border border-gray-200 text-xs font-semibold rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-colors"
               >
                 Next
-              </button>
+              </motion.button>
             </div>
           )}
         </main>
       </div>
 
-      {/* Mobile Filters Drawer */}
-      {mobileFilterOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end">
-          <div className="bg-white w-full max-w-xs h-full p-6 space-y-6 overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-200">
-              <h2 className="text-base font-bold text-gray-900">Filters</h2>
-              <button onClick={() => setMobileFilterOpen(false)}>
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-            </div>
+      {/* Mobile Filters Drawer with Smooth AnimatePresence */}
+      <AnimatePresence>
+        {mobileFilterOpen && (
+          <div className="fixed inset-0 z-50 flex justify-end">
+            {/* Backdrop */}
+            <motion.div
+              variants={modalBackdropVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              onClick={() => setMobileFilterOpen(false)}
+              className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+            />
 
-            <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">Category</h3>
-              <div className="space-y-1">
-                <button
-                  onClick={() => {
-                    updateFilter('category', '');
-                    setMobileFilterOpen(false);
-                  }}
-                  className="w-full text-left text-xs py-1.5 font-medium"
-                >
-                  All Categories
-                </button>
-                {categories.map((c) => (
+            {/* Sliding Panel */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+              className="relative bg-white w-full max-w-xs h-full p-6 space-y-6 overflow-y-auto shadow-2xl z-10"
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-gray-200">
+                <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4 text-brand-600" />
+                  Filters
+                </h2>
+                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setMobileFilterOpen(false)}>
+                  <X className="w-5 h-5 text-gray-500" />
+                </motion.button>
+              </div>
+
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">Category</h3>
+                <div className="space-y-1">
                   <button
-                    key={c._id}
                     onClick={() => {
-                      updateFilter('category', c.slug || c._id);
+                      updateFilter('category', '');
                       setMobileFilterOpen(false);
                     }}
-                    className="w-full text-left text-xs py-1.5 font-medium text-gray-700 truncate"
+                    className={`w-full text-left text-xs py-2 px-2 rounded-md font-medium ${
+                      !selectedCategory ? 'bg-brand-50 text-brand-700 font-bold' : 'text-gray-700'
+                    }`}
                   >
-                    {c.name}
+                    All Categories
                   </button>
-                ))}
+                  {categories.map((c) => (
+                    <button
+                      key={c._id}
+                      onClick={() => {
+                        updateFilter('category', c.slug || c._id);
+                        setMobileFilterOpen(false);
+                      }}
+                      className={`w-full text-left text-xs py-2 px-2 rounded-md font-medium truncate ${
+                        selectedCategory === (c.slug || c._id) ? 'bg-brand-50 text-brand-700 font-bold' : 'text-gray-700'
+                      }`}
+                    >
+                      {c.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <button
-              onClick={() => {
-                clearAllFilters();
-                setMobileFilterOpen(false);
-              }}
-              className="w-full py-2 bg-gray-100 text-gray-700 text-xs font-bold rounded-lg"
-            >
-              Reset Filters
-            </button>
+              <motion.button
+                whileTap={{ scale: 0.96 }}
+                onClick={() => {
+                  clearAllFilters();
+                  setMobileFilterOpen(false);
+                }}
+                className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold rounded-xl transition-colors"
+              >
+                Reset All Filters
+              </motion.button>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }

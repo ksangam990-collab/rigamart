@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Star, ThumbsUp, CheckCircle, MessageSquare, AlertCircle, Loader2, X } from 'lucide-react';
 import api from '../../utils/api.js';
 import RatingStars from '../common/RatingStars.jsx';
+import { modalBackdropVariants, modalContentVariants } from '../../utils/animations.js';
 
 export default function ReviewSection({ productId, initialRating = 0, initialNumReviews = 0 }) {
   const [reviews, setReviews] = useState([]);
@@ -101,7 +103,9 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
           <p className="text-xs text-gray-500 mt-1">Verified feedback from real Rigamart buyers</p>
         </div>
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
           onClick={() => {
             if (!isAuthenticated) {
               window.location.href = '/login';
@@ -112,7 +116,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
           className="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all self-start md:self-auto"
         >
           Write a Customer Review
-        </button>
+        </motion.button>
       </div>
 
       {/* Ratings Breakdown Grid */}
@@ -138,9 +142,11 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                   {starLevel} <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                 </span>
                 <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-amber-400 rounded-full transition-all duration-500"
-                    style={{ width: `${percentage}%` }}
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${percentage}%` }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    className="h-full bg-amber-400 rounded-full"
                   />
                 </div>
                 <span className="w-10 text-right text-gray-500 font-mono">{percentage}%</span>
@@ -151,21 +157,24 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
       </div>
 
       {/* Reviews List */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         {isLoading ? (
           <div className="py-12 flex justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
+            <div className="w-8 h-8 border-2 border-brand-600 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : reviews.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-xl border border-gray-100 p-8">
-            <p className="text-gray-500 text-sm">No reviews yet for this product.</p>
+          <div className="text-center py-12 bg-white rounded-2xl border border-gray-100 p-8 shadow-xs">
+            <p className="text-gray-500 text-sm font-medium">No reviews yet for this product.</p>
             <p className="text-xs text-gray-400 mt-1">Be the first to share your thoughts with the community!</p>
           </div>
         ) : (
           reviews.map((rev) => (
-            <div
+            <motion.div
               key={rev._id}
-              className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-3"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25 }}
+              className="bg-white p-6 rounded-2xl border border-gray-100 shadow-xs space-y-3"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
@@ -200,111 +209,140 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{rev.body}</p>
 
               <div className="pt-2 flex items-center justify-between">
-                <button
+                <motion.button
+                  whileTap={{ scale: 0.92 }}
                   onClick={() => handleHelpfulVote(rev._id)}
                   className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-brand-600 transition-colors p-1"
                 >
                   <ThumbsUp className="w-3.5 h-3.5" />
                   <span>Helpful ({typeof rev.helpfulVotes === 'number' ? rev.helpfulVotes : 0})</span>
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
           ))
         )}
       </div>
 
-      {/* Review Submission Modal Dialog */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 relative">
-            <button
+      {/* Review Submission Modal Dialog with AnimatePresence */}
+      <AnimatePresence>
+        {modalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              variants={modalBackdropVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            />
+
+            <motion.div
+              variants={modalContentVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 relative z-10"
             >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div>
-              <h3 className="text-lg font-black text-gray-900">Write a Review</h3>
-              <p className="text-xs text-gray-500 mt-1">Rate your experience with this item</p>
-            </div>
-
-            {formError && (
-              <div className="flex items-center gap-2 p-3 bg-red-50 text-red-700 text-xs rounded-lg border border-red-200">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{formError}</span>
-              </div>
-            )}
-
-            {formSuccess && (
-              <div className="flex items-center gap-2 p-3 bg-emerald-50 text-emerald-700 text-xs rounded-lg border border-emerald-200">
-                <CheckCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{formSuccess}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmitReview} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                  Overall Rating
-                </label>
-                <RatingStars
-                  rating={rating}
-                  interactive={true}
-                  onRatingChange={(newVal) => setRating(newVal)}
-                  size="w-7 h-7"
-                />
-              </div>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setModalOpen(false)}
+                className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </motion.button>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                  Review Headline / Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Excellent fabric quality and perfect fit!"
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-brand-500 focus:bg-white"
-                />
+                <h3 className="text-lg font-black text-gray-900 tracking-tight">Write a Review</h3>
+                <p className="text-xs text-gray-500 mt-1">Rate your experience with this item</p>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                  Review Description
-                </label>
-                <textarea
-                  required
-                  rows={4}
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  placeholder="Tell others what you liked or disliked about this product..."
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-brand-500 focus:bg-white"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 border border-gray-200 text-gray-700 font-semibold text-xs rounded-lg hover:bg-gray-50"
+              {formError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2 p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg shadow-sm flex items-center gap-2 disabled:opacity-50"
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{formError}</span>
+                </motion.div>
+              )}
+
+              {formSuccess && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-2 p-3 bg-emerald-50 text-emerald-700 text-xs rounded-xl border border-emerald-200"
                 >
-                  {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                  Submit Review
-                </button>
-              </div>
-            </form>
+                  <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{formSuccess}</span>
+                </motion.div>
+              )}
+
+              <form onSubmit={handleSubmitReview} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+                    Overall Rating
+                  </label>
+                  <RatingStars
+                    rating={rating}
+                    interactive={true}
+                    onRatingChange={(newVal) => setRating(newVal)}
+                    size="w-7 h-7"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+                    Review Headline / Title
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="e.g. Excellent fabric quality and perfect fit!"
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-brand-500 focus:bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+                    Review Description
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    placeholder="Tell others what you liked or disliked about this product..."
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-brand-500 focus:bg-white"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setModalOpen(false)}
+                    className="px-4 py-2 border border-gray-200 text-gray-700 font-semibold text-xs rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg shadow-sm flex items-center gap-2 disabled:opacity-50 transition-all"
+                  >
+                    {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    Submit Review
+                  </motion.button>
+                </div>
+              </form>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }

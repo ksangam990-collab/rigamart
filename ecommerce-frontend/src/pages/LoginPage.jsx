@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 import { Mail, Lock, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
 import { loginUser, clearError } from '../features/auth/authSlice.js';
+import Logo from '../components/common/Logo.jsx';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -28,20 +30,29 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-100 p-8 space-y-6">
+      <motion.div
+        initial={{ opacity: 0, y: 16, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-100 p-8 space-y-6"
+      >
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-50 text-brand-600 font-extrabold text-2xl mb-3 shadow-inner">
-            R
+          <div className="flex justify-center mb-3">
+            <Logo variant="icon" size="lg" />
           </div>
           <h2 className="text-2xl font-black text-gray-900 tracking-tight">Welcome Back</h2>
           <p className="text-sm text-gray-500 mt-1">Sign in to manage orders, wishlist & addresses</p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2 p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg"
+          >
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
-          </div>
+          </motion.div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -79,7 +90,9 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={isLoading}
             className="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
@@ -95,7 +108,7 @@ export default function LoginPage() {
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
-          </button>
+          </motion.button>
         </form>
 
         <div className="text-center pt-2 text-xs text-gray-500">
@@ -104,7 +117,7 @@ export default function LoginPage() {
             Create an account
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

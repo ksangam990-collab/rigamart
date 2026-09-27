@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Heart, Star, ShoppingCart } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Star, ShoppingCart, Check } from 'lucide-react';
 import { toggleWishlist } from '../../features/wishlist/wishlistSlice.js';
 import { addToCart } from '../../features/cart/cartSlice.js';
+import { heartBounceVariants } from '../../utils/animations.js';
 
 export default function ProductCard({ product }) {
+  const [justAdded, setJustAdded] = useState(false);
+  const [heartAnim, setHeartAnim] = useState('idle');
+
   const dispatch = useDispatch();
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -24,6 +29,8 @@ export default function ProductCard({ product }) {
       window.location.href = '/login';
       return;
     }
+    setHeartAnim('active');
+    setTimeout(() => setHeartAnim('idle'), 350);
     dispatch(toggleWishlist(product._id));
   };
 
@@ -43,6 +50,8 @@ export default function ProductCard({ product }) {
           quantity: 1
         })
       );
+      setJustAdded(true);
+      setTimeout(() => setJustAdded(false), 1400);
     }
   };
 
@@ -61,19 +70,22 @@ export default function ProductCard({ product }) {
   const isOutOfStock = totalStock <= 0;
 
   return (
-    <div className="group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
+    <motion.div
+      whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] } }}
+      className="group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden"
+    >
       {/* Product Image & Badges */}
       <Link to={`/products/${product._id}`} className="relative block aspect-square bg-gray-50 overflow-hidden">
         <img
           src={primaryImage}
           alt={product.name}
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover object-center group-hover:scale-106 transition-transform duration-500 ease-out"
           loading="lazy"
         />
 
         {/* Discount Badge */}
         {discountPercent > 0 && (
-          <span className="absolute top-2.5 left-2.5 bg-emerald-600 text-white text-[11px] font-bold px-2 py-0.5 rounded shadow-sm">
+          <span className="absolute top-2.5 left-2.5 bg-emerald-600 text-white text-[11px] font-black px-2 py-0.5 rounded shadow-sm">
             {discountPercent}% OFF
           </span>
         )}
@@ -87,22 +99,25 @@ export default function ProductCard({ product }) {
           </div>
         )}
 
-        {/* Wishlist Button */}
-        <button
+        {/* Wishlist Button with Heart Bounce */}
+        <motion.button
           onClick={handleWishlistToggle}
+          variants={heartBounceVariants}
+          animate={heartAnim}
+          whileTap={{ scale: 0.85 }}
           aria-label={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-          className={`absolute top-2.5 right-2.5 p-2 rounded-full backdrop-blur-md shadow-md transition-all ${
+          className={`absolute top-2.5 right-2.5 p-2 rounded-full backdrop-blur-md shadow-md transition-colors ${
             isWishlisted
               ? 'bg-rose-50 text-rose-600'
-              : 'bg-white/80 hover:bg-white text-gray-500 hover:text-rose-500'
+              : 'bg-white/85 hover:bg-white text-gray-500 hover:text-rose-500'
           }`}
         >
           <Heart
-            className={`w-4 h-4 transition-transform active:scale-125 ${
+            className={`w-4 h-4 transition-colors ${
               isWishlisted ? 'fill-rose-500 text-rose-500' : ''
             }`}
           />
-        </button>
+        </motion.button>
       </Link>
 
       {/* Product Information */}
@@ -154,16 +169,44 @@ export default function ProductCard({ product }) {
           </div>
 
           {!isOutOfStock && (
-            <button
+            <motion.button
               onClick={handleQuickAdd}
-              title="Quick Add to Cart"
-              className="p-2 bg-brand-50 hover:bg-brand-600 text-brand-600 hover:text-white rounded-lg transition-colors shadow-sm"
+              whileTap={{ scale: 0.88 }}
+              whileHover={{ scale: 1.05 }}
+              title={justAdded ? 'Added to Cart' : 'Quick Add to Cart'}
+              className={`p-2 rounded-lg transition-colors shadow-sm flex items-center justify-center ${
+                justAdded
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-brand-50 hover:bg-brand-600 text-brand-600 hover:text-white'
+              }`}
             >
-              <ShoppingCart className="w-4 h-4" />
-            </button>
+              <AnimatePresence mode="wait">
+                {justAdded ? (
+                  <motion.div
+                    key="check"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <Check className="w-4 h-4" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="cart"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
