@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from './features/auth/authSlice.js';
@@ -8,6 +8,7 @@ import { fetchWishlist } from './features/wishlist/wishlistSlice.js';
 import Layout from './components/layout/Layout.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import PublicRoute from './components/common/PublicRoute.jsx';
+import Logo from './components/common/Logo.jsx';
 
 import HomePage from './pages/HomePage.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
@@ -16,11 +17,24 @@ import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import UnauthorizedPage from './pages/UnauthorizedPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
-import MyOrdersPage from './pages/MyOrdersPage.jsx';
 import CartPage from './pages/CartPage.jsx';
 import WishlistPage from './pages/WishlistPage.jsx';
-import SellerDashboardPage from './pages/SellerDashboardPage.jsx';
-import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
+
+// Code-split dynamic routes
+const MyOrdersPage = lazy(() => import('./pages/MyOrdersPage.jsx'));
+const SellerDashboardPage = lazy(() => import('./pages/SellerDashboardPage.jsx'));
+const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage.jsx'));
+
+function RouteLoadingFallback({ message = 'Loading...' }) {
+  return (
+    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
+      <div className="w-10 h-10 animate-pulse">
+        <Logo variant="icon" size="sm" />
+      </div>
+      <span className="text-xs text-gray-400 font-medium tracking-wide">{message}</span>
+    </div>
+  );
+}
 
 export default function App() {
   const dispatch = useDispatch();
@@ -73,7 +87,9 @@ export default function App() {
             path="my-orders"
             element={
               <ProtectedRoute>
-                <MyOrdersPage />
+                <Suspense fallback={<RouteLoadingFallback message="Loading your orders..." />}>
+                  <MyOrdersPage />
+                </Suspense>
               </ProtectedRoute>
             }
           />
@@ -99,7 +115,9 @@ export default function App() {
             path="seller/dashboard"
             element={
               <ProtectedRoute allowedRoles={['seller', 'admin']}>
-                <SellerDashboardPage />
+                <Suspense fallback={<RouteLoadingFallback message="Opening Seller Central..." />}>
+                  <SellerDashboardPage />
+                </Suspense>
               </ProtectedRoute>
             }
           />
@@ -109,7 +127,9 @@ export default function App() {
             path="admin/dashboard"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboardPage />
+                <Suspense fallback={<RouteLoadingFallback message="Opening Admin Moderation..." />}>
+                  <AdminDashboardPage />
+                </Suspense>
               </ProtectedRoute>
             }
           />

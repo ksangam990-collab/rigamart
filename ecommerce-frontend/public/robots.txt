@@ -1,0 +1,8 @@
+# Rigamart robots.txt
+User-agent: *
+Allow: /
+Disallow: /seller/
+Disallow: /admin/
+Disallow: /my-orders
+Disallow: /cart
+Disallow: /wishlist
