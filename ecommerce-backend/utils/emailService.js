@@ -122,8 +122,8 @@ const buildEmailTemplate = (contentHtml, headerTitle = 'Rigamart Notification') 
       ${contentHtml}
     </div>
     <div class="footer">
-      <p style="margin: 0 0 8px 0;">Need help with your order? Contact <a href="mailto:support@rigamart.com" style="color: #1d4ed8; text-decoration: none;">support@rigamart.com</a></p>
-      <p style="margin: 0;">&copy; ${new Date().getFullYear()} Rigamart Online Services Pvt Ltd. All rights reserved.</p>
+      <p style="margin: 0 0 8px 0;">Rigamart Demonstration Project &bull; Automated test notification</p>
+      <p style="margin: 0;">&copy; ${new Date().getFullYear()} Rigamart Demo Store &bull; Portfolio Project</p>
     </div>
   </div>
 </body>

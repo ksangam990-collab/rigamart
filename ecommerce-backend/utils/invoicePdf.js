@@ -24,8 +24,8 @@ const generateInvoicePdf = (order, writableStream) => {
         .fontSize(9)
         .font('Helvetica')
         .fillColor('#6b7280')
-        .text("India's Premier Multi-Vendor E-Commerce Platform", 50, 72)
-        .text('GSTIN: 29AABCR1234F1Z5 | support@rigamart.com', 50, 84);
+        .text('Full-Stack Portfolio Project Demonstration', 50, 72)
+        .text('GSTIN: [DEMO-PLACEHOLDER] | Sample Tax Invoice', 50, 84);
 
       const formatDate = (date) => {
         if (!date) return 'N/A';

@@ -9,144 +9,112 @@ const SECTIONS = [
     id: 'acceptance',
     title: 'Acceptance of Terms',
     content: `
-By accessing or using the Rigamart platform (available at rigamart.com and associated mobile applications), you confirm that you have read, understood, and agree to be bound by these Terms of Service ("Terms") and our Privacy Policy.
+By accessing or using the Rigamart demonstration platform, you confirm that you understand this application is an educational, full-stack portfolio showcase.
 
-If you do not agree with any part of these Terms, you must immediately discontinue use of the platform. These Terms constitute a legally binding agreement between you and Rigamart Online Services Pvt. Ltd. ("Rigamart", "we", "our", or "us").
+These Terms of Service provide an illustrative framework demonstrating standard e-commerce governance, user account rules, and multi-vendor agreements.
 
-We reserve the right to update or modify these Terms at any time without prior notice. Continued use of the platform after any such changes constitutes acceptance of the new Terms. We will make reasonable efforts to notify registered users of material changes via email.
-
-You must be at least 18 years of age to use this platform. By using Rigamart, you represent and warrant that you meet this age requirement.
+If you do not agree with any part of these demonstration terms, you may discontinue use of the platform at any time.
     `.trim(),
   },
   {
     id: 'accounts',
     title: 'User Accounts',
     content: `
-To access most features of Rigamart, you must create an account. You agree to:
+To test features of Rigamart, you can create a test account. In this environment:
 
-**Accurate Information:** Provide truthful, accurate, and current information during registration and keep your profile updated at all times.
+**Accurate Information:** You can use simulated credentials or test emails for registration.
 
-**Account Security:** Maintain the confidentiality of your login credentials. You are solely responsible for all activities that occur under your account. Notify us immediately at support@rigamart.com if you suspect any unauthorised access.
+**Account Security:** Maintain your test credentials responsibly. In this demonstration, mock sessions are authenticated via JWT tokens.
 
-**Single Account:** Each individual may maintain only one buyer account. Sellers may maintain one seller account in addition to a buyer account, subject to our Seller Program terms.
+**Role Testing:** Users can register as Customers or Sellers to test their respective workflows and access the dedicated dashboards.
 
-**No Transfer:** Your account is personal to you and may not be sold, transferred, or assigned to another party.
-
-We reserve the right to suspend or terminate accounts that violate these Terms, engage in fraudulent activity, or remain inactive for more than 24 consecutive months.
+**Data Resets:** Test accounts and sample order histories in this database are periodically reset or re-seeded.
     `.trim(),
   },
   {
     id: 'seller-terms',
     title: 'Seller Terms',
     content: `
-By joining the Rigamart Seller Program, you agree to the following additional obligations:
+The Rigamart Seller Program simulates a multi-vendor marketplace model:
 
-**Product Authenticity:** You warrant that all products listed on Rigamart are genuine, accurately described, legally owned by you, and fit for their intended purpose. Listing counterfeit, illegal, or prohibited goods is strictly forbidden and may result in immediate account termination and legal action.
+**Product Listings:** Demo sellers can create products, configure variant SKUs (size, color, price, stock), and upload imagery via Cloudinary.
 
-**Accurate Listings:** Product titles, descriptions, images, and prices must accurately represent the item being sold. Misleading listings are a violation of these Terms.
+**Order Processing:** Sellers receive simulated orders and can update dispatch and delivery statuses in real time.
 
-**Order Fulfilment:** You are obligated to fulfil all accepted orders within the dispatch timeframe specified during listing. Repeated cancellations or non-fulfilment may result in account penalties.
+**Commission & Pricing:** Platform commission calculations and payout schedules shown in the seller portal are architectural models for demonstration.
 
-**Commission & Payouts:** Rigamart charges a platform commission on each successful sale. Payout rates and schedules are defined in the Seller Commission Schedule, which may be updated periodically. Payouts are released 7 days after delivery confirmation.
-
-**Tax Compliance:** Sellers are independently responsible for collecting and remitting GST and any other applicable taxes. Rigamart may collect GST on its commission as required by law.
+**Sandbox Environment:** All financial tracking reflects test transactions and does not represent real monetary earnings or liability.
     `.trim(),
   },
   {
     id: 'buyer-terms',
     title: 'Buyer Terms',
     content: `
-As a buyer on Rigamart, you agree to the following:
+As a simulated buyer on Rigamart:
 
-**Accurate Delivery Information:** You are responsible for providing a complete and correct delivery address. Rigamart and its logistics partners cannot be held liable for failed deliveries caused by incorrect address information.
+**Delivery Addresses:** You can create and manage test delivery addresses within your profile to test the checkout address selector.
 
-**Payment Obligations:** By placing an order, you authorise the total amount (including applicable taxes and delivery charges) to be charged to your selected payment method. In case of payment failure, your order will not be processed.
+**Simulated Payment:** Checkout utilizes Razorpay in Test Mode or simulated Cash on Delivery. No actual charges are made to any real bank account or credit card.
 
-**Return Policy Compliance:** Returns must be initiated within the 7-day return window and must meet the eligibility criteria defined in our Returns Policy. Abuse of the return system (e.g., wardrobing, returning used items as unused) may result in account restrictions.
+**Order Tracking:** Live order updates (Placed, Confirmed, Shipped, Delivered) demonstrate real-time status transitions.
 
-**Reviews & Feedback:** Product reviews must be genuine, based on your own experience, and free from offensive or defamatory language. Fake reviews, whether positive or negative, are prohibited.
-
-Rigamart is a marketplace platform. While we verify sellers, we are not the direct seller of most items. Liability for product quality rests primarily with the listing seller.
+**Returns Simulation:** The 7-day return request workflow illustrates customer return management and inventory restock logic.
     `.trim(),
   },
   {
     id: 'prohibited',
     title: 'Prohibited Activities',
     content: `
-You agree not to engage in any of the following activities while using Rigamart:
+When interacting with this demonstration platform, users agree not to:
 
-- Listing, selling, or promoting counterfeit, stolen, or illegal goods
-- Using automated bots, scrapers, or scripts to access the platform without written permission
-- Attempting to reverse-engineer, decompile, or access the platform's source code
-- Manipulating product reviews, seller ratings, or order counts through artificial means
-- Impersonating any person, business, or Rigamart employee
-- Engaging in phishing, spreading malware, or attempting to compromise user accounts
-- Using the platform to launder money or conduct fraudulent transactions
-- Circumventing or attempting to bypass our payment or commission systems by conducting transactions off-platform
-- Sending unsolicited commercial messages (spam) to other users
+- Attempt denial-of-service or destructive attacks against the demonstration infrastructure
+- Inject malicious payloads, SQL/NoSQL injection vectors, or unauthorized scripts
+- Attempt to harvest or scrape sensitive data from other demonstration test accounts
+- Exploit test API endpoints for unintended automated spamming
 
-Violations may result in immediate account suspension, permanent banning, and civil or criminal legal proceedings.
+Violations may result in IP-level blocking and account suspension.
     `.trim(),
   },
   {
     id: 'ip',
-    title: 'Intellectual Property',
+    title: 'Open Source & Intellectual Property',
     content: `
-**Rigamart's Content:** All content on the Rigamart platform — including logos, brand marks, UI design, software, text, and original photography — is the exclusive intellectual property of Rigamart Online Services Pvt. Ltd. and is protected under Indian and international copyright law.
+**Demonstration Codebase:** The Rigamart application is an open-source demonstration project published for educational and portfolio evaluation purposes.
 
-**Seller Content:** By uploading product images, descriptions, and other content to Rigamart, you grant us a non-exclusive, royalty-free, worldwide license to display, reproduce, and distribute that content for the purpose of operating and marketing the platform.
+**Third-Party Marks:** Any trademarks, product brand names, or logos referenced within sample seed data remain the property of their respective trademark owners and are used strictly as illustrative placeholders.
 
-**User-Generated Content:** Reviews, ratings, and comments submitted by users are licensed to Rigamart under the same terms. You represent that you have the right to submit such content.
-
-**Restrictions:** You may not copy, reproduce, distribute, publish, or create derivative works from any Rigamart content without explicit written permission. Unauthorised use constitutes copyright infringement.
-
-Rigamart respects third-party intellectual property rights. If you believe your copyrighted work has been infringed on our platform, contact us at legal@rigamart.com.
+**Source Repository:** Full source code and documentation are available on GitHub under standard open-source licensing.
     `.trim(),
   },
   {
     id: 'liability',
-    title: 'Limitation of Liability',
+    title: 'Disclaimer of Liability',
     content: `
-To the fullest extent permitted by applicable law, Rigamart, its directors, employees, and affiliates shall not be liable for:
+Rigamart is provided strictly on an "as is" and "as available" basis for technical evaluation and portfolio demonstration:
 
-- Any indirect, incidental, special, consequential, or punitive damages arising from your use of the platform
-- Loss of profits, revenue, data, goodwill, or other intangible losses
-- Damages arising from unauthorised access to or alteration of your transmissions or data
-- Conduct or content of third parties, including sellers and delivery partners, on the platform
-
-In no event shall Rigamart's total cumulative liability to you exceed the total amount paid by you for transactions processed through the platform in the three (3) months preceding the event giving rise to the claim.
-
-These limitations apply regardless of the legal theory on which the claim is based, whether contract, tort, negligence, or any other basis, even if Rigamart has been advised of the possibility of such damages.
+- This application is not a licensed commercial business entity.
+- The developers make no warranties, express or implied, regarding commercial merchantability or uninterrupted service availability.
+- No commercial transactions, binding legal sales, or physical deliveries take place through this application.
     `.trim(),
   },
   {
     id: 'governing-law',
-    title: 'Governing Law',
+    title: 'Project Governance',
     content: `
-These Terms shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law provisions.
+This project is governed as an open-source technical demonstration.
 
-Any disputes arising under these Terms shall be subject to the exclusive jurisdiction of the courts of Bengaluru, Karnataka, India.
+For inquiries, feature requests, or technical bug reports, please submit an issue through the GitHub repository.
 
-**Dispute Resolution:** Before initiating any legal proceedings, you agree to first attempt to resolve any dispute informally by contacting our support team at support@rigamart.com. We will make reasonable efforts to resolve disputes within 30 days.
-
-If informal resolution fails, disputes shall be resolved through binding arbitration under the Arbitration and Conciliation Act, 1996, with the seat of arbitration in Bengaluru, Karnataka.
-
-These Terms do not affect any statutory rights you may have as a consumer under applicable Indian law, including under the Consumer Protection Act, 2019.
+**Repository:** https://github.com/ksangam990-collab/rigamart
     `.trim(),
   },
   {
     id: 'changes',
     title: 'Changes to Terms',
     content: `
-Rigamart reserves the right to modify these Terms of Service at any time at our sole discretion.
+These demonstration terms may be updated as the underlying portfolio architecture evolves.
 
-**Notification:** For material changes, we will provide at least 14 days' prior notice via email to your registered email address, or by displaying a prominent notice on the platform.
-
-**Continued Use:** Your continued use of Rigamart following the effective date of any changes constitutes your binding acceptance of the updated Terms. If you do not agree to the updated Terms, you must stop using the platform and may request account deletion.
-
-**Versioning:** The current version of these Terms is always available at rigamart.com/terms. We recommend reviewing this page periodically.
-
-These Terms were last updated in **September 2026**.
+These terms were last updated in **September 2026**.
     `.trim(),
   },
 ];
@@ -244,6 +212,24 @@ export default function TermsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Demonstration Disclaimer Alert Banner */}
+        <div className="mb-8 p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs sm:text-sm leading-relaxed">
+          <strong className="block text-sm font-bold text-amber-900 mb-1">
+            ⚠️ Demonstration Project Notice (Not Legal Advice)
+          </strong>
+          <p className="text-gray-700">
+            Rigamart is an educational, non-commercial portfolio project. Third-party integrations in this demo are limited to:
+          </p>
+          <ul className="list-disc pl-5 mt-1.5 space-y-0.5 text-gray-700">
+            <li><strong>Razorpay:</strong> Running exclusively in test/sandbox mode (no real money transactions).</li>
+            <li><strong>Cloudinary:</strong> Used for hosting uploaded product photos.</li>
+            <li><strong>Gmail SMTP:</strong> Used for sending transactional test notifications.</li>
+          </ul>
+          <p className="mt-2 text-gray-600 text-xs">
+            This page is an illustrative template for demonstration completeness and does not constitute a binding legal policy.
+          </p>
+        </div>
+
         <div className="flex gap-10 items-start">
           {/* ── Sticky Left Nav (desktop) ───────────────────────────────── */}
           <nav

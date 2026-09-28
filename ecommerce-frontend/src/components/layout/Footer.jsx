@@ -81,18 +81,16 @@ export default function Footer() {
             India's trusted multi-vendor marketplace connecting millions of customers to verified sellers nationwide.
           </p>
 
-          {/* Social icons with functional destinations */}
+          {/* Portfolio Repository Link */}
           <div className="flex items-center gap-2 mb-4">
-            <SocialButton label="LinkedIn" href="https://www.linkedin.com/company/rigamart">in</SocialButton>
-            <SocialButton label="Facebook" href="https://www.facebook.com/rigamart">f</SocialButton>
-            <SocialButton label="Instagram" href="https://www.instagram.com/rigamart">@</SocialButton>
+            <SocialButton label="GitHub Repository" href="https://github.com/ksangam990-collab/rigamart">gh</SocialButton>
           </div>
 
           <ul className="space-y-2 text-xs">
             <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-            <li><Link to="/about#team" className="hover:text-white transition-colors">Meet the Team</Link></li>
-            <li><Link to="/about#careers" className="hover:text-white transition-colors">Careers</Link></li>
-            <li><Link to="/about#press" className="hover:text-white transition-colors">Press &amp; Media</Link></li>
+            <li><Link to="/about#architecture" className="hover:text-white transition-colors">Architecture</Link></li>
+            <li><Link to="/help" className="hover:text-white transition-colors">Help Center &amp; FAQs</Link></li>
+            <li><Link to="/sell" className="hover:text-white transition-colors">Sell on Rigamart</Link></li>
           </ul>
         </div>
 
@@ -121,14 +119,14 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 4 — Office */}
+        {/* Column 4 — Project Notice */}
         <div>
-          <h3 className="text-white font-bold text-xs sm:text-sm tracking-wider uppercase mb-4">Registered Office</h3>
+          <h3 className="text-white font-bold text-xs sm:text-sm tracking-wider uppercase mb-4">Project Notice</h3>
           <p className="text-xs text-gray-400 leading-relaxed">
-            Rigamart Online Services Pvt. Ltd.<br />
-            Buildings Alyssa, Begonia &amp; Clove Embassy Tech Village,<br />
-            Outer Ring Road, Bengaluru - 560103, Karnataka, India<br />
-            <span className="font-mono text-[10px] text-gray-500">CIN: U51109KA2025PTC123456</span>
+            Rigamart is an educational, full-stack multi-vendor e-commerce demonstration engineered with React, Redux, Node.js, and MongoDB.
+          </p>
+          <p className="text-[11px] text-amber-400/90 mt-2 font-medium">
+            Portfolio Demonstration &bull; Not a commercial business
           </p>
         </div>
       </div>

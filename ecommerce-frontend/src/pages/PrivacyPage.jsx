@@ -9,124 +9,99 @@ const SECTIONS = [
     id: 'data-collect',
     title: 'Data We Collect',
     content: `
-When you use Rigamart, we collect certain information to provide and improve our services. The categories of data we collect include:
+When you test the Rigamart demonstration, we collect certain information to support simulated shopping and seller features:
 
-**Account Information:** When you register, we collect your name, email address, mobile number, and password (stored as a bcrypt hash — never in plain text).
+**Account Information:** When you register, we collect a display name, test email address, mobile number, and password (hashed with bcrypt).
 
-**Order & Transaction Data:** We store details of purchases, returns, and refund transactions associated with your account to fulfil orders and resolve disputes.
+**Order & Transaction Data:** We store mock purchase records, simulated delivery statuses, and test payment references to demonstrate the fulfillment pipeline.
 
-**Device & Usage Data:** We automatically collect device identifiers, IP address, browser type, operating system, pages visited, and interaction timestamps to monitor platform health and improve user experience.
+**Media & Product Listings:** Sellers can upload product photography stored securely on Cloudinary.
 
-**Location Data:** We collect your delivery address and, with your explicit permission, approximate location to provide delivery estimates and suggest nearby sellers.
-
-**Communications:** If you contact our support team via email or chat, we retain those records to provide context in future interactions.
-
-We do not collect sensitive personal data such as government IDs, caste, religion, or biometric data.
+**Session Identifiers:** We use standard authentication tokens (JWT in secure cookies or headers) to persist session state between requests.
     `.trim(),
   },
   {
     id: 'how-use',
-    title: 'How We Use Your Data',
+    title: 'How Data is Handled',
     content: `
-We use the information we collect only for the following purposes:
+Information collected in this demonstration application is used solely for project functionality:
 
-**Order Fulfilment:** Processing payments, coordinating with delivery partners, and notifying you of order status updates.
+**Simulated Checkout:** Creating mock orders, calculating price breakdowns (tax, shipping), and tracking order statuses.
 
-**Platform Personalisation:** Recommending products based on browse and purchase history to surface items most relevant to you.
+**Seller Catalog Tools:** Storing product records, sizes, color variants, and stock counts.
 
-**Security & Fraud Prevention:** Detecting unusual activity patterns, verifying seller identities, and protecting your account from unauthorised access.
+**Transactional Test Alerts:** Generating mock order confirmation and status update emails via Gmail SMTP.
 
-**Legal Compliance:** Meeting obligations under the Information Technology Act, 2000 and other applicable Indian laws and regulations.
-
-**Marketing (opt-in only):** Sending promotional emails, deal alerts, or notifications — but only if you have explicitly opted in. You can unsubscribe at any time.
-
-We will never sell your data to third parties for their own marketing purposes.
+As an educational portfolio demonstration, data submitted is stored in a test database and not utilized for commercial marketing.
     `.trim(),
   },
   {
     id: 'sharing',
-    title: 'Data Sharing & Third Parties',
+    title: 'Third-Party Services & Integrations',
     content: `
-Rigamart shares your data with trusted third parties only when necessary to provide our services:
+This demonstration platform integrates with the following external services:
 
-**Delivery Partners:** Your name, phone number, and delivery address are shared with our logistics partners (e.g., Delhivery, DTDC) solely for order delivery.
+**Razorpay (Sandbox / Test Mode):** Processes test transactions using simulated UPI and card credentials. No real funds are transferred or processed.
 
-**Payment Processors:** Order amount and transaction identifiers are shared with Razorpay under their PCI-DSS Level 1 compliant infrastructure. We do not share full card or UPI details.
+**Cloudinary CDN:** Hosts and delivers uploaded product catalog images.
 
-**Cloud Infrastructure:** We use cloud servers (hosted in India) to store data. Our hosting providers are contractually bound to keep your data confidential.
+**Gmail SMTP / Nodemailer:** Delivers automated transaction test notification emails to registered test accounts.
 
-**Legal Authorities:** We may disclose your data when required by law, court order, or to prevent fraud or illegal activity.
-
-All third-party data sharing agreements include appropriate confidentiality and data protection clauses.
+**MongoDB Atlas:** Provides managed database storage for user accounts, products, reviews, and order records.
     `.trim(),
   },
   {
     id: 'cookies',
-    title: 'Cookies',
+    title: 'Cookies & Storage',
     content: `
-We use cookies and similar tracking technologies to improve your experience on Rigamart.
+We use essential cookies and browser storage strictly required for application functionality:
 
-**Essential Cookies:** Required for the platform to function — these include your session authentication token (stored as a secure, HttpOnly cookie) and cart state.
+**Authentication Tokens:** Secure tokens stored to authenticate API requests for customer, seller, and admin routes.
 
-**Analytics Cookies:** We use privacy-respecting analytics tools to understand aggregated usage patterns, such as popular search terms and high-traffic pages. These do not identify you individually.
+**Local State:** Cart items and interface preferences stored locally in memory and browser state.
 
-**Preference Cookies:** Used to remember your saved preferences such as currency, region, or display settings.
-
-You can manage cookie preferences via your browser settings. Note that disabling essential cookies will prevent you from logging in or completing purchases.
-
-We do not use cross-site tracking cookies or sell data to advertising networks.
+We do not embed third-party advertising tracking cookies or ad networks.
     `.trim(),
   },
   {
     id: 'security',
-    title: 'Data Security',
+    title: 'Technical Security Measures',
     content: `
-We take the security of your personal data seriously and implement the following technical safeguards:
+We implement modern security best practices across the application architecture:
 
-**Encryption in Transit:** All communication between your browser and our servers is encrypted via TLS 1.3. HTTP connections are automatically redirected to HTTPS.
+**Password Hashing:** Passwords are never stored in plain text and are hashed with bcrypt.
 
-**Encryption at Rest:** Sensitive database fields (e.g., OTP tokens, session identifiers) are encrypted at rest using AES-256.
+**Role-Based Access Control:** API routes enforce strict role checks (Customer, Seller, Admin) to prevent unauthorized access.
 
-**Password Hashing:** Passwords are never stored in plain text. We use bcrypt with a minimum cost factor of 12.
+**Sanitization & Validation:** Request inputs are validated and sanitized to guard against injection attacks.
 
-**Access Controls:** Data access within our team is role-restricted on a need-to-know basis. All access to production data is logged and audited.
-
-**Incident Response:** In the event of a data breach affecting your personal data, we will notify you within 72 hours in accordance with applicable regulations.
-
-Despite these measures, no system is completely secure. We encourage you to use a strong, unique password and enable two-factor authentication when available.
+**Signature Verification:** Razorpay payment webhooks and capture callbacks require cryptographic HMAC SHA-256 signature verification.
     `.trim(),
   },
   {
     id: 'rights',
-    title: 'Your Rights',
+    title: 'Your Rights & Data Access',
     content: `
-As a user of Rigamart, you have the following rights regarding your personal data:
+As a demonstration user of Rigamart, you have full control over the test data associated with your session:
 
-**Access:** You may request a copy of the personal data we hold about you at any time by contacting support@rigamart.com.
+**Access & Correction:** You can view and modify your name, mobile number, and delivery addresses at any time directly through your My Profile dashboard.
 
-**Correction:** If any of your data is inaccurate or incomplete, you can update it directly from your profile settings or request a correction from our team.
+**Deletion:** You can reset demo accounts or re-register at any time. Test database records are periodically refreshed.
 
-**Deletion:** You may request the deletion of your account and associated personal data. We will process such requests within 7 business days, subject to legal retention requirements.
-
-**Data Portability:** You may request an export of your order history and account data in a machine-readable format (JSON/CSV).
-
-**Opt-Out:** You may opt out of marketing communications at any time by clicking 'Unsubscribe' in any promotional email or updating your notification preferences in Account Settings.
-
-To exercise any of these rights, email us at support@rigamart.com with the subject line 'Data Rights Request'.
+**Order History:** Your placed test orders, tracking logs, and sample invoice PDFs can be downloaded directly from the My Orders and Order Detail views.
     `.trim(),
   },
   {
     id: 'contact',
-    title: 'Contact Us',
+    title: 'Project Contact',
     content: `
-If you have any questions about this Privacy Policy or how we handle your personal data, you can reach our Data Protection team at:
+Rigamart is an open-source demonstration application built for portfolio showcase purposes.
 
-**Email:** privacy@rigamart.com
-**Postal Address:** Data Protection Officer, Rigamart Online Services Pvt. Ltd., Buildings Alyssa, Begonia & Clove, Embassy Tech Village, Outer Ring Road, Bengaluru – 560103, Karnataka, India.
+For questions, code review, or technical inquiries regarding this implementation, please visit the project repository on GitHub:
 
-We aim to respond to all privacy-related queries within 5 business days.
+**Repository:** https://github.com/ksangam990-collab/rigamart
 
-This Privacy Policy was last updated on **September 2026** and supersedes all previous versions. We reserve the right to update this policy at any time; material changes will be communicated to registered users via email.
+This demonstration policy was last updated in **September 2026**.
     `.trim(),
   },
 ];
@@ -138,6 +113,20 @@ function RenderContent({ text }) {
   return (
     <div className="space-y-4">
       {paragraphs.map((para, i) => {
+        // Handle bullet lists
+        if (para.startsWith('- ')) {
+          const items = para.split('\n').filter((l) => l.startsWith('- '));
+          return (
+            <ul key={i} className="list-disc list-inside space-y-1.5 pl-2">
+              {items.map((item, j) => (
+                <li key={j} className="text-sm text-gray-600 leading-relaxed">
+                  {item.slice(2)}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        // Bold replacement
         const parts = para.split(/(\*\*[^*]+\*\*)/g);
         return (
           <p key={i} className="text-sm text-gray-600 leading-relaxed">
@@ -212,6 +201,24 @@ export default function PrivacyPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Demonstration Disclaimer Alert Banner */}
+        <div className="mb-8 p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs sm:text-sm leading-relaxed">
+          <strong className="block text-sm font-bold text-amber-900 mb-1">
+            ⚠️ Demonstration Project Notice (Not Legal Advice)
+          </strong>
+          <p className="text-gray-700">
+            Rigamart is an educational, non-commercial portfolio project. Third-party integrations in this demo are limited to:
+          </p>
+          <ul className="list-disc pl-5 mt-1.5 space-y-0.5 text-gray-700">
+            <li><strong>Razorpay:</strong> Running exclusively in test/sandbox mode (no real money transactions).</li>
+            <li><strong>Cloudinary:</strong> Used for hosting uploaded product photos.</li>
+            <li><strong>Gmail SMTP:</strong> Used for sending transactional test notifications.</li>
+          </ul>
+          <p className="mt-2 text-gray-600 text-xs">
+            This page is an illustrative template for demonstration completeness and does not constitute a binding legal policy.
+          </p>
+        </div>
+
         <div className="flex gap-10 items-start">
           {/* ── Sticky Left Nav (desktop) ───────────────────────────────── */}
           <nav

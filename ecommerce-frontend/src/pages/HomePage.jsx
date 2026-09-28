@@ -11,8 +11,7 @@ import {
   CheckCircle2,
   Truck,
   RotateCcw,
-  CreditCard,
-  Star
+  CreditCard
 } from 'lucide-react';
 import api from '../utils/api.js';
 import ProductCard from '../components/product/ProductCard.jsx';
@@ -318,105 +317,6 @@ export default function HomePage() {
           )}
         </motion.section>
       )}
-
-      {/* ── Section B: Customers Love – Static Testimonials ──────────────────── */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.4 }}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-      >
-        {/* Section Header */}
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-black text-gray-900 tracking-tight">
-            What Our Community Says
-          </h2>
-          <p className="text-gray-500 text-xs sm:text-sm mt-2 max-w-lg mx-auto">
-            Real experiences from buyers and sellers across India — unfiltered, unsponsored.
-          </p>
-        </div>
-
-        <motion.div
-          variants={staggerContainer(0.08)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {/* Testimonial 1 */}
-          <motion.div
-            variants={staggerItem}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4 flex flex-col"
-          >
-            <div className="flex items-center gap-0.5" aria-label="5 out of 5 stars">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-              ))}
-            </div>
-            <blockquote className="text-sm text-gray-700 leading-relaxed flex-1">
-              "Finally a marketplace that actually ships what's shown. Got my Puma sneakers in 2 days — brand new, sealed box!"
-            </blockquote>
-            <div className="flex items-center justify-between pt-3 border-t border-gray-50">
-              <div>
-                <div className="text-sm font-bold text-gray-900">Ravi K.</div>
-                <div className="text-xs text-gray-400">Bengaluru</div>
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
-                Verified Buyer
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Testimonial 2 */}
-          <motion.div
-            variants={staggerItem}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4 flex flex-col"
-          >
-            <div className="flex items-center gap-0.5" aria-label="5 out of 5 stars">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-              ))}
-            </div>
-            <blockquote className="text-sm text-gray-700 leading-relaxed flex-1">
-              "The seller dashboard is absolutely fantastic. I went from zero to ₹80,000 monthly revenue in 3 months selling ethnic wear."
-            </blockquote>
-            <div className="flex items-center justify-between pt-3 border-t border-gray-50">
-              <div>
-                <div className="text-sm font-bold text-gray-900">Priya M.</div>
-                <div className="text-xs text-gray-400">Jaipur</div>
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700 bg-brand-50 border border-brand-100 px-2 py-0.5 rounded-full">
-                Verified Seller
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Testimonial 3 */}
-          <motion.div
-            variants={staggerItem}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4 flex flex-col"
-          >
-            <div className="flex items-center gap-0.5" aria-label="5 out of 5 stars">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-              ))}
-            </div>
-            <blockquote className="text-sm text-gray-700 leading-relaxed flex-1">
-              "Razorpay checkout is seamless — UPI worked instantly. Returned a defective item and got full refund in 4 hours. This is how it should work."
-            </blockquote>
-            <div className="flex items-center justify-between pt-3 border-t border-gray-50">
-              <div>
-                <div className="text-sm font-bold text-gray-900">Arjun T.</div>
-                <div className="text-xs text-gray-400">Mumbai</div>
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
-                Verified Buyer
-              </span>
-            </div>
-          </motion.div>
-        </motion.div>
-      </motion.section>
     </div>
   );
 }

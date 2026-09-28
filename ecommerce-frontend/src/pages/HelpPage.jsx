@@ -41,7 +41,7 @@ const FAQ_SECTIONS = [
       },
       {
         q: 'What if my order is delayed?',
-        a: "If your order crosses the expected delivery date, reach out to our support team at support@rigamart.com and we'll resolve it within 24 hours.",
+        a: 'This is a demonstration project — for simulated orders, review the real-time status timeline on your My Orders page.',
       },
     ],
   },
@@ -98,7 +98,7 @@ const FAQ_SECTIONS = [
       },
       {
         q: 'How do I delete my account?',
-        a: "Email our support team at support@rigamart.com with the subject 'Account Deletion Request'. We process all requests within 7 business days.",
+        a: 'In this demonstration project, test accounts can be reset or re-registered anytime through the database seed scripts.',
       },
     ],
   },
@@ -302,15 +302,17 @@ export default function HelpPage() {
                 <MessageCircle className="w-6 h-6" />
               </div>
             </div>
-            <h3 className="font-bold text-gray-900 text-lg mb-2">Still have questions?</h3>
+            <h3 className="font-bold text-gray-900 text-lg mb-2">Have questions about this project?</h3>
             <p className="text-sm text-gray-500 mb-4">
-              Our support team responds to all queries within 24 hours.
+              Rigamart is an open-source demonstration application. Explore the source code or report issues on GitHub.
             </p>
             <a
-              href="mailto:support@rigamart.com"
+              href="https://github.com/ksangam990-collab/rigamart"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-brand-700 transition-colors"
             >
-              Email us at support@rigamart.com
+              View on GitHub
             </a>
           </motion.div>
         </div>

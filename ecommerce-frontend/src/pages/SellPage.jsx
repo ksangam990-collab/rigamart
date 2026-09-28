@@ -33,8 +33,8 @@ const BENEFITS = [
   },
   {
     icon: Globe,
-    title: '28-State Reach',
-    desc: 'Nationwide delivery logistics handled for you.',
+    title: 'Multi-Vendor Logistics',
+    desc: 'Automated tracking and simulated delivery status pipeline.',
     color: 'text-brand-600 bg-brand-50',
   },
   {
@@ -45,20 +45,20 @@ const BENEFITS = [
   },
   {
     icon: Wallet,
-    title: 'Razorpay Payouts',
-    desc: 'Fast, reliable payouts directly to your bank account.',
+    title: 'Razorpay Integration',
+    desc: 'Test mode payment flow and settlement tracking architecture.',
     color: 'text-amber-600 bg-amber-50',
   },
   {
     icon: Headphones,
-    title: 'Dedicated Support',
-    desc: 'Priority seller support 7 days a week.',
+    title: 'Support Channels',
+    desc: 'Built-in notification alerts and order inquiry management.',
     color: 'text-rose-600 bg-rose-50',
   },
   {
     icon: BadgeCheck,
     title: 'Buyer Trust Signals',
-    desc: 'Our verification badges build instant buyer confidence.',
+    desc: 'Verification badges build instant buyer confidence.',
     color: 'text-teal-600 bg-teal-50',
   },
 ];
@@ -74,14 +74,14 @@ export default function SellPage() {
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/5 blur-2xl" aria-hidden="true" />
         <div className="absolute -bottom-16 -left-16 w-72 h-72 rounded-full bg-indigo-400/10 blur-2xl" aria-hidden="true" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 text-center">
           <motion.span
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
             className="inline-block text-xs font-semibold tracking-widest uppercase bg-white/15 border border-white/25 rounded-full px-4 py-1.5 mb-6"
           >
-            Seller Program
+            Seller Architecture Demo
           </motion.span>
 
           <motion.h1
@@ -91,7 +91,7 @@ export default function SellPage() {
             custom={{ delay: 0.08 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 max-w-3xl mx-auto"
           >
-            Reach Crores of Customers.{' '}
+            Multi-Vendor Architecture.{' '}
             <span className="text-amber-400">Sell on Rigamart.</span>
           </motion.h1>
 
@@ -102,7 +102,7 @@ export default function SellPage() {
             custom={{ delay: 0.16 }}
             className="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Join 840+ verified sellers already growing their business on India's most transparent multi-vendor marketplace.
+            Explore seller onboarding, catalog creation, SKU variant management, and live order tracking.
           </motion.p>
 
           <motion.div
@@ -150,7 +150,7 @@ export default function SellPage() {
               aria-hidden="true"
             />
 
-            {STEPS.map((step, idx) => (
+            {STEPS.map((step) => (
               <motion.div key={step.num} variants={staggerItem} className="text-center relative">
                 <div className="w-20 h-20 rounded-full bg-brand-600 text-white flex items-center justify-center mx-auto mb-6 shadow-lg ring-4 ring-brand-100">
                   <span className="text-2xl font-black">{step.num}</span>
@@ -173,8 +173,8 @@ export default function SellPage() {
             viewport={{ once: true, margin: '-60px' }}
             className="text-center mb-12"
           >
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">Everything You Need to Succeed</h2>
-            <p className="mt-3 text-gray-500 max-w-lg mx-auto">Built for Indian sellers — from first-time entrepreneurs to established businesses.</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">Platform Capabilities</h2>
+            <p className="mt-3 text-gray-500 max-w-lg mx-auto">Engineered to support modern e-commerce workflows and vendor independence.</p>
           </motion.div>
 
           <motion.div
@@ -207,106 +207,69 @@ export default function SellPage() {
         </div>
       </section>
 
-      {/* ── Testimonial ──────────────────────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            className="bg-brand-50 border border-brand-100 rounded-2xl p-8 sm:p-10 text-center shadow-sm"
-          >
-            <div className="text-5xl mb-4" aria-hidden="true">❝</div>
-            <blockquote className="text-lg sm:text-xl text-gray-800 font-medium leading-relaxed mb-6">
-              I was selling from a tiny store in Jaipur. Within 6 months on Rigamart, my monthly revenue crossed{' '}
-              <span className="text-brand-600 font-bold">₹1.5 lakh</span>. The seller dashboard is better than anything
-              I've used before.
-            </blockquote>
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-amber-400 flex items-center justify-center text-white font-bold text-sm">
-                PM
-              </div>
-              <div className="text-left">
-                <p className="font-bold text-gray-900 text-sm">Priya M.</p>
-                <p className="text-xs text-gray-500">Ethnic Fashion Seller, Jaipur</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* ── Partner Programs: Wholesale, Supply Chain, Affiliate, Advertising ──────────────── */}
-      <section className="py-20 bg-gray-50 border-t border-gray-100">
+      <section className="py-20 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">Partner &amp; Enterprise Programs</h2>
-            <p className="mt-2 text-sm text-gray-500">Accelerate your business with Rigamart's integrated commercial ecosystem.</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">Marketplace Service Concepts</h2>
+            <p className="mt-2 text-sm text-gray-500">Illustrative marketplace extensions designed for this demonstration architecture.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Wholesale */}
-            <div id="wholesale" className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
+            <div id="wholesale" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
+              <span className="text-[10px] font-bold text-amber-700 bg-amber-100/70 border border-amber-200 px-2.5 py-0.5 rounded-full inline-block">
+                Concept — Not available in this demo
+              </span>
               <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
                 <PackageCheck className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900">Wholesale &amp; B2B Sourcing</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Connect directly with certified manufacturers for bulk inventory. Enjoy volume-tiered pricing, GST input tax credit invoices, and credit terms for qualified buyers.
+                Connect directly with certified manufacturers for bulk inventory. Volume-tiered pricing, GST input tax credit invoices, and credit terms for qualified buyers.
               </p>
-              <div className="pt-2">
-                <a href="mailto:wholesale@rigamart.com?subject=Wholesale%20Inquiry" className="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1">
-                  Contact Wholesale Desk &rarr;
-                </a>
-              </div>
             </div>
 
             {/* Supply Chain */}
-            <div id="supply-chain" className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
+            <div id="supply-chain" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
+              <span className="text-[10px] font-bold text-blue-700 bg-blue-100/70 border border-blue-200 px-2.5 py-0.5 rounded-full inline-block">
+                Concept — Not available in this demo
+              </span>
               <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                 <Truck className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900">Supply Chain &amp; Fulfillment Hub</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Plug your inventory into Rigamart's automated logistics network. We partner with India's leading 3PL couriers to provide pan-India doorstep pick-up, automated tracking, and RTO reduction.
+                Plug your inventory into Rigamart's automated logistics network. Doorstep pick-up, automated tracking, and RTO reduction workflows.
               </p>
-              <div className="pt-2">
-                <a href="mailto:logistics@rigamart.com?subject=Supply%20Chain%20Partnership" className="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1">
-                  Explore Logistics Integration &rarr;
-                </a>
-              </div>
             </div>
 
             {/* Affiliate */}
-            <div id="affiliate" className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
+            <div id="affiliate" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-block">
+                Concept — Not available in this demo
+              </span>
               <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                 <Sparkles className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900">Affiliate &amp; Creator Program</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Earn competitive commissions (up to 8%) by sharing curated Rigamart product links with your audience. Access real-time analytics, automated payouts, and exclusive campaign banners.
+                Earn commissions by sharing curated Rigamart product links with your audience. Access real-time analytics, automated payouts, and campaign assets.
               </p>
-              <div className="pt-2">
-                <a href="mailto:affiliates@rigamart.com?subject=Affiliate%20Program" className="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1">
-                  Apply for Affiliate Access &rarr;
-                </a>
-              </div>
             </div>
 
             {/* Advertise */}
-            <div id="advertise" className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
+            <div id="advertise" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
+              <span className="text-[10px] font-bold text-purple-700 bg-purple-100/70 border border-purple-200 px-2.5 py-0.5 rounded-full inline-block">
+                Concept — Not available in this demo
+              </span>
               <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
                 <Megaphone className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-gray-900">Brand Advertising &amp; Sponsored Ads</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Put your products at the top of category searches and buyer feeds. Rigamart Sponsored Listings deliver measurable ROI with keyword targeting and transparent CPC analytics.
+                Put products at the top of category searches and buyer feeds with keyword targeting and transparent CPC analytics.
               </p>
-              <div className="pt-2">
-                <a href="mailto:ads@rigamart.com?subject=Advertising%20Inquiry" className="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1">
-                  Launch Ad Campaign &rarr;
-                </a>
-              </div>
             </div>
           </div>
         </div>
@@ -322,10 +285,10 @@ export default function SellPage() {
             viewport={{ once: true, margin: '-60px' }}
           >
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-              Ready to Start Your Journey?
+              Ready to Explore Seller Features?
             </h2>
             <p className="text-blue-100 mb-8 max-w-lg mx-auto">
-              It takes less than 5 minutes to set up your seller account. No credit card required.
+              Register a demo seller account to test product creation and dashboard metrics.
             </p>
             <motion.div whileHover={buttonHover} whileTap={buttonTap} className="inline-block">
               <Link
