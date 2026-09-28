@@ -22,8 +22,18 @@ import WishlistPage from './pages/WishlistPage.jsx';
 
 // Code-split dynamic routes
 const MyOrdersPage = lazy(() => import('./pages/MyOrdersPage.jsx'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage.jsx'));
+const OrderDetailPage = lazy(() => import('./pages/OrderDetailPage.jsx'));
 const SellerDashboardPage = lazy(() => import('./pages/SellerDashboardPage.jsx'));
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage.jsx'));
+
+// Static / marketing pages (code-split)
+const AboutPage = lazy(() => import('./pages/AboutPage.jsx'));
+const HelpPage = lazy(() => import('./pages/HelpPage.jsx'));
+const SellPage = lazy(() => import('./pages/SellPage.jsx'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage.jsx'));
+const TermsPage = lazy(() => import('./pages/TermsPage.jsx'));
+
 
 function RouteLoadingFallback({ message = 'Loading...' }) {
   return (
@@ -64,6 +74,48 @@ export default function App() {
           <Route path="products/:id" element={<ProductDetailPage />} />
           <Route path="unauthorized" element={<UnauthorizedPage />} />
 
+          {/* Static / Marketing Routes */}
+          <Route
+            path="about"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading..." />}>
+                <AboutPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="help"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading Help Center..." />}>
+                <HelpPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="sell"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading..." />}>
+                <SellPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="privacy"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading..." />}>
+                <PrivacyPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="terms"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading..." />}>
+                <TermsPage />
+              </Suspense>
+            }
+          />
+
           {/* Guest Auth Routes */}
           <Route
             path="login"
@@ -89,6 +141,26 @@ export default function App() {
               <ProtectedRoute>
                 <Suspense fallback={<RouteLoadingFallback message="Loading your orders..." />}>
                   <MyOrdersPage />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<RouteLoadingFallback message="Loading your profile..." />}>
+                  <ProfilePage />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="orders/:id"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<RouteLoadingFallback message="Loading order details..." />}>
+                  <OrderDetailPage />
                 </Suspense>
               </ProtectedRoute>
             }

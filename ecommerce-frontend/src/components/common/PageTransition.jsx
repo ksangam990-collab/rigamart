@@ -12,8 +12,21 @@ export default function PageTransition({ children, className = '' }) {
   const variants = shouldReduceMotion ? pageVariantsReduced : pageVariants;
 
   useEffect(() => {
-    // Scroll window to top smoothly when page changes
-    window.scrollTo({ top: 0, left: 0, behavior: shouldReduceMotion ? 'auto' : 'instant' });
+    if (window.location.hash) {
+      const targetId = window.location.hash.replace('#', '');
+      const scrollToElement = () => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: shouldReduceMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+      };
+      // Try immediate and with slight delay for dynamic mounts
+      scrollToElement();
+      const timer = setTimeout(scrollToElement, 150);
+      return () => clearTimeout(timer);
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: shouldReduceMotion ? 'auto' : 'instant' });
+    }
   }, [shouldReduceMotion]);
 
   return (

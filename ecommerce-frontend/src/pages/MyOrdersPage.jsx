@@ -188,7 +188,12 @@ export default function MyOrdersPage() {
                 <div className="flex flex-wrap items-center gap-6 text-xs">
                   <div>
                     <span className="text-gray-400 block uppercase font-bold text-[10px]">Order ID</span>
-                    <span className="font-mono font-bold text-gray-800">#{order._id.slice(-8)}</span>
+                    <Link
+                      to={`/orders/${order._id}`}
+                      className="font-mono font-bold text-brand-600 hover:text-brand-700 hover:underline transition-colors"
+                    >
+                      #{order._id.slice(-8)}
+                    </Link>
                   </div>
                   <div>
                     <span className="text-gray-400 block uppercase font-bold text-[10px]">Placed On</span>
@@ -214,6 +219,14 @@ export default function MyOrdersPage() {
 
                 <div className="flex items-center gap-3">
                   {getStatusBadge(order.status)}
+
+                  <Link
+                    to={`/orders/${order._id}`}
+                    className="text-xs font-bold text-brand-600 hover:text-brand-700 hover:underline transition-colors flex items-center gap-1"
+                    aria-label={`View details for order ${order._id.slice(-8)}`}
+                  >
+                    View Details <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
 
                   <motion.button
                     whileHover={{ scale: 1.04 }}

@@ -20,7 +20,10 @@ import { toggleWishlist } from '../features/wishlist/wishlistSlice.js';
 import VariantSelector from '../components/product/VariantSelector.jsx';
 import ReviewSection from '../components/review/ReviewSection.jsx';
 import RatingStars from '../components/common/RatingStars.jsx';
-import { heartBounceVariants } from '../utils/animations.js';
+import ProductCard from '../components/product/ProductCard.jsx';
+import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
+import Breadcrumb from '../components/common/Breadcrumb.jsx';
+import { heartBounceVariants, staggerContainer, staggerItem } from '../utils/animations.js';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -35,6 +38,8 @@ export default function ProductDetailPage() {
   const [addingToCart, setAddingToCart] = useState(false);
   const [addedToast, setAddedToast] = useState(false);
   const [heartAnim, setHeartAnim] = useState('idle');
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [relatedLoading, setRelatedLoading] = useState(false);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const wishlistItems = useSelector((state) => state.wishlist.items);
@@ -62,6 +67,25 @@ export default function ProductDetailPage() {
 
     if (id) fetchProduct();
   }, [id]);
+
+  // Fetch related products once the main product is loaded
+  useEffect(() => {
+    if (!product?.category) return;
+    const fetchRelated = async () => {
+      setRelatedLoading(true);
+      try {
+        const res = await api.get(`/products?category=${encodeURIComponent(product.category)}&limit=5`);
+        const all = res.data.data?.products || [];
+        // Filter out the current product and cap at 4
+        setRelatedProducts(all.filter((p) => p._id !== product._id).slice(0, 4));
+      } catch {
+        setRelatedProducts([]);
+      } finally {
+        setRelatedLoading(false);
+      }
+    };
+    fetchRelated();
+  }, [product?._id, product?.category]);
 
   if (isLoading) {
     return (
@@ -167,13 +191,13 @@ export default function ProductDetailPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center gap-1.5 text-xs text-gray-500">
-        <Link to="/" className="hover:text-brand-600">Home</Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <Link to="/search" className="hover:text-brand-600">Catalog</Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-gray-800 font-semibold truncate max-w-xs">{product.name}</span>
-      </nav>
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '/' },
+          { label: product.category || 'Catalog', href: `/search?category=${encodeURIComponent(product.category || '')}` },
+          { label: product.name },
+        ]}
+      />
 
       {/* Main Product Showcase Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -435,6 +459,50 @@ export default function ProductDetailPage() {
           />
         </div>
       </div>
+
+      {/* ── You Might Also Like – Related Products Section ───────────────────── */}
+      {(relatedLoading || relatedProducts.length > 0) && (
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.4 }}
+          className="pt-6 border-t border-gray-200"
+        >
+          {/* Section Header */}
+          <div className="mb-7">
+            <h2 className="text-xl font-black text-gray-900 tracking-tight">
+              You Might Also Like
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">
+              More from the same category, curated for you
+            </p>
+          </div>
+
+          {relatedLoading ? (
+            /* Skeleton grid matching the real card geometry */
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              {[...Array(4)].map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : (
+            <motion.div
+              variants={staggerContainer(0.05)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
+            >
+              {relatedProducts.map((p) => (
+                <motion.div key={p._id} variants={staggerItem}>
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </motion.section>
+      )}
     </div>
   );
 }

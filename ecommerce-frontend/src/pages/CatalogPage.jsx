@@ -5,6 +5,7 @@ import { Filter, SlidersHorizontal, ArrowUpDown, Sparkles, X, ChevronRight } fro
 import api from '../utils/api.js';
 import ProductCard from '../components/product/ProductCard.jsx';
 import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
+import Breadcrumb from '../components/common/Breadcrumb.jsx';
 import {
   staggerContainer,
   staggerItem,
@@ -95,6 +96,14 @@ export default function CatalogPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '/' },
+          { label: selectedCategory ? selectedCategory.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : 'All Products' },
+        ]}
+      />
+
       {/* Header & Results Breadcrumb */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200">
         <div>

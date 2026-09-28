@@ -210,6 +210,15 @@ export default function Navbar() {
                       </div>
 
                       <Link
+                        to="/profile"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <User className="w-4 h-4 text-brand-500" />
+                        My Profile
+                      </Link>
+
+                      <Link
                         to="/my-orders"
                         onClick={() => setUserDropdownOpen(false)}
                         className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -326,6 +335,14 @@ export default function Navbar() {
                       {user?.role}
                     </span>
                   </div>
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <User className="w-4 h-4 text-brand-500" />
+                    My Profile
+                  </Link>
                   <Link
                     to="/my-orders"
                     onClick={() => setMobileMenuOpen(false)}
