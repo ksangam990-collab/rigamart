@@ -172,6 +172,33 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
+
+          {/* Creator & Developer Profile Card */}
+          <div className="mt-8 bg-gradient-to-r from-gray-900 via-brand-950 to-gray-900 rounded-2xl p-6 sm:p-8 text-white border border-gray-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+              <div className="w-14 h-14 rounded-2xl bg-brand-500/20 border border-brand-400/30 flex items-center justify-center font-black text-xl text-brand-300 shrink-0 shadow-inner">
+                SK
+              </div>
+              <div>
+                <span className="text-[11px] font-bold text-brand-400 uppercase tracking-widest block mb-1">
+                  Architecture &amp; Development
+                </span>
+                <h3 className="text-xl font-black text-white tracking-tight">Sangam Kumar</h3>
+                <p className="text-xs text-gray-400 mt-1 max-w-xl leading-relaxed">
+                  Engineered end-to-end with modern multi-vendor commerce design patterns, state management via Redux Toolkit, atomic MongoDB transactions, and responsive micro-interactions.
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://github.com/ksangam990-collab"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white font-semibold text-xs transition-colors shrink-0 flex items-center gap-2"
+            >
+              <span>GitHub Profile</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </div>
       </section>
 

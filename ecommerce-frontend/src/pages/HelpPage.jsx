@@ -303,8 +303,8 @@ export default function HelpPage() {
               </div>
             </div>
             <h3 className="font-bold text-gray-900 text-lg mb-2">Have questions about this project?</h3>
-            <p className="text-sm text-gray-500 mb-4">
-              Rigamart is an open-source demonstration application. Explore the source code or report issues on GitHub.
+            <p className="text-sm text-gray-500 mb-4 max-w-md mx-auto">
+              Rigamart is an open-source demonstration application developed by <strong className="text-gray-700 font-semibold">Sangam Kumar</strong>. Explore the source code or report issues on GitHub.
             </p>
             <a
               href="https://github.com/ksangam990-collab/rigamart"

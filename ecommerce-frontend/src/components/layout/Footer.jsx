@@ -125,6 +125,10 @@ export default function Footer() {
           <p className="text-xs text-gray-400 leading-relaxed">
             Rigamart is an educational, full-stack multi-vendor e-commerce demonstration engineered with React, Redux, Node.js, and MongoDB.
           </p>
+          <div className="mt-3 pt-3 border-t border-gray-800/80 flex items-center justify-between text-xs">
+            <span className="text-gray-400">Lead Developer</span>
+            <span className="font-semibold text-white">Sangam Kumar</span>
+          </div>
           <p className="text-[11px] text-amber-400/90 mt-2 font-medium">
             Portfolio Demonstration &bull; Not a commercial business
           </p>
@@ -140,9 +144,24 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Copyright Notice */}
-      <div className="border-t border-gray-800/80 py-6 text-center text-xs text-gray-500">
-        &copy; {new Date().getFullYear()} Rigamart.com. Crafted with passion for modern e-commerce engineering.
+      {/* Bottom Bar: Copyright & Developer Attribution */}
+      <div className="border-t border-gray-800/80 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 text-center sm:text-left">
+          <p>
+            &copy; {new Date().getFullYear()} Rigamart Demo Store &bull; All rights reserved.
+          </p>
+          <p className="flex items-center gap-1.5 text-gray-400">
+            <span>Designed &amp; Developed by</span>
+            <a
+              href="https://github.com/ksangam990-collab"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-white hover:text-brand-400 transition-colors"
+            >
+              Sangam Kumar
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
