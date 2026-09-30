@@ -493,13 +493,13 @@ export default function OrderDetailPage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 mt-1.5">
+                      <p className="text-xs text-gray-500 mt-1.5 tabular-nums">
                         Qty: <strong className="text-gray-800">{item.quantity}</strong>{' '}
                         × ₹{(item.price || 0).toLocaleString('en-IN')}
                       </p>
                     </div>
                     <div className="text-right flex-shrink-0">
-                      <p className="text-sm font-black text-gray-900">
+                      <p className="text-sm font-black text-gray-900 tabular-nums">
                         ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString('en-IN')}
                       </p>
                     </div>
@@ -515,7 +515,7 @@ export default function OrderDetailPage() {
           {/* Price Breakdown */}
           <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-4">
             <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Price Summary</h3>
-            <div className="space-y-2.5 text-xs text-gray-600">
+            <div className="space-y-2.5 text-xs text-gray-600 tabular-nums">
               <div className="flex justify-between">
                 <span>Items</span>
                 <span className="font-semibold text-gray-800">₹{(order.itemsPrice || 0).toLocaleString('en-IN')}</span>
@@ -530,7 +530,7 @@ export default function OrderDetailPage() {
                 <span>Taxes & Fees</span>
                 <span className="font-semibold text-gray-800">₹{(order.taxPrice || 0).toLocaleString('en-IN')}</span>
               </div>
-              <div className="border-t border-gray-100 pt-2.5 flex justify-between">
+              <div className="border-t border-gray-100 pt-2.5 flex justify-between tabular-nums">
                 <span className="text-sm font-black text-gray-900">Total</span>
                 <span className="text-sm font-black text-brand-700">₹{(order.totalAmount || 0).toLocaleString('en-IN')}</span>
               </div>

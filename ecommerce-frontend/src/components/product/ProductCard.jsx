@@ -85,7 +85,7 @@ export default function ProductCard({ product }) {
 
         {/* Discount Badge */}
         {discountPercent > 0 && (
-          <span className="absolute top-2.5 left-2.5 bg-emerald-600 text-white text-[11px] font-black px-2 py-0.5 rounded shadow-sm">
+          <span className="absolute top-2.5 left-2.5 bg-emerald-600 text-white text-[11px] font-black px-2 py-0.5 rounded shadow-sm tabular-nums">
             {discountPercent}% OFF
           </span>
         )}
@@ -138,11 +138,11 @@ export default function ProductCard({ product }) {
 
           {/* Ratings Pill */}
           <div className="flex items-center gap-2 mt-2">
-            <div className="inline-flex items-center gap-1 bg-emerald-700 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">
+            <div className="inline-flex items-center gap-1 bg-emerald-700 text-white text-[11px] font-bold px-1.5 py-0.5 rounded tabular-nums">
               <span>{(product.avgRating || 0).toFixed(1)}</span>
               <Star className="w-3 h-3 fill-current" />
             </div>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-400 tabular-nums">
               ({product.numReviews || 0} reviews)
             </span>
           </div>
@@ -151,7 +151,7 @@ export default function ProductCard({ product }) {
         {/* Price & Quick Add Button */}
         <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
           <div className="flex flex-col">
-            <div className="flex items-baseline gap-1.5">
+            <div className="flex items-baseline gap-1.5 tabular-nums">
               <span className="text-base font-black text-gray-900">
                 ₹{currentPrice.toLocaleString('en-IN')}
               </span>

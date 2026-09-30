@@ -280,18 +280,18 @@ export default function ProductDetailPage() {
 
             {/* Ratings & Review summary */}
             <div className="flex items-center gap-3 mt-3">
-              <div className="inline-flex items-center gap-1.5 bg-emerald-700 text-white text-xs font-bold px-2.5 py-0.5 rounded">
+              <div className="inline-flex items-center gap-1.5 bg-emerald-700 text-white text-xs font-bold px-2.5 py-0.5 rounded tabular-nums">
                 <span>{(product.avgRating || 0).toFixed(1)}</span>
                 <Star className="w-3.5 h-3.5 fill-current" />
               </div>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 tabular-nums">
                 {product.numReviews || 0} Ratings & Customer Reviews
               </span>
             </div>
           </div>
 
           {/* Pricing Card */}
-          <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-baseline gap-3">
+          <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-baseline gap-3 tabular-nums">
             <span className="text-3xl font-black text-gray-900">
               ₹{price.toLocaleString('en-IN')}
             </span>
@@ -333,7 +333,7 @@ export default function ProductDetailPage() {
                 >
                   -
                 </motion.button>
-                <span className="px-4 py-1.5 text-sm font-bold text-gray-800">
+                <span className="px-4 py-1.5 text-sm font-bold text-gray-800 tabular-nums">
                   {quantity}
                 </span>
                 <motion.button

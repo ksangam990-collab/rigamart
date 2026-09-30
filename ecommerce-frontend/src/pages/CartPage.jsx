@@ -167,12 +167,12 @@ export default function CartPage() {
       {/* Free Shipping Gamification Meter */}
       <div className="p-4 bg-brand-50/80 rounded-2xl border border-brand-100 space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-bold text-brand-900">
+          <span className="font-bold text-brand-900 tabular-nums">
             {itemsSubtotal >= 500
               ? '🎉 Congratulations! You unlocked Free Pan-India Delivery!'
               : `Add ₹${(500 - itemsSubtotal).toLocaleString('en-IN')} more to unlock FREE Delivery!`}
           </span>
-          <span className="font-mono font-bold text-brand-700">{progressToFreeShipping}%</span>
+          <span className="font-bold text-brand-700 tabular-nums">{progressToFreeShipping}%</span>
         </div>
         <div className="w-full h-2.5 bg-brand-200/50 rounded-full overflow-hidden">
           <motion.div
@@ -392,7 +392,7 @@ export default function CartPage() {
                           </div>
                         )}
 
-                        <div className="text-xs font-black text-gray-900 pt-1">
+                        <div className="text-xs font-black text-gray-900 pt-1 tabular-nums">
                           ₹{unitPrice.toLocaleString('en-IN')}{' '}
                           <span className="text-[11px] font-normal text-gray-500">each</span>
                         </div>
@@ -416,7 +416,7 @@ export default function CartPage() {
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </motion.button>
-                        <span className="px-3 py-1 text-xs font-bold text-gray-900 bg-white min-w-[28px] text-center">
+                        <span className="px-3 py-1 text-xs font-bold text-gray-900 bg-white min-w-[28px] text-center tabular-nums">
                           {item.quantity}
                         </span>
                         <motion.button
@@ -436,7 +436,7 @@ export default function CartPage() {
                       </div>
 
                       <div className="text-right sm:min-w-[80px]">
-                        <span className="text-sm font-black text-gray-900 block">
+                        <span className="text-sm font-black text-gray-900 block tabular-nums">
                           ₹{subtotal.toLocaleString('en-IN')}
                         </span>
                       </div>
@@ -465,7 +465,7 @@ export default function CartPage() {
               Price Details
             </h2>
 
-            <div className="space-y-2.5 text-xs">
+            <div className="space-y-2.5 text-xs tabular-nums">
               <div className="flex justify-between text-gray-600">
                 <span>Items Subtotal ({cart.totalCount || items.length} items)</span>
                 <span className="font-bold text-gray-800">
@@ -491,7 +491,7 @@ export default function CartPage() {
                 </span>
               </div>
 
-              <div className="border-t border-gray-100 pt-3 flex justify-between text-base font-black text-gray-900">
+              <div className="border-t border-gray-100 pt-3 flex justify-between text-base font-black text-gray-900 tabular-nums">
                 <span>Total Amount</span>
                 <span>₹{totalPayable.toLocaleString('en-IN')}</span>
               </div>

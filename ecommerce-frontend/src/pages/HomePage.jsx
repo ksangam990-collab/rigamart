@@ -139,7 +139,7 @@ export default function HomePage() {
                 <Sparkles className="w-3.5 h-3.5" />
                 Featured Deal of the Day
               </span>
-              <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold tracking-wider uppercase">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold tracking-wider uppercase tabular-nums">
                 45% OFF
               </span>
             </div>
@@ -162,14 +162,14 @@ export default function HomePage() {
                   <h4 className="text-white font-bold text-sm sm:text-base truncate mt-0.5">
                     Aura Pro Wireless ANC Headphones
                   </h4>
-                  <div className="flex items-center gap-2 mt-1.5">
+                  <div className="flex items-center gap-2 mt-1.5 tabular-nums">
                     <div className="flex items-center text-amber-400 text-xs font-bold">
                       <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 inline mr-1" />
                       4.9
                     </div>
                     <span className="text-white/50 text-xs">&bull; 1,280+ ratings</span>
                   </div>
-                  <div className="flex items-baseline gap-2 mt-2">
+                  <div className="flex items-baseline gap-2 mt-2 tabular-nums">
                     <span className="text-xl sm:text-2xl font-black text-white">₹3,499</span>
                     <span className="text-xs text-white/50 line-through">₹5,999</span>
                   </div>

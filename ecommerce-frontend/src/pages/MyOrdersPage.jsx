@@ -185,7 +185,7 @@ export default function MyOrdersPage() {
             >
               {/* Order Header Card */}
               <div className="bg-gray-50/80 px-6 py-4 border-b border-gray-200 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-6 text-xs">
+                <div className="flex flex-wrap items-center gap-6 text-xs tabular-nums">
                   <div>
                     <span className="text-gray-400 block uppercase font-bold text-[10px]">Order ID</span>
                     <Link
@@ -270,7 +270,7 @@ export default function MyOrdersPage() {
                           >
                             {product.name || item.name || 'Product Item'}
                           </Link>
-                          <div className="text-[11px] text-gray-500 mt-0.5">
+                          <div className="text-[11px] text-gray-500 mt-0.5 tabular-nums">
                             Qty: <strong className="text-gray-800">{item.quantity}</strong> &times; ₹
                             {(item.price || 0).toLocaleString('en-IN')}
                           </div>
@@ -278,7 +278,7 @@ export default function MyOrdersPage() {
                       </div>
 
                       <div className="text-right">
-                        <span className="text-sm font-black text-gray-900">
+                        <span className="text-sm font-black text-gray-900 tabular-nums">
                           ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString('en-IN')}
                         </span>
                       </div>
