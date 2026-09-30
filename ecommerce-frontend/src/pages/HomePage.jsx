@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight,
   ShoppingBag,
-  Zap,
   Shield,
   Sparkles,
-  CheckCircle2,
   Truck,
   RotateCcw,
-  CreditCard
+  CreditCard,
+  Star,
+  ShieldCheck
 } from 'lucide-react';
 import api from '../utils/api.js';
 import ProductCard from '../components/product/ProductCard.jsx';
@@ -25,22 +25,9 @@ import {
 } from '../utils/animations.js';
 
 export default function HomePage() {
-  const [healthStatus, setHealthStatus] = useState(null);
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [trendingLoading, setTrendingLoading] = useState(true);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    const fetchHealth = async () => {
-      try {
-        const res = await api.get('/health');
-        setHealthStatus(res.data.data);
-      } catch (e) {
-        setHealthStatus({ status: 'disconnected', database: 'offline' });
-      }
-    };
-    fetchHealth();
-  }, []);
 
   // Silent-fail fetch for Trending Now section
   useEffect(() => {
@@ -136,45 +123,80 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
 
-          {/* Live System Diagnostic Card */}
+          {/* Marketplace Spotlight Showcase Card */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl shadow-2xl relative overflow-hidden"
+            className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 sm:p-7 rounded-3xl shadow-2xl relative overflow-hidden group"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-bold flex items-center gap-2">
-                <Zap className="w-4 h-4 text-amber-300" />
-                Platform Live Health Status
-              </h3>
-              <span className="flex h-2.5 w-2.5 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            {/* Ambient accent glow */}
+            <div className="absolute -top-16 -right-16 w-40 h-40 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+
+            {/* Spotlight Header Badges */}
+            <div className="flex items-center justify-between mb-5">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-300/30 text-amber-300 font-semibold text-xs tracking-wide">
+                <Sparkles className="w-3.5 h-3.5" />
+                Featured Deal of the Day
+              </span>
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-bold tracking-wider uppercase">
+                45% OFF
               </span>
             </div>
 
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center bg-black/25 p-3 rounded-xl border border-white/5">
-                <span className="text-blue-200 text-xs">Active Session:</span>
-                <span className="font-semibold text-white text-xs truncate max-w-[200px]">
-                  {isAuthenticated ? `${user.name} (${user.role})` : 'Guest Visitor'}
-                </span>
-              </div>
-              <div className="flex justify-between items-center bg-black/25 p-3 rounded-xl border border-white/5">
-                <span className="text-blue-200 text-xs">REST API Gateway:</span>
-                <span className="font-semibold text-emerald-300 flex items-center gap-1.5 text-xs">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  {healthStatus?.status || 'Connecting...'}
-                </span>
-              </div>
-              <div className="flex justify-between items-center bg-black/25 p-3 rounded-xl border border-white/5">
-                <span className="text-blue-200 text-xs">Database Engine:</span>
-                <span className="font-semibold text-emerald-300 capitalize text-xs">
-                  MongoDB Atlas ({healthStatus?.database || 'Connecting...'})
-                </span>
+            {/* Spotlight Product Preview */}
+            <div className="bg-black/30 rounded-2xl p-4 border border-white/10 backdrop-blur-sm mb-5">
+              <div className="flex items-start gap-4">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gray-800/80 flex-shrink-0 border border-white/10 relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300"
+                    alt="Aura ANC Wireless Headphones"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-[11px] font-medium text-blue-200 uppercase tracking-wider block">
+                    Electronics &bull; Audio
+                  </span>
+                  <h4 className="text-white font-bold text-sm sm:text-base truncate mt-0.5">
+                    Aura Pro Wireless ANC Headphones
+                  </h4>
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <div className="flex items-center text-amber-400 text-xs font-bold">
+                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 inline mr-1" />
+                      4.9
+                    </div>
+                    <span className="text-white/50 text-xs">&bull; 1,280+ ratings</span>
+                  </div>
+                  <div className="flex items-baseline gap-2 mt-2">
+                    <span className="text-xl sm:text-2xl font-black text-white">₹3,499</span>
+                    <span className="text-xs text-white/50 line-through">₹5,999</span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* Value Proof Badges */}
+            <div className="grid grid-cols-2 gap-2 text-xs mb-5">
+              <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl border border-white/5">
+                <Truck className="w-4 h-4 text-emerald-300 flex-shrink-0" />
+                <span className="text-blue-100 text-[11px] font-medium">Within 24h Dispatch</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl border border-white/5">
+                <ShieldCheck className="w-4 h-4 text-emerald-300 flex-shrink-0" />
+                <span className="text-blue-100 text-[11px] font-medium">Verified Seller Assured</span>
+              </div>
+            </div>
+
+            {/* CTA Link */}
+            <Link
+              to="/search?category=electronics"
+              className="w-full py-3 px-4 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-gray-950 font-bold rounded-xl text-center text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all"
+            >
+              <span>Explore Featured Deals</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </motion.div>
         </div>
       </section>
