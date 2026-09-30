@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -40,9 +40,29 @@ export default function ProductDetailPage() {
   const [heartAnim, setHeartAnim] = useState('idle');
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedLoading, setRelatedLoading] = useState(false);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
+  const mainCtaRef = useRef(null);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const wishlistItems = useSelector((state) => state.wishlist.items);
+
+  // Monitor scroll position to show sticky mobile buy bar once scrolled past main CTA
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!mainCtaRef.current) return;
+      const rect = mainCtaRef.current.getBoundingClientRect();
+      if (rect.bottom < 70) {
+        setShowStickyBar(true);
+      } else {
+        setShowStickyBar(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [product]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -351,7 +371,7 @@ export default function ProductDetailPage() {
           )}
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <div ref={mainCtaRef} className="flex flex-col sm:flex-row gap-4 pt-4">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
@@ -503,6 +523,63 @@ export default function ProductDetailPage() {
           )}
         </motion.section>
       )}
+
+      {/* Sticky Floating Buy Now Bar on Mobile (Appears after scrolling past main CTA) */}
+      <AnimatePresence>
+        {showStickyBar && product && (
+          <motion.div
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-2.5 shadow-[0_-4px_25px_rgba(0,0,0,0.12)] flex items-center justify-between gap-3"
+          >
+            {/* Left: Thumbnail & Price */}
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <img
+                src={selectedImage || product.images?.[0]?.url || product.images?.[0] || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100'}
+                alt={product.name}
+                className="w-10 h-10 rounded-lg object-cover border border-gray-200 flex-shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold text-gray-900 truncate leading-tight">{product.name}</p>
+                <div className="flex items-baseline gap-1.5 tabular-nums mt-0.5">
+                  <span className="text-sm font-black text-gray-900">₹{price.toLocaleString('en-IN')}</span>
+                  {mrp > price && (
+                    <span className="text-[10px] text-gray-400 line-through">₹{Math.round(mrp).toLocaleString('en-IN')}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Actions */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <motion.button
+                whileTap={{ scale: 0.92 }}
+                onClick={handleAddToCart}
+                disabled={isOutOfStock || addingToCart}
+                className="p-2.5 bg-brand-50 border border-brand-200 text-brand-700 rounded-xl font-bold flex items-center justify-center disabled:opacity-50"
+                aria-label="Add to cart"
+              >
+                {addingToCart ? (
+                  <div className="w-4 h-4 border-2 border-brand-600 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <ShoppingCart className="w-4 h-4" />
+                )}
+              </motion.button>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleBuyNow}
+                disabled={isOutOfStock}
+                className="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-xl shadow-md flex items-center gap-1.5 disabled:opacity-50"
+              >
+                <Zap className="w-3.5 h-3.5 text-amber-300" />
+                <span>Buy Now</span>
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
