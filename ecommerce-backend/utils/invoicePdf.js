@@ -25,7 +25,7 @@ const generateInvoicePdf = (order, writableStream) => {
         .font('Helvetica')
         .fillColor('#6b7280')
         .text('Multi-Vendor E-Commerce Platform | Bill of Supply', 50, 72)
-        .text('GSTIN: [REGISTERED-ON-DEPLOYMENT] | Tax Invoice', 50, 84);
+        .text('GSTIN: Demo Placeholder (Evaluation Only) | Tax Invoice', 50, 84);
 
       const formatDate = (date) => {
         if (!date) return 'N/A';

@@ -218,8 +218,8 @@ export default function SellPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Wholesale */}
             <div id="wholesale" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
-              <span className="text-[10px] font-bold text-amber-700 bg-amber-100/70 border border-amber-200 px-2.5 py-0.5 rounded-full inline-block">
-                Available on Request
+              <span className="text-[10px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2.5 py-0.5 rounded-full inline-block">
+                Concept — Not available in this demo
               </span>
               <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
                 <PackageCheck className="w-6 h-6" />
@@ -232,8 +232,8 @@ export default function SellPage() {
 
             {/* Supply Chain */}
             <div id="supply-chain" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
-              <span className="text-[10px] font-bold text-blue-700 bg-blue-100/70 border border-blue-200 px-2.5 py-0.5 rounded-full inline-block">
-                Enterprise Integration
+              <span className="text-[10px] font-bold text-blue-800 bg-blue-100 border border-blue-300 px-2.5 py-0.5 rounded-full inline-block">
+                Concept — Not available in this demo
               </span>
               <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                 <Truck className="w-6 h-6" />
@@ -246,8 +246,8 @@ export default function SellPage() {
 
             {/* Affiliate */}
             <div id="affiliate" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-block">
-                Growth Program
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-full inline-block">
+                Concept — Not available in this demo
               </span>
               <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                 <Sparkles className="w-6 h-6" />
@@ -260,8 +260,8 @@ export default function SellPage() {
 
             {/* Advertise */}
             <div id="advertise" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
-              <span className="text-[10px] font-bold text-purple-700 bg-purple-100/70 border border-purple-200 px-2.5 py-0.5 rounded-full inline-block">
-                Sponsored Media
+              <span className="text-[10px] font-bold text-purple-800 bg-purple-100 border border-purple-300 px-2.5 py-0.5 rounded-full inline-block">
+                Concept — Not available in this demo
               </span>
               <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
                 <Megaphone className="w-6 h-6" />

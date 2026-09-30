@@ -19,7 +19,7 @@ async function seedSampleOrder() {
   let customer = await User.findOne({ email: 'demo_customer@rigamart.com' });
   if (!customer) {
     customer = await User.create({
-      name: 'Aditya Sharma',
+      name: 'Demo Customer',
       email: 'demo_customer@rigamart.com',
       password: 'Password123!',
       mobile: '9876543210',
@@ -125,7 +125,7 @@ async function seedSampleOrder() {
       }
     ],
     shippingAddress: {
-      name: 'Aditya Sharma',
+      name: 'Demo Customer',
       mobile: '9876543210',
       street: 'Flat 402, Sunshine Heights, Powai Vihar',
       landmark: 'Opposite D-Mart Powai',
@@ -160,7 +160,7 @@ async function seedSampleOrder() {
       },
       {
         status: 'Delivered',
-        comment: 'Package delivered successfully to Aditya Sharma.',
+        comment: 'Package delivered successfully to Demo Customer.',
         timestamp: new Date(Date.now() - 1 * 86400000)
       }
     ],

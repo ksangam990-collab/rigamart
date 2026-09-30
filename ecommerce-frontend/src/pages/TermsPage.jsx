@@ -230,7 +230,13 @@ export default function TermsPage() {
           </nav>
 
           {/* ── Content ─────────────────────────────────────────────────── */}
-          <div className="flex-1 min-w-0 space-y-10">
+          <div className="flex-1 min-w-0 space-y-8">
+            {/* Demonstration Notice */}
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 text-xs text-amber-900 leading-relaxed shadow-sm">
+              <strong className="font-bold block text-sm mb-1 text-amber-950">Demonstration Platform Notice</strong>
+              This website is an interactive multi-vendor e-commerce platform demonstration. Store transactions, seller listings, and test payments (processed via <strong>Razorpay Test Mode</strong>) are functional simulations for portfolio and evaluation purposes.
+            </div>
+
             {SECTIONS.map(({ id, title, content }) => (
               <section
                 key={id}

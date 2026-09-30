@@ -32,7 +32,7 @@ Information collected on Rigamart is used strictly for core platform functionali
 
 **Notifications:** Generating automated order confirmation alerts and delivery status updates.
 
-Customer data is treated with confidentiality and is never sold or rented to third-party data brokers.
+**Demonstration Scope:** This platform operates as an interactive demonstration using Razorpay (Test Mode), Cloudinary (Image CDN), and Gmail SMTP for transactional communications. While role-based access control and password hashing are implemented, please avoid submitting sensitive personal, card, or banking details.
     `.trim(),
   },
   {
@@ -223,7 +223,13 @@ export default function PrivacyPage() {
           </nav>
 
           {/* ── Content ─────────────────────────────────────────────────── */}
-          <div className="flex-1 min-w-0 space-y-10">
+          <div className="flex-1 min-w-0 space-y-8">
+            {/* Demonstration Notice */}
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 text-xs text-amber-900 leading-relaxed shadow-sm">
+              <strong className="font-bold block text-sm mb-1 text-amber-950">Demonstration Platform Notice</strong>
+              Rigamart is a full-stack multi-vendor e-commerce platform demonstration. Real payment transactions are processed in <strong>Razorpay Test Mode</strong> (no actual currency is debited), media assets are hosted via <strong>Cloudinary CDN</strong>, and transactional notifications use <strong>Gmail SMTP</strong>. Because this is a portfolio demonstration environment, please do not submit sensitive personal, financial, or proprietary information.
+            </div>
+
             {SECTIONS.map(({ id, title, content }) => (
               <section
                 key={id}
