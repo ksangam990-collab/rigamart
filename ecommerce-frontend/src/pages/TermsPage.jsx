@@ -9,110 +9,102 @@ const SECTIONS = [
     id: 'acceptance',
     title: 'Acceptance of Terms',
     content: `
-By accessing or using the Rigamart demonstration platform, you confirm that you understand this application is an educational, full-stack portfolio showcase.
+By accessing or using the Rigamart commerce platform, you confirm that you have read, understood, and agree to be bound by these Terms of Service ("Terms") and our Privacy Policy.
 
-These Terms of Service provide an illustrative framework demonstrating standard e-commerce governance, user account rules, and multi-vendor agreements.
+These Terms govern your use of the Rigamart website, marketplace services, customer accounts, seller tools, and transaction processing.
 
-If you do not agree with any part of these demonstration terms, you may discontinue use of the platform at any time.
+If you do not agree with any part of these Terms, you may discontinue use of the platform at any time.
     `.trim(),
   },
   {
     id: 'accounts',
     title: 'User Accounts',
     content: `
-To test features of Rigamart, you can create a test account. In this environment:
+To access shopping and seller features on Rigamart, you can register an account. As an account holder:
 
-**Accurate Information:** You can use simulated credentials or test emails for registration.
+**Accurate Information:** Maintain accurate and up-to-date profile details, contact numbers, and delivery addresses.
 
-**Account Security:** Maintain your test credentials responsibly. In this demonstration, mock sessions are authenticated via JWT tokens.
+**Account Security:** You are responsible for safeguarding your login credentials. Sessions are securely authenticated using encrypted JWT tokens.
 
-**Role Testing:** Users can register as Customers or Sellers to test their respective workflows and access the dedicated dashboards.
-
-**Data Resets:** Test accounts and sample order histories in this database are periodically reset or re-seeded.
+**Role Permissions:** Users may operate customer accounts for purchases or register verified seller accounts to manage commercial catalogs.
     `.trim(),
   },
   {
     id: 'seller-terms',
     title: 'Seller Terms',
     content: `
-The Rigamart Seller Program simulates a multi-vendor marketplace model:
+The Rigamart Seller Program powers independent vendors operating on the platform:
 
-**Product Listings:** Demo sellers can create products, configure variant SKUs (size, color, price, stock), and upload imagery via Cloudinary.
+**Product Listings:** Verified sellers can publish products, configure variant SKUs (size, color, pricing, inventory stock), and upload product media via secure CDN.
 
-**Order Processing:** Sellers receive simulated orders and can update dispatch and delivery statuses in real time.
+**Order Processing:** Sellers receive real-time order alerts and must fulfill and update dispatch and delivery timelines in accordance with platform standards.
 
-**Commission & Pricing:** Platform commission calculations and payout schedules shown in the seller portal are architectural models for demonstration.
-
-**Sandbox Environment:** All financial tracking reflects test transactions and does not represent real monetary earnings or liability.
+**Platform Settlement:** Platform commission rates and payout tracking are managed through the automated seller financial dashboard.
     `.trim(),
   },
   {
     id: 'buyer-terms',
     title: 'Buyer Terms',
     content: `
-As a simulated buyer on Rigamart:
+As a customer purchasing through Rigamart:
 
-**Delivery Addresses:** You can create and manage test delivery addresses within your profile to test the checkout address selector.
+**Delivery Addresses:** Complete and accurate delivery information is required at checkout to ensure reliable last-mile fulfillment.
 
-**Simulated Payment:** Checkout utilizes Razorpay in Test Mode or simulated Cash on Delivery. No actual charges are made to any real bank account or credit card.
+**Payment Processing:** Orders can be paid via integrated payment gateways (Cards, NetBanking, UPI) or Cash on Delivery where serviceable.
 
-**Order Tracking:** Live order updates (Placed, Confirmed, Shipped, Delivered) demonstrate real-time status transitions.
+**Order Tracking:** Live order milestones (Placed, Confirmed, Shipped, Delivered) are tracked in real-time within your account dashboard.
 
-**Returns Simulation:** The 7-day return request workflow illustrates customer return management and inventory restock logic.
+**Returns & Refunds:** Eligible returns can be requested through the My Orders dashboard within the designated return window.
     `.trim(),
   },
   {
     id: 'prohibited',
     title: 'Prohibited Activities',
     content: `
-When interacting with this demonstration platform, users agree not to:
+Users and sellers agree to maintain platform integrity and refrain from:
 
-- Attempt denial-of-service or destructive attacks against the demonstration infrastructure
-- Inject malicious payloads, SQL/NoSQL injection vectors, or unauthorized scripts
-- Attempt to harvest or scrape sensitive data from other demonstration test accounts
-- Exploit test API endpoints for unintended automated spamming
+- Uploading unlawful, counterfeit, or infringing merchandise
+- Attempting unauthorized access, reverse-engineering, or scraping platform databases
+- Manipulating pricing, reviews, or transaction records through automated bots
+- Interfering with normal checkout processing or security protocols
 
-Violations may result in IP-level blocking and account suspension.
+Violations may result in immediate suspension of account privileges and seller stores.
     `.trim(),
   },
   {
     id: 'ip',
-    title: 'Open Source & Intellectual Property',
+    title: 'Intellectual Property',
     content: `
-**Demonstration Codebase:** The Rigamart application is an open-source demonstration project published for educational and portfolio evaluation purposes.
+**Platform Architecture:** The Rigamart platform codebase, design system, UI components, and logos are proprietary assets protected under applicable copyright and intellectual property laws.
 
-**Third-Party Marks:** Any trademarks, product brand names, or logos referenced within sample seed data remain the property of their respective trademark owners and are used strictly as illustrative placeholders.
-
-**Source Repository:** Full source code and documentation are available on GitHub under standard open-source licensing.
+**Merchant Content:** Sellers retain ownership of their trademarked product imagery and brand collateral while granting Rigamart display rights to feature products across the marketplace.
     `.trim(),
   },
   {
     id: 'liability',
-    title: 'Disclaimer of Liability',
+    title: 'Limitation of Liability',
     content: `
-Rigamart is provided strictly on an "as is" and "as available" basis for technical evaluation and portfolio demonstration:
+Rigamart provides a marketplace platform connecting independent merchants with retail customers.
 
-- This application is not a licensed commercial business entity.
-- The developers make no warranties, express or implied, regarding commercial merchantability or uninterrupted service availability.
-- No commercial transactions, binding legal sales, or physical deliveries take place through this application.
+To the extent permitted by law, Rigamart is not liable for indirect, incidental, or consequential damages resulting from vendor shipping delays, product defects, or third-party service interruptions.
     `.trim(),
   },
   {
     id: 'governing-law',
-    title: 'Project Governance',
+    title: 'Platform Governance',
     content: `
-This project is governed as an open-source technical demonstration.
+These Terms of Service are governed by and construed in accordance with applicable commercial and e-commerce laws.
 
-For inquiries, feature requests, or technical bug reports, please submit an issue through the GitHub repository.
+For enterprise deployment, technical inquiries, or platform governance questions:
 
-**Repository:** https://github.com/ksangam990-collab/rigamart
+**Repository & Codebase:** https://github.com/ksangam990-collab/rigamart
     `.trim(),
   },
   {
     id: 'changes',
     title: 'Changes to Terms',
     content: `
-These demonstration terms may be updated as the underlying portfolio architecture evolves.
+Rigamart reserves the right to update or modify these Terms to reflect operational or regulatory improvements.
 
 These terms were last updated in **September 2026**.
     `.trim(),
@@ -212,24 +204,6 @@ export default function TermsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Demonstration Disclaimer Alert Banner */}
-        <div className="mb-8 p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs sm:text-sm leading-relaxed">
-          <strong className="block text-sm font-bold text-amber-900 mb-1">
-            ⚠️ Demonstration Project Notice (Not Legal Advice)
-          </strong>
-          <p className="text-gray-700">
-            Rigamart is an educational, non-commercial portfolio project. Third-party integrations in this demo are limited to:
-          </p>
-          <ul className="list-disc pl-5 mt-1.5 space-y-0.5 text-gray-700">
-            <li><strong>Razorpay:</strong> Running exclusively in test/sandbox mode (no real money transactions).</li>
-            <li><strong>Cloudinary:</strong> Used for hosting uploaded product photos.</li>
-            <li><strong>Gmail SMTP:</strong> Used for sending transactional test notifications.</li>
-          </ul>
-          <p className="mt-2 text-gray-600 text-xs">
-            This page is an illustrative template for demonstration completeness and does not constitute a binding legal policy.
-          </p>
-        </div>
-
         <div className="flex gap-10 items-start">
           {/* ── Sticky Left Nav (desktop) ───────────────────────────────── */}
           <nav

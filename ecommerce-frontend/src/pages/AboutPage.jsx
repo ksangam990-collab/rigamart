@@ -55,7 +55,7 @@ export default function AboutPage() {
             animate="visible"
             className="inline-block text-xs font-semibold tracking-widest uppercase bg-white/15 border border-white/25 rounded-full px-4 py-1.5 mb-6"
           >
-            Portfolio Project
+            Enterprise Commerce
           </motion.span>
           <motion.h1
             variants={fadeInUp}
@@ -73,7 +73,7 @@ export default function AboutPage() {
             custom={{ delay: 0.16 }}
             className="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed"
           >
-            A Full-Stack Multi-Vendor E-Commerce Platform engineered as a demonstration project.
+            A Full-Stack Multi-Vendor E-Commerce Platform engineered for speed, reliability, and scale.
           </motion.p>
         </div>
       </section>
@@ -87,11 +87,11 @@ export default function AboutPage() {
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
           >
-            <span className="block text-brand-600 font-semibold text-xs tracking-widest uppercase mb-6">Our Purpose</span>
+            <span className="block text-brand-600 font-semibold text-xs tracking-widest uppercase mb-6">Our Vision</span>
             <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-snug">
-              "Demonstrating end-to-end multi-vendor commerce architecture — from{' '}
-              <span className="text-brand-600">seller catalog onboarding</span> to atomic checkout and order fulfillment —
-              on one modern, transparent stack."
+              "Delivering end-to-end multi-vendor commerce infrastructure — from{' '}
+              <span className="text-brand-600">instant seller onboarding</span> to atomic checkout and automated fulfillment —
+              on one modern, unified stack."
             </blockquote>
           </motion.div>
         </div>
@@ -212,17 +212,17 @@ export default function AboutPage() {
             viewport={{ once: true, margin: '-60px' }}
           >
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-              Explore the Demonstration
+              Launch Your Marketplace
             </h2>
             <p className="text-blue-100 mb-8 max-w-lg mx-auto">
-              Test customer checkout with test Razorpay credentials or register a demo seller account.
+              Empower independent sellers, manage dynamic catalogs, and deliver seamless buyer checkouts.
             </p>
             <motion.div whileHover={buttonHover} whileTap={buttonTap}>
               <Link
                 to="/register"
                 className="inline-flex items-center gap-2 bg-white text-brand-600 font-bold px-8 py-3.5 rounded-full shadow-lg hover:bg-blue-50 transition-colors text-sm"
               >
-                Create Demo Account <ArrowRight className="w-4 h-4" />
+                Get Started Now <ArrowRight className="w-4 h-4" />
               </Link>
             </motion.div>
           </motion.div>

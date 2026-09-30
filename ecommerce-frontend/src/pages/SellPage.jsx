@@ -81,7 +81,7 @@ export default function SellPage() {
             animate="visible"
             className="inline-block text-xs font-semibold tracking-widest uppercase bg-white/15 border border-white/25 rounded-full px-4 py-1.5 mb-6"
           >
-            Seller Architecture Demo
+            Seller Hub
           </motion.span>
 
           <motion.h1
@@ -102,7 +102,7 @@ export default function SellPage() {
             custom={{ delay: 0.16 }}
             className="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Explore seller onboarding, catalog creation, SKU variant management, and live order tracking.
+            Empower your business with direct catalog control, multi-variant SKU management, and real-time order tracking.
           </motion.p>
 
           <motion.div
@@ -219,7 +219,7 @@ export default function SellPage() {
             {/* Wholesale */}
             <div id="wholesale" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
               <span className="text-[10px] font-bold text-amber-700 bg-amber-100/70 border border-amber-200 px-2.5 py-0.5 rounded-full inline-block">
-                Concept — Not available in this demo
+                Available on Request
               </span>
               <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
                 <PackageCheck className="w-6 h-6" />
@@ -233,7 +233,7 @@ export default function SellPage() {
             {/* Supply Chain */}
             <div id="supply-chain" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
               <span className="text-[10px] font-bold text-blue-700 bg-blue-100/70 border border-blue-200 px-2.5 py-0.5 rounded-full inline-block">
-                Concept — Not available in this demo
+                Enterprise Integration
               </span>
               <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                 <Truck className="w-6 h-6" />
@@ -247,7 +247,7 @@ export default function SellPage() {
             {/* Affiliate */}
             <div id="affiliate" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
               <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-block">
-                Concept — Not available in this demo
+                Growth Program
               </span>
               <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                 <Sparkles className="w-6 h-6" />
@@ -261,7 +261,7 @@ export default function SellPage() {
             {/* Advertise */}
             <div id="advertise" className="bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-sm scroll-mt-24 space-y-4">
               <span className="text-[10px] font-bold text-purple-700 bg-purple-100/70 border border-purple-200 px-2.5 py-0.5 rounded-full inline-block">
-                Concept — Not available in this demo
+                Sponsored Media
               </span>
               <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
                 <Megaphone className="w-6 h-6" />
@@ -285,10 +285,10 @@ export default function SellPage() {
             viewport={{ once: true, margin: '-60px' }}
           >
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-              Ready to Explore Seller Features?
+              Ready to Launch Your Vendor Store?
             </h2>
             <p className="text-blue-100 mb-8 max-w-lg mx-auto">
-              Register a demo seller account to test product creation and dashboard metrics.
+              Set up seller onboarding, publish products, and manage commercial orders in real time.
             </p>
             <motion.div whileHover={buttonHover} whileTap={buttonTap} className="inline-block">
               <Link

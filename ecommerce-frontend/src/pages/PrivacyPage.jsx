@@ -9,45 +9,45 @@ const SECTIONS = [
     id: 'data-collect',
     title: 'Data We Collect',
     content: `
-When you test the Rigamart demonstration, we collect certain information to support simulated shopping and seller features:
+When you use the Rigamart commerce platform, we collect information necessary to support marketplace operations, seller catalogs, and buyer checkouts:
 
-**Account Information:** When you register, we collect a display name, test email address, mobile number, and password (hashed with bcrypt).
+**Account Information:** When you register, we collect a display name, email address, mobile number, and encrypted password (hashed with bcrypt).
 
-**Order & Transaction Data:** We store mock purchase records, simulated delivery statuses, and test payment references to demonstrate the fulfillment pipeline.
+**Order & Transaction Data:** We store order details, payment reference IDs, item variant selections, and delivery addresses to fulfill purchases and track delivery progress.
 
-**Media & Product Listings:** Sellers can upload product photography stored securely on Cloudinary.
+**Seller Product Listings:** Sellers upload product details, pricing, inventory stock counts, and product imagery stored securely on Cloudinary.
 
-**Session Identifiers:** We use standard authentication tokens (JWT in secure cookies or headers) to persist session state between requests.
+**Session Identifiers:** We use standard authentication tokens (JWT in secure cookies or headers) to manage session security across requests.
     `.trim(),
   },
   {
     id: 'how-use',
     title: 'How Data is Handled',
     content: `
-Information collected in this demonstration application is used solely for project functionality:
+Information collected on Rigamart is used strictly for core platform functionality:
 
-**Simulated Checkout:** Creating mock orders, calculating price breakdowns (tax, shipping), and tracking order statuses.
+**Order Processing:** Creating orders, calculating transparent price breakdowns (taxes, shipping), and managing order lifecycle states.
 
-**Seller Catalog Tools:** Storing product records, sizes, color variants, and stock counts.
+**Seller Catalog Tools:** Managing product records, dynamic size/color variants, and automated stock deductions.
 
-**Transactional Test Alerts:** Generating mock order confirmation and status update emails via Gmail SMTP.
+**Notifications:** Generating automated order confirmation alerts and delivery status updates.
 
-As an educational portfolio demonstration, data submitted is stored in a test database and not utilized for commercial marketing.
+Customer data is treated with confidentiality and is never sold or rented to third-party data brokers.
     `.trim(),
   },
   {
     id: 'sharing',
-    title: 'Third-Party Services & Integrations',
+    title: 'Integrated Services',
     content: `
-This demonstration platform integrates with the following external services:
+The platform coordinates with trusted infrastructure providers to deliver services:
 
-**Razorpay (Sandbox / Test Mode):** Processes test transactions using simulated UPI and card credentials. No real funds are transferred or processed.
+**Payment Processing:** Integrates with Razorpay for secure checkout payment capture and HMAC signature verification.
 
-**Cloudinary CDN:** Hosts and delivers uploaded product catalog images.
+**Media CDN:** Uses Cloudinary for optimized delivery of product photography.
 
-**Gmail SMTP / Nodemailer:** Delivers automated transaction test notification emails to registered test accounts.
+**Transactional Delivery:** Delivers transactional order notices and account lifecycle emails.
 
-**MongoDB Atlas:** Provides managed database storage for user accounts, products, reviews, and order records.
+**Database Infrastructure:** Operates on secure MongoDB Atlas cloud database infrastructure with role-based access controls.
     `.trim(),
   },
   {
@@ -82,26 +82,22 @@ We implement modern security best practices across the application architecture:
     id: 'rights',
     title: 'Your Rights & Data Access',
     content: `
-As a demonstration user of Rigamart, you have full control over the test data associated with your session:
+As a user of Rigamart, you have full control over the data associated with your account:
 
 **Access & Correction:** You can view and modify your name, mobile number, and delivery addresses at any time directly through your My Profile dashboard.
 
-**Deletion:** You can reset demo accounts or re-register at any time. Test database records are periodically refreshed.
-
-**Order History:** Your placed test orders, tracking logs, and sample invoice PDFs can be downloaded directly from the My Orders and Order Detail views.
+**Order History:** Your placed orders, tracking logs, and tax invoice PDFs can be viewed and downloaded directly from the My Orders view.
     `.trim(),
   },
   {
     id: 'contact',
-    title: 'Project Contact',
+    title: 'Platform Contact',
     content: `
-Rigamart is an open-source demonstration application built for portfolio showcase purposes.
+For inquiries, enterprise white-label deployment, or technical questions regarding this platform:
 
-For questions, code review, or technical inquiries regarding this implementation, please visit the project repository on GitHub:
+**Repository & Codebase:** https://github.com/ksangam990-collab/rigamart
 
-**Repository:** https://github.com/ksangam990-collab/rigamart
-
-This demonstration policy was last updated in **September 2026**.
+This policy was last updated in **September 2026**.
     `.trim(),
   },
 ];
@@ -201,24 +197,6 @@ export default function PrivacyPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Demonstration Disclaimer Alert Banner */}
-        <div className="mb-8 p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs sm:text-sm leading-relaxed">
-          <strong className="block text-sm font-bold text-amber-900 mb-1">
-            ⚠️ Demonstration Project Notice (Not Legal Advice)
-          </strong>
-          <p className="text-gray-700">
-            Rigamart is an educational, non-commercial portfolio project. Third-party integrations in this demo are limited to:
-          </p>
-          <ul className="list-disc pl-5 mt-1.5 space-y-0.5 text-gray-700">
-            <li><strong>Razorpay:</strong> Running exclusively in test/sandbox mode (no real money transactions).</li>
-            <li><strong>Cloudinary:</strong> Used for hosting uploaded product photos.</li>
-            <li><strong>Gmail SMTP:</strong> Used for sending transactional test notifications.</li>
-          </ul>
-          <p className="mt-2 text-gray-600 text-xs">
-            This page is an illustrative template for demonstration completeness and does not constitute a binding legal policy.
-          </p>
-        </div>
-
         <div className="flex gap-10 items-start">
           {/* ── Sticky Left Nav (desktop) ───────────────────────────────── */}
           <nav

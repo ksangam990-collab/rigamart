@@ -119,19 +119,16 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 4 — Project Notice */}
+        {/* Column 4 — Platform Architecture */}
         <div>
-          <h3 className="text-white font-bold text-xs sm:text-sm tracking-wider uppercase mb-4">Project Notice</h3>
+          <h3 className="text-white font-bold text-xs sm:text-sm tracking-wider uppercase mb-4">Platform Architecture</h3>
           <p className="text-xs text-gray-400 leading-relaxed">
-            Rigamart is an educational, full-stack multi-vendor e-commerce demonstration engineered with React, Redux, Node.js, and MongoDB.
+            Next-generation multi-vendor commerce platform engineered with modern React, Redux Toolkit, Node.js, and MongoDB.
           </p>
           <div className="mt-3 pt-3 border-t border-gray-800/80 flex items-center justify-between text-xs">
-            <span className="text-gray-400">Lead Developer</span>
+            <span className="text-gray-400">Platform Architect</span>
             <span className="font-semibold text-white">Sangam Kumar</span>
           </div>
-          <p className="text-[11px] text-amber-400/90 mt-2 font-medium">
-            Portfolio Demonstration &bull; Not a commercial business
-          </p>
         </div>
       </div>
 
@@ -148,7 +145,7 @@ export default function Footer() {
       <div className="border-t border-gray-800/80 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 text-center sm:text-left">
           <p>
-            &copy; {new Date().getFullYear()} Rigamart Demo Store &bull; All rights reserved.
+            &copy; {new Date().getFullYear()} Rigamart Platform &bull; All rights reserved.
           </p>
           <p className="flex items-center gap-1.5 text-gray-400">
             <span>Designed &amp; Developed by</span>
