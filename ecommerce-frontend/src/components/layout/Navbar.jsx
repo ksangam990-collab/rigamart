@@ -41,7 +41,7 @@ export default function Navbar() {
   // Scroll listener for sticky glassmorphism backdrop blur & shadow
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 12) {
+      if (window.scrollY > 15) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -68,20 +68,30 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-200 ${
+      className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-gray-200/80'
+          ? 'bg-white/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border-b border-gray-200/60'
           : 'bg-white border-b border-gray-200 shadow-sm'
       }`}
     >
-      {/* Top Banner for Trust / Free Delivery */}
-      <div className="bg-brand-600 text-white text-xs py-1.5 px-4 text-center font-medium tracking-wide">
+      {/* Top Banner for Trust / Free Delivery (collapses smoothly on scroll) */}
+      <div
+        className={`bg-brand-600 text-white text-xs text-center font-medium tracking-wide transition-all duration-300 overflow-hidden ${
+          isScrolled
+            ? 'max-h-0 py-0 opacity-0 pointer-events-none'
+            : 'max-h-10 py-1.5 px-4 opacity-100'
+        }`}
+      >
         ⚡ Super Saver Sale: Free delivery across India on orders above ₹500!
       </div>
 
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
+        <div
+          className={`flex items-center justify-between gap-4 transition-all duration-300 ${
+            isScrolled ? 'h-14' : 'h-16 sm:h-17'
+          }`}
+        >
           {/* Brand Logo */}
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center group">
@@ -89,6 +99,9 @@ export default function Navbar() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.15 }}
+                className={`transition-transform duration-300 origin-left ${
+                  isScrolled ? 'scale-95' : 'scale-100'
+                }`}
               >
                 <Logo variant="full" size="responsive" />
               </motion.div>
@@ -105,14 +118,18 @@ export default function Navbar() {
               placeholder="Search for products, brands, and categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-gray-100 hover:bg-gray-50 focus:bg-white text-sm rounded-lg pl-10 pr-20 py-2.5 border border-transparent focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 transition-all text-gray-800"
+              className={`w-full bg-gray-100 hover:bg-gray-50 focus:bg-white rounded-lg pl-10 pr-20 border border-transparent focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 transition-all text-gray-800 ${
+                isScrolled ? 'py-2 text-xs' : 'py-2.5 text-sm'
+              }`}
             />
             <Search className="w-4 h-4 text-gray-400 absolute left-3.5 pointer-events-none" />
             <motion.button
               type="submit"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.96 }}
-              className="absolute right-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-md transition-colors shadow-sm"
+              className={`absolute right-1.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-md transition-all shadow-sm ${
+                isScrolled ? 'px-2.5 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'
+              }`}
             >
               Search
             </motion.button>
