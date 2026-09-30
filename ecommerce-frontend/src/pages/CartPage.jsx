@@ -13,7 +13,9 @@ import {
   ShoppingBag,
   CheckCircle,
   PlusCircle,
-  AlertTriangle
+  AlertTriangle,
+  Truck,
+  Sparkles
 } from 'lucide-react';
 import api from '../utils/api.js';
 import {
@@ -23,7 +25,7 @@ import {
   clearCart
 } from '../features/cart/cartSlice.js';
 import CheckoutModal from '../components/checkout/CheckoutModal.jsx';
-import { drawerSlideDown } from '../utils/animations.js';
+import { drawerSlideDown, EASINGS } from '../utils/animations.js';
 
 export default function CartPage() {
   const dispatch = useDispatch();
@@ -165,24 +167,81 @@ export default function CartPage() {
       </div>
 
       {/* Free Shipping Gamification Meter */}
-      <div className="p-4 bg-brand-50/80 rounded-2xl border border-brand-100 space-y-2">
+      <motion.div
+        layout
+        className={`p-4 rounded-2xl border transition-colors duration-300 space-y-2.5 ${
+          progressToFreeShipping >= 100
+            ? 'bg-gradient-to-r from-emerald-50/90 via-teal-50/70 to-emerald-50/90 border-emerald-200/90 shadow-xs'
+            : 'bg-brand-50/80 border-brand-100'
+        }`}
+      >
         <div className="flex items-center justify-between text-xs">
-          <span className="font-bold text-brand-900 tabular-nums">
-            {itemsSubtotal >= 500
-              ? '🎉 Congratulations! You unlocked Free Pan-India Delivery!'
-              : `Add ₹${(500 - itemsSubtotal).toLocaleString('en-IN')} more to unlock FREE Delivery!`}
+          <div className="flex items-center gap-2">
+            {progressToFreeShipping >= 100 ? (
+              <motion.div
+                initial={{ scale: 0, rotate: -20 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+                className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs"
+              >
+                <Sparkles className="w-3 h-3" />
+              </motion.div>
+            ) : (
+              <div className="w-5 h-5 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center shrink-0">
+                <Truck className="w-3 h-3" />
+              </div>
+            )}
+            <span
+              className={`font-bold tabular-nums ${
+                progressToFreeShipping >= 100 ? 'text-emerald-900' : 'text-brand-900'
+              }`}
+            >
+              {progressToFreeShipping >= 100 ? (
+                <span>🎉 Free Pan-India Express Delivery Unlocked!</span>
+              ) : (
+                `Add ₹${(500 - itemsSubtotal).toLocaleString('en-IN')} more to unlock FREE Delivery!`
+              )}
+            </span>
+          </div>
+          <span
+            className={`font-black tabular-nums ${
+              progressToFreeShipping >= 100 ? 'text-emerald-700' : 'text-brand-700'
+            }`}
+          >
+            {progressToFreeShipping}%
           </span>
-          <span className="font-bold text-brand-700 tabular-nums">{progressToFreeShipping}%</span>
         </div>
-        <div className="w-full h-2.5 bg-brand-200/50 rounded-full overflow-hidden">
+
+        {/* Progress Track */}
+        <div className="w-full h-2.5 bg-brand-200/40 rounded-full overflow-hidden relative">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progressToFreeShipping}%` }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="h-full bg-brand-600 rounded-full"
-          />
+            transition={{
+              type: 'spring',
+              stiffness: 140,
+              damping: 18,
+              mass: 0.8
+            }}
+            className={`h-full rounded-full relative overflow-hidden transition-colors duration-300 ${
+              progressToFreeShipping >= 100
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]'
+                : 'bg-gradient-to-r from-brand-500 to-brand-600 shadow-[0_0_8px_rgba(234,88,12,0.3)]'
+            }`}
+          >
+            {/* Smooth moving shimmer effect */}
+            <motion.div
+              animate={{ x: ['-100%', '200%'] }}
+              transition={{
+                repeat: Infinity,
+                duration: 2.2,
+                ease: 'easeInOut'
+              }}
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent w-full h-full pointer-events-none"
+            />
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Cart Items & Delivery Address Picker (8 cols) */}
