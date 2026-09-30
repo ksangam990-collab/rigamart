@@ -9,6 +9,7 @@ import Layout from './components/layout/Layout.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import PublicRoute from './components/common/PublicRoute.jsx';
 import Logo from './components/common/Logo.jsx';
+import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 
 import HomePage from './pages/HomePage.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
@@ -65,8 +66,9 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<Layout />}>
           {/* Public Storefront Routes */}
           <Route index element={<HomePage />} />
           <Route path="search" element={<CatalogPage />} />
@@ -210,6 +212,7 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }

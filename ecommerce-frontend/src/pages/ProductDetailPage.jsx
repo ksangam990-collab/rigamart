@@ -91,10 +91,16 @@ export default function ProductDetailPage() {
   // Fetch related products once the main product is loaded
   useEffect(() => {
     if (!product?.category) return;
+    const catQuery =
+      typeof product.category === 'object' && product.category !== null
+        ? product.category.slug || product.category._id || product.category.name
+        : product.category;
+    if (!catQuery) return;
+
     const fetchRelated = async () => {
       setRelatedLoading(true);
       try {
-        const res = await api.get(`/products?category=${encodeURIComponent(product.category)}&limit=5`);
+        const res = await api.get(`/products?category=${encodeURIComponent(catQuery)}&limit=5`);
         const all = res.data.data?.products || [];
         // Filter out the current product and cap at 4
         setRelatedProducts(all.filter((p) => p._id !== product._id).slice(0, 4));
@@ -211,13 +217,28 @@ export default function ProductDetailPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
       {/* Breadcrumb Navigation */}
-      <Breadcrumb
-        items={[
-          { label: 'Home', href: '/' },
-          { label: product.category || 'Catalog', href: `/search?category=${encodeURIComponent(product.category || '')}` },
-          { label: product.name },
-        ]}
-      />
+      {(() => {
+        const categoryName =
+          typeof product.category === 'object' && product.category !== null
+            ? product.category.name || 'Catalog'
+            : product.category || 'Catalog';
+        const categorySlug =
+          typeof product.category === 'object' && product.category !== null
+            ? product.category.slug || product.category._id || ''
+            : product.category || '';
+        return (
+          <Breadcrumb
+            items={[
+              { label: 'Home', href: '/' },
+              {
+                label: categoryName,
+                href: `/search?category=${encodeURIComponent(categorySlug || categoryName)}`
+              },
+              { label: product.name }
+            ]}
+          />
+        );
+      })()}
 
       {/* Main Product Showcase Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">

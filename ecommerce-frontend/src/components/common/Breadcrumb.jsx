@@ -39,8 +39,17 @@ export default function Breadcrumb({ items = [] }) {
     <span className="text-gray-300 select-none" aria-hidden="true">›</span>
   );
 
+  const getItemLabel = (item) => {
+    if (!item) return '';
+    if (typeof item.label === 'object' && item.label !== null) {
+      return item.label.name || item.label.title || item.label.slug || '';
+    }
+    return item.label != null ? String(item.label) : '';
+  };
+
   const renderItem = (item, idx, arr) => {
     const isLast = idx === arr.length - 1;
+    const labelText = getItemLabel(item);
 
     if (item.ellipsis) {
       return (
@@ -52,7 +61,7 @@ export default function Breadcrumb({ items = [] }) {
     }
 
     return (
-      <React.Fragment key={`${item.label}-${idx}`}>
+      <React.Fragment key={`${labelText}-${idx}`}>
         {idx > 0 && <Separator />}
         {isLast || !item.href ? (
           <span
@@ -62,17 +71,17 @@ export default function Breadcrumb({ items = [] }) {
                 : 'text-gray-500'
             }`}
             aria-current={isLast ? 'page' : undefined}
-            title={item.label}
+            title={labelText}
           >
-            {item.label}
+            {labelText}
           </span>
         ) : (
           <Link
             to={item.href}
             className="text-xs text-gray-500 hover:text-brand-600 transition-colors truncate max-w-[120px] sm:max-w-xs"
-            title={item.label}
+            title={labelText}
           >
-            {item.label}
+            {labelText}
           </Link>
         )}
       </React.Fragment>
