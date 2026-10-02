@@ -26,7 +26,6 @@ import {
   buttonHover,
   buttonTap,
   drawerSlideDown,
-  pageVariants,
 } from '../utils/animations.js';
 
 /* ─── Helpers ─────────────────────────────────────── */
@@ -446,16 +445,10 @@ export default function ProfilePage() {
   if (isLoading) return <ProfileSkeleton />;
 
   return (
-    <motion.div
-      variants={pageVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
-    >
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* ── LEFT COLUMN: Sticky Sidebar ─────────────────── */}
-        <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-24">
+        <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-20 z-10">
           <motion.div
             variants={fadeInUp}
             initial="hidden"
@@ -673,6 +666,6 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

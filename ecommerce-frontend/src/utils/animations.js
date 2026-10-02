@@ -15,25 +15,22 @@ export const EASINGS = {
   springGentle: { type: 'spring', stiffness: 280, damping: 25 },
 };
 
-// Page Transition Variants
+// Page Transition Variants (fade only to prevent CSS transform containing block breaking position: sticky)
 export const pageVariants = {
   initial: {
     opacity: 0,
-    y: 8,
   },
   animate: {
     opacity: 1,
-    y: 0,
     transition: {
-      duration: 0.24,
+      duration: 0.22,
       ease: EASINGS.easeOutCubic,
     },
   },
   exit: {
     opacity: 0,
-    y: -6,
     transition: {
-      duration: 0.16,
+      duration: 0.15,
       ease: EASINGS.easeOutCubic,
     },
   },

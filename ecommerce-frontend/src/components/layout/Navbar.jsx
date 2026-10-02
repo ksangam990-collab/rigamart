@@ -70,7 +70,7 @@ export default function Navbar() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border-b border-gray-200/60'
+          ? 'bg-white/95 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.06)] border-b border-gray-200/80'
           : 'bg-white border-b border-gray-200 shadow-sm'
       }`}
     >
@@ -89,7 +89,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           className={`flex items-center justify-between gap-4 transition-all duration-300 ${
-            isScrolled ? 'h-14' : 'h-16 sm:h-17'
+            isScrolled ? 'h-14' : 'h-16'
           }`}
         >
           {/* Brand Logo */}
