@@ -30,6 +30,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isBannerCollapsed, setIsBannerCollapsed] = useState(false);
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const cartTotalCount = useSelector((state) => state.cart.totalCount);
@@ -38,13 +39,35 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Scroll listener for sticky glassmorphism backdrop blur & shadow
+  // RAF-throttled scroll listener with dual-threshold hysteresis
+  // Decouples visual elevation from banner collapse and prevents layout-shift oscillation
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      if (window.scrollY > 15) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+
+          // 1. Elevation shadow hysteresis: turn on at > 25px, turn off only when back at < 10px
+          setIsScrolled((prev) => {
+            if (!prev && currentScrollY > 25) return true;
+            if (prev && currentScrollY < 10) return false;
+            return prev;
+          });
+
+          // 2. Banner collapse hysteresis: collapse at > 80px, re-expand only when back at < 20px
+          // The 60px hysteresis gap strictly exceeds the ~40px header height delta,
+          // making threshold oscillation mathematically impossible.
+          setIsBannerCollapsed((prev) => {
+            if (!prev && currentScrollY > 80) return true;
+            if (prev && currentScrollY < 20) return false;
+            return prev;
+          });
+
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -77,7 +100,7 @@ export default function Navbar() {
       {/* Top Banner for Trust / Free Delivery (collapses smoothly on scroll) */}
       <div
         className={`bg-brand-600 text-white text-xs text-center font-medium tracking-wide transition-all duration-300 overflow-hidden ${
-          isScrolled
+          isBannerCollapsed
             ? 'max-h-0 py-0 opacity-0 pointer-events-none'
             : 'max-h-10 py-1.5 px-4 opacity-100'
         }`}
@@ -89,7 +112,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           className={`flex items-center justify-between gap-4 transition-all duration-300 ${
-            isScrolled ? 'h-14' : 'h-16'
+            isBannerCollapsed ? 'h-14' : 'h-16'
           }`}
         >
           {/* Brand Logo */}
@@ -100,7 +123,7 @@ export default function Navbar() {
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.15 }}
                 className={`transition-transform duration-300 origin-left ${
-                  isScrolled ? 'scale-95' : 'scale-100'
+                  isBannerCollapsed ? 'scale-95' : 'scale-100'
                 }`}
               >
                 <Logo variant="full" size="responsive" />
@@ -119,7 +142,7 @@ export default function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className={`w-full bg-gray-100 hover:bg-gray-50 focus:bg-white rounded-lg pl-10 pr-20 border border-transparent focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 transition-all text-gray-800 ${
-                isScrolled ? 'py-2 text-xs' : 'py-2.5 text-sm'
+                isBannerCollapsed ? 'py-2 text-xs' : 'py-2.5 text-sm'
               }`}
             />
             <Search className="w-4 h-4 text-gray-400 absolute left-3.5 pointer-events-none" />
@@ -128,7 +151,7 @@ export default function Navbar() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.96 }}
               className={`absolute right-1.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-md transition-all shadow-sm ${
-                isScrolled ? 'px-2.5 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'
+                isBannerCollapsed ? 'px-2.5 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'
               }`}
             >
               Search
