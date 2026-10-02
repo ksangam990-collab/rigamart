@@ -349,7 +349,8 @@ export default function Navbar() {
             <motion.button
               type="submit"
               whileTap={{ scale: 0.94 }}
-              className="absolute right-1 px-2.5 py-1 bg-brand-600 text-white text-xs font-semibold rounded shadow-sm"
+              className="absolute right-1 px-3 py-1.5 min-h-[30px] bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-md shadow-sm flex items-center justify-center transition-colors"
+              aria-label="Submit search"
             >
               Go
             </motion.button>

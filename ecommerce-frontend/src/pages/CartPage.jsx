@@ -471,11 +471,12 @@ export default function CartPage() {
                               })
                             )
                           }
-                          className="px-2.5 py-1 text-gray-600 hover:bg-gray-200 font-bold transition-colors"
+                          className="w-8 h-8 sm:w-7 sm:h-7 flex items-center justify-center text-gray-600 hover:bg-gray-200 font-bold transition-colors"
+                          aria-label="Decrease quantity"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </motion.button>
-                        <span className="px-3 py-1 text-xs font-bold text-gray-900 bg-white min-w-[28px] text-center tabular-nums">
+                        <span className="px-2 sm:px-3 py-1 text-xs font-bold text-gray-900 bg-white min-w-[32px] text-center tabular-nums">
                           {item.quantity}
                         </span>
                         <motion.button
@@ -488,7 +489,8 @@ export default function CartPage() {
                               })
                             )
                           }
-                          className="px-2.5 py-1 text-gray-600 hover:bg-gray-200 font-bold transition-colors"
+                          className="w-8 h-8 sm:w-7 sm:h-7 flex items-center justify-center text-gray-600 hover:bg-gray-200 font-bold transition-colors"
+                          aria-label="Increase quantity"
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </motion.button>
@@ -504,8 +506,9 @@ export default function CartPage() {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => dispatch(removeFromCart(item._id))}
-                        className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                        className="p-2 sm:p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
                         title="Remove item"
+                        aria-label="Remove item from cart"
                       >
                         <Trash2 className="w-4 h-4" />
                       </motion.button>

@@ -40,6 +40,11 @@ export default function BottomNav() {
     return tab.to;
   }
 
+  // Do not render BottomNav on product detail pages where the sticky buy bar operates
+  if (location.pathname.startsWith('/products/')) {
+    return null;
+  }
+
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white border-t border-gray-200"

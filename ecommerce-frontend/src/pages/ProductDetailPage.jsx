@@ -370,7 +370,8 @@ export default function ProductDetailPage() {
                   type="button"
                   disabled={quantity <= 1}
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold disabled:opacity-40 transition-colors"
+                  className="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold disabled:opacity-40 transition-colors"
+                  aria-label="Decrease quantity"
                 >
                   -
                 </motion.button>
@@ -382,7 +383,8 @@ export default function ProductDetailPage() {
                   type="button"
                   disabled={quantity >= Math.min(stock, 10)}
                   onClick={() => setQuantity((q) => Math.min(Math.min(stock, 10), q + 1))}
-                  className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold disabled:opacity-40 transition-colors"
+                  className="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold disabled:opacity-40 transition-colors"
+                  aria-label="Increase quantity"
                 >
                   +
                 </motion.button>
@@ -554,6 +556,7 @@ export default function ProductDetailPage() {
             exit={{ y: 80, opacity: 0 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-2.5 shadow-[0_-4px_25px_rgba(0,0,0,0.12)] flex items-center justify-between gap-3"
+            style={{ paddingBottom: 'max(10px, env(safe-area-inset-bottom, 10px))' }}
           >
             {/* Left: Thumbnail & Price */}
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
