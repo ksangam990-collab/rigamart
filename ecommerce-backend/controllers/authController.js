@@ -124,14 +124,43 @@ const login = async (req, res) => {
       });
     }
 
+    // Check if account is temporarily locked due to brute-force attempts
+    if (user.lockUntil && user.lockUntil > Date.now()) {
+      const minutesRemaining = Math.ceil((user.lockUntil - Date.now()) / (60 * 1000));
+      return res.status(423).json({
+        success: false,
+        message: `Account is temporarily locked due to consecutive failed login attempts. Please try again in ${minutesRemaining} minute(s).`,
+        data: null
+      });
+    }
+
     // Verify password hash
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+      if (user.failedLoginAttempts >= 5) {
+        user.lockUntil = new Date(Date.now() + 15 * 60 * 1000); // 15-minute lockout
+        user.failedLoginAttempts = 0;
+        await user.save({ validateBeforeSave: false });
+        return res.status(423).json({
+          success: false,
+          message: 'Account has been temporarily locked for 15 minutes due to 5 consecutive failed login attempts.',
+          data: null
+        });
+      }
+      await user.save({ validateBeforeSave: false });
+      const remainingAttempts = 5 - user.failedLoginAttempts;
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password.',
+        message: `Invalid email or password. ${remainingAttempts} attempt(s) remaining before temporary lockout.`,
         data: null
       });
+    }
+
+    // Reset failed login counter on successful authentication
+    if (user.failedLoginAttempts > 0 || user.lockUntil) {
+      user.failedLoginAttempts = 0;
+      user.lockUntil = null;
     }
 
     // Generate tokens

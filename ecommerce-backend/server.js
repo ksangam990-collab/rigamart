@@ -21,6 +21,9 @@ const sellerRoutes = require('./routes/sellerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const { verifyEmailConfig } = require('./config/nodemailer');
 const { initKeepAlive } = require('./utils/keepAlive');
+const mongoSanitize = require('express-mongo-sanitize');
+const hpp = require('hpp');
+const { globalLimiter, authLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 
@@ -74,6 +77,15 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Cookie parser for secure httpOnly refresh tokens
 app.use(cookieParser());
 
+// Data sanitization against NoSQL query injection (strips $ and .)
+app.use(mongoSanitize());
+
+// Prevent HTTP parameter pollution attacks
+app.use(hpp());
+
+// Global API rate limiter (150 req/min per IP)
+app.use('/api', globalLimiter);
+
 // Request logger in development
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -100,8 +112,8 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API Routes
-app.use('/api/auth', authRoutes);
+// API Routes (Strict rate limiting applied on authentication endpoints)
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/upload', uploadRoutes);
@@ -133,15 +145,21 @@ app.use((req, res, next) => {
   });
 });
 
-// Global Centralized Error Handler
+// Global Centralized Error Handler (Masks internal stack traces in production)
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || (res.statusCode === 200 ? 500 : res.statusCode);
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  // In production, mask internal 500 errors to prevent server path and database disclosure
+  const safeMessage = isProduction && statusCode === 500
+    ? 'An unexpected internal server error occurred. Please try again later.'
+    : err.message || 'Internal Server Error';
 
   res.status(statusCode).json({
     success: false,
-    message: err.message || 'Internal Server Error',
+    message: safeMessage,
     data: null,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    ...(!isProduction && { stack: err.stack })
   });
 });
 

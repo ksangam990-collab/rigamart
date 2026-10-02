@@ -102,6 +102,14 @@ const userSchema = new mongoose.Schema(
     isBanned: {
       type: Boolean,
       default: false
+    },
+    failedLoginAttempts: {
+      type: Number,
+      default: 0
+    },
+    lockUntil: {
+      type: Date,
+      default: null
     }
   },
   {
