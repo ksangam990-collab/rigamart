@@ -446,9 +446,9 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
+      <div className="flex flex-col lg:flex-row gap-8 items-start lg:min-h-[calc(100vh-12rem)]">
         {/* ── LEFT COLUMN: Sticky Sidebar ─────────────────── */}
-        <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-20 z-10">
+        <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-20 z-10 self-start">
           <motion.div
             variants={fadeInUp}
             initial="hidden"
@@ -456,20 +456,20 @@ export default function ProfilePage() {
             className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
           >
             {/* Avatar block */}
-            <div className="bg-gradient-to-br from-brand-600 to-brand-700 px-6 py-8 text-center">
-              <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur text-white font-black text-3xl flex items-center justify-center mx-auto mb-3 shadow-lg ring-4 ring-white/30">
+            <div className="bg-gradient-to-br from-brand-600 to-brand-700 px-6 py-5 text-center">
+              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur text-white font-black text-2xl flex items-center justify-center mx-auto mb-2.5 shadow-lg ring-4 ring-white/30">
                 {getInitials(profile?.name || authUser?.name || 'U')}
               </div>
-              <h1 className="text-lg font-black text-white truncate">
+              <h1 className="text-base font-black text-white truncate">
                 {profile?.name || authUser?.name}
               </h1>
               <p className="text-xs text-brand-100 truncate mt-0.5">{profile?.email}</p>
-              <span className={`inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-bold ${RoleMeta.cls}`}>
+              <span className={`inline-flex items-center gap-1.5 mt-2 px-2.5 py-0.5 rounded-full text-xs font-bold ${RoleMeta.cls}`}>
                 <RoleIcon className="w-3.5 h-3.5" />
                 {RoleMeta.label}
               </span>
               {memberSince && (
-                <p className="text-[11px] text-brand-200 mt-2">Member since {memberSince}</p>
+                <p className="text-[11px] text-brand-200 mt-1.5">Member since {memberSince}</p>
               )}
             </div>
 
@@ -567,7 +567,7 @@ export default function ProfilePage() {
         </aside>
 
         {/* ── RIGHT COLUMN: Addresses ──────────────────────── */}
-        <div className="flex-1 min-w-0 space-y-6">
+        <div className="flex-1 min-w-0 space-y-6 lg:min-h-[600px]">
           {/* Header */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>

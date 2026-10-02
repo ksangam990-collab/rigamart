@@ -70,7 +70,7 @@ export default function Navbar() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.06)] border-b border-gray-200/80'
+          ? 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.08)] border-b border-gray-200'
           : 'bg-white border-b border-gray-200 shadow-sm'
       }`}
     >
