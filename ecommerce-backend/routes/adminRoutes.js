@@ -9,7 +9,8 @@ const {
   updateUserRole,
   getAdminProducts,
   toggleProductStatus,
-  updateOrderStatusOverride
+  updateOrderStatusOverride,
+  getSecurityAuditLogs
 } = require('../controllers/adminController');
 const { getAllOrders } = require('../controllers/orderController');
 const { protect } = require('../middleware/auth');
@@ -35,5 +36,8 @@ router.patch('/products/:id/status', toggleProductStatus);
 // Platform Order Audits & Overrides
 router.get('/orders', getAllOrders);
 router.patch('/orders/:id/status', updateOrderStatusOverride);
+
+// Security Audit Trail (SOC2 / ISO-27001)
+router.get('/audit-logs', getSecurityAuditLogs);
 
 module.exports = router;

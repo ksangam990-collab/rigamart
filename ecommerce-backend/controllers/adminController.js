@@ -3,7 +3,9 @@ const User = require('../models/User');
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const AuditLog = require('../models/AuditLog');
 const { getPagination } = require('../utils/paginate');
+const { logSecurityEvent } = require('../utils/auditLogger');
 
 /**
  * Helper to restore inventory if admin overrides an order to Cancelled
@@ -466,6 +468,14 @@ const toggleUserBan = async (req, res) => {
 
     await user.save();
 
+    logSecurityEvent({
+      action: isBanned ? 'USER_BANNED' : 'USER_UNBANNED',
+      severity: isBanned ? 'critical' : 'warning',
+      req,
+      target: { targetType: 'User', targetId: user._id },
+      details: { targetEmail: user.email, isBanned, adminEmail: req.user.email }
+    });
+
     res.status(200).json({
       success: true,
       message: isBanned
@@ -526,6 +536,14 @@ const updateUserRole = async (req, res) => {
     const previousRole = user.role;
     user.role = role;
     await user.save();
+
+    logSecurityEvent({
+      action: 'USER_ROLE_UPDATED',
+      severity: 'critical',
+      req,
+      target: { targetType: 'User', targetId: user._id },
+      details: { targetEmail: user.email, previousRole, newRole: role, adminEmail: req.user.email }
+    });
 
     res.status(200).json({
       success: true,
@@ -716,6 +734,14 @@ const updateOrderStatusOverride = async (req, res) => {
 
     await order.save();
 
+    logSecurityEvent({
+      action: 'ORDER_STATUS_OVERRIDDEN',
+      severity: 'warning',
+      req,
+      target: { targetType: 'Order', targetId: order._id },
+      details: { previousStatus, newStatus: status, adminEmail: req.user.email }
+    });
+
     res.status(200).json({
       success: true,
       message: `Order status overridden from '${previousStatus}' to '${status}' successfully`,
@@ -732,6 +758,54 @@ const updateOrderStatusOverride = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Get paginated security audit logs with filtering (SOC2 / ISO-27001 trail)
+ * @route   GET /api/admin/audit-logs
+ * @access  Private (Admin only)
+ */
+const getSecurityAuditLogs = async (req, res) => {
+  try {
+    const { action, severity, search } = req.query;
+    const { page, limit, skip, getPaginationMeta } = getPagination(req.query, 20);
+
+    const filter = {};
+    if (action) filter.action = action.toUpperCase();
+    if (severity) filter.severity = severity.toLowerCase();
+    if (search && search.trim()) {
+      const term = search.trim();
+      filter.$or = [
+        { 'actor.email': { $regex: term, $options: 'i' } },
+        { 'actor.ip': { $regex: term, $options: 'i' } },
+        { action: { $regex: term, $options: 'i' } }
+      ];
+    }
+
+    const [logs, totalCount] = await Promise.all([
+      AuditLog.find(filter)
+        .sort({ timestamp: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      AuditLog.countDocuments(filter)
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: 'Security audit logs retrieved successfully',
+      data: {
+        logs,
+        pagination: getPaginationMeta(totalCount)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Failed to retrieve audit logs: ${error.message}`,
+      data: null
+    });
+  }
+};
+
 module.exports = {
   getAdminDashboard,
   getAdminAnalytics,
@@ -741,5 +815,6 @@ module.exports = {
   updateUserRole,
   getAdminProducts,
   toggleProductStatus,
-  updateOrderStatusOverride
+  updateOrderStatusOverride,
+  getSecurityAuditLogs
 };

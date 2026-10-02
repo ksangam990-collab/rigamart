@@ -8,6 +8,7 @@ const {
   sendOrderDeliveredEmail,
   sendOrderCancelledEmail
 } = require('../utils/emailService');
+const { logSecurityEvent } = require('../utils/auditLogger');
 
 /**
  * Helper to atomically restore variant stock on cancellation/returns
@@ -175,6 +176,16 @@ const cancelOrder = async (req, res) => {
 
     // Atomically restore variant stock
     await restoreInventory(order.items);
+
+    // Record immutable audit event
+    logSecurityEvent({
+      action: 'ORDER_CANCELLED',
+      severity: 'warning',
+      req,
+      user: req.user,
+      target: { targetType: 'Order', targetId: order._id },
+      details: { orderNumber: order.orderNumber, reason, totalAmount: order.totalAmount }
+    });
 
     // Non-blocking cancellation email
     User.findById(order.user)

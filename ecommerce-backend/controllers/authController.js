@@ -8,6 +8,7 @@ const {
   getRefreshTokenCookieOptions
 } = require('../utils/generateToken');
 const { generateNumericOtp, sendSmsOtp } = require('../utils/otp');
+const { logSecurityEvent } = require('../utils/auditLogger');
 
 /**
  * Helper to strip sensitive fields from user object before sending response
@@ -79,6 +80,15 @@ const register = async (req, res) => {
     // Set refresh token in secure httpOnly cookie
     res.cookie('refreshToken', refreshToken, getRefreshTokenCookieOptions());
 
+    // Record audit event
+    logSecurityEvent({
+      action: 'AUTH_REGISTER',
+      severity: 'info',
+      req,
+      user,
+      details: { role: assignedRole }
+    });
+
     res.status(201).json({
       success: true,
       message: 'User registered successfully.',
@@ -108,6 +118,12 @@ const login = async (req, res) => {
     // Find user with password explicitly selected
     const user = await User.findOne({ email: email.toLowerCase().trim() }).select('+password +refreshToken');
     if (!user) {
+      logSecurityEvent({
+        action: 'AUTH_LOGIN_FAILED',
+        severity: 'warning',
+        req,
+        details: { email, reason: 'User not found' }
+      });
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password.',
@@ -117,6 +133,13 @@ const login = async (req, res) => {
 
     // Check if user is suspended/banned
     if (user.isBanned) {
+      logSecurityEvent({
+        action: 'AUTH_LOGIN_BANNED',
+        severity: 'warning',
+        req,
+        user,
+        details: { email, reason: 'Account suspended' }
+      });
       return res.status(403).json({
         success: false,
         message: 'Your account has been suspended. Please contact support.',
@@ -127,6 +150,13 @@ const login = async (req, res) => {
     // Check if account is temporarily locked due to brute-force attempts
     if (user.lockUntil && user.lockUntil > Date.now()) {
       const minutesRemaining = Math.ceil((user.lockUntil - Date.now()) / (60 * 1000));
+      logSecurityEvent({
+        action: 'AUTH_LOGIN_LOCKED',
+        severity: 'warning',
+        req,
+        user,
+        details: { email, minutesRemaining }
+      });
       return res.status(423).json({
         success: false,
         message: `Account is temporarily locked due to consecutive failed login attempts. Please try again in ${minutesRemaining} minute(s).`,
@@ -142,6 +172,13 @@ const login = async (req, res) => {
         user.lockUntil = new Date(Date.now() + 15 * 60 * 1000); // 15-minute lockout
         user.failedLoginAttempts = 0;
         await user.save({ validateBeforeSave: false });
+        logSecurityEvent({
+          action: 'ACCOUNT_LOCKED',
+          severity: 'critical',
+          req,
+          user,
+          details: { email, reason: '5 consecutive failed password attempts', durationMinutes: 15 }
+        });
         return res.status(423).json({
           success: false,
           message: 'Account has been temporarily locked for 15 minutes due to 5 consecutive failed login attempts.',
@@ -150,6 +187,13 @@ const login = async (req, res) => {
       }
       await user.save({ validateBeforeSave: false });
       const remainingAttempts = 5 - user.failedLoginAttempts;
+      logSecurityEvent({
+        action: 'AUTH_LOGIN_FAILED',
+        severity: 'warning',
+        req,
+        user,
+        details: { email, remainingAttempts }
+      });
       return res.status(401).json({
         success: false,
         message: `Invalid email or password. ${remainingAttempts} attempt(s) remaining before temporary lockout.`,
@@ -173,6 +217,14 @@ const login = async (req, res) => {
 
     // Set refresh token in secure httpOnly cookie
     res.cookie('refreshToken', refreshToken, getRefreshTokenCookieOptions());
+
+    // Record successful login audit log
+    logSecurityEvent({
+      action: 'AUTH_LOGIN_SUCCESS',
+      severity: 'info',
+      req,
+      user
+    });
 
     res.status(200).json({
       success: true,
@@ -211,6 +263,12 @@ const logout = async (req, res) => {
 
     // Clear the httpOnly cookie
     res.clearCookie('refreshToken', getRefreshTokenCookieOptions());
+
+    logSecurityEvent({
+      action: 'AUTH_LOGOUT',
+      severity: 'info',
+      req
+    });
 
     res.status(200).json({
       success: true,
@@ -507,6 +565,14 @@ const resetPassword = async (req, res) => {
 
     // Consume the OTP
     await Otp.deleteOne({ _id: otpRecord._id });
+
+    logSecurityEvent({
+      action: 'PASSWORD_RESET_SUCCESS',
+      severity: 'warning',
+      req,
+      user,
+      details: { email: user.email }
+    });
 
     res.status(200).json({
       success: true,
