@@ -15,7 +15,9 @@ import {
   PlusCircle,
   AlertTriangle,
   Truck,
-  Sparkles
+  Sparkles,
+  Navigation,
+  Loader2
 } from 'lucide-react';
 import api from '../utils/api.js';
 import {
@@ -44,6 +46,64 @@ export default function CartPage() {
   const [addrState, setAddrState] = useState('');
   const [addrPincode, setAddrPincode] = useState('');
   const [savingAddress, setSavingAddress] = useState(false);
+  const [locating, setLocating] = useState(false);
+  const [geoNotice, setGeoNotice] = useState(null);
+
+  const handleUseCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setGeoNotice({ type: 'error', text: 'Geolocation is not supported by your browser.' });
+      return;
+    }
+
+    setLocating(true);
+    setGeoNotice({ type: 'info', text: 'Detecting your GPS location...' });
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          setGeoNotice({ type: 'info', text: 'Resolving address details...' });
+          const res = await api.get('/users/reverse-geocode', {
+            params: { lat: latitude, lon: longitude }
+          });
+          if (res.data?.success && res.data.data) {
+            const { street, city, state, pincode, landmark } = res.data.data;
+            if (street) setAddrStreet(street);
+            if (city) setAddrCity(city);
+            if (state) setAddrState(state);
+            if (pincode) setAddrPincode(pincode);
+            const detectedArea = [city, state].filter(Boolean).join(', ');
+            setGeoNotice({
+              type: 'success',
+              text: `Location detected: ${detectedArea || 'Address updated'}`
+            });
+            setTimeout(() => setGeoNotice(null), 4000);
+          }
+        } catch (err) {
+          setGeoNotice({
+            type: 'error',
+            text: err.response?.data?.message || 'Failed to resolve location address. Please fill manually.'
+          });
+        } finally {
+          setLocating(false);
+        }
+      },
+      (err) => {
+        setLocating(false);
+        if (err.code === 1) {
+          setGeoNotice({
+            type: 'error',
+            text: 'Location permission was denied. Please allow access in browser or fill manually.'
+          });
+        } else if (err.code === 3) {
+          setGeoNotice({ type: 'error', text: 'Location request timed out. Please enter manually.' });
+        } else {
+          setGeoNotice({ type: 'error', text: 'Unable to detect location. Please fill manually.' });
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  };
 
   // Fetch fresh cart and user profile addresses
   useEffect(() => {
@@ -310,7 +370,42 @@ export default function CartPage() {
                   onSubmit={handleAddNewAddress}
                   className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3"
                 >
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700">New Address Details</h3>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-1 border-b border-gray-200/80">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700">New Address Details</h3>
+                    <button
+                      type="button"
+                      onClick={handleUseCurrentLocation}
+                      disabled={locating}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-bold rounded-lg border border-brand-200 transition-colors disabled:opacity-60 shadow-xs"
+                    >
+                      {locating ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-600" />
+                          <span>Detecting Location...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Navigation className="w-3.5 h-3.5 text-brand-600" />
+                          <span>Use Current Location</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Geolocation feedback notification banner */}
+                  {geoNotice && (
+                    <div
+                      className={`text-xs px-3 py-2 rounded-xl flex items-center gap-2 ${
+                        geoNotice.type === 'success'
+                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                          : geoNotice.type === 'info'
+                          ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                          : 'bg-amber-50 text-amber-800 border border-amber-200'
+                      }`}
+                    >
+                      <span>{geoNotice.text}</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       type="text"

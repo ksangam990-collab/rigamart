@@ -6,6 +6,7 @@ const {
   addAddress,
   updateAddress,
   deleteAddress,
+  reverseGeocodeLocation,
   getWishlist,
   addToWishlist,
   removeFromWishlist
@@ -15,9 +16,10 @@ const { protect } = require('../middleware/auth');
 // All user endpoints require authentication
 router.use(protect);
 
-// Profile
+// Profile & Geolocation
 router.get('/profile', getProfile);
 router.put('/profile', updateProfile);
+router.get('/reverse-geocode', reverseGeocodeLocation);
 
 // Shipping Addresses
 router.post('/address', addAddress);
