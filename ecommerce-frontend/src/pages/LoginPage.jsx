@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Mail, Lock, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
 import { loginUser, clearError } from '../features/auth/authSlice.js';
 import Logo from '../components/common/Logo.jsx';
+import GoogleAuthButton from '../components/auth/GoogleAuthButton.jsx';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -111,7 +112,20 @@ export default function LoginPage() {
           </motion.button>
         </form>
 
-        <div className="text-center pt-2 text-xs text-gray-500">
+        {/* Divider */}
+        <div className="relative my-3">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-3 text-gray-400 font-semibold tracking-wider">Or continue with</span>
+          </div>
+        </div>
+
+        {/* Google One-Tap & Sign In Button */}
+        <GoogleAuthButton mode="login" enableOneTap={true} />
+
+        <div className="text-center pt-1 text-xs text-gray-500">
           New to Rigamart?{' '}
           <Link to="/register" className="font-bold text-brand-600 hover:underline">
             Create an account

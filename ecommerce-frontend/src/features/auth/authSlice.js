@@ -69,6 +69,21 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const loginWithGoogle = createAsyncThunk(
+  'auth/loginWithGoogle',
+  async ({ credential, role = 'customer' }, { rejectWithValue }) => {
+    try {
+      const res = await api.post('/auth/google', { credential, role });
+      const { user, accessToken } = res.data.data;
+      setAccessToken(accessToken);
+      safeStorage.setItem('rigamart_user', JSON.stringify(user));
+      return { user, accessToken };
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Google sign-in failed');
+    }
+  }
+);
+
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
   setAccessToken(null);
   safeStorage.removeItem('rigamart_user');
@@ -153,6 +168,21 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Google Login
+      .addCase(loginWithGoogle.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.accessToken = action.payload.accessToken;
+      })
+      .addCase(loginWithGoogle.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })

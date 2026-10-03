@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Cart = require('../models/Cart');
@@ -238,6 +240,168 @@ const login = async (req, res) => {
     res.status(500).json({
       success: false,
       message: `Login failed: ${error.message}`,
+      data: null
+    });
+  }
+};
+
+/**
+ * @desc    Authenticate or register user via Google OAuth ID token / One-Tap
+ * @route   POST /api/auth/google
+ * @access  Public
+ */
+const googleAuth = async (req, res) => {
+  try {
+    const { credential, role = 'customer' } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({
+        success: false,
+        message: 'Google credential token is required',
+        data: null
+      });
+    }
+
+    let payload = null;
+
+    // Verify Google ID token against Google's tokeninfo endpoint
+    try {
+      const googleRes = await axios.get('https://oauth2.googleapis.com/tokeninfo', {
+        params: { id_token: credential },
+        timeout: 6000
+      });
+      payload = googleRes.data;
+    } catch (err) {
+      // In non-production testing, allow decoded JWT if provided
+      const decoded = jwt.decode(credential);
+      if (process.env.NODE_ENV !== 'production' && decoded && decoded.email) {
+        payload = decoded;
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid or expired Google authentication token. Please sign in again.',
+          data: null
+        });
+      }
+    }
+
+    const { email, name, sub: googleId, picture, email_verified } = payload;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Google profile does not contain a valid email address.',
+        data: null
+      });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Check if user already exists
+    let user = await User.findOne({ email: normalizedEmail }).select('+password +refreshToken');
+    let isNewUser = false;
+
+    if (user) {
+      // Check if account is suspended/banned
+      if (user.isBanned) {
+        logSecurityEvent({
+          action: 'AUTH_LOGIN_BANNED',
+          severity: 'warning',
+          req,
+          user,
+          details: { email: normalizedEmail, method: 'google' }
+        });
+        return res.status(403).json({
+          success: false,
+          message: 'Your account has been suspended. Please contact customer support.',
+          data: null
+        });
+      }
+
+      // Link googleId and avatar if not present
+      let needsSave = false;
+      if (!user.googleId && googleId) {
+        user.googleId = googleId;
+        needsSave = true;
+      }
+      if (!user.avatar && picture) {
+        user.avatar = picture;
+        needsSave = true;
+      }
+      if (!user.isVerified && (email_verified === 'true' || email_verified === true)) {
+        user.isVerified = true;
+        needsSave = true;
+      }
+      if (needsSave) {
+        await user.save({ validateBeforeSave: false });
+      }
+    } else {
+      // Create new user via Google Sign-In
+      isNewUser = true;
+      const assignedRole = role === 'seller' ? 'seller' : 'customer';
+      const randomPassword = crypto.randomBytes(32).toString('hex');
+
+      user = await User.create({
+        name: name || normalizedEmail.split('@')[0],
+        email: normalizedEmail,
+        password: randomPassword,
+        role: assignedRole,
+        isVerified: email_verified === 'true' || email_verified === true,
+        googleId,
+        avatar: picture || null,
+        authProvider: 'google'
+      });
+
+      // Create initial persistent empty cart
+      await Cart.create({
+        user: user._id,
+        items: []
+      });
+
+      logSecurityEvent({
+        action: 'AUTH_REGISTER',
+        severity: 'info',
+        req,
+        user,
+        details: { method: 'google', role: assignedRole }
+      });
+    }
+
+    // Generate fresh JWT tokens
+    const accessToken = generateAccessToken(user._id, user.role);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    user.failedLoginAttempts = 0;
+    user.lockUntil = null;
+    await user.save({ validateBeforeSave: false });
+
+    // Set secure httpOnly cookie
+    res.cookie('refreshToken', refreshToken, getRefreshTokenCookieOptions());
+
+    logSecurityEvent({
+      action: 'AUTH_LOGIN_SUCCESS',
+      severity: 'info',
+      req,
+      user,
+      details: { method: 'google', isNewUser }
+    });
+
+    res.status(isNewUser ? 201 : 200).json({
+      success: true,
+      message: isNewUser
+        ? 'Account registered and signed in with Google successfully.'
+        : 'Signed in with Google successfully.',
+      data: {
+        user: sanitizeUser(user),
+        accessToken,
+        isNewUser
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Google authentication failed: ${error.message}`,
       data: null
     });
   }
@@ -614,6 +778,7 @@ const getMe = async (req, res) => {
 module.exports = {
   register,
   login,
+  googleAuth,
   logout,
   refreshToken,
   sendOtp,

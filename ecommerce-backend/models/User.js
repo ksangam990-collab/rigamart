@@ -110,6 +110,20 @@ const userSchema = new mongoose.Schema(
     lockUntil: {
       type: Date,
       default: null
+    },
+    googleId: {
+      type: String,
+      default: null,
+      sparse: true
+    },
+    avatar: {
+      type: String,
+      default: null
+    },
+    authProvider: {
+      type: String,
+      enum: ['local', 'google'],
+      default: 'local'
     }
   },
   {

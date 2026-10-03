@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   register,
   login,
+  googleAuth,
   logout,
   refreshToken,
   sendOtp,
@@ -23,6 +24,7 @@ const {
 // Public authentication routes
 router.post('/register', validateRegister, register);
 router.post('/login', validateLogin, login);
+router.post('/google', googleAuth); // Google OAuth & One-Tap Sign In
 router.post('/logout', logout);
 router.post('/refresh-token', refreshToken);
 router.post('/send-otp', validateOtpRequest, sendOtp);
