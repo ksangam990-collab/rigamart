@@ -256,6 +256,77 @@ const searchProducts = async (req, res) => {
 };
 
 /**
+ * @desc    Get fast predictive search suggestions (products & categories)
+ * @route   GET /api/products/suggestions?q=
+ * @access  Public
+ */
+const getProductSuggestions = async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || !q.trim()) {
+      return res.status(200).json({
+        success: true,
+        message: 'Empty query, no suggestions',
+        data: { products: [], categories: [] }
+      });
+    }
+
+    const queryTerm = q.trim();
+    const regexPattern = new RegExp(queryTerm.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'i');
+
+    const [products, categories] = await Promise.all([
+      Product.find({
+        isActive: true,
+        $or: [
+          { name: regexPattern },
+          { brand: regexPattern },
+          { tags: regexPattern }
+        ]
+      })
+        .select('name brand basePrice images category avgRating')
+        .populate('category', 'name slug')
+        .limit(6)
+        .lean(),
+      Category.find({
+        isActive: true,
+        name: regexPattern
+      })
+        .select('name slug')
+        .limit(3)
+        .lean()
+    ]);
+
+    const formattedProducts = products.map((p) => {
+      const primaryImg = p.images?.find((img) => img.isPrimary) || p.images?.[0] || null;
+      return {
+        _id: p._id,
+        name: p.name,
+        brand: p.brand,
+        basePrice: p.basePrice,
+        image: primaryImg ? primaryImg.url : null,
+        category: p.category ? { name: p.category.name, slug: p.category.slug } : null,
+        avgRating: p.avgRating
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Suggestions retrieved successfully',
+      data: {
+        products: formattedProducts,
+        categories
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Failed to fetch search suggestions: ${error.message}`,
+      data: { products: [], categories: [] }
+    });
+  }
+};
+
+/**
  * @desc    Create a new product with variants
  * @route   POST /api/products
  * @access  Private (Seller or Admin)
@@ -479,6 +550,7 @@ module.exports = {
   getProducts,
   getProductById,
   searchProducts,
+  getProductSuggestions,
   createProduct,
   updateProduct,
   deleteProduct

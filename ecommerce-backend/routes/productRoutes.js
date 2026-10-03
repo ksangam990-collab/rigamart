@@ -4,6 +4,7 @@ const {
   getProducts,
   getProductById,
   searchProducts,
+  getProductSuggestions,
   createProduct,
   updateProduct,
   deleteProduct
@@ -18,6 +19,7 @@ router.use('/:productId/reviews', reviewRoutes);
 // Public catalog and search routes
 router.get('/', getProducts);
 router.get('/search', searchProducts); // Must precede /:id to prevent route clash
+router.get('/suggestions', getProductSuggestions); // Fast predictive search suggestions
 router.get('/:id', getProductById);
 
 // Protected seller & admin product operations
