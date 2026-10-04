@@ -6,6 +6,7 @@ import api from '../utils/api.js';
 import ProductCard from '../components/product/ProductCard.jsx';
 import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
+import RecentlyViewedRibbon from '../components/product/RecentlyViewedRibbon.jsx';
 import {
   staggerContainer,
   staggerItem,
@@ -321,6 +322,9 @@ export default function CatalogPage() {
           )}
         </main>
       </div>
+
+      {/* Recently Viewed Products Ribbon */}
+      <RecentlyViewedRibbon title="Recently Viewed Products" subtitle="Pick up right where you left off" />
 
       {/* Mobile Filters Drawer with Smooth AnimatePresence */}
       <AnimatePresence>

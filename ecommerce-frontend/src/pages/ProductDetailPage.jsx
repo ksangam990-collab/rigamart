@@ -12,7 +12,10 @@ import {
   Check,
   Star,
   ChevronRight,
-  Store
+  Store,
+  Flame,
+  AlertCircle,
+  CheckCircle2
 } from 'lucide-react';
 import api from '../utils/api.js';
 import { addToCart } from '../features/cart/cartSlice.js';
@@ -23,6 +26,8 @@ import RatingStars from '../components/common/RatingStars.jsx';
 import ProductCard from '../components/product/ProductCard.jsx';
 import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
+import RecentlyViewedRibbon from '../components/product/RecentlyViewedRibbon.jsx';
+import { recordRecentlyViewed } from '../utils/recentlyViewed.js';
 import { heartBounceVariants, staggerContainer, staggerItem } from '../utils/animations.js';
 
 export default function ProductDetailPage() {
@@ -71,6 +76,7 @@ export default function ProductDetailPage() {
         const res = await api.get(`/products/${id}`);
         const p = res.data.data.product;
         setProduct(p);
+        recordRecentlyViewed(p);
         if (p.variants && p.variants.length > 0) {
           const inStock = p.variants.find((v) => (v.stock || 0) > 0) || p.variants[0];
           setSelectedVariant(inStock);
@@ -358,6 +364,57 @@ export default function ProductDetailPage() {
             }}
           />
 
+          {/* Stock Urgency & Depletion Meter */}
+          {isOutOfStock ? (
+            <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-3 text-rose-800">
+              <AlertCircle className="w-5 h-5 flex-shrink-0 text-rose-600" />
+              <div>
+                <p className="text-xs font-black uppercase tracking-wide">Temporarily Out of Stock</p>
+                <p className="text-[11px] text-rose-600 font-medium mt-0.5">
+                  This variant is currently unavailable. Check other variants or check back soon.
+                </p>
+              </div>
+            </div>
+          ) : stock <= 5 ? (
+            <div className="p-3.5 bg-gradient-to-r from-amber-50 to-rose-50 border border-amber-200/80 rounded-xl space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 text-xs font-black text-rose-700">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-600"></span>
+                  </span>
+                  <Flame className="w-4 h-4 text-amber-500 fill-amber-500" />
+                  Hurry! Only {stock} {stock === 1 ? 'unit' : 'units'} left in stock
+                </span>
+                <span className="text-[11px] font-bold text-amber-700 tabular-nums">
+                  High Demand
+                </span>
+              </div>
+              {/* Depletion Progress Meter */}
+              <div className="w-full bg-rose-100/80 h-1.5 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min(100, Math.max(15, (stock / 5) * 100))}%` }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="h-full bg-gradient-to-r from-amber-500 to-rose-500 rounded-full"
+                />
+              </div>
+            </div>
+          ) : stock <= 15 ? (
+            <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl flex items-center justify-between text-xs text-amber-900">
+              <div className="flex items-center gap-2 font-bold">
+                <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                <span>Limited stock remaining: {stock} units left</span>
+              </div>
+              <span className="text-[11px] text-amber-700 font-medium">Order soon</span>
+            </div>
+          ) : (
+            <div className="p-2.5 bg-emerald-50/70 border border-emerald-200 rounded-xl flex items-center gap-2 text-xs font-semibold text-emerald-800">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span>In Stock &amp; Ready for Express Dispatch</span>
+            </div>
+          )}
+
           {/* Quantity Selector */}
           {!isOutOfStock && (
             <div className="flex items-center gap-4 pt-2">
@@ -547,6 +604,9 @@ export default function ProductDetailPage() {
         </motion.section>
       )}
 
+      {/* Recently Viewed Products Ribbon */}
+      <RecentlyViewedRibbon currentProductId={product._id} />
+
       {/* Sticky Floating Buy Now Bar on Mobile (Appears after scrolling past main CTA) */}
       <AnimatePresence>
         {showStickyBar && product && (
@@ -571,6 +631,12 @@ export default function ProductDetailPage() {
                   <span className="text-sm font-black text-gray-900">₹{price.toLocaleString('en-IN')}</span>
                   {mrp > price && (
                     <span className="text-[10px] text-gray-400 line-through">₹{Math.round(mrp).toLocaleString('en-IN')}</span>
+                  )}
+                  {!isOutOfStock && stock > 0 && stock <= 5 && (
+                    <span className="text-[10px] font-black text-rose-600 bg-rose-50 border border-rose-200/80 px-1.5 py-0.5 rounded flex items-center gap-0.5 flex-shrink-0">
+                      <Flame className="w-2.5 h-2.5 text-rose-500 fill-rose-500" />
+                      Only {stock} left
+                    </span>
                   )}
                 </div>
               </div>
@@ -598,7 +664,7 @@ export default function ProductDetailPage() {
                 className="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-black rounded-xl shadow-md flex items-center gap-1.5 disabled:opacity-50"
               >
                 <Zap className="w-3.5 h-3.5 text-amber-300" />
-                <span>Buy Now</span>
+                <span>{isOutOfStock ? 'Sold Out' : 'Buy Now'}</span>
               </motion.button>
             </div>
           </motion.div>

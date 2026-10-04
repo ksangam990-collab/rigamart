@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Star, ShoppingCart, Check } from 'lucide-react';
+import { Heart, Star, ShoppingCart, Check, Flame } from 'lucide-react';
 import { toggleWishlist } from '../../features/wishlist/wishlistSlice.js';
 import { addToCart } from '../../features/cart/cartSlice.js';
 import { heartBounceVariants } from '../../utils/animations.js';
@@ -97,6 +97,14 @@ export default function ProductCard({ product }) {
               Out of Stock
             </span>
           </div>
+        )}
+
+        {/* Low Stock Urgency Pill */}
+        {!isOutOfStock && totalStock > 0 && totalStock <= 5 && (
+          <span className="absolute bottom-2.5 left-2.5 bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded shadow-sm flex items-center gap-1 z-10">
+            <Flame className="w-3 h-3 fill-current" />
+            <span>Only {totalStock} left</span>
+          </span>
         )}
 
         {/* Wishlist Button with Heart Bounce */}
