@@ -9,6 +9,7 @@ const {
   verifyWebhookSignature
 } = require('../config/razorpay');
 const { sendOrderConfirmationEmail } = require('../utils/emailService');
+const { notifyOrderStatusChange } = require('../utils/notificationService');
 
 /**
  * Helper to atomically decrement stock for order items using $elemMatch
@@ -250,6 +251,11 @@ const createOrder = async (req, res) => {
         console.error('[EMAIL ERROR] Failed to send COD order confirmation:', err.message)
       );
 
+      // Non-blocking in-app notification dispatch
+      notifyOrderStatusChange(order, 'Placed').catch((err) =>
+        console.error('[NOTIFICATION ERROR] Failed to dispatch order placed notification:', err.message)
+      );
+
       return res.status(201).json({
         success: true,
         message: 'Order placed successfully with Cash on Delivery',
@@ -350,6 +356,15 @@ const verifyPayment = async (req, res) => {
     // Non-blocking transactional email notification
     sendOrderConfirmationEmail(order, req.user.email).catch((err) =>
       console.error('[EMAIL ERROR] Failed to send Razorpay order confirmation:', err.message)
+    );
+
+    // Non-blocking in-app notification dispatch
+    notifyOrderStatusChange(
+      order,
+      'Confirmed',
+      `Payment of ₹${order.totalAmount.toLocaleString('en-IN')} confirmed for order #${order.orderNumber}.`
+    ).catch((err) =>
+      console.error('[NOTIFICATION ERROR] Failed to dispatch payment confirmed notification:', err.message)
     );
 
     res.status(200).json({

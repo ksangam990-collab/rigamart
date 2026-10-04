@@ -17,9 +17,16 @@ import {
   Loader2,
   Tag,
   ArrowRight,
-  Star
+  Star,
+  Bell
 } from 'lucide-react';
 import { logoutUser } from '../../features/auth/authSlice.js';
+import {
+  fetchNotifications,
+  fetchUnreadCount,
+  resetNotificationState
+} from '../../features/notification/notificationSlice.js';
+import NotificationDropdown from './NotificationDropdown.jsx';
 import api from '../../utils/api.js';
 import Logo from '../common/Logo.jsx';
 import {
@@ -188,6 +195,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isBannerCollapsed, setIsBannerCollapsed] = useState(false);
 
@@ -198,13 +206,33 @@ export default function Navbar() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const searchRef = useRef(null);
   const mobileSearchRef = useRef(null);
+  const notificationRef = useRef(null);
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const cartTotalCount = useSelector((state) => state.cart.totalCount);
   const wishlistCount = useSelector((state) => state.wishlist.items.length);
+  const unreadCount = useSelector((state) => state.notification?.unreadCount ?? 0);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Notification polling effect (every 30 seconds when authenticated)
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    dispatch(fetchUnreadCount());
+    const interval = setInterval(() => {
+      dispatch(fetchUnreadCount());
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [isAuthenticated, dispatch]);
+
+  const handleToggleNotifications = () => {
+    if (!notificationDropdownOpen) {
+      dispatch(fetchNotifications({ limit: 20 }));
+    }
+    setNotificationDropdownOpen((prev) => !prev);
+    setUserDropdownOpen(false);
+  };
 
   // Debounced search suggestions fetcher (250ms)
   useEffect(() => {
@@ -236,7 +264,7 @@ export default function Navbar() {
     return () => clearTimeout(debounceTimer);
   }, [searchQuery]);
 
-  // Dismiss dropdown on outside clicks
+  // Dismiss dropdowns on outside clicks
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -244,6 +272,9 @@ export default function Navbar() {
         mobileSearchRef.current && !mobileSearchRef.current.contains(e.target)
       ) {
         setShowDropdown(false);
+      }
+      if (notificationRef.current && !notificationRef.current.contains(e.target)) {
+        setNotificationDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -367,7 +398,9 @@ export default function Navbar() {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    dispatch(resetNotificationState());
     setUserDropdownOpen(false);
+    setNotificationDropdownOpen(false);
     navigate('/');
   };
 
@@ -528,6 +561,49 @@ export default function Navbar() {
                 </AnimatePresence>
               </Link>
             </motion.div>
+
+            {/* Notification Bell with Live Unread Badge */}
+            {isAuthenticated && (
+              <div className="relative" ref={notificationRef}>
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.92 }}
+                  onClick={handleToggleNotifications}
+                  className={`relative p-2 text-gray-600 hover:text-brand-600 transition-colors rounded-full hover:bg-gray-100 flex items-center justify-center ${
+                    notificationDropdownOpen ? 'bg-gray-100 text-brand-600' : ''
+                  }`}
+                  title="Notifications"
+                  aria-label="View notifications"
+                >
+                  <Bell className="w-5 h-5 transition-transform duration-150" />
+                  <AnimatePresence>
+                    {unreadCount > 0 && (
+                      <motion.span
+                        key={unreadCount}
+                        variants={badgePulse}
+                        initial="initial"
+                        animate="animate"
+                        exit={{ scale: 0 }}
+                        className="absolute top-1 right-1 bg-amber-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm"
+                      >
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+
+                {/* Animated Dropdown Drawer */}
+                <AnimatePresence>
+                  {notificationDropdownOpen && (
+                    <NotificationDropdown
+                      isOpen={notificationDropdownOpen}
+                      onClose={() => setNotificationDropdownOpen(false)}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
             {/* Authenticated User Dropdown or Guest Auth Buttons */}
             {isAuthenticated && user ? (
@@ -750,6 +826,24 @@ export default function Navbar() {
                     <Package className="w-4 h-4 text-gray-500" />
                     My Orders
                   </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleToggleNotifications();
+                    }}
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Bell className="w-4 h-4 text-amber-500" />
+                      <span>Notifications</span>
+                    </div>
+                    {unreadCount > 0 && (
+                      <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        {unreadCount} new
+                      </span>
+                    )}
+                  </button>
                   {(user?.role === 'seller' || user?.role === 'admin') && (
                     <Link
                       to="/seller/dashboard"

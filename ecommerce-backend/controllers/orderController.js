@@ -8,6 +8,7 @@ const {
   sendOrderDeliveredEmail,
   sendOrderCancelledEmail
 } = require('../utils/emailService');
+const { notifyOrderStatusChange } = require('../utils/notificationService');
 const { logSecurityEvent } = require('../utils/auditLogger');
 
 /**
@@ -195,6 +196,9 @@ const cancelOrder = async (req, res) => {
       })
       .catch((err) => console.error('[EMAIL ERROR] Cancel email error:', err.message));
 
+    // Non-blocking in-app notification
+    notifyOrderStatusChange(order, 'Cancelled', `Order #${order.orderNumber} was cancelled. Reason: ${reason}`).catch(() => {});
+
     res.status(200).json({
       success: true,
       message: 'Order cancelled successfully and inventory restored',
@@ -256,6 +260,9 @@ const returnOrder = async (req, res) => {
 
     await order.save();
     await restoreInventory(order.items);
+
+    // Non-blocking in-app notification
+    notifyOrderStatusChange(order, 'Returned', `Return requested for order #${order.orderNumber}. Reason: ${reason}`).catch(() => {});
 
     res.status(200).json({
       success: true,
@@ -430,6 +437,11 @@ const updateSellerOrderStatus = async (req, res) => {
         if (status === 'Cancelled') sendOrderCancelledEmail(order, u.email, comment);
       })
       .catch((err) => console.error('[EMAIL ERROR] Status transition email error:', err.message));
+
+    // Non-blocking in-app notification dispatch
+    notifyOrderStatusChange(order, status, comment).catch((err) =>
+      console.error('[NOTIFICATION ERROR] Status change notification error:', err.message)
+    );
 
     res.status(200).json({
       success: true,
