@@ -32,6 +32,19 @@ router.post(
   uploadMultipleImages
 );
 
+// Review image upload (accessible by any authenticated user/customer)
+router.post(
+  '/review-images',
+  protect,
+  uploadMultiple,
+  handleUploadErrors,
+  (req, res, next) => {
+    req.body.folder = 'rigamart/reviews';
+    next();
+  },
+  uploadMultipleImages
+);
+
 router.delete(
   '/:publicId(*)',
   protect,

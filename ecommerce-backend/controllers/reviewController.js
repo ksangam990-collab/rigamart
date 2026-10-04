@@ -71,13 +71,29 @@ const createReview = async (req, res) => {
       status: 'Delivered'
     });
 
+    // Normalize images array to ensure { public_id, url } format
+    const normalizedImages = (Array.isArray(images) ? images : [])
+      .map((img, idx) => {
+        if (typeof img === 'string') {
+          return {
+            public_id: `review_${Date.now()}_${idx}`,
+            url: img
+          };
+        }
+        return {
+          public_id: img?.public_id || `review_${Date.now()}_${idx}`,
+          url: img?.url
+        };
+      })
+      .filter((img) => img && img.url);
+
     const review = await Review.create({
       product: productId,
       user: req.user._id,
       rating: numRating,
       title: title.trim(),
       body: body.trim(),
-      images: Array.isArray(images) ? images : [],
+      images: normalizedImages,
       verifiedPurchase: Boolean(hasDeliveredOrder)
     });
 
