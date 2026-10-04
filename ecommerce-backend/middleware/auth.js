@@ -65,6 +65,9 @@ const protect = async (req, res, next) => {
   }
 };
 
+const { authorize } = require('./roleCheck');
+
 module.exports = {
-  protect
+  protect,
+  authorize
 };
