@@ -269,14 +269,52 @@ const getSellerAnalytics = async (req, res) => {
       { $sort: { revenue: -1 } }
     ]);
 
+    // 4. Fill continuous day-by-day timeline for smooth charting
+    const timelineMap = new Map();
+    timelineAgg.forEach((item) => {
+      timelineMap.set(item.date, item);
+    });
+
+    const continuousTimeline = [];
+    const curr = new Date(startDate);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+
+    while (curr <= today) {
+      const dateStr = curr.toISOString().slice(0, 10);
+      const match = timelineMap.get(dateStr);
+      continuousTimeline.push(
+        match || {
+          date: dateStr,
+          revenue: 0,
+          unitsSold: 0,
+          orderCount: 0
+        }
+      );
+      curr.setDate(curr.getDate() + 1);
+    }
+
+    const totalPeriodRevenue = continuousTimeline.reduce((acc, d) => acc + d.revenue, 0);
+    const totalPeriodUnits = continuousTimeline.reduce((acc, d) => acc + d.unitsSold, 0);
+    const totalPeriodOrders = continuousTimeline.reduce((acc, d) => acc + d.orderCount, 0);
+    const averageOrderValue =
+      totalPeriodOrders > 0 ? Math.round(totalPeriodRevenue / totalPeriodOrders) : 0;
+
     res.status(200).json({
       success: true,
       message: 'Seller analytics retrieved successfully',
       data: {
         range: `${days} days`,
-        timeline: timelineAgg,
+        days,
+        timeline: continuousTimeline,
         topProducts: topProductsAgg,
-        categoryPerformance: categoryAgg
+        categoryPerformance: categoryAgg,
+        summary: {
+          periodRevenue: totalPeriodRevenue,
+          periodUnits: totalPeriodUnits,
+          periodOrders: totalPeriodOrders,
+          averageOrderValue
+        }
       }
     });
   } catch (error) {

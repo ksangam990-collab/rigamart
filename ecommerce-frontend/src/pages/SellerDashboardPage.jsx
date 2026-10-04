@@ -9,18 +9,21 @@ import {
   Plus,
   RefreshCw,
   CheckCircle2,
-  TrendingUp
+  TrendingUp,
+  BarChart3
 } from 'lucide-react';
 import api from '../utils/api.js';
 import RestockModal from '../components/seller/RestockModal.jsx';
 import AddProductModal from '../components/seller/AddProductModal.jsx';
+import SellerAnalyticsTab from '../components/seller/SellerAnalyticsTab.jsx';
 import { staggerContainer, staggerItem } from '../utils/animations.js';
 
 export default function SellerDashboardPage() {
   const [dashboardData, setDashboardData] = useState(null);
+  const [statusCounts, setStatusCounts] = useState({});
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [activeTab, setActiveTab] = useState('products');
+  const [activeTab, setActiveTab] = useState('analytics');
   const [isLoading, setIsLoading] = useState(true);
 
   // Modals state
@@ -37,6 +40,7 @@ export default function SellerDashboardPage() {
       ]);
 
       setDashboardData(dashRes.data.data?.metrics || null);
+      setStatusCounts(dashRes.data.data?.statusCounts || {});
       setProducts(prodRes.data.data?.products || []);
       setOrders(ordRes.data.data?.orders || []);
     } catch (e) {
@@ -221,6 +225,23 @@ export default function SellerDashboardPage() {
 
       {/* Tabs Controller */}
       <div className="border-b border-gray-200 flex gap-6 text-xs font-bold uppercase tracking-wider">
+        <button
+          onClick={() => setActiveTab('analytics')}
+          className={`pb-3 transition-colors relative flex items-center gap-1.5 ${
+            activeTab === 'analytics'
+              ? 'text-brand-600 font-black'
+              : 'text-gray-500 hover:text-gray-900'
+          }`}
+        >
+          <BarChart3 className="w-4 h-4" />
+          Sales & Analytics
+          {activeTab === 'analytics' && (
+            <motion.div
+              layoutId="sellerTab"
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-600"
+            />
+          )}
+        </button>
         <button
           onClick={() => setActiveTab('products')}
           className={`pb-3 transition-colors relative ${
@@ -426,6 +447,18 @@ export default function SellerDashboardPage() {
                 </tbody>
               </table>
             </div>
+          </motion.div>
+        )}
+
+        {activeTab === 'analytics' && (
+          <motion.div
+            key="analytics"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SellerAnalyticsTab statusCounts={statusCounts} />
           </motion.div>
         )}
       </AnimatePresence>
