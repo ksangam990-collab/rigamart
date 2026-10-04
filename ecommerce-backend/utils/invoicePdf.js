@@ -161,6 +161,16 @@ const generateInvoicePdf = (order, writableStream) => {
         .text('Taxes (Inclusive GST):', 350, yPosition)
         .text(`Rs. ${order.taxPrice.toFixed(2)}`, 450, yPosition, { align: 'right', width: 90 });
 
+      if (order.discountPrice > 0) {
+        yPosition += 16;
+        const couponLabel = order.coupon?.code ? `Discount (${order.coupon.code}):` : 'Coupon Discount:';
+        doc
+          .fillColor('#059669')
+          .text(couponLabel, 350, yPosition)
+          .text(`-Rs. ${order.discountPrice.toFixed(2)}`, 450, yPosition, { align: 'right', width: 90 })
+          .fillColor('#4b5563');
+      }
+
       yPosition += 18;
       doc.rect(340, yPosition - 4, 210, 26).fillColor('#eff6ff').fill();
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, CreditCard, Banknote, AlertCircle, X, CheckCircle } from 'lucide-react';
+import { ShieldCheck, CreditCard, Banknote, AlertCircle, X, CheckCircle, Sparkles, Tag } from 'lucide-react';
 import api from '../../utils/api.js';
 import { clearCart } from '../../features/cart/cartSlice.js';
 import { modalBackdropVariants, modalContentVariants } from '../../utils/animations.js';
@@ -22,7 +22,7 @@ const loadRazorpayScript = () => {
   });
 };
 
-export default function CheckoutModal({ isOpen, onClose, cart, selectedAddress }) {
+export default function CheckoutModal({ isOpen, onClose, cart, selectedAddress, appliedCoupon }) {
   const [paymentMethod, setPaymentMethod] = useState('RAZORPAY');
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -46,7 +46,8 @@ export default function CheckoutModal({ isOpen, onClose, cart, selectedAddress }
       // 1. Initiate order on backend
       const res = await api.post('/payment/create-order', {
         shippingAddress: selectedAddress,
-        paymentMethod
+        paymentMethod,
+        couponCode: appliedCoupon?.code || undefined
       });
 
       const orderData = res.data.data;
@@ -241,6 +242,21 @@ export default function CheckoutModal({ isOpen, onClose, cart, selectedAddress }
                 </motion.button>
               </div>
             </div>
+
+            {/* Applied Coupon Display in Modal */}
+            {appliedCoupon && appliedCoupon.discountAmount > 0 && (
+              <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2 text-xs">
+                <div className="flex items-center gap-2 text-emerald-800 font-semibold">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>
+                    Coupon: <strong className="font-mono text-emerald-950">{appliedCoupon.code}</strong>
+                  </span>
+                </div>
+                <span className="font-bold text-emerald-700 tabular-nums">
+                  -₹{appliedCoupon.discountAmount.toLocaleString('en-IN')}
+                </span>
+              </div>
+            )}
 
             {/* Order Final Amount */}
             <div className="border-t border-gray-100 pt-4 flex items-center justify-between">

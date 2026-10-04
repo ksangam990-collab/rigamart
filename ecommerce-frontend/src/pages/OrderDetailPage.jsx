@@ -526,6 +526,12 @@ export default function OrderDetailPage() {
                   {order.shippingPrice === 0 ? 'FREE' : `₹${order.shippingPrice?.toLocaleString('en-IN')}`}
                 </span>
               </div>
+              {order.discountPrice > 0 && (
+                <div className="flex justify-between text-emerald-600 font-semibold">
+                  <span>Coupon Discount {order.coupon?.code ? `(${order.coupon.code})` : ''}</span>
+                  <span>-₹{order.discountPrice.toLocaleString('en-IN')}</span>
+                </div>
+              )}
               <div className="flex justify-between">
                 <span>Taxes & Fees</span>
                 <span className="font-semibold text-gray-800">₹{(order.taxPrice || 0).toLocaleString('en-IN')}</span>

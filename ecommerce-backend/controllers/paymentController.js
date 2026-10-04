@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
+const Coupon = require('../models/Coupon');
 const {
   createRazorpayOrder,
   verifyRazorpaySignature,
@@ -39,7 +40,7 @@ const decrementInventory = async (items) => {
  */
 const createOrder = async (req, res) => {
   try {
-    const { shippingAddress, paymentMethod } = req.body;
+    const { shippingAddress, paymentMethod, couponCode } = req.body;
 
     // Validate payment method
     if (!['RAZORPAY', 'COD'].includes(paymentMethod)) {
@@ -131,9 +132,27 @@ const createOrder = async (req, res) => {
       itemsPrice += variant.price * item.quantity;
     }
 
+    // Coupon discount verification and calculation
+    let discountPrice = 0;
+    let appliedCouponInfo = { code: null, discount: 0 };
+    let couponDoc = null;
+
+    if (couponCode && typeof couponCode === 'string' && couponCode.trim()) {
+      const normalizedCode = couponCode.trim().toUpperCase();
+      couponDoc = await Coupon.findOne({ code: normalizedCode });
+
+      if (couponDoc && couponDoc.isValid() && itemsPrice >= couponDoc.minCartValue) {
+        discountPrice = couponDoc.calculateDiscount(itemsPrice);
+        appliedCouponInfo = {
+          code: couponDoc.code,
+          discount: discountPrice
+        };
+      }
+    }
+
     const shippingPrice = itemsPrice >= 500 ? 0 : 40;
     const taxPrice = 0; // Inclusive GST
-    const totalAmount = itemsPrice + shippingPrice + taxPrice;
+    const totalAmount = Math.max(0, itemsPrice - discountPrice + shippingPrice + taxPrice);
 
     // Generate readable Rigamart Order Number
     const orderNumber = `RGM-${Date.now().toString().slice(-8)}-${crypto.randomInt(1000, 9999)}`;
@@ -167,6 +186,8 @@ const createOrder = async (req, res) => {
         itemsPrice,
         shippingPrice,
         taxPrice,
+        discountPrice,
+        coupon: appliedCouponInfo,
         totalAmount
       });
 
@@ -180,7 +201,8 @@ const createOrder = async (req, res) => {
           amount: rzpOrder.amount, // in paise
           currency: rzpOrder.currency,
           keyId: process.env.RAZORPAY_KEY_ID,
-          totalAmount
+          totalAmount,
+          discountPrice
         }
       });
     }
@@ -207,8 +229,15 @@ const createOrder = async (req, res) => {
         itemsPrice,
         shippingPrice,
         taxPrice,
+        discountPrice,
+        coupon: appliedCouponInfo,
         totalAmount
       });
+
+      // Increment coupon usage for COD order
+      if (couponDoc) {
+        await Coupon.updateOne({ _id: couponDoc._id }, { $inc: { timesUsed: 1 } });
+      }
 
       // Decrement inventory atomically using $elemMatch
       await decrementInventory(orderItems);
@@ -309,6 +338,11 @@ const verifyPayment = async (req, res) => {
 
     // Decrement inventory using $elemMatch
     await decrementInventory(order.items);
+
+    // Increment coupon usage if applied
+    if (order.coupon && order.coupon.code) {
+      await Coupon.updateOne({ code: order.coupon.code }, { $inc: { timesUsed: 1 } });
+    }
 
     // Clear cart
     await Cart.findOneAndUpdate({ user: order.user }, { $set: { items: [] } });

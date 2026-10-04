@@ -146,6 +146,15 @@ const orderSchema = new mongoose.Schema(
       required: true,
       default: 0
     },
+    discountPrice: {
+      type: Number,
+      default: 0,
+      min: [0, 'Discount price cannot be negative']
+    },
+    coupon: {
+      code: { type: String, default: null },
+      discount: { type: Number, default: 0 }
+    },
     totalAmount: {
       type: Number,
       required: [true, 'Total order amount is required'],

@@ -5,6 +5,7 @@ const Cart = require('./Cart');
 const Order = require('./Order');
 const Review = require('./Review');
 const Otp = require('./Otp');
+const Coupon = require('./Coupon');
 
 module.exports = {
   User,
@@ -13,5 +14,7 @@ module.exports = {
   Cart,
   Order,
   Review,
-  Otp
+  Otp,
+  Coupon
 };
+
