@@ -1,19 +1,20 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Check, AlertTriangle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
+import { cn } from '../../utils/cn';
 
 export default function VariantSelector({ variants = [], selectedVariant, onSelectVariant }) {
   if (!variants || variants.length === 0) return null;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 font-sans">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
-          Select Variant / Option
+        <label className="text-xs font-bold uppercase tracking-wider text-muted font-mono">
+          Select Option / Variant
         </label>
-        {selectedVariant && (
-          <span className="text-xs text-gray-500 font-medium">
-            SKU: <span className="font-mono text-gray-700">{selectedVariant.sku || 'N/A'}</span>
+        {selectedVariant?.sku && (
+          <span className="text-xs text-muted font-medium">
+            SKU: <span className="font-mono text-ink">{selectedVariant.sku}</span>
           </span>
         )}
       </div>
@@ -33,75 +34,45 @@ export default function VariantSelector({ variants = [], selectedVariant, onSele
           return (
             <motion.button
               key={variant._id}
-              whileTap={!isOut ? { scale: 0.96 } : undefined}
-              whileHover={!isOut && !isSelected ? { y: -2 } : undefined}
+              whileTap={!isOut ? { scale: 0.97 } : undefined}
               type="button"
               disabled={isOut}
               onClick={() => onSelectVariant(variant)}
-              className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all ${
+              className={cn(
+                'p-3 rounded-xl border text-left flex flex-col justify-between transition-all shadow-subtle',
                 isSelected
-                  ? 'border-brand-600 bg-brand-50/60 ring-2 ring-brand-500 shadow-sm'
+                  ? 'border-brand bg-brand-soft ring-2 ring-brand/30 text-brand-dark font-semibold'
                   : isOut
-                  ? 'border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed'
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
-              }`}
+                  ? 'border-line bg-canvas/60 opacity-40 cursor-not-allowed text-muted'
+                  : 'border-line bg-surface hover:border-muted/40 hover:bg-canvas text-ink'
+              )}
             >
               <div className="flex items-center justify-between gap-1 mb-1">
-                <span className="text-xs font-bold text-gray-800 line-clamp-1">{label}</span>
-                {isSelected && <Check className="w-3.5 h-3.5 text-brand-600 flex-shrink-0" />}
+                <span className="text-xs font-bold truncate tracking-tight">{label}</span>
+                {isSelected && <Check className="w-3.5 h-3.5 text-brand shrink-0" />}
               </div>
 
-              <div className="flex items-baseline justify-between gap-2 mt-1">
-                <span className="text-sm font-black text-gray-900">
+              <div className="flex items-baseline justify-between gap-2 mt-1 tabular-nums">
+                <span className="text-sm font-bold text-ink">
                   ₹{(variant.price || 0).toLocaleString('en-IN')}
                 </span>
                 <span
-                  className={`text-[10px] font-semibold ${
+                  className={cn(
+                    'text-[10px] font-medium',
                     isOut
-                      ? 'text-red-600'
+                      ? 'text-danger'
                       : variant.stock <= 5
-                      ? 'text-amber-600'
-                      : 'text-emerald-600'
-                  }`}
+                      ? 'text-warning font-semibold'
+                      : 'text-success'
+                  )}
                 >
-                  {isOut ? 'Sold Out' : `${variant.stock} left`}
+                  {isOut ? 'Sold Out' : variant.stock <= 5 ? `${variant.stock} left` : 'In Stock'}
                 </span>
               </div>
             </motion.button>
           );
         })}
       </div>
-
-      {/* Stock Urgency Indicator */}
-      <AnimatePresence mode="wait">
-        {selectedVariant && (
-          <motion.div
-            key={selectedVariant._id + (selectedVariant.stock <= 0 ? 'out' : selectedVariant.stock <= 5 ? 'low' : 'in')}
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.2 }}
-            className="pt-1"
-          >
-            {selectedVariant.stock <= 0 ? (
-              <div className="flex items-center gap-1.5 text-xs text-red-600 font-semibold bg-red-50 p-2.5 rounded-lg border border-red-100">
-                <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-                <span>This variant is currently out of stock. Please select another option.</span>
-              </div>
-            ) : selectedVariant.stock <= 5 ? (
-              <div className="flex items-center gap-1.5 text-xs text-amber-700 font-semibold bg-amber-50 p-2.5 rounded-lg border border-amber-100">
-                <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-                <span>Hurry! Only {selectedVariant.stock} items left in stock.</span>
-              </div>
-            ) : (
-              <div className="text-xs text-emerald-700 font-semibold flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                In Stock & Ready for Express Dispatch
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
