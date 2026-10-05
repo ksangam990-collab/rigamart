@@ -10,8 +10,6 @@ import {
   Edit3,
   Trash2,
   CheckCircle2,
-  XCircle,
-  ChevronDown,
   ChevronUp,
   Star,
   AlertCircle,
@@ -19,14 +17,14 @@ import {
   Store,
   Navigation,
   Loader2,
+  X
 } from 'lucide-react';
 import api from '../utils/api.js';
+import { Button, Badge } from '../components/ui/index.js';
 import {
   fadeInUp,
   staggerContainer,
   staggerItem,
-  buttonHover,
-  buttonTap,
   drawerSlideDown,
 } from '../utils/animations.js';
 
@@ -40,60 +38,50 @@ const getInitials = (name = '') =>
     .join('');
 
 const roleMeta = {
-  admin: { label: 'Admin', cls: 'bg-red-100 text-red-700', icon: Shield },
-  seller: { label: 'Seller', cls: 'bg-indigo-100 text-indigo-700', icon: Store },
-  customer: { label: 'Customer', cls: 'bg-brand-50 text-brand-700', icon: User },
+  admin: { label: 'Admin', variant: 'danger', icon: Shield },
+  seller: { label: 'Seller', variant: 'brand', icon: Store },
+  customer: { label: 'Customer', variant: 'secondary', icon: User },
 };
 
 const emptyAddress = {
-  name: '', mobile: '', street: '', city: '', state: '', pincode: '', landmark: '', isDefault: false,
+  name: '',
+  mobile: '',
+  street: '',
+  city: '',
+  state: '',
+  pincode: '',
+  landmark: '',
+  isDefault: false,
 };
 
-const fieldClass =
-  'w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-500 transition-all bg-white placeholder:text-gray-400';
-const labelClass = 'block text-xs font-semibold text-gray-500 mb-1';
-const errClass = 'text-xs text-red-500 mt-0.5';
+const inputClass =
+  'w-full border border-line rounded-xl px-3.5 py-2 text-xs text-ink bg-surface placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all';
+const labelClass = 'block text-[11px] font-bold uppercase tracking-wider text-muted mb-1';
+const errClass = 'text-[11px] text-danger mt-1';
 
 /* ─── Skeleton ─────────────────────────────────────── */
 function ProfileSkeleton() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-pulse">
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar skeleton */}
-        <div className="w-full lg:w-80 flex-shrink-0 space-y-5">
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <div className="w-20 h-20 rounded-full bg-gray-200 mx-auto" />
-            <div className="h-5 bg-gray-200 rounded w-40 mx-auto" />
-            <div className="h-3.5 bg-gray-200 rounded w-32 mx-auto" />
-            <div className="h-5 bg-gray-100 rounded-full w-20 mx-auto" />
-            <div className="border-t border-gray-100 pt-4 space-y-3">
-              <div className="h-3 bg-gray-200 rounded w-16" />
-              <div className="h-9 bg-gray-100 rounded-xl" />
-              <div className="h-3 bg-gray-200 rounded w-16" />
-              <div className="h-9 bg-gray-100 rounded-xl" />
-              <div className="h-9 bg-gray-200 rounded-xl w-28" />
+    <div className="min-h-screen bg-canvas">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-pulse">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-4 space-y-4">
+            <div className="bg-surface rounded-2xl border border-line p-6 space-y-4">
+              <div className="w-20 h-20 rounded-full bg-line/60 mx-auto" />
+              <div className="h-5 bg-line/60 rounded w-40 mx-auto" />
+              <div className="h-3 bg-line/40 rounded w-32 mx-auto" />
+              <div className="border-t border-line pt-4 space-y-3">
+                <div className="h-9 bg-line/40 rounded-xl" />
+                <div className="h-9 bg-line/40 rounded-xl" />
+              </div>
             </div>
           </div>
-        </div>
-        {/* Address grid skeleton */}
-        <div className="flex-1 space-y-5">
-          <div className="flex justify-between items-center">
-            <div className="h-6 bg-gray-200 rounded w-40" />
-            <div className="h-9 bg-gray-200 rounded-xl w-28" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 space-y-2.5 h-44">
-                <div className="h-4 bg-gray-200 rounded w-32" />
-                <div className="h-3.5 bg-gray-100 rounded w-24" />
-                <div className="h-3.5 bg-gray-100 rounded w-full" />
-                <div className="h-3.5 bg-gray-100 rounded w-2/3" />
-                <div className="flex gap-2 pt-2">
-                  <div className="h-7 bg-gray-100 rounded-lg w-14" />
-                  <div className="h-7 bg-gray-100 rounded-lg w-14" />
-                </div>
-              </div>
-            ))}
+          <div className="lg:col-span-8 space-y-4">
+            <div className="h-8 bg-line/60 rounded-lg w-48" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="h-44 bg-surface rounded-2xl border border-line" />
+              <div className="h-44 bg-surface rounded-2xl border border-line" />
+            </div>
           </div>
         </div>
       </div>
@@ -108,7 +96,11 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
   const [locating, setLocating] = useState(false);
   const [geoNotice, setGeoNotice] = useState(null);
 
-  const set = (k) => (e) => setForm((p) => ({ ...p, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
+  const set = (k) => (e) =>
+    setForm((p) => ({
+      ...p,
+      [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    }));
 
   const handleUseCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -117,7 +109,7 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
     }
 
     setLocating(true);
-    setGeoNotice({ type: 'info', text: 'Detecting your GPS location...' });
+    setGeoNotice({ type: 'info', text: 'Detecting GPS location...' });
 
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
@@ -140,14 +132,14 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
             const detectedArea = [city, state].filter(Boolean).join(', ');
             setGeoNotice({
               type: 'success',
-              text: `Location detected: ${detectedArea || 'Address updated'}`
+              text: `Location detected: ${detectedArea || 'Address filled'}`
             });
             setTimeout(() => setGeoNotice(null), 4000);
           }
         } catch (err) {
           setGeoNotice({
             type: 'error',
-            text: err.response?.data?.message || 'Failed to resolve location address. Please fill manually.'
+            text: err.response?.data?.message || 'Failed to detect address. Please enter manually.'
           });
         } finally {
           setLocating(false);
@@ -158,12 +150,10 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
         if (err.code === 1) {
           setGeoNotice({
             type: 'error',
-            text: 'Location permission was denied. Please allow access in browser or fill manually.'
+            text: 'Location permission denied. Please fill manually.'
           });
-        } else if (err.code === 3) {
-          setGeoNotice({ type: 'error', text: 'Location request timed out. Please enter manually.' });
         } else {
-          setGeoNotice({ type: 'error', text: 'Unable to detect location. Please fill manually.' });
+          setGeoNotice({ type: 'error', text: 'Location request timed out. Please enter manually.' });
         }
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
@@ -173,149 +163,172 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
   const validate = () => {
     const e = {};
     if (!form.name.trim()) e.name = 'Name is required';
-    if (!/^\d{10}$/.test(form.mobile)) e.mobile = 'Enter a valid 10-digit mobile';
+    if (!/^\d{10}$/.test(form.mobile)) e.mobile = 'Enter a valid 10-digit mobile number';
     if (!form.street.trim()) e.street = 'Street address is required';
     if (!form.city.trim()) e.city = 'City is required';
     if (!form.state.trim()) e.state = 'State is required';
-    if (!/^\d{6}$/.test(form.pincode)) e.pincode = 'Enter valid 6-digit pincode';
+    if (!/^\d{6}$/.test(form.pincode)) e.pincode = 'Enter a valid 6-digit pincode';
     return e;
   };
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
     const e = validate();
-    if (Object.keys(e).length) { setErrors(e); return; }
+    if (Object.keys(e).length) {
+      setErrors(e);
+      return;
+    }
     onSubmit(form);
   };
 
   return (
-    <motion.form
-      variants={fadeInUp}
-      initial="hidden"
-      animate="visible"
-      onSubmit={handleSubmit}
-      className="space-y-4 pt-4"
-    >
-      {/* Geolocation auto-fill action */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-gray-100">
-        <p className="text-xs font-semibold text-gray-700">Delivery Address Details</p>
+    <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+      {/* Geolocation auto-fill */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-line">
+        <p className="text-xs font-bold text-ink uppercase tracking-wider">Address Information</p>
         <button
           type="button"
           onClick={handleUseCurrentLocation}
           disabled={locating}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-bold rounded-xl border border-brand-200 transition-colors disabled:opacity-60 shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1 bg-surface hover:bg-line/40 text-brand text-xs font-semibold rounded-lg border border-line transition-colors disabled:opacity-60 shadow-subtle"
         >
           {locating ? (
             <>
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-600" />
-              <span>Detecting Location...</span>
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-brand" />
+              <span>Detecting...</span>
             </>
           ) : (
             <>
-              <Navigation className="w-3.5 h-3.5 text-brand-600" />
-              <span>Use Current Location</span>
+              <Navigation className="w-3.5 h-3.5 text-brand" />
+              <span>Use Current GPS Location</span>
             </>
           )}
         </button>
       </div>
 
-      {/* Geolocation feedback notification banner */}
       {geoNotice && (
         <div
-          className={`text-xs px-3 py-2 rounded-xl flex items-center gap-2 ${
+          className={`text-xs px-3 py-2 rounded-lg flex items-center gap-2 ${
             geoNotice.type === 'success'
-              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-              : geoNotice.type === 'info'
-              ? 'bg-blue-50 text-blue-800 border border-blue-200'
-              : 'bg-amber-50 text-amber-800 border border-amber-200'
+              ? 'bg-brand-soft text-brand-dark border border-brand/20'
+              : 'bg-danger-soft text-danger border border-danger/20'
           }`}
         >
-          {geoNotice.type === 'success' ? (
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-          ) : geoNotice.type === 'info' ? (
-            <Loader2 className="w-3.5 h-3.5 text-blue-600 animate-spin shrink-0" />
-          ) : (
-            <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-          )}
           <span>{geoNotice.text}</span>
         </div>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {/* Name */}
         <div>
-          <label className={labelClass}>Full Name *</label>
-          <input className={fieldClass} placeholder="Recipient name" value={form.name} onChange={set('name')} />
+          <label className={labelClass}>Recipient Name *</label>
+          <input
+            className={inputClass}
+            placeholder="Full Name"
+            value={form.name}
+            onChange={set('name')}
+          />
           {errors.name && <p className={errClass}>{errors.name}</p>}
         </div>
-        {/* Mobile */}
+
         <div>
-          <label className={labelClass}>Mobile *</label>
-          <input className={fieldClass} placeholder="10-digit number" value={form.mobile} onChange={set('mobile')} maxLength={10} />
+          <label className={labelClass}>Mobile Number *</label>
+          <input
+            className={inputClass}
+            placeholder="10-digit number"
+            value={form.mobile}
+            onChange={set('mobile')}
+            maxLength={10}
+          />
           {errors.mobile && <p className={errClass}>{errors.mobile}</p>}
         </div>
-        {/* Street */}
+
         <div className="sm:col-span-2">
-          <label className={labelClass}>Street / House No. *</label>
-          <input className={fieldClass} placeholder="House no., street, area" value={form.street} onChange={set('street')} />
+          <label className={labelClass}>Street Address / Flat / Building *</label>
+          <input
+            className={inputClass}
+            placeholder="Flat no., Building, Street name"
+            value={form.street}
+            onChange={set('street')}
+          />
           {errors.street && <p className={errClass}>{errors.street}</p>}
         </div>
-        {/* City */}
+
         <div>
           <label className={labelClass}>City *</label>
-          <input className={fieldClass} placeholder="City" value={form.city} onChange={set('city')} />
+          <input
+            className={inputClass}
+            placeholder="City"
+            value={form.city}
+            onChange={set('city')}
+          />
           {errors.city && <p className={errClass}>{errors.city}</p>}
         </div>
-        {/* State */}
+
         <div>
           <label className={labelClass}>State *</label>
-          <input className={fieldClass} placeholder="State" value={form.state} onChange={set('state')} />
+          <input
+            className={inputClass}
+            placeholder="State"
+            value={form.state}
+            onChange={set('state')}
+          />
           {errors.state && <p className={errClass}>{errors.state}</p>}
         </div>
-        {/* Pincode */}
+
         <div>
           <label className={labelClass}>Pincode *</label>
-          <input className={fieldClass} placeholder="6-digit pincode" value={form.pincode} onChange={set('pincode')} maxLength={6} />
+          <input
+            className={inputClass}
+            placeholder="6-digit pincode"
+            value={form.pincode}
+            onChange={set('pincode')}
+            maxLength={6}
+          />
           {errors.pincode && <p className={errClass}>{errors.pincode}</p>}
         </div>
-        {/* Landmark */}
+
         <div>
-          <label className={labelClass}>Landmark <span className="text-gray-400 font-normal">(optional)</span></label>
-          <input className={fieldClass} placeholder="Near metro, mall…" value={form.landmark} onChange={set('landmark')} />
+          <label className={labelClass}>
+            Landmark <span className="text-muted font-normal">(Optional)</span>
+          </label>
+          <input
+            className={inputClass}
+            placeholder="Near metro, landmark…"
+            value={form.landmark}
+            onChange={set('landmark')}
+          />
         </div>
       </div>
 
-      {/* Default checkbox */}
-      <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer select-none">
+      <label className="flex items-center gap-2 text-xs text-ink cursor-pointer select-none pt-1">
         <input
           type="checkbox"
           checked={form.isDefault}
           onChange={set('isDefault')}
-          className="w-4 h-4 accent-brand-600 rounded"
+          className="w-4 h-4 accent-brand rounded border-line"
         />
-        Set as default delivery address
+        Set as default shipping address
       </label>
 
-      <div className="flex gap-3 pt-1">
-        <motion.button
+      <div className="flex gap-2 pt-2">
+        <Button
           type="submit"
-          whileHover={buttonHover}
-          whileTap={buttonTap}
-          disabled={isSaving}
-          className="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shadow-sm transition-colors disabled:opacity-60"
+          variant="primary"
+          size="sm"
+          isLoading={isSaving}
         >
-          {isSaving ? 'Saving…' : 'Save Address'}
-        </motion.button>
-        <motion.button
+          Save Address
+        </Button>
+        <Button
           type="button"
-          whileTap={buttonTap}
+          variant="ghost"
+          size="sm"
           onClick={onCancel}
-          className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl transition-colors"
         >
           Cancel
-        </motion.button>
+        </Button>
       </div>
-    </motion.form>
+    </form>
   );
 }
 
@@ -332,82 +345,78 @@ function AddressCard({ addr, onEdit, onDelete }) {
     setEditing(false);
   };
 
-  const handleConfirmDelete = async () => {
-    await onDelete(addr._id);
-  };
-
   return (
     <motion.div
       variants={staggerItem}
       layout
-      className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-250 overflow-hidden"
+      className="bg-surface rounded-2xl border border-line shadow-subtle hover:border-muted/30 transition-all duration-200 overflow-hidden"
     >
       <div className="p-5">
-        {/* Card header */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="text-sm font-bold text-gray-900">{addr.name}</p>
+            <p className="text-sm font-bold text-ink">{addr.name}</p>
             {addr.isDefault && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-100">
+              <Badge variant="brand" size="sm" className="gap-1">
                 <Star className="w-2.5 h-2.5" /> Default
-              </span>
+              </Badge>
             )}
           </div>
         </div>
-        <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
-          <Phone className="w-3 h-3 flex-shrink-0" /> {addr.mobile}
+
+        <p className="text-xs text-muted mb-1 flex items-center gap-1.5">
+          <Phone className="w-3.5 h-3.5 text-muted shrink-0" /> {addr.mobile}
         </p>
-        <p className="text-xs text-gray-600 leading-relaxed">
-          {addr.street}, {addr.city}, {addr.state} — {addr.pincode}
+
+        <p className="text-xs text-muted leading-relaxed line-clamp-2">
+          {addr.street}, {addr.city}, {addr.state} &ndash; {addr.pincode}
           {addr.landmark ? `, Near ${addr.landmark}` : ''}
         </p>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2 mt-4">
-          <motion.button
-            whileHover={buttonHover}
-            whileTap={buttonTap}
-            onClick={() => { setEditing((p) => !p); setConfirmDelete(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 rounded-lg transition-colors border border-brand-100"
+        {/* Card Actions */}
+        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-line/60">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setEditing((p) => !p);
+              setConfirmDelete(false);
+            }}
+            className="text-brand hover:text-brand hover:bg-brand-soft text-xs"
           >
-            <Edit3 className="w-3.5 h-3.5" /> Edit
-          </motion.button>
+            <Edit3 className="w-3.5 h-3.5 mr-1" /> Edit
+          </Button>
 
           <AnimatePresence mode="wait">
             {confirmDelete ? (
-              <motion.div
-                key="confirm"
-                initial={{ opacity: 0, scale: 0.92 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.92 }}
-                className="flex items-center gap-1.5"
-              >
-                <span className="text-xs text-gray-500 font-medium">Remove this address?</span>
-                <motion.button
-                  whileTap={buttonTap}
-                  onClick={handleConfirmDelete}
-                  className="px-2.5 py-1 bg-red-600 text-white text-xs font-bold rounded-lg hover:bg-red-700 transition-colors"
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-danger font-medium">Remove address?</span>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => onDelete(addr._id)}
                 >
                   Yes, Delete
-                </motion.button>
-                <motion.button
-                  whileTap={buttonTap}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setConfirmDelete(false)}
-                  className="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-lg hover:bg-gray-200 transition-colors"
                 >
-                  No
-                </motion.button>
-              </motion.div>
+                  Cancel
+                </Button>
+              </div>
             ) : (
-              <motion.button
-                key="delete"
-                whileHover={buttonHover}
-                whileTap={buttonTap}
-                onClick={() => { setConfirmDelete(true); setEditing(false); }}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-100"
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setConfirmDelete(true);
+                  setEditing(false);
+                }}
+                className="text-muted hover:text-danger hover:bg-danger-soft text-xs"
               >
-                <Trash2 className="w-3.5 h-3.5" /> Delete
-              </motion.button>
+                <Trash2 className="w-3.5 h-3.5 mr-1" /> Delete
+              </Button>
             )}
           </AnimatePresence>
         </div>
@@ -421,7 +430,7 @@ function AddressCard({ addr, onEdit, onDelete }) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="border-t border-gray-100 bg-gray-50/60 px-5 pb-5"
+            className="border-t border-line bg-canvas p-5"
           >
             <AddressForm
               initial={{
@@ -445,27 +454,26 @@ function AddressCard({ addr, onEdit, onDelete }) {
   );
 }
 
-/* ─── Main Page ─────────────────────────────────────── */
+/* ─── Main Component ─────────────────────────────────── */
 export default function ProfilePage() {
   const { user: authUser } = useSelector((s) => s.auth);
 
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Profile edit state
+  // Profile Edit
   const [profileForm, setProfileForm] = useState({ name: '', mobile: '' });
   const [profileErrors, setProfileErrors] = useState({});
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileSuccess, setProfileSuccess] = useState(false);
   const [profileApiError, setProfileApiError] = useState('');
 
-  // Address state
+  // Address
   const [addresses, setAddresses] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [addSaving, setAddSaving] = useState(false);
   const [addApiError, setAddApiError] = useState('');
 
-  /* Fetch profile */
   const fetchProfile = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -481,20 +489,25 @@ export default function ProfilePage() {
     }
   }, []);
 
-  useEffect(() => { fetchProfile(); }, [fetchProfile]);
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
-  /* Profile update */
   const validateProfile = () => {
     const e = {};
     if (!profileForm.name.trim()) e.name = 'Name is required';
-    if (profileForm.mobile && !/^\d{10}$/.test(profileForm.mobile)) e.mobile = 'Enter a valid 10-digit mobile';
+    if (profileForm.mobile && !/^\d{10}$/.test(profileForm.mobile))
+      e.mobile = 'Enter a valid 10-digit mobile number';
     return e;
   };
 
   const handleProfileSave = async (ev) => {
     ev.preventDefault();
     const e = validateProfile();
-    if (Object.keys(e).length) { setProfileErrors(e); return; }
+    if (Object.keys(e).length) {
+      setProfileErrors(e);
+      return;
+    }
     setProfileErrors({});
     setProfileApiError('');
     setProfileSaving(true);
@@ -511,7 +524,6 @@ export default function ProfilePage() {
     }
   };
 
-  /* Address ops */
   const handleAddAddress = async (form) => {
     setAddSaving(true);
     setAddApiError('');
@@ -520,7 +532,7 @@ export default function ProfilePage() {
       await fetchProfile();
       setShowAddForm(false);
     } catch (err) {
-      setAddApiError(err.response?.data?.message || 'Failed to add address.');
+      setAddApiError(err.response?.data?.message || 'Failed to save address.');
     } finally {
       setAddSaving(false);
     }
@@ -531,7 +543,7 @@ export default function ProfilePage() {
       await api.put(`/users/address/${id}`, form);
       await fetchProfile();
     } catch (err) {
-      // errors surfaced inside AddressCard
+      // handled
     }
   };
 
@@ -540,11 +552,10 @@ export default function ProfilePage() {
       await api.delete(`/users/address/${id}`);
       setAddresses((p) => p.filter((a) => a._id !== id));
     } catch {
-      // silent fail – card stays
+      // handled
     }
   };
 
-  /* Derived */
   const RoleMeta = roleMeta[profile?.role] || roleMeta.customer;
   const RoleIcon = RoleMeta.icon;
   const memberSince = profile?.createdAt
@@ -554,225 +565,205 @@ export default function ProfilePage() {
   if (isLoading) return <ProfileSkeleton />;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex flex-col lg:flex-row gap-8 items-start lg:min-h-[calc(100vh-12rem)]">
-        {/* ── LEFT COLUMN: Sticky Sidebar ─────────────────── */}
-        <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-20 z-10 self-start">
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            animate="visible"
-            className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
-          >
-            {/* Avatar block */}
-            <div className="bg-gradient-to-br from-brand-600 to-brand-700 px-6 py-5 text-center">
-              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur text-white font-black text-2xl flex items-center justify-center mx-auto mb-2.5 shadow-lg ring-4 ring-white/30">
-                {getInitials(profile?.name || authUser?.name || 'U')}
+    <div className="min-h-screen bg-canvas">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* ── LEFT COLUMN: Sticky Profile Card (4 cols) ─────── */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
+            <div className="bg-surface rounded-2xl border border-line shadow-subtle overflow-hidden">
+              {/* Profile Header */}
+              <div className="p-6 text-center border-b border-line bg-canvas/40">
+                <div className="w-18 h-18 rounded-full bg-brand-soft text-brand-dark font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-subtle ring-2 ring-brand/20">
+                  {getInitials(profile?.name || authUser?.name || 'U')}
+                </div>
+                <h1 className="text-base font-bold text-ink truncate">
+                  {profile?.name || authUser?.name}
+                </h1>
+                <p className="text-xs text-muted truncate mt-0.5">{profile?.email}</p>
+                <div className="mt-2.5 flex items-center justify-center gap-1.5">
+                  <Badge variant={RoleMeta.variant} size="sm" className="gap-1">
+                    <RoleIcon className="w-3 h-3" />
+                    {RoleMeta.label}
+                  </Badge>
+                </div>
+                {memberSince && (
+                  <p className="text-[11px] text-muted mt-2">Member since {memberSince}</p>
+                )}
               </div>
-              <h1 className="text-base font-black text-white truncate">
-                {profile?.name || authUser?.name}
-              </h1>
-              <p className="text-xs text-brand-100 truncate mt-0.5">{profile?.email}</p>
-              <span className={`inline-flex items-center gap-1.5 mt-2 px-2.5 py-0.5 rounded-full text-xs font-bold ${RoleMeta.cls}`}>
-                <RoleIcon className="w-3.5 h-3.5" />
-                {RoleMeta.label}
-              </span>
-              {memberSince && (
-                <p className="text-[11px] text-brand-200 mt-1.5">Member since {memberSince}</p>
-              )}
-            </div>
 
-            {/* Edit Profile Form */}
-            <div className="p-5 space-y-4">
-              <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
-                <Edit3 className="w-3.5 h-3.5" /> Edit Profile
-              </h2>
+              {/* Edit Profile Form */}
+              <div className="p-5 sm:p-6 space-y-4">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-muted flex items-center gap-1.5">
+                  <Edit3 className="w-3.5 h-3.5 text-brand" /> Personal Details
+                </h2>
 
-              <form onSubmit={handleProfileSave} className="space-y-3">
-                <div>
-                  <label className={labelClass}>Full Name</label>
-                  <div className="relative">
-                    <User className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                      className={`${fieldClass} pl-9`}
-                      value={profileForm.name}
-                      onChange={(e) => setProfileForm((p) => ({ ...p, name: e.target.value }))}
-                      placeholder="Your full name"
-                    />
+                <form onSubmit={handleProfileSave} className="space-y-3">
+                  <div>
+                    <label className={labelClass}>Full Name</label>
+                    <div className="relative">
+                      <User className="w-4 h-4 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <input
+                        className={`${inputClass} pl-9`}
+                        value={profileForm.name}
+                        onChange={(e) => setProfileForm((p) => ({ ...p, name: e.target.value }))}
+                        placeholder="Your full name"
+                      />
+                    </div>
+                    {profileErrors.name && <p className={errClass}>{profileErrors.name}</p>}
                   </div>
-                  {profileErrors.name && <p className={errClass}>{profileErrors.name}</p>}
-                </div>
 
-                <div>
-                  <label className={labelClass}>Mobile Number</label>
-                  <div className="relative">
-                    <Phone className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                      className={`${fieldClass} pl-9`}
-                      value={profileForm.mobile}
-                      onChange={(e) => setProfileForm((p) => ({ ...p, mobile: e.target.value }))}
-                      placeholder="10-digit mobile"
-                      maxLength={10}
-                    />
+                  <div>
+                    <label className={labelClass}>Mobile Number</label>
+                    <div className="relative">
+                      <Phone className="w-4 h-4 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <input
+                        className={`${inputClass} pl-9`}
+                        value={profileForm.mobile}
+                        onChange={(e) => setProfileForm((p) => ({ ...p, mobile: e.target.value }))}
+                        placeholder="10-digit mobile"
+                        maxLength={10}
+                      />
+                    </div>
+                    {profileErrors.mobile && <p className={errClass}>{profileErrors.mobile}</p>}
                   </div>
-                  {profileErrors.mobile && <p className={errClass}>{profileErrors.mobile}</p>}
-                </div>
 
-                {/* Email (read-only) */}
-                <div>
-                  <label className={labelClass}>Email Address</label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                      readOnly
-                      className={`${fieldClass} pl-9 bg-gray-50 cursor-not-allowed`}
-                      value={profile?.email || ''}
-                    />
+                  <div>
+                    <label className={labelClass}>Email Address</label>
+                    <div className="relative">
+                      <Mail className="w-4 h-4 text-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <input
+                        readOnly
+                        className={`${inputClass} pl-9 bg-canvas text-muted cursor-not-allowed`}
+                        value={profile?.email || ''}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* API error */}
-                <AnimatePresence>
                   {profileApiError && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="flex items-center gap-2 bg-red-50 border border-red-100 text-red-600 text-xs px-3 py-2 rounded-xl"
-                    >
-                      <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                      {profileApiError}
-                    </motion.div>
+                    <div className="flex items-center gap-2 bg-danger-soft text-danger text-xs px-3 py-2 rounded-xl border border-danger/20">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{profileApiError}</span>
+                    </div>
                   )}
-                </AnimatePresence>
 
-                {/* Success */}
-                <AnimatePresence>
                   {profileSuccess && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="flex items-center gap-2 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs px-3 py-2 rounded-xl"
-                    >
-                      <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
-                      Profile updated successfully!
-                    </motion.div>
+                    <div className="flex items-center gap-2 bg-brand-soft text-brand-dark text-xs px-3 py-2 rounded-xl border border-brand/20">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-brand" />
+                      <span>Profile updated successfully!</span>
+                    </div>
                   )}
-                </AnimatePresence>
 
-                <motion.button
-                  type="submit"
-                  whileHover={buttonHover}
-                  whileTap={buttonTap}
-                  disabled={profileSaving}
-                  className="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shadow-sm transition-colors disabled:opacity-60"
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="md"
+                    className="w-full text-xs font-bold"
+                    isLoading={profileSaving}
+                  >
+                    Save Changes
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </aside>
+
+          {/* ── RIGHT COLUMN: Saved Addresses (8 cols) ────────── */}
+          <main className="lg:col-span-8 space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-line">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-ink tracking-tight flex items-center gap-2.5">
+                  <MapPin className="w-5 h-5 text-brand" />
+                  Saved Addresses
+                </h2>
+                <p className="text-xs text-muted mt-0.5">
+                  Manage your delivery destinations for rapid checkout
+                </p>
+              </div>
+
+              <Button
+                variant={showAddForm ? 'secondary' : 'outline'}
+                size="sm"
+                onClick={() => setShowAddForm((p) => !p)}
+                className="text-xs shadow-subtle"
+              >
+                {showAddForm ? <ChevronUp className="w-4 h-4 mr-1.5" /> : <Plus className="w-4 h-4 mr-1.5" />}
+                {showAddForm ? 'Close Form' : 'Add New Address'}
+              </Button>
+            </div>
+
+            {/* Collapsible Add Address Form */}
+            <AnimatePresence>
+              {showAddForm && (
+                <motion.div
+                  variants={drawerSlideDown}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="bg-surface rounded-2xl border border-line shadow-subtle p-5 sm:p-6"
                 >
-                  {profileSaving ? 'Saving…' : 'Save Changes'}
-                </motion.button>
-              </form>
-            </div>
-          </motion.div>
-        </aside>
+                  <h3 className="text-sm font-bold text-ink mb-1 flex items-center gap-2">
+                    <Plus className="w-4 h-4 text-brand" />
+                    New Delivery Address
+                  </h3>
 
-        {/* ── RIGHT COLUMN: Addresses ──────────────────────── */}
-        <div className="flex-1 min-w-0 space-y-6 lg:min-h-[600px]">
-          {/* Header */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-brand-600" />
-                Saved Addresses
-              </h2>
-              <p className="text-xs text-gray-500 mt-0.5">{addresses.length} address{addresses.length !== 1 ? 'es' : ''} saved</p>
-            </div>
-            <motion.button
-              whileHover={buttonHover}
-              whileTap={buttonTap}
-              onClick={() => setShowAddForm((p) => !p)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shadow-sm transition-colors"
-            >
-              {showAddForm ? <ChevronUp className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-              {showAddForm ? 'Close Form' : 'Add New Address'}
-            </motion.button>
-          </div>
+                  {addApiError && (
+                    <div className="flex items-center gap-2 bg-danger-soft text-danger text-xs px-3 py-2 rounded-xl border border-danger/20 my-2">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{addApiError}</span>
+                    </div>
+                  )}
 
-          {/* Add Address collapsible form */}
-          <AnimatePresence>
-            {showAddForm && (
+                  <AddressForm
+                    onSubmit={handleAddAddress}
+                    onCancel={() => setShowAddForm(false)}
+                    isSaving={addSaving}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Empty state */}
+            {addresses.length === 0 && !showAddForm && (
+              <div className="bg-surface rounded-2xl border border-line p-12 text-center space-y-4 shadow-subtle">
+                <div className="w-16 h-16 rounded-full bg-brand-soft text-brand mx-auto flex items-center justify-center">
+                  <MapPin className="w-8 h-8" />
+                </div>
+                <h3 className="text-base font-bold text-ink">No Saved Addresses</h3>
+                <p className="text-xs text-muted max-w-xs mx-auto">
+                  Save your home, office, or secondary delivery location for express checkout.
+                </p>
+                <Button
+                  variant="primary"
+                  size="md"
+                  onClick={() => setShowAddForm(true)}
+                  className="shadow-subtle"
+                >
+                  <Plus className="w-4 h-4 mr-1.5" /> Add Your First Address
+                </Button>
+              </div>
+            )}
+
+            {/* Address Cards Grid */}
+            {addresses.length > 0 && (
               <motion.div
-                variants={drawerSlideDown}
+                variants={staggerContainer(0.05)}
                 initial="hidden"
                 animate="visible"
-                exit="exit"
-                className="bg-white rounded-2xl border border-brand-100 shadow-sm p-6"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               >
-                <h3 className="text-sm font-bold text-gray-800 mb-1 flex items-center gap-2">
-                  <Plus className="w-4 h-4 text-brand-600" />
-                  New Delivery Address
-                </h3>
-
-                {addApiError && (
-                  <div className="flex items-center gap-2 bg-red-50 border border-red-100 text-red-600 text-xs px-3 py-2 rounded-xl mt-2">
-                    <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" /> {addApiError}
-                  </div>
-                )}
-
-                <AddressForm
-                  onSubmit={handleAddAddress}
-                  onCancel={() => setShowAddForm(false)}
-                  isSaving={addSaving}
-                />
+                <AnimatePresence>
+                  {addresses.map((addr) => (
+                    <AddressCard
+                      key={addr._id}
+                      addr={addr}
+                      onEdit={handleEditAddress}
+                      onDelete={handleDeleteAddress}
+                    />
+                  ))}
+                </AnimatePresence>
               </motion.div>
             )}
-          </AnimatePresence>
-
-          {/* Empty state */}
-          {addresses.length === 0 && !showAddForm && (
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              animate="visible"
-              className="bg-white rounded-2xl border border-dashed border-gray-300 p-12 text-center space-y-4"
-            >
-              <div className="w-16 h-16 rounded-full bg-brand-50 text-brand-400 mx-auto flex items-center justify-center">
-                <MapPin className="w-8 h-8" />
-              </div>
-              <h3 className="text-base font-bold text-gray-700">No Saved Addresses</h3>
-              <p className="text-xs text-gray-400 max-w-xs mx-auto">
-                Add your home, office, or any delivery address to speed up checkout.
-              </p>
-              <motion.button
-                whileHover={buttonHover}
-                whileTap={buttonTap}
-                onClick={() => setShowAddForm(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shadow-sm transition-colors"
-              >
-                <Plus className="w-4 h-4" /> Add Your First Address
-              </motion.button>
-            </motion.div>
-          )}
-
-          {/* Address cards grid */}
-          {addresses.length > 0 && (
-            <motion.div
-              variants={staggerContainer(0.06)}
-              initial="hidden"
-              animate="visible"
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              <AnimatePresence>
-                {addresses.map((addr) => (
-                  <AddressCard
-                    key={addr._id}
-                    addr={addr}
-                    onEdit={handleEditAddress}
-                    onDelete={handleDeleteAddress}
-                  />
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          )}
+          </main>
         </div>
       </div>
     </div>
