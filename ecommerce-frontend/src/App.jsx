@@ -34,6 +34,7 @@ const HelpPage = lazy(() => import('./pages/HelpPage.jsx'));
 const SellPage = lazy(() => import('./pages/SellPage.jsx'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage.jsx'));
 const TermsPage = lazy(() => import('./pages/TermsPage.jsx'));
+const StyleguidePage = lazy(() => import('./pages/StyleguidePage.jsx'));
 
 
 function RouteLoadingFallback({ message = 'Loading...' }) {
@@ -114,6 +115,14 @@ export default function App() {
             element={
               <Suspense fallback={<RouteLoadingFallback message="Loading..." />}>
                 <TermsPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="styleguide"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading Styleguide..." />}>
+                <StyleguidePage />
               </Suspense>
             }
           />

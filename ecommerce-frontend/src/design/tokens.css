@@ -1,0 +1,45 @@
+/* ─── Rigamart Design System Tokens (Calm Editorial Marketplace) ─── */
+
+:root {
+  /* Surfaces */
+  --color-canvas: #FAF8F5;
+  --color-surface: #FFFFFF;
+  
+  /* Typography */
+  --color-ink: #14161A;
+  --color-muted: #5B6270;
+  --color-line: #E7E2DA;
+  
+  /* Brand: Forest Emerald */
+  --color-brand: #0E6B5C;
+  --color-brand-dark: #0A4F44;
+  --color-brand-soft: #E3F1EE;
+  
+  /* Functional Accents */
+  --color-accent: #F2A93B;
+  --color-success: #2E9E6B;
+  --color-warning: #C77700;
+  --color-danger: #D64545;
+}
+
+[data-theme="dark"] {
+  /* Surfaces */
+  --color-canvas: #0F1113;
+  --color-surface: #181B1F;
+  
+  /* Typography */
+  --color-ink: #F2F2F0;
+  --color-muted: #A3A9B3;
+  --color-line: #2A2F35;
+  
+  /* Brand: Forest Emerald (accessible on dark surfaces) */
+  --color-brand: #3FB9A3;
+  --color-brand-dark: #2F9B87;
+  --color-brand-soft: #142E28;
+  
+  /* Functional Accents */
+  --color-accent: #F5B955;
+  --color-success: #38B87D;
+  --color-warning: #E08A0A;
+  --color-danger: #E25858;
+}
