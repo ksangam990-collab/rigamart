@@ -24,7 +24,6 @@ export default function BottomNav() {
   function isActive(tab) {
     if (tab.exact) return location.pathname === tab.to;
     if (tab.profileTab) {
-      // Profile tab is "active" on /login or any profile-ish page
       return (
         location.pathname === '/login' ||
         location.pathname === '/register' ||
@@ -47,7 +46,7 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white border-t border-gray-200"
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface/95 backdrop-blur-md border-t border-line transition-colors duration-150"
       aria-label="Mobile bottom navigation"
     >
       <div className="flex items-stretch h-16">
@@ -60,7 +59,7 @@ export default function BottomNav() {
             <NavLink
               key={tab.label}
               to={getTo(tab)}
-              className="relative flex-1 flex flex-col items-center justify-center gap-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500"
+              className="relative flex-1 flex flex-col items-center justify-center gap-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
               aria-label={tab.label}
             >
               {/* Active indicator dot */}
@@ -68,7 +67,7 @@ export default function BottomNav() {
                 {active && (
                   <motion.span
                     layoutId="bottomNavIndicator"
-                    className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-brand-600 rounded-full"
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-brand rounded-full"
                     initial={{ opacity: 0, scaleX: 0 }}
                     animate={{ opacity: 1, scaleX: 1 }}
                     exit={{ opacity: 0, scaleX: 0 }}
@@ -86,10 +85,9 @@ export default function BottomNav() {
                 >
                   <Icon
                     className={`w-5 h-5 transition-colors duration-150 ${
-                      active ? 'text-brand-600' : 'text-gray-400'
+                      active ? 'text-brand' : 'text-muted'
                     }`}
                     strokeWidth={active ? 2.4 : 1.8}
-                    aria-hidden="true"
                   />
                 </motion.div>
 
@@ -102,7 +100,7 @@ export default function BottomNav() {
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0, opacity: 0 }}
                       transition={{ type: 'spring', stiffness: 500, damping: 28 }}
-                      className="absolute -top-1.5 -right-2 min-w-[16px] h-4 bg-amber-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 leading-none"
+                      className="absolute -top-1.5 -right-2 min-w-[16px] h-4 bg-accent text-ink text-[10px] font-bold rounded-full flex items-center justify-center px-1 leading-none shadow-subtle"
                       aria-label={`${badgeCount} items in wishlist`}
                     >
                       {badgeCount > 99 ? '99+' : badgeCount}
@@ -114,7 +112,7 @@ export default function BottomNav() {
               {/* Label */}
               <span
                 className={`text-[10px] font-medium transition-colors duration-150 ${
-                  active ? 'text-brand-600' : 'text-gray-400'
+                  active ? 'text-brand font-semibold' : 'text-muted'
                 }`}
               >
                 {tab.label}

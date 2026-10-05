@@ -14,7 +14,6 @@ import {
   ShieldCheck,
   CheckCheck,
   Trash2,
-  ExternalLink,
   ChevronRight,
   Clock
 } from 'lucide-react';
@@ -94,7 +93,7 @@ export default function NotificationDropdown({ isOpen, onClose }) {
 
     if (iconType === 'truck' || status === 'Shipped') {
       return (
-        <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400 flex items-center justify-center shrink-0">
           <Truck className="w-4 h-4" />
         </div>
       );
@@ -102,7 +101,7 @@ export default function NotificationDropdown({ isOpen, onClose }) {
 
     if (iconType === 'check' || status === 'Confirmed') {
       return (
-        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-brand-soft text-brand-dark flex items-center justify-center shrink-0">
           <CheckCircle2 className="w-4 h-4" />
         </div>
       );
@@ -110,7 +109,7 @@ export default function NotificationDropdown({ isOpen, onClose }) {
 
     if (iconType === 'sparkles' || status === 'Delivered') {
       return (
-        <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0">
           <CheckCircle2 className="w-4 h-4" />
         </div>
       );
@@ -118,54 +117,38 @@ export default function NotificationDropdown({ isOpen, onClose }) {
 
     if (iconType === 'alert' || status === 'Cancelled') {
       return (
-        <div className="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-danger/15 text-danger flex items-center justify-center shrink-0">
           <AlertTriangle className="w-4 h-4" />
         </div>
       );
     }
 
-    if (iconType === 'refresh' || status === 'Returned') {
+    if (iconType === 'rotate' || status === 'Returned') {
       return (
-        <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-line/60 text-muted flex items-center justify-center shrink-0">
           <RotateCcw className="w-4 h-4" />
         </div>
       );
     }
 
-    if (iconType === 'package' || status === 'Placed' || notification.type === 'ORDER_STATUS') {
+    if (iconType === 'tag') {
       return (
-        <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-          <Package className="w-4 h-4" />
-        </div>
-      );
-    }
-
-    if (notification.type === 'PROMO') {
-      return (
-        <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-          <Sparkles className="w-4 h-4" />
-        </div>
-      );
-    }
-
-    if (notification.type === 'PRICE_DROP') {
-      return (
-        <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center shrink-0">
           <Tag className="w-4 h-4" />
         </div>
       );
     }
 
-    if (notification.type === 'SECURITY') {
+    if (iconType === 'shield') {
       return (
-        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-full bg-brand-soft text-brand-dark flex items-center justify-center shrink-0">
           <ShieldCheck className="w-4 h-4" />
         </div>
       );
     }
 
     return (
-      <div className="w-8 h-8 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+      <div className="w-8 h-8 rounded-full bg-brand-soft text-brand-dark flex items-center justify-center shrink-0">
         <Bell className="w-4 h-4" />
       </div>
     );
@@ -177,15 +160,15 @@ export default function NotificationDropdown({ isOpen, onClose }) {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 origin-top-right text-left"
+      className="absolute right-0 mt-2 w-80 sm:w-96 bg-surface rounded-2xl shadow-elevation border border-line overflow-hidden z-50 origin-top-right text-left"
     >
       {/* Header */}
-      <div className="px-4 py-3 bg-white border-b border-gray-100">
+      <div className="px-4 py-3 bg-surface border-b border-line">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-gray-900">Notifications</h3>
+            <h3 className="text-sm font-bold text-ink">Notifications</h3>
             {unreadCount > 0 && (
-              <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+              <span className="bg-accent text-ink text-[10px] font-bold px-2 py-0.5 rounded-full shadow-subtle">
                 {unreadCount} new
               </span>
             )}
@@ -194,7 +177,7 @@ export default function NotificationDropdown({ isOpen, onClose }) {
             <button
               type="button"
               onClick={handleMarkAllRead}
-              className="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1 transition-colors"
+              className="text-xs font-semibold text-brand hover:text-brand-dark flex items-center gap-1 transition-colors"
               title="Mark all as read"
             >
               <CheckCheck className="w-3.5 h-3.5" />
@@ -210,8 +193,8 @@ export default function NotificationDropdown({ isOpen, onClose }) {
             onClick={() => setFilter('all')}
             className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
               filter === 'all'
-                ? 'bg-gray-900 text-white shadow-xs'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-ink text-canvas shadow-subtle'
+                : 'bg-canvas text-muted hover:text-ink'
             }`}
           >
             All
@@ -221,15 +204,15 @@ export default function NotificationDropdown({ isOpen, onClose }) {
             onClick={() => setFilter('unread')}
             className={`px-3 py-1 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 ${
               filter === 'unread'
-                ? 'bg-brand-600 text-white shadow-xs'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-brand text-white shadow-subtle'
+                : 'bg-canvas text-muted hover:text-ink'
             }`}
           >
             <span>Unread</span>
             {unreadCount > 0 && (
               <span
                 className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                  filter === 'unread' ? 'bg-brand-800 text-white' : 'bg-brand-100 text-brand-700'
+                  filter === 'unread' ? 'bg-brand-dark text-white' : 'bg-brand-soft text-brand-dark'
                 }`}
               >
                 {unreadCount}
@@ -240,29 +223,29 @@ export default function NotificationDropdown({ isOpen, onClose }) {
       </div>
 
       {/* Notifications List */}
-      <div className="max-h-[380px] overflow-y-auto divide-y divide-gray-100 overscroll-contain">
+      <div className="max-h-[380px] overflow-y-auto divide-y divide-line overscroll-contain">
         {isLoading && notifications.length === 0 ? (
           <div className="p-4 space-y-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex gap-3 animate-pulse">
-                <div className="w-8 h-8 rounded-full bg-gray-200 shrink-0" />
+                <div className="w-8 h-8 rounded-full bg-line/60 shrink-0" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-3 bg-gray-200 rounded w-3/4" />
-                  <div className="h-2.5 bg-gray-200 rounded w-full" />
-                  <div className="h-2 bg-gray-200 rounded w-1/4" />
+                  <div className="h-3 bg-line/60 rounded w-3/4" />
+                  <div className="h-2.5 bg-line/60 rounded w-full" />
+                  <div className="h-2 bg-line/60 rounded w-1/4" />
                 </div>
               </div>
             ))}
           </div>
         ) : filteredNotifications.length === 0 ? (
           <div className="py-10 px-4 text-center">
-            <div className="w-12 h-12 rounded-full bg-gray-100 text-gray-400 mx-auto flex items-center justify-center mb-3">
-              <Bell className="w-6 h-6 text-gray-400" />
+            <div className="w-12 h-12 rounded-full bg-canvas text-muted mx-auto flex items-center justify-center mb-3 border border-line">
+              <Bell className="w-6 h-6 text-muted" />
             </div>
-            <p className="text-sm font-semibold text-gray-800">
+            <p className="text-sm font-semibold text-ink">
               {filter === 'unread' ? 'No unread notifications' : 'No notifications yet'}
             </p>
-            <p className="text-xs text-gray-500 mt-1 max-w-[220px] mx-auto">
+            <p className="text-xs text-muted mt-1 max-w-[220px] mx-auto">
               {filter === 'unread'
                 ? "You've read all your updates. Switch to 'All' to review past notices."
                 : "We'll let you know when your orders update or special deals arrive."}
@@ -275,8 +258,8 @@ export default function NotificationDropdown({ isOpen, onClose }) {
               onClick={(e) => handleItemClick(item, e)}
               className={`p-3.5 flex items-start gap-3 transition-colors cursor-pointer group relative ${
                 !item.isRead
-                  ? 'bg-brand-50/40 hover:bg-brand-50/70 border-l-2 border-brand-600'
-                  : 'hover:bg-gray-50 border-l-2 border-transparent'
+                  ? 'bg-brand-soft/40 hover:bg-brand-soft/60 border-l-2 border-brand'
+                  : 'hover:bg-canvas border-l-2 border-transparent'
               }`}
             >
               {renderIcon(item)}
@@ -284,28 +267,28 @@ export default function NotificationDropdown({ isOpen, onClose }) {
               <div className="flex-1 min-w-0 pr-4">
                 <div className="flex items-center justify-between gap-1 mb-0.5">
                   <p
-                    className={`text-xs font-semibold truncate ${
-                      !item.isRead ? 'text-gray-900 font-bold' : 'text-gray-700'
+                    className={`text-xs truncate ${
+                      !item.isRead ? 'text-ink font-bold' : 'text-ink/80 font-medium'
                     }`}
                   >
                     {item.title}
                   </p>
-                  <span className="text-[10px] text-gray-400 whitespace-nowrap shrink-0 flex items-center gap-1">
+                  <span className="text-[10px] text-muted whitespace-nowrap shrink-0 flex items-center gap-1">
                     <Clock className="w-2.5 h-2.5" />
                     {formatRelativeTime(item.createdAt)}
                   </span>
                 </div>
 
-                <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-muted line-clamp-2 leading-relaxed">
                   {item.message}
                 </p>
 
                 {(item.data?.orderNumber || item.metadata?.orderNumber) && (
                   <div className="mt-1.5 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-gray-100 text-gray-700">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-canvas text-muted border border-line">
                       Order #{item.data?.orderNumber || item.metadata?.orderNumber}
                     </span>
-                    <span className="text-[10px] font-semibold text-brand-600 flex items-center gap-0.5 group-hover:underline">
+                    <span className="text-[10px] font-semibold text-brand flex items-center gap-0.5 group-hover:underline">
                       Track <ChevronRight className="w-3 h-3" />
                     </span>
                   </div>
@@ -316,14 +299,14 @@ export default function NotificationDropdown({ isOpen, onClose }) {
               <div className="shrink-0 flex items-center gap-1 self-center">
                 {!item.isRead && (
                   <span
-                    className="w-2 h-2 rounded-full bg-brand-600 shrink-0 group-hover:hidden"
+                    className="w-2 h-2 rounded-full bg-brand shrink-0 group-hover:hidden"
                     title="Unread"
                   />
                 )}
                 <button
                   type="button"
                   onClick={(e) => handleDelete(item._id, e)}
-                  className="delete-btn p-1 text-gray-400 hover:text-rose-600 rounded-md hover:bg-rose-50 transition-colors opacity-0 group-hover:opacity-100"
+                  className="delete-btn p-1 text-muted hover:text-danger rounded-md hover:bg-danger/10 transition-colors opacity-0 group-hover:opacity-100"
                   title="Delete notification"
                   aria-label="Delete notification"
                 >
@@ -336,23 +319,23 @@ export default function NotificationDropdown({ isOpen, onClose }) {
       </div>
 
       {/* Footer */}
-      <div className="p-2.5 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs">
+      <div className="p-2.5 bg-canvas border-t border-line flex items-center justify-between text-xs">
         <button
           type="button"
           onClick={() => {
             onClose();
             navigate('/my-orders');
           }}
-          className="text-xs font-semibold text-gray-700 hover:text-brand-600 transition-colors flex items-center gap-1 px-2 py-1 rounded"
+          className="text-xs font-semibold text-ink hover:text-brand transition-colors flex items-center gap-1 px-2 py-1 rounded"
         >
-          <Package className="w-3.5 h-3.5 text-gray-500" />
+          <Package className="w-3.5 h-3.5 text-muted" />
           View My Orders
         </button>
 
         <button
           type="button"
           onClick={onClose}
-          className="text-xs font-medium text-gray-500 hover:text-gray-800 px-2 py-1 rounded transition-colors"
+          className="text-xs font-medium text-muted hover:text-ink px-2 py-1 rounded transition-colors"
         >
           Close
         </button>

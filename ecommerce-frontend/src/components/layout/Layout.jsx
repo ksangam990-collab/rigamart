@@ -27,7 +27,7 @@ export default function Layout() {
   }, [location.pathname, location.hash]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900 font-sans antialiased">
+    <div className="flex flex-col min-h-screen bg-canvas text-ink font-sans antialiased transition-colors duration-150">
       <Navbar />
       {/* pb-16 on mobile compensates for the fixed BottomNav height */}
       <main className="flex-1 flex flex-col pb-16 md:pb-0">

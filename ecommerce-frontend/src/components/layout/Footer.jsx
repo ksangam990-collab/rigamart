@@ -86,6 +86,12 @@ export default function Footer() {
             <li><Link to="/about#architecture" className="hover:text-white transition-colors">Architecture</Link></li>
             <li><Link to="/help" className="hover:text-white transition-colors">Help Center &amp; FAQs</Link></li>
             <li><Link to="/sell" className="hover:text-white transition-colors">Sell on Rigamart</Link></li>
+            <li>
+              <Link to="/styleguide" className="text-brand-soft hover:text-white transition-colors font-medium flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand inline-block" />
+                <span>Design System v2.0</span>
+              </Link>
+            </li>
           </ul>
         </div>
 

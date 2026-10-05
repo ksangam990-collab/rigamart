@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -20,9 +20,11 @@ import {
   Star,
   Bell,
   Clock,
-  Trash2,
   TrendingUp,
-  Sparkles
+  Sparkles,
+  Sun,
+  Moon,
+  Layers
 } from 'lucide-react';
 import { logoutUser } from '../../features/auth/authSlice.js';
 import {
@@ -34,7 +36,6 @@ import NotificationDropdown from './NotificationDropdown.jsx';
 import api from '../../utils/api.js';
 import Logo from '../common/Logo.jsx';
 import {
-  buttonHover,
   buttonTap,
   drawerSlideDown,
   modalContentVariants,
@@ -43,12 +44,15 @@ import {
 
 const RECENT_SEARCHES_KEY = 'rigamart_recent_searches';
 
-const POPULAR_CATEGORIES = [
-  { name: 'Electronics', slug: 'electronics' },
-  { name: 'Fashion', slug: 'fashion' },
-  { name: 'Footwear', slug: 'footwear' },
-  { name: 'Home & Kitchen', slug: 'home-kitchen' },
-  { name: 'Beauty & Grooming', slug: 'beauty-health' }
+const CURATED_CATEGORIES = [
+  { name: 'All Collections', href: '/catalog', badge: null },
+  { name: 'Electronics', href: '/search?category=electronics', badge: null },
+  { name: 'Fashion', href: '/search?category=fashion', badge: null },
+  { name: 'Footwear', href: '/search?category=footwear', badge: null },
+  { name: 'Home & Kitchen', href: '/search?category=home-kitchen', badge: null },
+  { name: 'Beauty & Wellness', href: '/search?category=beauty-health', badge: null },
+  { name: 'Trending Now', href: '/search?sort=newest', badge: '🔥 Hot' },
+  { name: 'Styleguide', href: '/styleguide', badge: 'v2.0' },
 ];
 
 const loadRecentSearches = () => {
@@ -93,53 +97,49 @@ function SearchSuggestionsDropdown({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -4, scale: 0.99 }}
           transition={{ duration: 0.15 }}
-          className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 divide-y divide-gray-100 max-h-[460px] overflow-y-auto text-left"
+          className="absolute left-0 right-0 top-full mt-1.5 bg-surface rounded-xl shadow-elevation border border-line overflow-hidden z-50 divide-y divide-line max-h-[460px] overflow-y-auto text-left"
         >
           {/* SCENARIO A: EMPTY OR SHORT QUERY (< 2 CHARS) -> RECENT SEARCHES + POPULAR CATEGORIES */}
           {!isQueryActive && (
-            <div className="divide-y divide-gray-100">
-              {/* Recent Searches */}
+            <div className="divide-y divide-line">
+              {/* Recent Search History */}
               {recentSearches.length > 0 && (
-                <div className="py-2">
-                  <div className="flex items-center justify-between px-3.5 pb-1.5 pt-0.5">
-                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                      <Clock className="w-3 h-3 text-brand-500" />
-                      <span>Recent Searches</span>
-                    </div>
+                <div className="p-3">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-muted uppercase tracking-wider px-1 pb-2">
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3 h-3 text-brand" />
+                      Recent Searches
+                    </span>
                     <button
                       type="button"
                       onClick={onClearRecentSearches}
-                      className="text-[10px] font-semibold text-gray-400 hover:text-red-500 flex items-center gap-1 transition-colors px-1.5 py-0.5 rounded hover:bg-gray-100"
-                      title="Clear search history"
+                      className="text-muted hover:text-danger lowercase font-normal transition-colors"
                     >
-                      <Trash2 className="w-3 h-3" />
-                      <span>Clear History</span>
+                      clear history
                     </button>
                   </div>
-
                   <div className="space-y-0.5">
                     {recentSearches.map((term, idx) => {
                       const isSelected = selectedIndex === idx;
-
                       return (
                         <div
                           key={term}
                           onClick={() => onSelectRecentSearch(term)}
                           onMouseEnter={() => setSelectedIndex(idx)}
-                          className={`flex items-center justify-between px-3.5 py-2 cursor-pointer transition-colors group ${
+                          className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs cursor-pointer transition-colors ${
                             isSelected
-                              ? 'bg-brand-50 text-brand-900 border-l-2 border-brand-600'
-                              : 'hover:bg-gray-50 text-gray-700'
+                              ? 'bg-brand-soft text-brand-dark'
+                              : 'hover:bg-canvas text-ink'
                           }`}
                         >
-                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                            <Clock className="w-3.5 h-3.5 text-gray-400 group-hover:text-brand-500 transition-colors shrink-0" />
-                            <span className="text-xs font-medium truncate">{term}</span>
-                          </div>
+                          <span className="flex items-center gap-2 truncate">
+                            <Search className="w-3 h-3 text-muted shrink-0" />
+                            {term}
+                          </span>
                           <button
                             type="button"
                             onClick={(e) => onRemoveRecentSearch(e, term)}
-                            className="p-1 text-gray-300 hover:text-red-500 rounded-full hover:bg-gray-200/60 transition-colors"
+                            className="p-1 text-muted hover:text-danger rounded-full hover:bg-canvas transition-colors"
                             title="Remove from history"
                           >
                             <X className="w-3 h-3" />
@@ -152,26 +152,27 @@ function SearchSuggestionsDropdown({
               )}
 
               {/* Popular / Trending Categories Quick Filter Chips */}
-              <div className="p-3 bg-gray-50/70">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pb-2 flex items-center gap-1.5">
-                  <TrendingUp className="w-3 h-3 text-amber-500" />
+              <div className="p-3 bg-canvas/60">
+                <div className="text-[10px] font-bold text-muted uppercase tracking-wider px-1 pb-2 flex items-center gap-1.5">
+                  <TrendingUp className="w-3 h-3 text-accent" />
                   <span>Trending Categories</span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {POPULAR_CATEGORIES.map((cat, idx) => {
+                  {CURATED_CATEGORIES.slice(1, 6).map((cat, idx) => {
                     const currentIndex = recentSearches.length + idx;
                     const isSelected = selectedIndex === currentIndex;
+                    const slug = cat.href.split('=').pop();
 
                     return (
                       <button
-                        key={cat.slug}
+                        key={cat.name}
                         type="button"
-                        onClick={() => onSelectCategory(cat.slug)}
+                        onClick={() => onSelectCategory(slug)}
                         onMouseEnter={() => setSelectedIndex(currentIndex)}
                         className={`text-xs px-2.5 py-1 rounded-full font-medium transition-colors ${
                           isSelected
-                            ? 'bg-brand-600 text-white shadow-xs'
-                            : 'bg-white hover:bg-brand-50 text-gray-700 hover:text-brand-600 border border-gray-200'
+                            ? 'bg-brand text-white shadow-subtle'
+                            : 'bg-surface hover:bg-brand-soft text-ink hover:text-brand-dark border border-line'
                         }`}
                       >
                         {cat.name}
@@ -188,17 +189,17 @@ function SearchSuggestionsDropdown({
             <>
               {/* Searching Loading State */}
               {isSearching && (
-                <div className="py-3 px-4 flex items-center justify-center gap-2 text-xs text-gray-500 bg-gray-50/50">
-                  <Loader2 className="w-3.5 h-3.5 text-brand-600 animate-spin" />
-                  <span>Searching products & categories...</span>
+                <div className="py-3 px-4 flex items-center justify-center gap-2 text-xs text-muted bg-canvas/40">
+                  <Loader2 className="w-3.5 h-3.5 text-brand animate-spin" />
+                  <span>Searching catalog...</span>
                 </div>
               )}
 
               {/* Matching Categories Jump Links */}
               {categories.length > 0 && (
-                <div className="p-2.5 bg-gray-50/80">
-                  <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pb-1.5 flex items-center gap-1.5">
-                    <Tag className="w-3 h-3 text-brand-500" />
+                <div className="p-2.5 bg-canvas/60">
+                  <div className="text-[10px] font-bold text-muted uppercase tracking-wider px-1 pb-1.5 flex items-center gap-1.5">
+                    <Tag className="w-3 h-3 text-brand" />
                     <span>Search in category</span>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
@@ -213,8 +214,8 @@ function SearchSuggestionsDropdown({
                           onMouseEnter={() => setSelectedIndex(idx)}
                           className={`text-xs px-2.5 py-1 rounded-full font-medium transition-colors flex items-center gap-1 ${
                             isSelected
-                              ? 'bg-brand-600 text-white shadow-xs'
-                              : 'bg-white hover:bg-brand-50 text-gray-700 hover:text-brand-600 border border-gray-200'
+                              ? 'bg-brand text-white shadow-subtle'
+                              : 'bg-surface hover:bg-brand-soft text-ink hover:text-brand-dark border border-line'
                           }`}
                         >
                           <span>{cat.name}</span>
@@ -229,12 +230,12 @@ function SearchSuggestionsDropdown({
               {/* Top 4 Matching Products */}
               {products.length > 0 && (
                 <div className="py-1">
-                  <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-3.5 py-1.5 flex items-center justify-between">
+                  <div className="text-[10px] font-bold text-muted uppercase tracking-wider px-3.5 py-1.5 flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
-                      <Package className="w-3 h-3 text-brand-500" />
+                      <Package className="w-3 h-3 text-brand" />
                       Matching Products
                     </span>
-                    <span className="text-gray-400 lowercase font-normal">top results</span>
+                    <span className="text-muted lowercase font-normal">top results</span>
                   </div>
                   <div className="space-y-0.5">
                     {products.map((prod, idx) => {
@@ -248,11 +249,11 @@ function SearchSuggestionsDropdown({
                           onMouseEnter={() => setSelectedIndex(itemIndex)}
                           className={`flex items-center gap-3 px-3.5 py-2 cursor-pointer transition-colors ${
                             isSelected
-                              ? 'bg-brand-50 text-brand-900 border-l-2 border-brand-600'
-                              : 'hover:bg-gray-50 text-gray-800'
+                              ? 'bg-brand-soft text-brand-dark border-l-2 border-brand'
+                              : 'hover:bg-canvas text-ink'
                           }`}
                         >
-                          <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden shrink-0 border border-gray-200 flex items-center justify-center p-0.5">
+                          <div className="w-10 h-10 rounded-lg bg-canvas overflow-hidden shrink-0 border border-line flex items-center justify-center p-0.5">
                             {prod.image ? (
                               <img
                                 src={prod.image}
@@ -261,30 +262,30 @@ function SearchSuggestionsDropdown({
                                 loading="lazy"
                               />
                             ) : (
-                              <Package className="w-5 h-5 text-gray-400" />
+                              <Package className="w-5 h-5 text-muted" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-xs font-semibold text-gray-900 truncate">
+                            <p className="text-xs font-semibold text-ink truncate">
                               {prod.name}
                             </p>
                             <div className="flex items-center gap-2 mt-0.5">
-                              <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider truncate">
+                              <span className="text-[10px] text-muted font-medium uppercase tracking-wider truncate">
                                 {prod.brand || prod.category?.name || 'Rigamart'}
                               </span>
                               {prod.avgRating > 0 && (
-                                <span className="flex items-center gap-0.5 text-[10px] text-amber-600 font-semibold">
-                                  <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                                <span className="flex items-center gap-0.5 text-[10px] text-ink font-semibold">
+                                  <Star className="w-2.5 h-2.5 fill-accent text-accent" />
                                   {prod.avgRating.toFixed(1)}
                                 </span>
                               )}
-                              <span className="text-[10px] text-emerald-600 font-medium bg-emerald-50 px-1 rounded">
+                              <span className="text-[10px] text-success font-medium bg-success/10 px-1 rounded">
                                 In Stock
                               </span>
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <span className="text-xs font-bold text-brand-700">
+                            <span className="text-xs font-bold text-ink tabular-nums">
                               ₹{prod.basePrice?.toLocaleString('en-IN')}
                             </span>
                           </div>
@@ -297,10 +298,10 @@ function SearchSuggestionsDropdown({
 
               {/* Empty State */}
               {!isSearching && !hasResults && (
-                <div className="py-5 px-4 text-center text-xs text-gray-500">
-                  <p className="font-semibold text-gray-700">No matching products or categories</p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">
-                    Press Enter or click below to search the catalog for &ldquo;{queryTrimmed}&rdquo;
+                <div className="py-5 px-4 text-center text-xs text-muted">
+                  <p className="font-semibold text-ink">No matching products or categories</p>
+                  <p className="text-[11px] text-muted mt-0.5">
+                    Press Enter or click below to search catalog for &ldquo;{queryTrimmed}&rdquo;
                   </p>
                 </div>
               )}
@@ -310,15 +311,15 @@ function SearchSuggestionsDropdown({
                 type="button"
                 onClick={onSubmitSearch}
                 onMouseEnter={() => setSelectedIndex(viewAllIndex)}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold text-brand-600 transition-colors ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold text-brand transition-colors ${
                   selectedIndex === viewAllIndex
-                    ? 'bg-brand-50'
-                    : 'hover:bg-brand-50/60 bg-gray-50/50'
+                    ? 'bg-brand-soft'
+                    : 'hover:bg-brand-soft/60 bg-canvas/40'
                 }`}
               >
                 <span>
                   View all results for &ldquo;
-                  <span className="text-brand-800 underline">{queryTrimmed}</span>
+                  <span className="text-brand-dark underline">{queryTrimmed}</span>
                   &rdquo;
                 </span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -339,6 +340,35 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isBannerCollapsed, setIsBannerCollapsed] = useState(false);
 
+  // Theme toggle state (system / user stored)
+  const [isDark, setIsDark] = useState(() => {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  });
+
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('rigamart_theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('rigamart_theme', 'light');
+    }
+  };
+
+  // Sync initial theme from localStorage or system preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('rigamart_theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      setIsDark(true);
+    } else if (savedTheme === 'light') {
+      document.documentElement.removeAttribute('data-theme');
+      setIsDark(false);
+    }
+  }, []);
+
   // Predictive search autocomplete & recent searches
   const [recentSearches, setRecentSearches] = useState(loadRecentSearches);
   const [suggestions, setSuggestions] = useState({ products: [], categories: [] });
@@ -351,11 +381,12 @@ export default function Navbar() {
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const cartTotalCount = useSelector((state) => state.cart.totalCount);
-  const wishlistCount = useSelector((state) => state.wishlist.items.length);
+  const wishlistCount = useSelector((state) => state.wishlist?.items?.length ?? 0);
   const unreadCount = useSelector((state) => state.notification?.unreadCount ?? 0);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Save recent search term to localStorage
   const saveRecentSearch = (term) => {
@@ -439,6 +470,20 @@ export default function Navbar() {
     return () => clearTimeout(debounceTimer);
   }, [searchQuery]);
 
+  // Global Ctrl+K / Cmd+K Spotlight Search shortcut
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        const inputEl = searchRef.current?.querySelector('input');
+        inputEl?.focus();
+        setShowDropdown(true);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
+
   // Dismiss dropdowns on outside clicks
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -465,8 +510,9 @@ export default function Navbar() {
       recentSearches.forEach((term) => {
         items.push({ type: 'recent', term });
       });
-      POPULAR_CATEGORIES.forEach((cat) => {
-        items.push({ type: 'popular_category', slug: cat.slug, name: cat.name });
+      CURATED_CATEGORIES.slice(1, 6).forEach((cat) => {
+        const slug = cat.href.split('=').pop();
+        items.push({ type: 'popular_category', slug, name: cat.name });
       });
     } else {
       (suggestions.categories || []).forEach((cat) => {
@@ -552,7 +598,6 @@ export default function Navbar() {
   };
 
   // RAF-throttled scroll listener with dual-threshold hysteresis
-  // Decouples visual elevation from banner collapse and prevents layout-shift oscillation
   useEffect(() => {
     let ticking = false;
 
@@ -561,16 +606,12 @@ export default function Navbar() {
         window.requestAnimationFrame(() => {
           const currentScrollY = window.scrollY;
 
-          // 1. Elevation shadow hysteresis: turn on at > 25px, turn off only when back at < 10px
           setIsScrolled((prev) => {
             if (!prev && currentScrollY > 25) return true;
             if (prev && currentScrollY < 10) return false;
             return prev;
           });
 
-          // 2. Banner collapse hysteresis: collapse at > 80px, re-expand only when back at < 20px
-          // The 60px hysteresis gap strictly exceeds the ~40px header height delta,
-          // making threshold oscillation mathematically impossible.
           setIsBannerCollapsed((prev) => {
             if (!prev && currentScrollY > 80) return true;
             if (prev && currentScrollY < 20) return false;
@@ -608,38 +649,40 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-50 transition-all duration-200 ${
         isScrolled
-          ? 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.08)] border-b border-gray-200'
-          : 'bg-white border-b border-gray-200 shadow-sm'
+          ? 'bg-surface/90 backdrop-blur-xl border-b border-line shadow-card'
+          : 'bg-surface border-b border-line'
       }`}
     >
       {/* Top Banner for Trust / Free Delivery (collapses smoothly on scroll) */}
       <div
-        className={`bg-brand-600 text-white text-xs text-center font-medium tracking-wide transition-all duration-300 overflow-hidden ${
+        className={`bg-brand text-white text-xs text-center font-medium tracking-wide transition-all duration-300 overflow-hidden ${
           isBannerCollapsed
             ? 'max-h-0 py-0 opacity-0 pointer-events-none'
             : 'max-h-10 py-1.5 px-4 opacity-100'
         }`}
       >
-        ⚡ Super Saver Sale: Free delivery across India on orders above ₹500!
+        <span className="opacity-90">
+          Super Saver Delivery: Free shipping across India on orders above ₹500
+        </span>
       </div>
 
-      {/* Main Navbar */}
+      {/* Main Navbar Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className={`flex items-center justify-between gap-4 transition-all duration-300 ${
+          className={`flex items-center justify-between gap-4 transition-all duration-200 ${
             isBannerCollapsed ? 'h-14' : 'h-16'
           }`}
         >
           {/* Brand Logo */}
           <div className="flex items-center gap-6">
-            <Link to="/" className="flex items-center group">
+            <Link to="/" className="flex items-center group" aria-label="Rigamart Homepage">
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.15 }}
-                className={`transition-transform duration-300 origin-left ${
+                className={`transition-transform duration-200 origin-left ${
                   isBannerCollapsed ? 'scale-95' : 'scale-100'
                 }`}
               >
@@ -648,7 +691,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Search Bar (Desktop) */}
+          {/* Desktop Spotlight Search Bar */}
           <form
             ref={searchRef}
             onSubmit={handleSearchSubmit}
@@ -659,40 +702,37 @@ export default function Navbar() {
           >
             <input
               type="text"
-              placeholder="Search for products, brands, and categories..."
+              placeholder="Search products, authentic brands, or categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
-              className={`w-full bg-gray-100 hover:bg-gray-50 focus:bg-white rounded-lg pl-10 pr-24 border border-transparent focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 transition-all text-gray-800 ${
-                isBannerCollapsed ? 'py-2 text-xs' : 'py-2.5 text-sm'
+              className={`w-full bg-canvas hover:bg-surface focus:bg-surface rounded-xl pl-10 pr-24 border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all text-ink placeholder:text-muted/60 ${
+                isBannerCollapsed ? 'py-1.5 text-xs' : 'py-2 text-sm'
               }`}
             />
             {isSearching ? (
-              <Loader2 className="w-4 h-4 text-brand-600 animate-spin absolute left-3.5 pointer-events-none" />
+              <Loader2 className="w-4 h-4 text-brand animate-spin absolute left-3.5 pointer-events-none" />
             ) : (
-              <Search className="w-4 h-4 text-gray-400 absolute left-3.5 pointer-events-none" />
+              <Search className="w-4 h-4 text-muted absolute left-3.5 pointer-events-none" />
             )}
+
+            {/* Clear Button */}
             {searchQuery && (
               <button
                 type="button"
                 onClick={handleClearSearch}
-                className="absolute right-16 p-1 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-200 transition-colors"
+                className="absolute right-16 p-1 text-muted hover:text-ink rounded-full hover:bg-line/40 transition-colors"
                 title="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
-            <motion.button
-              type="submit"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.96 }}
-              className={`absolute right-1.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-md transition-all shadow-sm ${
-                isBannerCollapsed ? 'px-2.5 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'
-              }`}
-            >
-              Search
-            </motion.button>
+
+            {/* Keyboard Shortcut Pill (⌘K) */}
+            <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-muted bg-surface border border-line rounded absolute right-2 pointer-events-none">
+              ⌘K
+            </kbd>
 
             {/* Predictive Autocomplete Dropdown */}
             <SearchSuggestionsDropdown
@@ -712,16 +752,32 @@ export default function Navbar() {
             />
           </form>
 
-          {/* User Actions & Badges */}
-          <div className="flex items-center gap-3 sm:gap-5">
+          {/* User Actions & Action Cluster */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Theme Toggle (Sun / Moon) */}
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.9 }}
+              onClick={toggleTheme}
+              className="p-2 text-muted hover:text-ink hover:bg-canvas rounded-xl transition-colors flex items-center justify-center border border-transparent hover:border-line"
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label="Toggle theme"
+            >
+              {isDark ? (
+                <Sun className="w-4 h-4 text-accent transition-transform hover:rotate-45" />
+              ) : (
+                <Moon className="w-4 h-4 transition-transform hover:-rotate-12" />
+              )}
+            </motion.button>
+
             {/* Wishlist Icon */}
-            <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.92 }}>
               <Link
                 to="/wishlist"
-                className="relative p-2 text-gray-600 hover:text-brand-600 transition-colors rounded-full hover:bg-gray-100 flex items-center justify-center"
+                className="relative p-2 text-muted hover:text-brand hover:bg-brand-soft/40 transition-colors rounded-xl flex items-center justify-center"
                 title="Wishlist"
               >
-                <Heart className="w-5 h-5 transition-transform duration-150 hover:text-rose-500" />
+                <Heart className="w-5 h-5 transition-transform duration-150" />
                 <AnimatePresence>
                   {wishlistCount > 0 && (
                     <motion.span
@@ -730,9 +786,9 @@ export default function Navbar() {
                       initial="initial"
                       animate="animate"
                       exit={{ scale: 0 }}
-                      className="absolute top-1 right-1 bg-rose-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm"
+                      className="absolute top-1 right-1 bg-accent text-ink text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-subtle leading-none"
                     >
-                      {wishlistCount}
+                      {wishlistCount > 99 ? '99+' : wishlistCount}
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -740,10 +796,10 @@ export default function Navbar() {
             </motion.div>
 
             {/* Shopping Cart Icon with Live Badge */}
-            <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.92 }}>
               <Link
                 to="/cart"
-                className="relative p-2 text-gray-600 hover:text-brand-600 transition-colors rounded-full hover:bg-gray-100 flex items-center justify-center"
+                className="relative p-2 text-muted hover:text-brand hover:bg-brand-soft/40 transition-colors rounded-xl flex items-center justify-center"
                 title="Cart"
               >
                 <ShoppingCart className="w-5 h-5 transition-colors" />
@@ -755,9 +811,9 @@ export default function Navbar() {
                       initial="initial"
                       animate="animate"
                       exit={{ scale: 0 }}
-                      className="absolute top-1 right-1 bg-brand-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm"
+                      className="absolute top-1 right-1 bg-brand text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-subtle leading-none"
                     >
-                      {cartTotalCount}
+                      {cartTotalCount > 99 ? '99+' : cartTotalCount}
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -769,11 +825,11 @@ export default function Navbar() {
               <div className="relative" ref={notificationRef}>
                 <motion.button
                   type="button"
-                  whileHover={{ scale: 1.08 }}
+                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.92 }}
                   onClick={handleToggleNotifications}
-                  className={`relative p-2 text-gray-600 hover:text-brand-600 transition-colors rounded-full hover:bg-gray-100 flex items-center justify-center ${
-                    notificationDropdownOpen ? 'bg-gray-100 text-brand-600' : ''
+                  className={`relative p-2 text-muted hover:text-brand hover:bg-brand-soft/40 transition-colors rounded-xl flex items-center justify-center ${
+                    notificationDropdownOpen ? 'bg-brand-soft/60 text-brand' : ''
                   }`}
                   title="Notifications"
                   aria-label="View notifications"
@@ -787,7 +843,7 @@ export default function Navbar() {
                         initial="initial"
                         animate="animate"
                         exit={{ scale: 0 }}
-                        className="absolute top-1 right-1 bg-amber-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm"
+                        className="absolute top-1 right-1 bg-accent text-ink text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-subtle leading-none"
                       >
                         {unreadCount > 9 ? '9+' : unreadCount}
                       </motion.span>
@@ -814,20 +870,20 @@ export default function Navbar() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2 py-1 px-2.5 rounded-lg border border-gray-200 hover:border-gray-300 bg-gray-50 hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700"
+                  className="flex items-center gap-2 py-1 px-2.5 rounded-xl border border-line hover:border-muted/40 bg-surface hover:bg-canvas transition-colors text-sm font-medium text-ink shadow-subtle"
                 >
-                  <div className="w-6 h-6 rounded-full bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center uppercase">
+                  <div className="w-6 h-6 rounded-full bg-brand-soft text-brand-dark font-bold text-xs flex items-center justify-center uppercase">
                     {user.name.charAt(0)}
                   </div>
-                  <span className="hidden sm:inline max-w-[100px] truncate">{user.name}</span>
+                  <span className="hidden sm:inline max-w-[100px] truncate tracking-tight">{user.name}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+                    className={`w-3.5 h-3.5 text-muted transition-transform duration-200 ${
                       userDropdownOpen ? 'rotate-180' : ''
                     }`}
                   />
                 </motion.button>
 
-                {/* Dropdown Menu Animated with AnimatePresence */}
+                {/* Dropdown Menu */}
                 <AnimatePresence>
                   {userDropdownOpen && (
                     <motion.div
@@ -835,13 +891,13 @@ export default function Navbar() {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 origin-top-right"
+                      className="absolute right-0 mt-2 w-56 bg-surface rounded-xl shadow-elevation border border-line py-2 z-50 origin-top-right text-left"
                       onMouseLeave={() => setUserDropdownOpen(false)}
                     >
-                      <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="text-xs text-gray-500">Signed in as</p>
-                        <p className="text-sm font-bold text-gray-800 truncate">{user.email}</p>
-                        <span className="inline-block mt-1 text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-blue-100 text-blue-700">
+                      <div className="px-4 py-2 border-b border-line">
+                        <p className="text-xs text-muted">Signed in as</p>
+                        <p className="text-sm font-bold text-ink truncate">{user.email}</p>
+                        <span className="inline-block mt-1 text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-brand-soft text-brand-dark">
                           {user.role}
                         </span>
                       </div>
@@ -849,18 +905,18 @@ export default function Navbar() {
                       <Link
                         to="/profile"
                         onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-ink hover:bg-canvas transition-colors"
                       >
-                        <User className="w-4 h-4 text-brand-500" />
+                        <User className="w-4 h-4 text-brand" />
                         My Profile
                       </Link>
 
                       <Link
                         to="/my-orders"
                         onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-ink hover:bg-canvas transition-colors"
                       >
-                        <Package className="w-4 h-4 text-gray-500" />
+                        <Package className="w-4 h-4 text-muted" />
                         My Orders
                       </Link>
 
@@ -868,9 +924,9 @@ export default function Navbar() {
                         <Link
                           to="/seller/dashboard"
                           onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-ink hover:bg-canvas transition-colors"
                         >
-                          <Store className="w-4 h-4 text-indigo-500" />
+                          <Store className="w-4 h-4 text-brand" />
                           Seller Dashboard
                         </Link>
                       )}
@@ -879,18 +935,18 @@ export default function Navbar() {
                         <Link
                           to="/admin/dashboard"
                           onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-ink hover:bg-canvas transition-colors"
                         >
-                          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                          <ShieldCheck className="w-4 h-4 text-success" />
                           Admin Portal
                         </Link>
                       )}
 
-                      <div className="border-t border-gray-100 my-1"></div>
+                      <div className="border-t border-line my-1" />
 
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left flex items-center gap-2.5 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        className="w-full text-left flex items-center gap-2.5 px-4 py-2 text-sm text-danger hover:bg-danger/10 transition-colors"
                       >
                         <LogOut className="w-4 h-4" />
                         Sign Out
@@ -901,18 +957,18 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="hidden sm:flex items-center gap-2">
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Link
                     to="/login"
-                    className="px-3.5 py-1.5 text-sm font-semibold text-gray-700 hover:text-brand-600 transition-colors"
+                    className="px-3.5 py-1.5 text-xs font-semibold text-ink hover:text-brand transition-colors"
                   >
                     Sign In
                   </Link>
                 </motion.div>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Link
                     to="/register"
-                    className="px-3.5 py-1.5 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg shadow-sm transition-all inline-block"
+                    className="px-3.5 py-1.5 text-xs font-semibold text-white bg-brand hover:bg-brand-dark rounded-xl shadow-subtle transition-all inline-block"
                   >
                     Register
                   </Link>
@@ -924,15 +980,40 @@ export default function Navbar() {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-600 hover:text-gray-900 rounded-lg focus:outline-none"
+              className="md:hidden p-2 text-muted hover:text-ink rounded-lg focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </motion.button>
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
+        {/* Curated Category Navigation Strip (Desktop) */}
+        <div className="hidden md:flex items-center gap-6 overflow-x-auto py-2 border-t border-line/60 scrollbar-none text-xs">
+          {CURATED_CATEGORIES.map((cat) => {
+            const isActive = location.pathname + location.search === cat.href;
+            return (
+              <Link
+                key={cat.name}
+                to={cat.href}
+                className={`whitespace-nowrap transition-colors flex items-center gap-1.5 font-medium py-0.5 tracking-tight ${
+                  isActive
+                    ? 'text-brand font-semibold border-b-2 border-brand pb-0'
+                    : 'text-muted hover:text-ink'
+                }`}
+              >
+                <span>{cat.name}</span>
+                {cat.badge && (
+                  <span className="text-[10px] font-bold bg-accent/20 text-accent px-1.5 py-0.2 rounded-full leading-tight">
+                    {cat.badge}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Mobile Search Bar (under header bar) */}
         <div ref={mobileSearchRef} className="md:hidden pb-3 relative">
           <form
             onSubmit={handleSearchSubmit}
@@ -948,18 +1029,18 @@ export default function Navbar() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
-              className="w-full bg-gray-100 text-sm rounded-lg pl-9 pr-24 py-2 border border-transparent focus:bg-white focus:border-brand-500 focus:outline-none transition-all"
+              className="w-full bg-canvas text-sm rounded-xl pl-9 pr-14 py-2 border border-line focus:bg-surface focus:border-brand focus:outline-none transition-all text-ink placeholder:text-muted/60"
             />
             {isSearching ? (
-              <Loader2 className="w-4 h-4 text-brand-600 animate-spin absolute left-3 pointer-events-none" />
+              <Loader2 className="w-4 h-4 text-brand animate-spin absolute left-3 pointer-events-none" />
             ) : (
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
+              <Search className="w-4 h-4 text-muted absolute left-3 pointer-events-none" />
             )}
             {searchQuery && (
               <button
                 type="button"
                 onClick={handleClearSearch}
-                className="absolute right-12 p-1 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-200 transition-colors"
+                className="absolute right-12 p-1 text-muted hover:text-ink rounded-full transition-colors"
                 title="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
@@ -968,13 +1049,13 @@ export default function Navbar() {
             <motion.button
               type="submit"
               whileTap={{ scale: 0.94 }}
-              className="absolute right-1 px-3 py-1.5 min-h-[30px] bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-md shadow-sm flex items-center justify-center transition-colors"
+              className="absolute right-1 px-3 py-1.5 bg-brand text-white text-xs font-semibold rounded-lg shadow-subtle flex items-center justify-center transition-colors"
               aria-label="Submit search"
             >
               Go
             </motion.button>
 
-            {/* Predictive Autocomplete Dropdown (Mobile) */}
+            {/* Mobile Predictive Dropdown */}
             <SearchSuggestionsDropdown
               show={showDropdown}
               isSearching={isSearching}
@@ -993,7 +1074,7 @@ export default function Navbar() {
           </form>
         </div>
 
-        {/* Mobile Slide-Down Menu Animated with AnimatePresence */}
+        {/* Mobile Slide-Down Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -1001,31 +1082,31 @@ export default function Navbar() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="md:hidden border-t border-gray-100 py-3 px-2 space-y-2 bg-white"
+              className="md:hidden border-t border-line py-3 px-2 space-y-2 bg-surface"
             >
               {isAuthenticated ? (
                 <div className="space-y-1">
-                  <div className="px-3 py-2 bg-gray-50 rounded-lg">
-                    <div className="text-xs text-gray-500">Signed in as</div>
-                    <div className="text-sm font-semibold text-gray-900">{user?.name || user?.email}</div>
-                    <span className="inline-block mt-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-brand-50 text-brand-600">
+                  <div className="px-3 py-2 bg-canvas rounded-xl border border-line">
+                    <div className="text-xs text-muted">Signed in as</div>
+                    <div className="text-sm font-semibold text-ink">{user?.name || user?.email}</div>
+                    <span className="inline-block mt-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-brand-soft text-brand-dark">
                       {user?.role}
                     </span>
                   </div>
                   <Link
                     to="/profile"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-ink hover:bg-canvas rounded-lg transition-colors"
                   >
-                    <User className="w-4 h-4 text-brand-500" />
+                    <User className="w-4 h-4 text-brand" />
                     My Profile
                   </Link>
                   <Link
                     to="/my-orders"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-ink hover:bg-canvas rounded-lg transition-colors"
                   >
-                    <Package className="w-4 h-4 text-gray-500" />
+                    <Package className="w-4 h-4 text-muted" />
                     My Orders
                   </Link>
                   <button
@@ -1034,14 +1115,14 @@ export default function Navbar() {
                       setMobileMenuOpen(false);
                       handleToggleNotifications();
                     }}
-                    className="w-full flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm text-ink hover:bg-canvas rounded-lg transition-colors"
                   >
                     <div className="flex items-center gap-2.5">
-                      <Bell className="w-4 h-4 text-amber-500" />
+                      <Bell className="w-4 h-4 text-accent" />
                       <span>Notifications</span>
                     </div>
                     {unreadCount > 0 && (
-                      <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      <span className="bg-accent text-ink text-[10px] font-bold px-2 py-0.5 rounded-full">
                         {unreadCount} new
                       </span>
                     )}
@@ -1050,9 +1131,9 @@ export default function Navbar() {
                     <Link
                       to="/seller/dashboard"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                      className="flex items-center gap-2.5 px-3 py-2 text-sm text-ink hover:bg-canvas rounded-lg transition-colors"
                     >
-                      <Store className="w-4 h-4 text-indigo-500" />
+                      <Store className="w-4 h-4 text-brand" />
                       Seller Dashboard
                     </Link>
                   )}
@@ -1060,15 +1141,15 @@ export default function Navbar() {
                     <Link
                       to="/admin/dashboard"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                      className="flex items-center gap-2.5 px-3 py-2 text-sm text-ink hover:bg-canvas rounded-lg transition-colors"
                     >
-                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                      <ShieldCheck className="w-4 h-4 text-success" />
                       Admin Portal
                     </Link>
                   )}
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="w-full text-left flex items-center gap-2.5 px-3 py-2 text-sm text-danger hover:bg-danger/10 rounded-lg transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                     Sign Out
@@ -1080,7 +1161,7 @@ export default function Navbar() {
                     <Link
                       to="/login"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-center w-full"
+                      className="flex items-center justify-center px-4 py-2 text-xs font-semibold text-ink bg-canvas hover:bg-line/40 border border-line rounded-xl transition-colors text-center w-full"
                     >
                       Sign In
                     </Link>
@@ -1089,28 +1170,31 @@ export default function Navbar() {
                     <Link
                       to="/register"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg transition-colors shadow-sm text-center w-full"
+                      className="flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-brand hover:bg-brand-dark rounded-xl transition-colors shadow-subtle text-center w-full"
                     >
                       Register
                     </Link>
                   </motion.div>
                 </div>
               )}
-              <div className="border-t border-gray-100 pt-2 space-y-1 text-xs text-gray-600">
-                <Link
-                  to="/catalog"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-1.5 hover:text-brand-600 transition-colors"
-                >
-                  📦 Explore All Products
-                </Link>
-                <Link
-                  to="/wishlist"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-1.5 hover:text-brand-600 transition-colors"
-                >
-                  ❤️ Saved Wishlist ({wishlistCount})
-                </Link>
+
+              {/* Mobile Quick Category Links */}
+              <div className="border-t border-line pt-2 space-y-1 text-xs text-muted">
+                {CURATED_CATEGORIES.map((cat) => (
+                  <Link
+                    key={cat.name}
+                    to={cat.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-between px-3 py-1.5 hover:text-brand transition-colors rounded-lg"
+                  >
+                    <span>{cat.name}</span>
+                    {cat.badge && (
+                      <span className="text-[10px] font-bold bg-accent/20 text-accent px-1.5 py-0.2 rounded-full">
+                        {cat.badge}
+                      </span>
+                    )}
+                  </Link>
+                ))}
               </div>
             </motion.div>
           )}
