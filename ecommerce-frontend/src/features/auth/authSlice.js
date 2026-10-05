@@ -84,6 +84,36 @@ export const loginWithGoogle = createAsyncThunk(
   }
 );
 
+export const sendMobileOtp = createAsyncThunk(
+  'auth/sendMobileOtp',
+  async ({ mobile }, { rejectWithValue }) => {
+    try {
+      const res = await api.post('/auth/send-otp', {
+        identifier: mobile,
+        type: 'login'
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to send OTP to mobile number');
+    }
+  }
+);
+
+export const loginWithMobileOtp = createAsyncThunk(
+  'auth/loginWithMobileOtp',
+  async ({ mobile, code, name }, { rejectWithValue }) => {
+    try {
+      const res = await api.post('/auth/verify-mobile-otp', { mobile, code, name });
+      const { user, accessToken, isNewUser } = res.data.data;
+      setAccessToken(accessToken);
+      safeStorage.setItem('rigamart_user', JSON.stringify(user));
+      return { user, accessToken, isNewUser };
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'OTP verification failed');
+    }
+  }
+);
+
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
   setAccessToken(null);
   safeStorage.removeItem('rigamart_user');
@@ -183,6 +213,21 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
       })
       .addCase(loginWithGoogle.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Mobile OTP Login
+      .addCase(loginWithMobileOtp.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginWithMobileOtp.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.accessToken = action.payload.accessToken;
+      })
+      .addCase(loginWithMobileOtp.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })

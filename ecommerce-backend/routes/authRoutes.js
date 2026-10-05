@@ -10,7 +10,8 @@ const {
   verifyOtp,
   forgotPassword,
   resetPassword,
-  getMe
+  getMe,
+  loginWithMobileOtp
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 const {
@@ -29,6 +30,7 @@ router.post('/logout', logout);
 router.post('/refresh-token', refreshToken);
 router.post('/send-otp', validateOtpRequest, sendOtp);
 router.post('/verify-otp', validateOtpVerify, verifyOtp);
+router.post('/verify-mobile-otp', loginWithMobileOtp);
 router.post('/forgot-password', validateOtpRequest, forgotPassword);
 router.post('/reset-password', validateResetPassword, resetPassword);
 

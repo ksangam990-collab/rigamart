@@ -563,7 +563,8 @@ const sendOtp = async (req, res) => {
       data: {
         identifier: cleanId,
         expiresInSeconds: 300,
-        deliveryMode: result.mode
+        deliveryMode: result.mode,
+        ...(process.env.NODE_ENV !== 'production' && { devOtp: code })
       }
     });
   } catch (error) {
@@ -629,6 +630,153 @@ const verifyOtp = async (req, res) => {
     res.status(500).json({
       success: false,
       message: `OTP verification failed: ${error.message}`,
+      data: null
+    });
+  }
+};
+
+/**
+ * @desc    Verify OTP and authenticate or auto-provision customer (Guest Checkout & Mobile OTP Login)
+ * @route   POST /api/auth/verify-mobile-otp
+ * @access  Public
+ */
+const loginWithMobileOtp = async (req, res) => {
+  try {
+    const { mobile, code, name } = req.body;
+
+    if (!mobile || !/^[6-9]\d{9}$/.test(mobile.toString().trim())) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid 10-digit Indian mobile number',
+        data: null
+      });
+    }
+
+    if (!code || code.toString().trim().length !== 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'A valid 6-digit OTP code is required',
+        data: null
+      });
+    }
+
+    const cleanMobile = mobile.toString().trim();
+    const cleanCode = code.toString().trim();
+
+    // Verify OTP from collection
+    const otpRecord = await Otp.findOne({
+      identifier: cleanMobile,
+      code: cleanCode,
+      type: 'login'
+    });
+
+    if (!otpRecord) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or incorrect verification code. Please check and try again.',
+        data: null
+      });
+    }
+
+    if (new Date() > otpRecord.expiresAt) {
+      await Otp.deleteOne({ _id: otpRecord._id });
+      return res.status(400).json({
+        success: false,
+        message: 'This OTP has expired. Please request a new one.',
+        data: null
+      });
+    }
+
+    // Invalidate consumed OTP
+    await Otp.deleteOne({ _id: otpRecord._id });
+
+    // Look for existing user with this mobile
+    let user = await User.findOne({ mobile: cleanMobile });
+    let isNewUser = false;
+
+    if (!user) {
+      isNewUser = true;
+      const cleanName = name && name.trim().length >= 2 ? name.trim() : `Customer ${cleanMobile.slice(-4)}`;
+      const guestEmail = `${cleanMobile}@guest.rigamart.com`;
+
+      // Guarantee unique guest email
+      const existingEmail = await User.findOne({ email: guestEmail });
+      const finalEmail = existingEmail ? `${cleanMobile}_${Date.now()}@guest.rigamart.com` : guestEmail;
+
+      const randomPassword = crypto.randomBytes(16).toString('hex');
+
+      user = await User.create({
+        name: cleanName,
+        email: finalEmail,
+        mobile: cleanMobile,
+        password: randomPassword,
+        role: 'customer',
+        isVerified: true
+      });
+
+      // Initialize persistent empty cart
+      await Cart.create({
+        user: user._id,
+        items: []
+      });
+
+      logSecurityEvent({
+        action: 'GUEST_OTP_REGISTER',
+        severity: 'info',
+        req,
+        user,
+        details: { mobile: cleanMobile }
+      });
+    } else {
+      if (user.isBanned) {
+        return res.status(403).json({
+          success: false,
+          message: 'This account has been suspended. Please contact support.',
+          data: null
+        });
+      }
+
+      user.isVerified = true;
+      if (name && name.trim().length >= 2 && user.name.startsWith('Customer ')) {
+        user.name = name.trim();
+      }
+    }
+
+    // Generate JWT tokens
+    const accessToken = generateAccessToken(user._id, user.role);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    user.failedLoginAttempts = 0;
+    user.lockUntil = null;
+    await user.save({ validateBeforeSave: false });
+
+    // Set secure cookie
+    res.cookie('refreshToken', refreshToken, getRefreshTokenCookieOptions());
+
+    logSecurityEvent({
+      action: 'AUTH_LOGIN_SUCCESS',
+      severity: 'info',
+      req,
+      user,
+      details: { method: 'mobile_otp', isNewUser }
+    });
+
+    res.status(isNewUser ? 201 : 200).json({
+      success: true,
+      message: isNewUser
+        ? 'Account created and authenticated successfully.'
+        : 'Logged in successfully with mobile OTP.',
+      data: {
+        user: sanitizeUser(user),
+        accessToken,
+        isNewUser
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Failed to authenticate with mobile OTP: ${error.message}`,
       data: null
     });
   }
@@ -785,5 +933,6 @@ module.exports = {
   verifyOtp,
   forgotPassword,
   resetPassword,
-  getMe
+  getMe,
+  loginWithMobileOtp
 };

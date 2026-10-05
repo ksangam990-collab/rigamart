@@ -31,16 +31,19 @@ import {
   clearCart
 } from '../features/cart/cartSlice.js';
 import CheckoutModal from '../components/checkout/CheckoutModal.jsx';
+import GuestOtpModal from '../components/checkout/GuestOtpModal.jsx';
 import { drawerSlideDown, EASINGS } from '../utils/animations.js';
 
 export default function CartPage() {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isGuestOtpOpen, setIsGuestOtpOpen] = useState(false);
 
   // Coupon state
   const [couponInput, setCouponInput] = useState('');
@@ -122,18 +125,44 @@ export default function CartPage() {
   useEffect(() => {
     dispatch(fetchCart());
 
-    api.get('/users/profile')
-      .then((res) => {
-        const addrs = res.data.data?.user?.addresses || [];
-        setAddresses(addrs);
-        const defaultIdx = addrs.findIndex((a) => a.isDefault);
-        setSelectedAddressIndex(defaultIdx >= 0 ? defaultIdx : 0);
-      })
-      .catch(() => {});
-  }, [dispatch]);
+    if (isAuthenticated) {
+      api.get('/users/profile')
+        .then((res) => {
+          const addrs = res.data.data?.user?.addresses || [];
+          setAddresses(addrs);
+          const defaultIdx = addrs.findIndex((a) => a.isDefault);
+          setSelectedAddressIndex(defaultIdx >= 0 ? defaultIdx : 0);
+        })
+        .catch(() => {});
+    }
+  }, [dispatch, isAuthenticated]);
 
   const handleAddNewAddress = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      // Store locally for guest buyer
+      const localAddr = {
+        _id: 'guest_addr_' + Date.now(),
+        name: addrName,
+        mobile: addrMobile,
+        street: addrStreet,
+        city: addrCity,
+        state: addrState,
+        pincode: addrPincode,
+        isDefault: true
+      };
+      setAddresses([localAddr]);
+      setSelectedAddressIndex(0);
+      setShowAddressForm(false);
+      setAddrName('');
+      setAddrMobile('');
+      setAddrStreet('');
+      setAddrCity('');
+      setAddrState('');
+      setAddrPincode('');
+      return;
+    }
+
     setSavingAddress(true);
 
     try {
@@ -162,6 +191,30 @@ export default function CartPage() {
     } finally {
       setSavingAddress(false);
     }
+  };
+
+  const handleProceedToCheckout = () => {
+    if (!isAuthenticated) {
+      setIsGuestOtpOpen(true);
+      return;
+    }
+    setIsCheckoutOpen(true);
+  };
+
+  const handleGuestOtpSuccess = () => {
+    // Reload user addresses and open checkout
+    api.get('/users/profile')
+      .then((res) => {
+        const addrs = res.data.data?.user?.addresses || [];
+        if (addrs.length > 0) {
+          setAddresses(addrs);
+          const defaultIdx = addrs.findIndex((a) => a.isDefault);
+          setSelectedAddressIndex(defaultIdx >= 0 ? defaultIdx : 0);
+        }
+      })
+      .catch(() => {});
+    dispatch(fetchCart());
+    setIsCheckoutOpen(true);
   };
 
   // Fetch available active coupons
@@ -963,7 +1016,7 @@ export default function CartPage() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setIsCheckoutOpen(true)}
+              onClick={handleProceedToCheckout}
               className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-black text-sm rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
             >
               <span>Proceed to Checkout</span>
@@ -977,6 +1030,13 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+
+      {/* Guest Checkout Mobile OTP Modal */}
+      <GuestOtpModal
+        isOpen={isGuestOtpOpen}
+        onClose={() => setIsGuestOtpOpen(false)}
+        onSuccess={handleGuestOtpSuccess}
+      />
 
       {/* Checkout Modal */}
       <CheckoutModal

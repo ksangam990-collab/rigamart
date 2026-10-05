@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { Mail, Lock, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, Lock, AlertCircle, ArrowRight, Loader2, Phone } from 'lucide-react';
 import { loginUser, clearError } from '../features/auth/authSlice.js';
 import Logo from '../components/common/Logo.jsx';
 import GoogleAuthButton from '../components/auth/GoogleAuthButton.jsx';
+import GuestOtpModal from '../components/checkout/GuestOtpModal.jsx';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -125,6 +127,18 @@ export default function LoginPage() {
         {/* Google One-Tap & Sign In Button */}
         <GoogleAuthButton mode="login" enableOneTap={true} />
 
+        {/* Mobile OTP Instant Login Button */}
+        <motion.button
+          type="button"
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => setIsOtpModalOpen(true)}
+          className="w-full py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/90 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors shadow-2xs"
+        >
+          <Phone className="w-3.5 h-3.5 text-emerald-600" />
+          <span>Sign In with Mobile OTP (Instant)</span>
+        </motion.button>
+
         <div className="text-center pt-1 text-xs text-gray-500">
           New to Rigamart?{' '}
           <Link to="/register" className="font-bold text-brand-600 hover:underline">
@@ -132,6 +146,15 @@ export default function LoginPage() {
           </Link>
         </div>
       </motion.div>
+
+      {/* Mobile OTP Login Modal */}
+      <GuestOtpModal
+        isOpen={isOtpModalOpen}
+        onClose={() => setIsOtpModalOpen(false)}
+        onSuccess={() => navigate(redirectPath, { replace: true })}
+        title="Sign In with Mobile OTP"
+        subtitle="Enter your 10-digit mobile number to sign in instantly with a 6-digit code."
+      />
     </div>
   );
 }

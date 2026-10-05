@@ -27,6 +27,7 @@ import ProductCard from '../components/product/ProductCard.jsx';
 import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
 import FrequentlyBoughtTogether from '../components/product/FrequentlyBoughtTogether.jsx';
+import GuestOtpModal from '../components/checkout/GuestOtpModal.jsx';
 import RecentlyViewedRibbon from '../components/product/RecentlyViewedRibbon.jsx';
 import { recordRecentlyViewed } from '../utils/recentlyViewed.js';
 import { heartBounceVariants, staggerContainer, staggerItem } from '../utils/animations.js';
@@ -47,6 +48,8 @@ export default function ProductDetailPage() {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedLoading, setRelatedLoading] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [isGuestOtpOpen, setIsGuestOtpOpen] = useState(false);
+  const [otpActionType, setOtpActionType] = useState('buyNow');
 
   const mainCtaRef = useRef(null);
 
@@ -186,7 +189,8 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
-      navigate('/login');
+      setOtpActionType('addToCart');
+      setIsGuestOtpOpen(true);
       return;
     }
     if (!selectedVariant || isOutOfStock) return;
@@ -206,7 +210,8 @@ export default function ProductDetailPage() {
 
   const handleBuyNow = async () => {
     if (!isAuthenticated) {
-      navigate('/login');
+      setOtpActionType('buyNow');
+      setIsGuestOtpOpen(true);
       return;
     }
     if (!selectedVariant || isOutOfStock) return;
@@ -219,6 +224,23 @@ export default function ProductDetailPage() {
       })
     );
     navigate('/cart');
+  };
+
+  const handleGuestOtpSuccess = async () => {
+    if (!selectedVariant || isOutOfStock) return;
+    await dispatch(
+      addToCart({
+        productId: product._id,
+        variantId: selectedVariant._id,
+        quantity
+      })
+    );
+    if (otpActionType === 'buyNow') {
+      navigate('/cart');
+    } else {
+      setAddedToast(true);
+      setTimeout(() => setAddedToast(false), 3000);
+    }
   };
 
   return (
@@ -678,6 +700,19 @@ export default function ProductDetailPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Guest Mobile OTP Checkout Modal */}
+      <GuestOtpModal
+        isOpen={isGuestOtpOpen}
+        onClose={() => setIsGuestOtpOpen(false)}
+        onSuccess={handleGuestOtpSuccess}
+        title={otpActionType === 'buyNow' ? 'Instant Buy with Mobile OTP' : 'Quick Sign In with Mobile OTP'}
+        subtitle={
+          otpActionType === 'buyNow'
+            ? 'Verify with a 6-digit code sent to your phone to proceed to checkout'
+            : 'Enter your mobile number to add items and checkout quickly'
+        }
+      />
     </div>
   );
 }
