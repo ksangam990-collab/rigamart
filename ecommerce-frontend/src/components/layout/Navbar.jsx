@@ -18,7 +18,11 @@ import {
   Tag,
   ArrowRight,
   Star,
-  Bell
+  Bell,
+  Clock,
+  Trash2,
+  TrendingUp,
+  Sparkles
 } from 'lucide-react';
 import { logoutUser } from '../../features/auth/authSlice.js';
 import {
@@ -37,23 +41,49 @@ import {
   badgePulse
 } from '../../utils/animations.js';
 
+const RECENT_SEARCHES_KEY = 'rigamart_recent_searches';
+
+const POPULAR_CATEGORIES = [
+  { name: 'Electronics', slug: 'electronics' },
+  { name: 'Fashion', slug: 'fashion' },
+  { name: 'Footwear', slug: 'footwear' },
+  { name: 'Home & Kitchen', slug: 'home-kitchen' },
+  { name: 'Beauty & Grooming', slug: 'beauty-health' }
+];
+
+const loadRecentSearches = () => {
+  try {
+    const saved = localStorage.getItem(RECENT_SEARCHES_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+};
+
 function SearchSuggestionsDropdown({
   show,
   isSearching,
   searchQuery,
   suggestions,
+  recentSearches = [],
   selectedIndex,
   setSelectedIndex,
+  onSelectRecentSearch,
+  onRemoveRecentSearch,
+  onClearRecentSearches,
   onSelectCategory,
   onSelectProduct,
   onSubmitSearch
 }) {
   if (!show) return null;
 
-  const totalCategories = suggestions.categories?.length || 0;
-  const totalProducts = suggestions.products?.length || 0;
-  const hasResults = totalCategories > 0 || totalProducts > 0;
-  const viewAllIndex = totalCategories + totalProducts;
+  const queryTrimmed = searchQuery.trim();
+  const isQueryActive = queryTrimmed.length >= 2;
+
+  const categories = suggestions.categories || [];
+  const products = (suggestions.products || []).slice(0, 4);
+  const hasResults = categories.length > 0 || products.length > 0;
+  const viewAllIndex = categories.length + products.length;
 
   return (
     <AnimatePresence>
@@ -63,127 +93,237 @@ function SearchSuggestionsDropdown({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -4, scale: 0.99 }}
           transition={{ duration: 0.15 }}
-          className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 divide-y divide-gray-100 max-h-[440px] overflow-y-auto text-left"
+          className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 divide-y divide-gray-100 max-h-[460px] overflow-y-auto text-left"
         >
-          {/* Categories Section */}
-          {totalCategories > 0 && (
-            <div className="p-2.5 bg-gray-50/70">
-              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pb-1.5 flex items-center gap-1.5">
-                <Tag className="w-3 h-3 text-brand-500" />
-                Categories
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {suggestions.categories.map((cat, idx) => {
-                  const isSelected = selectedIndex === idx;
-                  return (
-                    <button
-                      key={cat._id || cat.slug}
-                      type="button"
-                      onClick={() => onSelectCategory(cat.slug)}
-                      className={`text-xs px-2.5 py-1 rounded-full font-medium transition-colors ${
-                        isSelected
-                          ? 'bg-brand-600 text-white shadow-xs'
-                          : 'bg-white hover:bg-brand-50 text-gray-700 hover:text-brand-600 border border-gray-200'
-                      }`}
-                    >
-                      {cat.name}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Products Section */}
-          {totalProducts > 0 && (
-            <div className="py-1">
-              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-3.5 py-1">
-                Products
-              </div>
-              <div className="space-y-0.5">
-                {suggestions.products.map((prod, idx) => {
-                  const itemIndex = totalCategories + idx;
-                  const isSelected = selectedIndex === itemIndex;
-                  return (
-                    <div
-                      key={prod._id}
-                      onClick={() => onSelectProduct(prod._id)}
-                      onMouseEnter={() => setSelectedIndex(itemIndex)}
-                      className={`flex items-center gap-3 px-3.5 py-2 cursor-pointer transition-colors ${
-                        isSelected
-                          ? 'bg-brand-50 text-brand-900 border-l-2 border-brand-600'
-                          : 'hover:bg-gray-50 text-gray-800'
-                      }`}
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden shrink-0 border border-gray-200 flex items-center justify-center">
-                        {prod.image ? (
-                          <img
-                            src={prod.image}
-                            alt={prod.name}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <Package className="w-5 h-5 text-gray-400" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-gray-900 truncate">
-                          {prod.name}
-                        </p>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider truncate">
-                            {prod.brand || prod.category?.name || 'Rigamart'}
-                          </span>
-                          {prod.avgRating > 0 && (
-                            <span className="flex items-center gap-0.5 text-[10px] text-amber-600 font-semibold">
-                              <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                              {prod.avgRating.toFixed(1)}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="text-xs font-bold text-brand-700">
-                          ₹{prod.basePrice?.toLocaleString('en-IN')}
-                        </span>
-                      </div>
+          {/* SCENARIO A: EMPTY OR SHORT QUERY (< 2 CHARS) -> RECENT SEARCHES + POPULAR CATEGORIES */}
+          {!isQueryActive && (
+            <div className="divide-y divide-gray-100">
+              {/* Recent Searches */}
+              {recentSearches.length > 0 && (
+                <div className="py-2">
+                  <div className="flex items-center justify-between px-3.5 pb-1.5 pt-0.5">
+                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Clock className="w-3 h-3 text-brand-500" />
+                      <span>Recent Searches</span>
                     </div>
-                  );
-                })}
+                    <button
+                      type="button"
+                      onClick={onClearRecentSearches}
+                      className="text-[10px] font-semibold text-gray-400 hover:text-red-500 flex items-center gap-1 transition-colors px-1.5 py-0.5 rounded hover:bg-gray-100"
+                      title="Clear search history"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Clear History</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    {recentSearches.map((term, idx) => {
+                      const isSelected = selectedIndex === idx;
+
+                      return (
+                        <div
+                          key={term}
+                          onClick={() => onSelectRecentSearch(term)}
+                          onMouseEnter={() => setSelectedIndex(idx)}
+                          className={`flex items-center justify-between px-3.5 py-2 cursor-pointer transition-colors group ${
+                            isSelected
+                              ? 'bg-brand-50 text-brand-900 border-l-2 border-brand-600'
+                              : 'hover:bg-gray-50 text-gray-700'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                            <Clock className="w-3.5 h-3.5 text-gray-400 group-hover:text-brand-500 transition-colors shrink-0" />
+                            <span className="text-xs font-medium truncate">{term}</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => onRemoveRecentSearch(e, term)}
+                            className="p-1 text-gray-300 hover:text-red-500 rounded-full hover:bg-gray-200/60 transition-colors"
+                            title="Remove from history"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Popular / Trending Categories Quick Filter Chips */}
+              <div className="p-3 bg-gray-50/70">
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pb-2 flex items-center gap-1.5">
+                  <TrendingUp className="w-3 h-3 text-amber-500" />
+                  <span>Trending Categories</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {POPULAR_CATEGORIES.map((cat, idx) => {
+                    const currentIndex = recentSearches.length + idx;
+                    const isSelected = selectedIndex === currentIndex;
+
+                    return (
+                      <button
+                        key={cat.slug}
+                        type="button"
+                        onClick={() => onSelectCategory(cat.slug)}
+                        onMouseEnter={() => setSelectedIndex(currentIndex)}
+                        className={`text-xs px-2.5 py-1 rounded-full font-medium transition-colors ${
+                          isSelected
+                            ? 'bg-brand-600 text-white shadow-xs'
+                            : 'bg-white hover:bg-brand-50 text-gray-700 hover:text-brand-600 border border-gray-200'
+                        }`}
+                      >
+                        {cat.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
 
-          {/* Empty State */}
-          {!isSearching && !hasResults && searchQuery.trim().length >= 2 && (
-            <div className="py-5 px-4 text-center text-xs text-gray-500">
-              <p className="font-semibold text-gray-700">No matching products or categories</p>
-              <p className="text-[11px] text-gray-400 mt-0.5">
-                Press Enter or click below to search the catalog
-              </p>
-            </div>
-          )}
+          {/* SCENARIO B: ACTIVE QUERY (>= 2 CHARS) -> PREDICTIVE RESULTS */}
+          {isQueryActive && (
+            <>
+              {/* Searching Loading State */}
+              {isSearching && (
+                <div className="py-3 px-4 flex items-center justify-center gap-2 text-xs text-gray-500 bg-gray-50/50">
+                  <Loader2 className="w-3.5 h-3.5 text-brand-600 animate-spin" />
+                  <span>Searching products & categories...</span>
+                </div>
+              )}
 
-          {/* "View All Results" Footer */}
-          {searchQuery.trim().length >= 2 && (
-            <button
-              type="button"
-              onClick={onSubmitSearch}
-              onMouseEnter={() => setSelectedIndex(viewAllIndex)}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold text-brand-600 transition-colors ${
-                selectedIndex === viewAllIndex
-                  ? 'bg-brand-50'
-                  : 'hover:bg-brand-50/60 bg-gray-50/50'
-              }`}
-            >
-              <span>
-                View all results for &ldquo;
-                <span className="text-brand-800 underline">{searchQuery.trim()}</span>
-                &rdquo;
-              </span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+              {/* Matching Categories Jump Links */}
+              {categories.length > 0 && (
+                <div className="p-2.5 bg-gray-50/80">
+                  <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pb-1.5 flex items-center gap-1.5">
+                    <Tag className="w-3 h-3 text-brand-500" />
+                    <span>Search in category</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {categories.map((cat, idx) => {
+                      const isSelected = selectedIndex === idx;
+
+                      return (
+                        <button
+                          key={cat._id || cat.slug}
+                          type="button"
+                          onClick={() => onSelectCategory(cat.slug, queryTrimmed)}
+                          onMouseEnter={() => setSelectedIndex(idx)}
+                          className={`text-xs px-2.5 py-1 rounded-full font-medium transition-colors flex items-center gap-1 ${
+                            isSelected
+                              ? 'bg-brand-600 text-white shadow-xs'
+                              : 'bg-white hover:bg-brand-50 text-gray-700 hover:text-brand-600 border border-gray-200'
+                          }`}
+                        >
+                          <span>{cat.name}</span>
+                          <ArrowRight className="w-3 h-3 opacity-60" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Top 4 Matching Products */}
+              {products.length > 0 && (
+                <div className="py-1">
+                  <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-3.5 py-1.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Package className="w-3 h-3 text-brand-500" />
+                      Matching Products
+                    </span>
+                    <span className="text-gray-400 lowercase font-normal">top results</span>
+                  </div>
+                  <div className="space-y-0.5">
+                    {products.map((prod, idx) => {
+                      const itemIndex = categories.length + idx;
+                      const isSelected = selectedIndex === itemIndex;
+
+                      return (
+                        <div
+                          key={prod._id}
+                          onClick={() => onSelectProduct(prod)}
+                          onMouseEnter={() => setSelectedIndex(itemIndex)}
+                          className={`flex items-center gap-3 px-3.5 py-2 cursor-pointer transition-colors ${
+                            isSelected
+                              ? 'bg-brand-50 text-brand-900 border-l-2 border-brand-600'
+                              : 'hover:bg-gray-50 text-gray-800'
+                          }`}
+                        >
+                          <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden shrink-0 border border-gray-200 flex items-center justify-center p-0.5">
+                            {prod.image ? (
+                              <img
+                                src={prod.image}
+                                alt={prod.name}
+                                className="w-full h-full object-contain"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <Package className="w-5 h-5 text-gray-400" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-gray-900 truncate">
+                              {prod.name}
+                            </p>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider truncate">
+                                {prod.brand || prod.category?.name || 'Rigamart'}
+                              </span>
+                              {prod.avgRating > 0 && (
+                                <span className="flex items-center gap-0.5 text-[10px] text-amber-600 font-semibold">
+                                  <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                                  {prod.avgRating.toFixed(1)}
+                                </span>
+                              )}
+                              <span className="text-[10px] text-emerald-600 font-medium bg-emerald-50 px-1 rounded">
+                                In Stock
+                              </span>
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className="text-xs font-bold text-brand-700">
+                              ₹{prod.basePrice?.toLocaleString('en-IN')}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Empty State */}
+              {!isSearching && !hasResults && (
+                <div className="py-5 px-4 text-center text-xs text-gray-500">
+                  <p className="font-semibold text-gray-700">No matching products or categories</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    Press Enter or click below to search the catalog for &ldquo;{queryTrimmed}&rdquo;
+                  </p>
+                </div>
+              )}
+
+              {/* "View All Results" Footer */}
+              <button
+                type="button"
+                onClick={onSubmitSearch}
+                onMouseEnter={() => setSelectedIndex(viewAllIndex)}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold text-brand-600 transition-colors ${
+                  selectedIndex === viewAllIndex
+                    ? 'bg-brand-50'
+                    : 'hover:bg-brand-50/60 bg-gray-50/50'
+                }`}
+              >
+                <span>
+                  View all results for &ldquo;
+                  <span className="text-brand-800 underline">{queryTrimmed}</span>
+                  &rdquo;
+                </span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </>
           )}
         </motion.div>
       )}
@@ -199,7 +339,8 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isBannerCollapsed, setIsBannerCollapsed] = useState(false);
 
-  // Predictive search autocomplete states
+  // Predictive search autocomplete & recent searches
+  const [recentSearches, setRecentSearches] = useState(loadRecentSearches);
   const [suggestions, setSuggestions] = useState({ products: [], categories: [] });
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -215,6 +356,41 @@ export default function Navbar() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Save recent search term to localStorage
+  const saveRecentSearch = (term) => {
+    if (!term || typeof term !== 'string' || !term.trim()) return;
+    const clean = term.trim();
+    setRecentSearches((prev) => {
+      const filtered = prev.filter((item) => item.toLowerCase() !== clean.toLowerCase());
+      const updated = [clean, ...filtered].slice(0, 6);
+      try {
+        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+      } catch (err) {
+        console.error('Failed to save recent search to localStorage:', err);
+      }
+      return updated;
+    });
+  };
+
+  const handleRemoveRecentSearch = (e, termToRemove) => {
+    if (e) e.stopPropagation();
+    setRecentSearches((prev) => {
+      const updated = prev.filter((item) => item !== termToRemove);
+      try {
+        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+      } catch (err) {}
+      return updated;
+    });
+  };
+
+  const handleClearRecentSearches = (e) => {
+    if (e) e.stopPropagation();
+    setRecentSearches([]);
+    try {
+      localStorage.removeItem(RECENT_SEARCHES_KEY);
+    } catch (err) {}
+  };
 
   // Notification polling effect (every 30 seconds when authenticated)
   useEffect(() => {
@@ -238,7 +414,6 @@ export default function Navbar() {
   useEffect(() => {
     if (searchQuery.trim().length < 2) {
       setSuggestions({ products: [], categories: [] });
-      setShowDropdown(false);
       setIsSearching(false);
       setSelectedIndex(-1);
       return;
@@ -284,14 +459,23 @@ export default function Navbar() {
   // Flatten selectable items for keyboard navigation
   const getSelectableItems = () => {
     const items = [];
-    (suggestions.categories || []).forEach((cat) => {
-      items.push({ type: 'category', data: cat });
-    });
-    (suggestions.products || []).forEach((prod) => {
-      items.push({ type: 'product', data: prod });
-    });
-    if (searchQuery.trim().length >= 2) {
-      items.push({ type: 'view_all', query: searchQuery.trim() });
+    const queryTrimmed = searchQuery.trim();
+
+    if (queryTrimmed.length < 2) {
+      recentSearches.forEach((term) => {
+        items.push({ type: 'recent', term });
+      });
+      POPULAR_CATEGORIES.forEach((cat) => {
+        items.push({ type: 'popular_category', slug: cat.slug, name: cat.name });
+      });
+    } else {
+      (suggestions.categories || []).forEach((cat) => {
+        items.push({ type: 'category', data: cat });
+      });
+      (suggestions.products || []).slice(0, 4).forEach((prod) => {
+        items.push({ type: 'product', data: prod });
+      });
+      items.push({ type: 'view_all', query: queryTrimmed });
     }
     return items;
   };
@@ -317,16 +501,17 @@ export default function Navbar() {
       if (selectedIndex >= 0 && selectedIndex < items.length) {
         e.preventDefault();
         const item = items[selectedIndex];
-        if (item.type === 'category') {
-          navigate(`/search?category=${encodeURIComponent(item.data.slug)}`);
+        if (item.type === 'recent') {
+          handleSelectRecentSearch(item.term);
+        } else if (item.type === 'popular_category') {
+          handleSelectCategory(item.slug);
+        } else if (item.type === 'category') {
+          handleSelectCategory(item.data.slug, searchQuery.trim());
         } else if (item.type === 'product') {
-          navigate(`/products/${item.data._id}`);
+          handleSelectProduct(item.data);
         } else if (item.type === 'view_all') {
-          navigate(`/search?q=${encodeURIComponent(item.query)}`);
+          handleSearchSubmit();
         }
-        setShowDropdown(false);
-        setSelectedIndex(-1);
-        setMobileMenuOpen(false);
       }
     }
   };
@@ -334,18 +519,34 @@ export default function Navbar() {
   const handleClearSearch = () => {
     setSearchQuery('');
     setSuggestions({ products: [], categories: [] });
-    setShowDropdown(false);
     setSelectedIndex(-1);
   };
 
-  const handleSelectCategory = (slug) => {
-    navigate(`/search?category=${encodeURIComponent(slug)}`);
+  const handleSelectRecentSearch = (term) => {
+    setSearchQuery(term);
+    saveRecentSearch(term);
+    navigate(`/search?q=${encodeURIComponent(term)}`);
     setShowDropdown(false);
     setMobileMenuOpen(false);
   };
 
-  const handleSelectProduct = (productId) => {
-    navigate(`/products/${productId}`);
+  const handleSelectCategory = (slug, term) => {
+    if (term) {
+      saveRecentSearch(term);
+      navigate(`/search?category=${encodeURIComponent(slug)}&q=${encodeURIComponent(term)}`);
+    } else {
+      navigate(`/search?category=${encodeURIComponent(slug)}`);
+    }
+    setShowDropdown(false);
+    setMobileMenuOpen(false);
+  };
+
+  const handleSelectProduct = (prod) => {
+    const id = prod?._id || prod;
+    if (prod?.name) {
+      saveRecentSearch(prod.name);
+    }
+    navigate(`/products/${id}`);
     setShowDropdown(false);
     setMobileMenuOpen(false);
   };
@@ -389,6 +590,7 @@ export default function Navbar() {
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
     if (searchQuery.trim()) {
+      saveRecentSearch(searchQuery.trim());
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setMobileMenuOpen(false);
       setShowDropdown(false);
@@ -460,11 +662,7 @@ export default function Navbar() {
               placeholder="Search for products, brands, and categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => {
-                if (suggestions.products.length > 0 || suggestions.categories.length > 0) {
-                  setShowDropdown(true);
-                }
-              }}
+              onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
               className={`w-full bg-gray-100 hover:bg-gray-50 focus:bg-white rounded-lg pl-10 pr-24 border border-transparent focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 transition-all text-gray-800 ${
                 isBannerCollapsed ? 'py-2 text-xs' : 'py-2.5 text-sm'
@@ -502,8 +700,12 @@ export default function Navbar() {
               isSearching={isSearching}
               searchQuery={searchQuery}
               suggestions={suggestions}
+              recentSearches={recentSearches}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
+              onSelectRecentSearch={handleSelectRecentSearch}
+              onRemoveRecentSearch={handleRemoveRecentSearch}
+              onClearRecentSearches={handleClearRecentSearches}
               onSelectCategory={handleSelectCategory}
               onSelectProduct={handleSelectProduct}
               onSubmitSearch={handleSearchSubmit}
@@ -744,11 +946,7 @@ export default function Navbar() {
               placeholder="Search products, brands..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => {
-                if (suggestions.products.length > 0 || suggestions.categories.length > 0) {
-                  setShowDropdown(true);
-                }
-              }}
+              onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
               className="w-full bg-gray-100 text-sm rounded-lg pl-9 pr-24 py-2 border border-transparent focus:bg-white focus:border-brand-500 focus:outline-none transition-all"
             />
@@ -782,8 +980,12 @@ export default function Navbar() {
               isSearching={isSearching}
               searchQuery={searchQuery}
               suggestions={suggestions}
+              recentSearches={recentSearches}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
+              onSelectRecentSearch={handleSelectRecentSearch}
+              onRemoveRecentSearch={handleRemoveRecentSearch}
+              onClearRecentSearches={handleClearRecentSearches}
               onSelectCategory={handleSelectCategory}
               onSelectProduct={handleSelectProduct}
               onSubmitSearch={handleSearchSubmit}

@@ -26,6 +26,7 @@ import RatingStars from '../components/common/RatingStars.jsx';
 import ProductCard from '../components/product/ProductCard.jsx';
 import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
+import FrequentlyBoughtTogether from '../components/product/FrequentlyBoughtTogether.jsx';
 import RecentlyViewedRibbon from '../components/product/RecentlyViewedRibbon.jsx';
 import { recordRecentlyViewed } from '../utils/recentlyViewed.js';
 import { heartBounceVariants, staggerContainer, staggerItem } from '../utils/animations.js';
@@ -559,6 +560,13 @@ export default function ProductDetailPage() {
           />
         </div>
       </div>
+
+      {/* ── Frequently Bought Together Bundle Engine ─────────────────────────── */}
+      <FrequentlyBoughtTogether
+        currentProduct={product}
+        currentVariant={selectedVariant}
+        relatedProducts={relatedProducts}
+      />
 
       {/* ── You Might Also Like – Related Products Section ───────────────────── */}
       {(relatedLoading || relatedProducts.length > 0) && (
