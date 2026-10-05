@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   ArrowRight,
-  ShoppingBag,
   ShieldCheck,
   Truck,
   RotateCcw,
   CreditCard,
   Star,
-  Sparkles,
   CheckCircle2,
-  TrendingUp,
-  Tag,
-  Zap,
   Store
 } from 'lucide-react';
 import api from '../utils/api.js';
@@ -22,33 +17,26 @@ import ProductCard from '../components/product/ProductCard.jsx';
 import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
 import { Button, Badge } from '../components/ui';
 import {
-  fadeInUp,
   staggerContainer,
   staggerItem
 } from '../utils/animations.js';
 
 export default function HomePage() {
   const [trendingProducts, setTrendingProducts] = useState([]);
-  const [featuredProducts, setFeaturedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   // Fetch catalog shelves on mount
   useEffect(() => {
     let isMounted = true;
     const fetchCatalog = async () => {
       try {
-        const [trendingRes, featuredRes] = await Promise.all([
-          api.get('/products?sort=newest&limit=8').catch(() => ({ data: { data: { products: [] } } })),
-          api.get('/products?isFeatured=true&limit=4').catch(() => ({ data: { data: { products: [] } } }))
-        ]);
-
+        const res = await api.get('/products?sort=newest&limit=8');
         if (isMounted) {
-          setTrendingProducts(trendingRes.data.data?.products || []);
-          setFeaturedProducts(featuredRes.data.data?.products || []);
+          setTrendingProducts(res.data.data?.products || []);
         }
       } catch {
-        // Silent fail — preserve pristine homepage presentation
+        // Silent fail — preserve clean homepage presentation
       } finally {
         if (isMounted) setIsLoading(false);
       }
@@ -61,25 +49,25 @@ export default function HomePage() {
 
   const curatedCategories = [
     {
-      name: "Men's Sartorial",
+      name: "Men's Fashion",
       tagline: 'Linens, Kurtas & Tailoring',
       image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80',
       link: '/search?category=mens-fashion',
-      pill: 'New Arrivals'
+      pill: 'New'
     },
     {
-      name: "Women's Ethnic Luxe",
+      name: "Women's Ethnic",
       tagline: 'Handloom Sarees & Anarkalis',
       image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop&q=80',
       link: '/search?category=womens-ethnic',
-      pill: 'Handpicked'
+      pill: 'Curated'
     },
     {
       name: 'Smart Audio & Gear',
       tagline: 'Noise Cancelling & Wearables',
       image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&auto=format&fit=crop&q=80',
       link: '/search?category=electronics',
-      pill: 'Verified Tech'
+      pill: 'Verified'
     },
     {
       name: 'Sneakers & Footwear',
@@ -104,12 +92,12 @@ export default function HomePage() {
     {
       icon: RotateCcw,
       title: '7-Day Doorstep Returns',
-      desc: 'Zero-friction pickups with instant escrow refund.'
+      desc: 'Zero-friction pickups with instant refund guarantee.'
     },
     {
       icon: CreditCard,
       title: 'Escrow Protected Payments',
-      desc: 'Razorpay encrypted UPI, Cards, Net Banking & COD.'
+      desc: 'Encrypted Razorpay UPI, Cards, Net Banking & COD.'
     }
   ];
 
@@ -141,45 +129,41 @@ export default function HomePage() {
   ];
 
   const quickFilterPills = [
-    { label: '⚡ Super Express (< 48h)', link: '/search?sort=fastest' },
-    { label: '₹ Under ₹999 Deals', link: '/search?maxPrice=999' },
-    { label: '🎧 Studio Headphones', link: '/search?category=electronics' },
-    { label: '✨ Handcrafted Cottons', link: '/search?category=womens-ethnic' },
-    { label: '🛡️ Verified Sellers Only', link: '/search?verified=true' }
+    { label: 'Super Express (< 48h)', link: '/search?sort=fastest' },
+    { label: 'Under ₹999 Deals', link: '/search?maxPrice=999' },
+    { label: 'Studio Headphones', link: '/search?category=electronics' },
+    { label: 'Handcrafted Cottons', link: '/search?category=womens-ethnic' },
+    { label: 'Verified Sellers Only', link: '/search?verified=true' }
   ];
 
   return (
-    <div className="space-y-16 sm:space-y-24 pb-20 overflow-hidden font-sans">
-      {/* ── 1. Editorial Hero Showcase ────────────────────────────────────────── */}
-      <section className="relative pt-6 sm:pt-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="relative rounded-3xl bg-surface border border-line shadow-card overflow-hidden">
-          {/* Subtle warm ambient radial background glow */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-soft/50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
-
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-6 sm:p-10 lg:p-14 items-center">
-            {/* Left Column: Editorial Headline & Copy */}
+    <div className="space-y-12 sm:space-y-20 pb-20 overflow-hidden font-sans bg-canvas text-ink">
+      {/* ── 1. Sharp Minimal Hero Showcase ─────────────────────────────────── */}
+      <section className="pt-4 sm:pt-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="bg-surface border border-line overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-6 sm:p-10 lg:p-14 items-center">
+            {/* Left Column: Typographic Headline & Actions */}
             <motion.div
-              variants={staggerContainer(0.08)}
+              variants={staggerContainer(0.06)}
               initial="hidden"
               animate="visible"
               className="lg:col-span-7 space-y-6"
             >
               {/* Trust Badge Pill */}
               <motion.div variants={staggerItem}>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-soft text-brand-dark border border-brand/20 text-xs font-semibold tracking-tight shadow-subtle">
-                  <Sparkles className="w-3.5 h-3.5 text-brand" />
-                  <span>The Calm Editorial Marketplace</span>
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-sm bg-n-50 text-ink border border-line text-xs font-medium tracking-tight">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+                  <span>India's Premier Online Store</span>
                 </div>
               </motion.div>
 
               {/* Main Headline */}
               <motion.h1
                 variants={staggerItem}
-                className="text-4xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-ink leading-[1.08]"
+                className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-ink leading-[1.08]"
               >
-                Curated commerce. <br className="hidden sm:inline" />
-                <span className="text-brand">Photos first</span>, chrome second.
+                Authentic commerce. <br className="hidden sm:inline" />
+                Direct from verified makers.
               </motion.h1>
 
               {/* Editorial Subtitle */}
@@ -187,7 +171,7 @@ export default function HomePage() {
                 variants={staggerItem}
                 className="text-muted text-base sm:text-lg max-w-xl leading-relaxed"
               >
-                A modern multi-vendor marketplace built for discerning shoppers across India. Authentic brands, verified artisans, direct pricing, and zero fake scarcity.
+                Electronics, fashion, and lifestyle essentials from certified Indian sellers. Transparent pricing, express 28-state delivery, and guaranteed buyer escrow protection.
               </motion.p>
 
               {/* Action Buttons */}
@@ -221,7 +205,7 @@ export default function HomePage() {
                     <Link
                       key={pill.label}
                       to={pill.link}
-                      className="text-xs px-3 py-1.5 rounded-xl bg-canvas hover:bg-brand-soft text-ink hover:text-brand-dark border border-line transition-all duration-150 font-medium"
+                      className="text-xs px-3 py-1.5 rounded border border-line bg-n-50 hover:bg-n-100 text-ink transition-colors font-medium"
                     >
                       {pill.label}
                     </Link>
@@ -230,50 +214,50 @@ export default function HomePage() {
               </motion.div>
             </motion.div>
 
-            {/* Right Column: Editorial Hero Visual Card */}
+            {/* Right Column: Hero Visual Card (4:5 Ratio, No Radius) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
               className="lg:col-span-5"
             >
-              <div className="relative rounded-2xl bg-canvas border border-line p-3 shadow-elevation group overflow-hidden">
-                <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-surface">
+              <div className="relative bg-n-50 border border-line p-2 overflow-hidden">
+                <div className="relative aspect-[4/5] overflow-hidden bg-surface">
                   <img
                     src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80"
-                    alt="Editorial Featured Tech: Studio Acoustics"
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    alt="Featured Studio Acoustics"
+                    className="w-full h-full object-cover object-center"
                     loading="eager"
                   />
 
-                  {/* Gradient Overlay for Typography Poise */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
 
-                  {/* Floating Tag */}
-                  <div className="absolute top-3.5 left-3.5">
-                    <Badge color="accent" variant="solid" size="md">
-                      FEATURED CURATION
-                    </Badge>
+                  {/* Tag */}
+                  <div className="absolute top-3 left-3">
+                    <span className="bg-ink text-canvas text-[11px] font-semibold px-2 py-0.5 rounded-sm uppercase tracking-wider">
+                      Featured Item
+                    </span>
                   </div>
 
-                  {/* Bottom Editorial Caption */}
-                  <div className="absolute bottom-4 left-4 right-4 text-white space-y-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent">
-                      Acoustic Engineering
+                  {/* Caption */}
+                  <div className="absolute bottom-4 left-4 right-4 text-white space-y-1">
+                    <span className="text-[11px] font-medium uppercase tracking-widest text-n-200">
+                      Studio Gear
                     </span>
-                    <h2 className="text-xl font-bold font-display text-white leading-tight">
+                    <h2 className="text-xl font-semibold text-white leading-tight">
                       Aura Studio Wireless ANC
                     </h2>
                     <div className="flex items-center justify-between pt-1">
                       <div className="flex items-baseline gap-2 tabular-nums">
-                        <span className="text-lg font-black text-white">₹3,499</span>
-                        <span className="text-xs text-white/60 line-through">₹5,999</span>
+                        <span className="text-lg font-semibold text-white font-mono">₹3,499</span>
+                        <span className="text-xs text-white/70 line-through font-mono">₹5,999</span>
                       </div>
                       <Link
                         to="/search?category=electronics"
-                        className="text-xs font-semibold text-white hover:text-accent flex items-center gap-1 transition-colors"
+                        className="text-xs font-semibold text-white hover:underline flex items-center gap-1 transition-colors"
                       >
-                        <span>View Gear</span>
+                        <span>View Details</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
@@ -285,158 +269,126 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 2. Trust & Transparency Strip ────────────────────────────────────── */}
+      {/* ── 2. Trust & Transparency Strip (Hairline Grid) ───────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.35 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-surface rounded-card border border-line shadow-subtle"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 bg-surface border border-line divide-y sm:divide-y-0 sm:divide-x divide-line">
           {trustBadges.map((badge, idx) => {
             const Icon = badge.icon;
             return (
-              <div key={idx} className="flex items-start gap-3.5 p-2">
-                <div className="p-2.5 rounded-xl bg-brand-soft text-brand-dark shrink-0">
-                  <Icon className="w-5 h-5" />
+              <div key={idx} className="p-5 flex items-start gap-3.5">
+                <div className="p-2 rounded bg-n-50 text-ink shrink-0">
+                  <Icon strokeWidth={1.5} className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-ink tracking-tight font-sans">
+                  <h3 className="text-xs font-semibold text-ink tracking-tight">
                     {badge.title}
                   </h3>
-                  <p className="text-[11px] text-muted mt-0.5 leading-relaxed">
+                  <p className="text-[12px] text-muted mt-0.5 leading-relaxed">
                     {badge.desc}
                   </p>
                 </div>
               </div>
             );
           })}
-        </motion.div>
+        </div>
       </section>
 
-      {/* ── 3. Curated Category Story Tiles ──────────────────────────────────── */}
+      {/* ── 3. Curated Department Tiles (0px Radius, 1px Hairlines) ──────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 rounded-full bg-brand" />
-              <span className="text-[11px] font-bold uppercase tracking-wider text-brand font-mono">
-                COLLECTIONS
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black font-display text-ink tracking-tight">
-              Explore by Curated Department
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted font-mono block mb-1">
+              Departments
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-ink tracking-tight">
+              Explore by Category
             </h2>
-            <p className="text-muted text-xs sm:text-sm mt-1">
+            <p className="text-muted text-xs sm:text-sm mt-0.5">
               Handpicked merchandise from verified sellers and artisan workshops
             </p>
           </div>
 
           <Link
             to="/catalog"
-            className="text-xs sm:text-sm font-semibold text-brand hover:text-brand-dark flex items-center gap-1 group shrink-0"
+            className="text-xs sm:text-sm font-semibold text-brand hover:underline flex items-center gap-1 group shrink-0"
           >
-            <span>View All Departments</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <span>View All</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
-        <motion.div
-          variants={staggerContainer(0.06)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
-        >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           {curatedCategories.map((cat, idx) => (
-            <motion.div
+            <Link
               key={idx}
-              variants={staggerItem}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
+              to={cat.link}
+              className="group block bg-surface border border-line transition-colors hover:border-n-500 overflow-hidden"
             >
-              <Link
-                to={cat.link}
-                className="group block relative rounded-card bg-surface border border-line shadow-subtle hover:shadow-card transition-all duration-300 overflow-hidden"
-              >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-canvas">
-                  <img
-                    src={cat.image}
-                    alt={cat.name}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-2.5 left-2.5">
-                    <span className="text-[10px] font-bold bg-surface/90 backdrop-blur-sm text-ink px-2 py-0.5 rounded-full border border-line shadow-subtle">
-                      {cat.pill}
-                    </span>
-                  </div>
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-n-50">
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-300 ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute top-2 left-2">
+                  <span className="text-[10px] font-medium bg-surface/90 text-ink px-1.5 py-0.5 rounded-sm border border-line uppercase tracking-wider">
+                    {cat.pill}
+                  </span>
                 </div>
-                <div className="p-4 text-left bg-surface">
-                  <h3 className="text-sm font-bold text-ink group-hover:text-brand transition-colors tracking-tight">
-                    {cat.name}
-                  </h3>
-                  <p className="text-[11px] text-muted truncate mt-0.5">
-                    {cat.tagline}
-                  </p>
-                </div>
-              </Link>
-            </motion.div>
+              </div>
+              <div className="p-3 bg-surface">
+                <h3 className="text-sm font-semibold text-ink group-hover:underline transition-colors tracking-tight">
+                  {cat.name}
+                </h3>
+                <p className="text-[11px] text-muted truncate mt-0.5">
+                  {cat.tagline}
+                </p>
+              </div>
+            </Link>
           ))}
-        </motion.div>
+        </div>
       </section>
 
-      {/* ── 4. Shelf A: Trending Now (ProductCard 2.0 Grid) ──────────────────── */}
+      {/* ── 4. Shelf A: Trending Now (ProductCard Grid) ─────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-accent" aria-label="sparkles">🔥</span>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-accent font-mono">
-                TRENDING NOW
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black font-display text-ink tracking-tight">
-              Fresh Arrivals &amp; Customer Favorites
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted font-mono block mb-1">
+              Curated Shelf
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-ink tracking-tight">
+              Trending Products
             </h2>
-            <p className="text-muted text-xs sm:text-sm mt-1">
-              Real-time favorites authenticated and dispatched within 24 hours
+            <p className="text-muted text-xs sm:text-sm mt-0.5">
+              Verified items dispatched within 24 hours
             </p>
           </div>
 
           <Link
             to="/search?sort=newest"
-            className="text-xs sm:text-sm font-semibold text-brand hover:text-brand-dark flex items-center gap-1 group shrink-0"
+            className="text-xs sm:text-sm font-semibold text-brand hover:underline flex items-center gap-1 group shrink-0"
           >
             <span>See All Products</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
-        {/* Product Cards with Skeletons to prevent CLS */}
+        {/* Product Cards with Skeletons */}
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
             {[...Array(8)].map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
           </div>
         ) : trendingProducts.length > 0 ? (
-          <motion.div
-            variants={staggerContainer(0.05)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
-          >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
             {trendingProducts.map((product) => (
-              <motion.div key={product._id} variants={staggerItem}>
-                <ProductCard product={product} />
-              </motion.div>
+              <ProductCard key={product._id} product={product} />
             ))}
-          </motion.div>
+          </div>
         ) : (
-          <div className="p-8 text-center bg-surface border border-line rounded-card">
+          <div className="p-8 text-center bg-surface border border-line">
             <p className="text-sm font-medium text-muted">
               Products are refreshing. Explore the full catalog below.
             </p>
@@ -451,36 +403,31 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* ── 5. Social Proof: Customer & Seller Reviews Wall ──────────────────── */}
+      {/* ── 5. Social Proof: Customer & Seller Reviews Wall ─────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/15 text-accent text-xs font-semibold mb-2">
-            <Star className="w-3.5 h-3.5 fill-current" />
-            <span>4.9 / 5 Average Marketplace Rating</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-black font-display text-ink tracking-tight">
-            Loved by Buyers. Trusted by Sellers.
+        <div className="mb-6">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-muted font-mono block mb-1">
+            Trust &amp; Feedback
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-ink tracking-tight">
+            Customer Experiences
           </h2>
-          <p className="text-muted text-xs sm:text-sm mt-1">
-            Genuine experiences from thousands of verified transactions across India
+          <p className="text-muted text-xs sm:text-sm mt-0.5">
+            Verified ratings and transaction feedback from across India
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {customerReviews.map((rev, idx) => (
-            <motion.div
+            <div
               key={idx}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: idx * 0.1 }}
-              className="bg-surface rounded-card border border-line p-6 shadow-subtle flex flex-col justify-between"
+              className="bg-surface border border-line p-5 flex flex-col justify-between"
             >
               <div>
                 {/* 5 Stars */}
-                <div className="flex items-center gap-1 mb-4 text-accent">
+                <div className="flex items-center gap-1 mb-3 text-ink">
                   {[...Array(rev.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current text-accent" />
+                    <Star key={i} strokeWidth={1.5} className="w-3.5 h-3.5 fill-ink text-ink" />
                   ))}
                 </div>
 
@@ -489,36 +436,36 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-line flex items-center justify-between">
+              <div className="mt-6 pt-3 border-t border-line flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-bold text-ink">{rev.name}</h3>
+                  <h3 className="text-xs font-semibold text-ink">{rev.name}</h3>
                   <p className="text-[11px] text-muted">{rev.location}</p>
                 </div>
                 <div className="text-right">
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-brand bg-brand-soft px-2 py-0.5 rounded-full">
-                    <CheckCircle2 className="w-3 h-3" />
+                  <span className="inline-flex items-center gap-1 text-[10px] font-medium text-muted bg-n-50 px-1.5 py-0.5 rounded-sm">
+                    <CheckCircle2 strokeWidth={1.5} className="w-3 h-3 text-success" />
                     {rev.role}
                   </span>
                   <p className="text-[10px] text-muted mt-0.5">{rev.date}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* ── 6. Seller Conversion Banner ───────────────────────────────────────── */}
+      {/* ── 6. Seller Conversion Banner (Flat Surface, 1px Hairline) ────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-card bg-brand-soft border border-brand/20 p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="max-w-xl text-center md:text-left space-y-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-brand font-mono">
-              MERCHANT PARTNERSHIP
+        <div className="bg-n-50 border border-line p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="max-w-xl text-center md:text-left space-y-1.5">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted font-mono block">
+              Seller Program
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black font-display text-ink tracking-tight">
-              Reach Crores of Customers Across 28 States
+            <h2 className="text-2xl sm:text-3xl font-semibold text-ink tracking-tight">
+              Reach Customers Across 28 States
             </h2>
             <p className="text-muted text-xs sm:text-sm leading-relaxed">
-              Zero listing fees, weekly automated Razorpay payouts, and built-in logistics. Go live and start selling in under 24 hours.
+              Zero listing fees, weekly automated payouts, and integrated delivery logistics.
             </p>
           </div>
 

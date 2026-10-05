@@ -170,20 +170,20 @@ export default function CheckoutModal({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="bg-surface rounded-card max-w-lg w-full p-6 shadow-elevation border border-line relative space-y-6 z-10 text-ink"
+            className="bg-surface rounded-none max-w-lg w-full p-6 shadow-overlay border border-line relative space-y-6 z-10 text-ink"
           >
             <button
               type="button"
               onClick={onClose}
-              className="absolute top-4 right-4 p-1.5 text-muted hover:text-ink rounded-lg hover:bg-canvas transition-colors"
+              className="absolute top-4 right-4 p-1.5 text-muted hover:text-ink rounded-sm hover:bg-canvas transition-colors"
               aria-label="Close dialog"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-brand bg-brand-soft px-2.5 py-0.5 rounded-full mb-2">
-                <ShieldCheck className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-muted font-mono uppercase bg-line/20 px-2 py-0.5 rounded-sm mb-2">
+                <ShieldCheck className="w-3.5 h-3.5 text-brand" />
                 256-bit Encrypted Escrow
               </div>
               <h2 className="text-xl font-bold font-display text-ink tracking-tight">
@@ -195,7 +195,7 @@ export default function CheckoutModal({
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 p-3 bg-danger/10 text-danger text-xs rounded-xl border border-danger/20 font-medium"
+                className="flex items-center gap-2 p-3 bg-danger/10 text-danger text-xs rounded-none border border-danger/20 font-medium"
               >
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{errorMsg}</span>
@@ -206,7 +206,7 @@ export default function CheckoutModal({
               <motion.div
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex items-center gap-2 p-3.5 bg-success/15 text-success text-xs font-bold rounded-xl border border-success/30 shadow-subtle"
+                className="flex items-center gap-2 p-3.5 bg-success/15 text-success text-xs font-bold rounded-none border border-success/30"
               >
                 <CheckCircle className="w-4 h-4 text-success shrink-0" />
                 <span>{successMsg}</span>
@@ -214,7 +214,7 @@ export default function CheckoutModal({
             )}
 
             {/* Selected Shipping Address Snapshot */}
-            <div className="bg-canvas p-4 rounded-xl border border-line text-xs space-y-1">
+            <div className="bg-canvas p-4 rounded-none border border-line text-xs space-y-1">
               <div className="font-bold text-muted uppercase tracking-wider text-[10px] font-mono">
                 Delivery Destination
               </div>
@@ -222,7 +222,7 @@ export default function CheckoutModal({
                 <p className="text-ink font-medium leading-relaxed">
                   <strong className="text-ink font-bold">{selectedAddress.name}</strong> ({selectedAddress.mobile})<br />
                   {selectedAddress.street}, {selectedAddress.city}, {selectedAddress.state} &ndash;{' '}
-                  <span className="font-bold tabular-nums">{selectedAddress.pincode}</span>
+                  <span className="font-bold font-mono tabular-nums">{selectedAddress.pincode}</span>
                 </p>
               ) : (
                 <p className="text-warning font-semibold">No delivery address selected.</p>
@@ -239,9 +239,9 @@ export default function CheckoutModal({
                 <button
                   type="button"
                   onClick={() => setPaymentMethod('RAZORPAY')}
-                  className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all shadow-subtle ${
+                  className={`p-3.5 rounded-none border text-left flex flex-col justify-between transition-colors ${
                     paymentMethod === 'RAZORPAY'
-                      ? 'border-brand bg-brand-soft ring-2 ring-brand/30 text-brand-dark'
+                      ? 'border-ink bg-line/10 ring-1 ring-ink text-ink font-semibold'
                       : 'border-line bg-surface hover:bg-canvas text-ink'
                   }`}
                 >
@@ -257,9 +257,9 @@ export default function CheckoutModal({
                 <button
                   type="button"
                   onClick={() => setPaymentMethod('COD')}
-                  className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all shadow-subtle ${
+                  className={`p-3.5 rounded-none border text-left flex flex-col justify-between transition-colors ${
                     paymentMethod === 'COD'
-                      ? 'border-brand bg-brand-soft ring-2 ring-brand/30 text-brand-dark'
+                      ? 'border-ink bg-line/10 ring-1 ring-ink text-ink font-semibold'
                       : 'border-line bg-surface hover:bg-canvas text-ink'
                   }`}
                 >
@@ -276,8 +276,8 @@ export default function CheckoutModal({
 
             {/* Applied Coupon Banner */}
             {appliedCoupon && appliedCoupon.discountAmount > 0 ? (
-              <div className="flex items-center justify-between bg-brand-soft border border-brand/20 rounded-xl px-3.5 py-2.5 text-xs">
-                <div className="flex items-center gap-2 text-brand-dark font-semibold">
+              <div className="flex items-center justify-between bg-line/10 border border-line rounded-none px-3.5 py-2.5 text-xs">
+                <div className="flex items-center gap-2 text-ink font-semibold">
                   <Sparkles className="w-3.5 h-3.5 text-brand shrink-0" />
                   <div>
                     <span>
@@ -289,7 +289,7 @@ export default function CheckoutModal({
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-bold text-brand-dark text-sm tabular-nums">
+                  <span className="font-bold text-success text-sm font-mono tabular-nums">
                     &minus;{formatCurrency(appliedCoupon.discountAmount)}
                   </span>
                   {onOpenCouponDrawer && (
@@ -308,10 +308,10 @@ export default function CheckoutModal({
                 <button
                   type="button"
                   onClick={onOpenCouponDrawer}
-                  className="w-full flex items-center justify-between p-3 bg-canvas hover:bg-line/30 border border-dashed border-line rounded-xl text-xs text-ink transition-colors"
+                  className="w-full flex items-center justify-between p-3 bg-canvas hover:bg-line/20 border border-dashed border-line rounded-none text-xs text-ink transition-colors"
                 >
                   <div className="flex items-center gap-2 font-bold">
-                    <Tag className="w-3.5 h-3.5 text-accent" />
+                    <Tag className="w-3.5 h-3.5 text-brand" />
                     <span>Apply Coupon or Promo Code</span>
                   </div>
                   <span className="text-[11px] font-bold text-brand hover:underline">
@@ -325,7 +325,7 @@ export default function CheckoutModal({
             <div className="border-t border-line pt-4 flex items-center justify-between gap-4">
               <div>
                 <span className="text-xs text-muted block">Total Payable</span>
-                <div className="text-2xl font-black text-ink tracking-tight tabular-nums">
+                <div className="text-2xl font-bold font-mono text-ink tracking-tight tabular-nums">
                   {formatCurrency(totalPayable)}
                 </div>
               </div>

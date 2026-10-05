@@ -51,8 +51,7 @@ const CURATED_CATEGORIES = [
   { name: 'Footwear', href: '/search?category=footwear', badge: null },
   { name: 'Home & Kitchen', href: '/search?category=home-kitchen', badge: null },
   { name: 'Beauty & Wellness', href: '/search?category=beauty-health', badge: null },
-  { name: 'Trending Now', href: '/search?sort=newest', badge: '🔥 Hot' },
-  { name: 'Styleguide', href: '/styleguide', badge: 'v2.0' },
+  { name: 'Trending Now', href: '/search?sort=newest', badge: null },
 ];
 
 const loadRecentSearches = () => {

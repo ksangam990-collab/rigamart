@@ -140,10 +140,10 @@ export default function MyOrdersPage() {
     return (
       <div className="min-h-screen bg-canvas">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6 animate-pulse">
-          <div className="h-8 bg-line/60 rounded-lg w-52" />
+          <div className="h-8 bg-line/60 rounded-none w-52" />
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-44 bg-surface rounded-2xl border border-line" />
+              <div key={i} className="h-44 bg-surface rounded-none border border-line" />
             ))}
           </div>
         </div>
@@ -160,19 +160,19 @@ export default function MyOrdersPage() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="w-20 h-20 rounded-full bg-brand-soft text-brand mx-auto flex items-center justify-center shadow-subtle"
+            className="w-16 h-16 rounded-none bg-canvas border border-line text-ink mx-auto flex items-center justify-center"
           >
-            <Package className="w-9 h-9" />
+            <Package className="w-8 h-8" />
           </motion.div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-ink tracking-tight">No orders placed yet</h1>
+            <h1 className="text-2xl font-bold font-display text-ink tracking-tight">No orders placed yet</h1>
             <p className="text-sm text-muted leading-relaxed max-w-sm mx-auto">
               You haven't completed any orders yet. Discover verified factory deals and everyday essentials in our catalog.
             </p>
           </div>
           <div className="pt-2">
             <Link to="/catalog">
-              <Button variant="primary" size="lg" className="px-8 shadow-subtle">
+              <Button variant="primary" size="lg" className="px-8">
                 Explore Catalog
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -189,7 +189,7 @@ export default function MyOrdersPage() {
         {/* Header */}
         <div className="pb-4 border-b border-line flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-bold font-display text-ink tracking-tight flex items-center gap-3">
               <span>My Orders</span>
               <Badge variant="secondary">
                 {orders.length} {orders.length === 1 ? 'order' : 'orders'}
@@ -224,7 +224,7 @@ export default function MyOrdersPage() {
               <motion.div
                 key={order._id}
                 variants={staggerItem}
-                className="bg-surface rounded-2xl border border-line shadow-subtle overflow-hidden hover:border-muted/30 transition-all duration-300"
+                className="bg-surface rounded-none border border-line overflow-hidden transition-colors"
               >
                 {/* Order Header Ribbon */}
                 <div className="bg-canvas px-5 sm:px-6 py-4 border-b border-line flex flex-wrap items-center justify-between gap-4">
@@ -278,7 +278,7 @@ export default function MyOrdersPage() {
                     {renderStatusBadge(order.status)}
 
                     <Link to={`/orders/${order._id}`}>
-                      <Button variant="ghost" size="sm" className="text-brand hover:text-brand hover:bg-brand-soft text-xs">
+                      <Button variant="ghost" size="sm" className="text-brand hover:text-brand-dark text-xs">
                         <span>Details</span>
                         <ArrowRight className="w-3.5 h-3.5 ml-1" />
                       </Button>
@@ -318,7 +318,7 @@ export default function MyOrdersPage() {
                             <img
                               src={imageUrl}
                               alt={product.name || item.name || 'Product'}
-                              className="w-16 h-18 sm:w-18 sm:h-20 object-cover rounded-xl bg-canvas border border-line shrink-0 hover:opacity-90 transition-opacity"
+                              className="w-16 h-18 sm:w-18 sm:h-20 object-cover rounded-none bg-canvas border border-line shrink-0 hover:opacity-90 transition-opacity"
                             />
                           </Link>
                           <div className="space-y-1">
@@ -341,14 +341,14 @@ export default function MyOrdersPage() {
                                 </Badge>
                               )}
                               <span className="text-muted tabular-nums text-[11px]">
-                                Qty: <strong className="text-ink">{item.quantity}</strong> &times; {formatCurrency(item.price || 0)}
+                                Qty: <strong className="text-ink font-mono">{item.quantity}</strong> &times; {formatCurrency(item.price || 0)}
                               </span>
                             </div>
                           </div>
                         </div>
 
                         <div className="sm:text-right">
-                          <span className="text-sm font-bold text-ink block tabular-nums">
+                          <span className="text-sm font-bold font-mono text-ink block tabular-nums">
                             {formatCurrency((item.price || 0) * (item.quantity || 1))}
                           </span>
                         </div>
@@ -388,7 +388,7 @@ export default function MyOrdersPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => setConfirmCancelId(order._id)}
-                        className="text-danger hover:text-danger hover:bg-danger-soft text-xs font-semibold"
+                        className="text-danger hover:text-danger hover:bg-danger/10 text-xs font-semibold"
                       >
                         Cancel Order
                       </Button>

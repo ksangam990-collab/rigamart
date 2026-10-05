@@ -306,15 +306,15 @@ export default function CartPage() {
     return (
       <div className="min-h-screen bg-canvas">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6 animate-pulse">
-          <div className="h-8 bg-line/60 rounded-lg w-48" />
+          <div className="h-8 bg-line/60 rounded-none w-48" />
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8 space-y-4">
-              <div className="h-32 bg-surface rounded-2xl border border-line" />
-              <div className="h-32 bg-surface rounded-2xl border border-line" />
-              <div className="h-32 bg-surface rounded-2xl border border-line" />
+              <div className="h-32 bg-surface rounded-none border border-line" />
+              <div className="h-32 bg-surface rounded-none border border-line" />
+              <div className="h-32 bg-surface rounded-none border border-line" />
             </div>
             <div className="lg:col-span-4">
-              <div className="h-80 bg-surface rounded-2xl border border-line" />
+              <div className="h-80 bg-surface rounded-none border border-line" />
             </div>
           </div>
         </div>
@@ -331,19 +331,19 @@ export default function CartPage() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="w-20 h-20 rounded-full bg-brand-soft text-brand mx-auto flex items-center justify-center shadow-subtle"
+            className="w-16 h-16 rounded-none bg-canvas border border-line text-ink mx-auto flex items-center justify-center"
           >
-            <ShoppingBag className="w-9 h-9" />
+            <ShoppingBag className="w-8 h-8" />
           </motion.div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-ink tracking-tight">Your shopping bag is empty</h1>
+            <h1 className="text-2xl font-bold font-display text-ink tracking-tight">Your shopping bag is empty</h1>
             <p className="text-sm text-muted leading-relaxed max-w-sm mx-auto">
               Explore our curated selection of direct-from-factory pieces and timeless everyday essentials.
             </p>
           </div>
           <div className="pt-2">
             <Link to="/catalog">
-              <Button variant="primary" size="lg" className="px-8 shadow-subtle">
+              <Button variant="primary" size="lg" className="px-8">
                 Explore Catalog
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -360,7 +360,7 @@ export default function CartPage() {
         {/* Header Bar */}
         <div className="flex items-center justify-between pb-4 border-b border-line">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">Shopping Bag</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display text-ink tracking-tight">Shopping Bag</h1>
             <Badge variant="secondary">
               {cart.totalCount || items.length} {items.length === 1 ? 'item' : 'items'}
             </Badge>
@@ -369,7 +369,7 @@ export default function CartPage() {
             variant="ghost"
             size="sm"
             onClick={() => dispatch(clearCart())}
-            className="text-danger hover:text-danger hover:bg-danger-soft/50 text-xs"
+            className="text-danger hover:text-danger hover:bg-danger/10 text-xs"
           >
             <Trash2 className="w-3.5 h-3.5 mr-1.5" />
             Clear Bag
@@ -378,51 +378,45 @@ export default function CartPage() {
 
         {/* Free Shipping Progress Meter */}
         <div
-          className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 space-y-2.5 ${
+          className={`p-4 sm:p-5 rounded-none border transition-all space-y-2.5 ${
             progressToFreeShipping >= 100
-              ? 'bg-brand-soft/70 border-brand/30 shadow-subtle'
-              : 'bg-surface border-line shadow-subtle'
+              ? 'bg-line/10 border-line'
+              : 'bg-surface border-line'
           }`}
         >
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-2.5">
               {progressToFreeShipping >= 100 ? (
-                <div className="w-5 h-5 rounded-full bg-brand text-white flex items-center justify-center shrink-0 shadow-subtle">
+                <div className="w-5 h-5 rounded-none bg-ink text-canvas flex items-center justify-center shrink-0">
                   <Sparkles className="w-3 h-3" />
                 </div>
               ) : (
-                <div className="w-5 h-5 rounded-full bg-canvas text-brand flex items-center justify-center shrink-0 border border-line">
+                <div className="w-5 h-5 rounded-none bg-canvas text-ink flex items-center justify-center shrink-0 border border-line">
                   <Truck className="w-3 h-3" />
                 </div>
               )}
-              <span
-                className={`font-semibold ${
-                  progressToFreeShipping >= 100 ? 'text-brand-dark' : 'text-ink'
-                }`}
-              >
+              <span className="font-semibold text-ink">
                 {progressToFreeShipping >= 100 ? (
                   <span>Complimentary Pan-India Express Delivery Unlocked</span>
                 ) : (
                   <span>
-                    Add <strong className="font-bold text-brand">{formatCurrency(500 - itemsSubtotal)}</strong> more for complimentary delivery
+                    Add <strong className="font-bold font-mono text-ink">{formatCurrency(500 - itemsSubtotal)}</strong> more for complimentary delivery
                   </span>
                 )}
               </span>
             </div>
-            <span className="font-bold tabular-nums text-muted text-xs">
+            <span className="font-bold font-mono tabular-nums text-muted text-xs">
               {progressToFreeShipping}%
             </span>
           </div>
 
           {/* Progress Bar Track */}
-          <div className="w-full h-2 bg-line rounded-full overflow-hidden relative">
+          <div className="w-full h-1.5 bg-line rounded-none overflow-hidden relative">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progressToFreeShipping}%` }}
               transition={{ type: 'spring', stiffness: 140, damping: 18 }}
-              className={`h-full rounded-full ${
-                progressToFreeShipping >= 100 ? 'bg-brand' : 'bg-brand/80'
-              }`}
+              className="h-full rounded-none bg-ink"
             />
           </div>
         </div>
@@ -432,7 +426,7 @@ export default function CartPage() {
           {/* Left Column: Delivery Address & Cart Items (8 cols) */}
           <div className="lg:col-span-8 space-y-6">
             {/* Delivery Address Section */}
-            <div className="bg-surface p-5 sm:p-6 rounded-2xl border border-line shadow-subtle space-y-4">
+            <div className="bg-surface p-5 sm:p-6 rounded-none border border-line space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-wider text-muted flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-brand" />
@@ -451,7 +445,7 @@ export default function CartPage() {
 
               {/* Address List */}
               {addresses.length === 0 && !showAddressForm ? (
-                <div className="p-4 bg-accent-soft/40 rounded-xl border border-accent/20 text-xs text-ink">
+                <div className="p-4 bg-canvas rounded-none border border-line text-xs text-ink">
                   Please add a delivery destination to review final shipping and proceed with checkout.
                 </div>
               ) : (
@@ -462,15 +456,15 @@ export default function CartPage() {
                       <div
                         key={addr._id || idx}
                         onClick={() => setSelectedAddressIndex(idx)}
-                        className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                        className={`p-4 rounded-none border cursor-pointer transition-colors ${
                           isSelected
-                            ? 'border-brand bg-brand-soft/30 ring-1 ring-brand shadow-subtle'
-                            : 'border-line hover:border-muted/50 bg-surface'
+                            ? 'border-ink bg-line/10 ring-1 ring-ink'
+                            : 'border-line hover:border-ink/40 bg-surface'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1.5">
                           <span className="font-bold text-xs text-ink">{addr.name}</span>
-                          {isSelected && <CheckCircle className="w-4 h-4 text-brand" />}
+                          {isSelected && <CheckCircle className="w-4 h-4 text-ink" />}
                         </div>
                         <p className="text-[11px] text-muted leading-relaxed line-clamp-2">
                           {addr.street}, {addr.city}, {addr.state} &ndash; {addr.pincode}
@@ -493,19 +487,19 @@ export default function CartPage() {
                     animate="visible"
                     exit="exit"
                     onSubmit={handleAddNewAddress}
-                    className="p-4 sm:p-5 bg-canvas rounded-xl border border-line space-y-4 mt-3"
+                    className="p-4 sm:p-5 bg-canvas rounded-none border border-line space-y-4 mt-3"
                   >
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-line">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-ink">New Address Details</h3>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-ink font-mono">New Address Details</h3>
                       <button
                         type="button"
                         onClick={handleUseCurrentLocation}
                         disabled={locating}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface hover:bg-line/40 text-brand text-xs font-semibold rounded-lg border border-line transition-colors disabled:opacity-60 shadow-subtle"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface hover:bg-canvas text-ink text-xs font-medium rounded border border-line transition-colors disabled:opacity-60"
                       >
                         {locating ? (
                           <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin text-brand" />
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-ink" />
                             <span>Detecting Location...</span>
                           </>
                         ) : (
@@ -519,10 +513,10 @@ export default function CartPage() {
 
                     {geoNotice && (
                       <div
-                        className={`text-xs px-3 py-2 rounded-lg flex items-center gap-2 ${
+                        className={`text-xs px-3 py-2 rounded-none flex items-center gap-2 ${
                           geoNotice.type === 'success'
-                            ? 'bg-brand-soft text-brand-dark border border-brand/20'
-                            : 'bg-danger-soft text-danger border border-danger/20'
+                            ? 'bg-success/10 text-success border border-success/20'
+                            : 'bg-danger/10 text-danger border border-danger/20'
                         }`}
                       >
                         <span>{geoNotice.text}</span>
@@ -536,7 +530,7 @@ export default function CartPage() {
                         placeholder="Recipient Full Name"
                         value={addrName}
                         onChange={(e) => setAddrName(e.target.value)}
-                        className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                        className="px-3 py-2 bg-surface border border-line rounded text-xs text-ink outline-none focus:border-ink focus:ring-1 focus:ring-ink"
                       />
                       <input
                         type="tel"
@@ -545,7 +539,7 @@ export default function CartPage() {
                         placeholder="Mobile Number (10 digits)"
                         value={addrMobile}
                         onChange={(e) => setAddrMobile(e.target.value)}
-                        className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                        className="px-3 py-2 bg-surface border border-line rounded text-xs text-ink outline-none focus:border-ink focus:ring-1 focus:ring-ink"
                       />
                       <input
                         type="text"
@@ -553,7 +547,7 @@ export default function CartPage() {
                         placeholder="House, Street, Flat, Area"
                         value={addrStreet}
                         onChange={(e) => setAddrStreet(e.target.value)}
-                        className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink sm:col-span-2 outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                        className="px-3 py-2 bg-surface border border-line rounded text-xs text-ink sm:col-span-2 outline-none focus:border-ink focus:ring-1 focus:ring-ink"
                       />
                       <input
                         type="text"
@@ -561,7 +555,7 @@ export default function CartPage() {
                         placeholder="City"
                         value={addrCity}
                         onChange={(e) => setAddrCity(e.target.value)}
-                        className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                        className="px-3 py-2 bg-surface border border-line rounded text-xs text-ink outline-none focus:border-ink focus:ring-1 focus:ring-ink"
                       />
                       <input
                         type="text"
@@ -569,7 +563,7 @@ export default function CartPage() {
                         placeholder="State"
                         value={addrState}
                         onChange={(e) => setAddrState(e.target.value)}
-                        className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                        className="px-3 py-2 bg-surface border border-line rounded text-xs text-ink outline-none focus:border-ink focus:ring-1 focus:ring-ink"
                       />
                       <input
                         type="text"
@@ -578,7 +572,7 @@ export default function CartPage() {
                         placeholder="PIN Code (6 digits)"
                         value={addrPincode}
                         onChange={(e) => setAddrPincode(e.target.value)}
-                        className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                        className="px-3 py-2 bg-surface border border-line rounded text-xs text-ink outline-none focus:border-ink focus:ring-1 focus:ring-ink"
                       />
                     </div>
 
@@ -597,7 +591,7 @@ export default function CartPage() {
                         size="sm"
                         isLoading={savingAddress}
                       >
-                        Save & Select Address
+                        Save &amp; Select Address
                       </Button>
                     </div>
                   </motion.form>
@@ -627,18 +621,18 @@ export default function CartPage() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, x: -16, height: 0, overflow: 'hidden' }}
                       transition={{ duration: 0.2 }}
-                      className="bg-surface p-4 sm:p-5 rounded-2xl border border-line shadow-subtle flex flex-col sm:flex-row gap-4 sm:gap-5 items-start sm:items-center justify-between"
+                      className="bg-surface p-4 sm:p-5 rounded-none border border-line flex flex-col sm:flex-row gap-4 sm:gap-5 items-start sm:items-center justify-between"
                     >
                       <div className="flex items-start gap-4 w-full sm:w-auto">
                         <Link to={productId ? `/products/${productId}` : '#'} className="shrink-0">
                           <img
                             src={imageUrl}
                             alt={product.name || 'Product'}
-                            className="w-20 h-24 sm:w-24 sm:h-28 object-cover rounded-xl bg-canvas border border-line shrink-0 hover:opacity-90 transition-opacity"
+                            className="w-20 h-24 sm:w-24 sm:h-28 object-cover rounded-none bg-canvas border border-line shrink-0 hover:opacity-90 transition-opacity"
                           />
                         </Link>
                         <div className="space-y-1.5 flex-1 min-w-0">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-muted font-mono">
                             {product.brand || 'Rigamart Verified'}
                           </span>
                           <h3 className="text-sm font-bold text-ink line-clamp-1">
@@ -669,20 +663,20 @@ export default function CartPage() {
                           </div>
 
                           {item.hasPriceChanged && (
-                            <div className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent bg-accent-soft px-2 py-0.5 rounded-md border border-accent/20">
+                            <div className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent bg-accent/10 px-2 py-0.5 rounded-none border border-accent/20">
                               <AlertTriangle className="w-3 h-3 text-accent shrink-0" />
                               Price updated: ₹{item.priceAtAddition} &rarr; ₹{item.currentPrice}
                             </div>
                           )}
 
                           {!item.isAvailable && item.unavailableReason && (
-                            <div className="text-[10px] font-semibold text-danger bg-danger-soft px-2 py-0.5 rounded-md border border-danger/20 inline-block">
+                            <div className="text-[10px] font-semibold text-danger bg-danger/10 px-2 py-0.5 rounded-none border border-danger/20 inline-block">
                               {item.unavailableReason}
                             </div>
                           )}
 
-                          <div className="text-xs font-semibold text-muted pt-0.5 tabular-nums">
-                            {formatCurrency(unitPrice)} <span className="font-normal text-[11px]">each</span>
+                          <div className="text-xs font-semibold text-muted pt-0.5 tabular-nums font-mono">
+                            {formatCurrency(unitPrice)} <span className="font-sans font-normal text-[11px] text-muted">each</span>
                           </div>
                         </div>
                       </div>
@@ -690,7 +684,7 @@ export default function CartPage() {
                       {/* Quantity Controller & Total */}
                       <div className="flex items-center justify-between w-full sm:w-auto sm:gap-6 pt-3 sm:pt-0 border-t sm:border-t-0 border-line">
                         {/* Stepper */}
-                        <div className="inline-flex items-center border border-line rounded-lg bg-canvas shadow-2xs">
+                        <div className="inline-flex items-center border border-line rounded h-8 bg-surface">
                           <button
                             type="button"
                             onClick={() =>
@@ -701,12 +695,12 @@ export default function CartPage() {
                                 })
                               )
                             }
-                            className="w-8 h-8 flex items-center justify-center text-muted hover:text-ink hover:bg-line/40 transition-colors"
+                            className="w-8 h-8 flex items-center justify-center text-muted hover:text-ink hover:bg-canvas transition-colors"
                             aria-label="Decrease quantity"
                           >
                             <Minus className="w-3.5 h-3.5" />
                           </button>
-                          <span className="px-3 py-1 text-xs font-bold text-ink bg-surface min-w-[34px] text-center tabular-nums">
+                          <span className="px-3 py-1 text-xs font-semibold font-mono text-ink bg-surface min-w-[34px] text-center tabular-nums">
                             {item.quantity}
                           </span>
                           <button
@@ -719,7 +713,7 @@ export default function CartPage() {
                                 })
                               )
                             }
-                            className="w-8 h-8 flex items-center justify-center text-muted hover:text-ink hover:bg-line/40 transition-colors"
+                            className="w-8 h-8 flex items-center justify-center text-muted hover:text-ink hover:bg-canvas transition-colors"
                             aria-label="Increase quantity"
                           >
                             <Plus className="w-3.5 h-3.5" />
@@ -728,7 +722,7 @@ export default function CartPage() {
 
                         {/* Line subtotal */}
                         <div className="text-right sm:min-w-[80px]">
-                          <span className="text-sm font-bold text-ink block tabular-nums">
+                          <span className="text-sm font-bold font-mono text-ink block tabular-nums">
                             {formatCurrency(subtotal)}
                           </span>
                         </div>
@@ -737,7 +731,7 @@ export default function CartPage() {
                         <button
                           type="button"
                           onClick={() => dispatch(removeFromCart(item._id))}
-                          className="p-1.5 text-muted hover:text-danger hover:bg-danger-soft/50 rounded-lg transition-colors"
+                          className="p-1.5 text-muted hover:text-danger hover:bg-danger/10 rounded transition-colors"
                           title="Remove item"
                           aria-label="Remove item from cart"
                         >
@@ -754,11 +748,11 @@ export default function CartPage() {
           {/* Right Column: Order Summary & Checkout (4 cols, Sticky) */}
           <div className="lg:col-span-4 sticky top-24 space-y-4">
             {/* Coupon Card */}
-            <div className="bg-surface p-5 rounded-2xl border border-line shadow-subtle space-y-3">
+            <div className="bg-surface p-5 rounded-none border border-line space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-muted flex items-center gap-1.5">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted flex items-center gap-1.5 font-mono">
                   <Tag className="w-3.5 h-3.5 text-brand" />
-                  Coupons & Offers
+                  Coupons &amp; Offers
                 </h3>
                 <button
                   type="button"
@@ -777,22 +771,22 @@ export default function CartPage() {
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
-                    className="bg-brand-soft border border-brand/20 rounded-xl p-3 flex items-center justify-between shadow-2xs"
+                    className="bg-line/10 border border-line rounded-none p-3 flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-brand text-white flex items-center justify-center shrink-0">
+                      <div className="w-6 h-6 rounded-none bg-ink text-canvas flex items-center justify-center shrink-0">
                         <Sparkles className="w-3 h-3" />
                       </div>
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="font-mono text-xs font-bold text-brand-dark">
+                          <span className="font-mono text-xs font-bold text-ink">
                             {appliedCoupon.code}
                           </span>
                           <Badge variant="brand" size="sm">
                             APPLIED
                           </Badge>
                         </div>
-                        <p className="text-[11px] text-brand-dark font-medium pt-0.5">
+                        <p className="text-[11px] text-muted font-medium pt-0.5">
                           Saved {formatCurrency(couponDiscount)}
                         </p>
                       </div>
@@ -800,7 +794,7 @@ export default function CartPage() {
                     <button
                       type="button"
                       onClick={handleRemoveCoupon}
-                      className="p-1 text-brand hover:text-danger transition-colors"
+                      className="p-1 text-muted hover:text-danger transition-colors"
                       title="Remove coupon"
                     >
                       <X className="w-4 h-4" />
@@ -828,7 +822,7 @@ export default function CartPage() {
                           if (couponError) setCouponError(null);
                         }}
                         placeholder="ENTER COUPON CODE"
-                        className="w-full pl-3 pr-8 py-2 text-xs font-mono font-bold uppercase tracking-wider text-ink bg-canvas border border-line rounded-xl focus:bg-surface focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:font-sans placeholder:font-normal placeholder:text-muted"
+                        className="w-full pl-3 pr-8 py-2 text-xs font-mono font-bold uppercase tracking-wider text-ink bg-canvas border border-line rounded focus:bg-surface focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors placeholder:font-sans placeholder:font-normal placeholder:text-muted"
                       />
                       {couponInput && (
                         <button
@@ -854,56 +848,56 @@ export default function CartPage() {
               )}
 
               {couponError && (
-                <div className="flex items-start gap-1.5 text-[11px] text-danger bg-danger-soft border border-danger/20 rounded-xl p-2.5">
+                <div className="flex items-start gap-1.5 text-[11px] text-danger bg-danger/10 border border-danger/20 rounded-none p-2.5">
                   <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-danger" />
                   <span>{couponError}</span>
                 </div>
               )}
 
               {couponSuccess && (
-                <div className="flex items-center gap-1.5 text-[11px] text-brand-dark bg-brand-soft border border-brand/20 rounded-xl p-2.5">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-brand" />
+                <div className="flex items-center gap-1.5 text-[11px] text-success bg-success/10 border border-success/20 rounded-none p-2.5">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-success" />
                   <span>{couponSuccess}</span>
                 </div>
               )}
             </div>
 
             {/* Price Details Card */}
-            <div className="bg-surface p-6 rounded-2xl border border-line shadow-subtle space-y-4">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-muted pb-2 border-b border-line">
+            <div className="bg-surface p-6 rounded-none border border-line space-y-4">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-muted font-mono pb-2 border-b border-line">
                 Price Breakdown
               </h2>
 
               <div className="space-y-2.5 text-xs tabular-nums">
                 <div className="flex justify-between text-muted">
                   <span>Subtotal ({cart.totalCount || items.length} items)</span>
-                  <span className="font-semibold text-ink">
+                  <span className="font-semibold font-mono text-ink">
                     {formatCurrency(itemsSubtotal)}
                   </span>
                 </div>
 
                 {couponDiscount > 0 && (
-                  <div className="flex justify-between text-brand font-semibold">
+                  <div className="flex justify-between text-success font-semibold">
                     <span className="flex items-center gap-1">
                       <Sparkles className="w-3.5 h-3.5" />
                       Promotional Discount ({appliedCoupon?.code})
                     </span>
-                    <span>&minus;{formatCurrency(couponDiscount)}</span>
+                    <span className="font-mono">&minus;{formatCurrency(couponDiscount)}</span>
                   </div>
                 )}
 
                 <div className="flex justify-between text-muted">
                   <span>Estimated Taxes (GST)</span>
-                  <span className="font-semibold text-ink">
+                  <span className="font-semibold font-mono text-ink">
                     {formatCurrency(cart.taxPrice || 0)}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-muted">
                   <span>Delivery Charges</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold font-mono">
                     {shippingFee === 0 ? (
-                      <span className="text-brand font-bold uppercase">Free</span>
+                      <span className="text-success font-bold font-sans uppercase">Free</span>
                     ) : (
                       formatCurrency(shippingFee)
                     )}
@@ -912,15 +906,15 @@ export default function CartPage() {
 
                 <div className="border-t border-line pt-3 flex justify-between text-base font-bold text-ink tabular-nums">
                   <span>Total Amount</span>
-                  <span className="text-xl tracking-tight">
+                  <span className="text-xl font-mono tracking-tight">
                     {formatCurrency(totalPayable)}
                   </span>
                 </div>
               </div>
 
               {couponDiscount > 0 && (
-                <div className="bg-brand-soft border border-brand/20 rounded-xl py-2 px-3 text-center">
-                  <span className="text-xs font-bold text-brand-dark">
+                <div className="bg-success/10 border border-success/20 rounded-none py-2 px-3 text-center">
+                  <span className="text-xs font-medium text-success font-mono">
                     Total Savings: {formatCurrency(couponDiscount)}
                   </span>
                 </div>
@@ -931,7 +925,7 @@ export default function CartPage() {
                 variant="primary"
                 size="lg"
                 onClick={handleProceedToCheckout}
-                className="w-full text-sm font-bold shadow-subtle flex items-center justify-center gap-2"
+                className="w-full text-sm font-semibold flex items-center justify-center gap-2"
               >
                 <span>Proceed to Checkout</span>
                 <ArrowRight className="w-4 h-4" />

@@ -55,7 +55,7 @@ const emptyAddress = {
 };
 
 const inputClass =
-  'w-full border border-line rounded-xl px-3.5 py-2 text-xs text-ink bg-surface placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all';
+  'w-full border border-line rounded px-3.5 py-2 text-xs text-ink bg-surface placeholder:text-muted focus:outline-none focus:border-brand transition-all';
 const labelClass = 'block text-[11px] font-bold uppercase tracking-wider text-muted mb-1';
 const errClass = 'text-[11px] text-danger mt-1';
 
@@ -66,21 +66,21 @@ function ProfileSkeleton() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-pulse">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-4 space-y-4">
-            <div className="bg-surface rounded-2xl border border-line p-6 space-y-4">
-              <div className="w-20 h-20 rounded-full bg-line/60 mx-auto" />
-              <div className="h-5 bg-line/60 rounded w-40 mx-auto" />
-              <div className="h-3 bg-line/40 rounded w-32 mx-auto" />
+            <div className="bg-surface rounded-none border border-line p-6 space-y-4">
+              <div className="w-18 h-18 rounded bg-line/60 mx-auto" />
+              <div className="h-5 bg-line/60 rounded-sm w-40 mx-auto" />
+              <div className="h-3 bg-line/40 rounded-sm w-32 mx-auto" />
               <div className="border-t border-line pt-4 space-y-3">
-                <div className="h-9 bg-line/40 rounded-xl" />
-                <div className="h-9 bg-line/40 rounded-xl" />
+                <div className="h-9 bg-line/40 rounded" />
+                <div className="h-9 bg-line/40 rounded" />
               </div>
             </div>
           </div>
           <div className="lg:col-span-8 space-y-4">
-            <div className="h-8 bg-line/60 rounded-lg w-48" />
+            <div className="h-8 bg-line/60 rounded-sm w-48" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="h-44 bg-surface rounded-2xl border border-line" />
-              <div className="h-44 bg-surface rounded-2xl border border-line" />
+              <div className="h-44 bg-surface rounded-none border border-line" />
+              <div className="h-44 bg-surface rounded-none border border-line" />
             </div>
           </div>
         </div>
@@ -190,7 +190,7 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
           type="button"
           onClick={handleUseCurrentLocation}
           disabled={locating}
-          className="inline-flex items-center gap-1.5 px-3 py-1 bg-surface hover:bg-line/40 text-brand text-xs font-semibold rounded-lg border border-line transition-colors disabled:opacity-60 shadow-subtle"
+          className="inline-flex items-center gap-1.5 px-3 py-1 bg-surface hover:bg-line/40 text-brand text-xs font-semibold rounded border border-line transition-colors disabled:opacity-60"
         >
           {locating ? (
             <>
@@ -208,7 +208,7 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
 
       {geoNotice && (
         <div
-          className={`text-xs px-3 py-2 rounded-lg flex items-center gap-2 ${
+          className={`text-xs px-3 py-2 rounded-sm flex items-center gap-2 ${
             geoNotice.type === 'success'
               ? 'bg-brand-soft text-brand-dark border border-brand/20'
               : 'bg-danger-soft text-danger border border-danger/20'
@@ -349,7 +349,7 @@ function AddressCard({ addr, onEdit, onDelete }) {
     <motion.div
       variants={staggerItem}
       layout
-      className="bg-surface rounded-2xl border border-line shadow-subtle hover:border-muted/30 transition-all duration-200 overflow-hidden"
+      className="bg-surface rounded-none border border-line hover:border-ink transition-colors duration-150 overflow-hidden"
     >
       <div className="p-5">
         <div className="flex items-start justify-between gap-2 mb-2">
@@ -570,10 +570,10 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* ── LEFT COLUMN: Sticky Profile Card (4 cols) ─────── */}
           <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
-            <div className="bg-surface rounded-2xl border border-line shadow-subtle overflow-hidden">
+            <div className="bg-surface rounded-none border border-line overflow-hidden">
               {/* Profile Header */}
               <div className="p-6 text-center border-b border-line bg-canvas/40">
-                <div className="w-18 h-18 rounded-full bg-brand-soft text-brand-dark font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-subtle ring-2 ring-brand/20">
+                <div className="w-16 h-16 rounded bg-surface-2 text-ink font-bold text-xl flex items-center justify-center mx-auto mb-3 border border-line">
                   {getInitials(profile?.name || authUser?.name || 'U')}
                 </div>
                 <h1 className="text-base font-bold text-ink truncate">
@@ -640,14 +640,14 @@ export default function ProfilePage() {
                   </div>
 
                   {profileApiError && (
-                    <div className="flex items-center gap-2 bg-danger-soft text-danger text-xs px-3 py-2 rounded-xl border border-danger/20">
+                    <div className="flex items-center gap-2 bg-danger-soft text-danger text-xs px-3 py-2 rounded-sm border border-danger/20">
                       <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                       <span>{profileApiError}</span>
                     </div>
                   )}
 
                   {profileSuccess && (
-                    <div className="flex items-center gap-2 bg-brand-soft text-brand-dark text-xs px-3 py-2 rounded-xl border border-brand/20">
+                    <div className="flex items-center gap-2 bg-brand-soft text-brand text-xs px-3 py-2 rounded-sm border border-brand/20">
                       <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-brand" />
                       <span>Profile updated successfully!</span>
                     </div>
@@ -684,7 +684,7 @@ export default function ProfilePage() {
                 variant={showAddForm ? 'secondary' : 'outline'}
                 size="sm"
                 onClick={() => setShowAddForm((p) => !p)}
-                className="text-xs shadow-subtle"
+                className="text-xs"
               >
                 {showAddForm ? <ChevronUp className="w-4 h-4 mr-1.5" /> : <Plus className="w-4 h-4 mr-1.5" />}
                 {showAddForm ? 'Close Form' : 'Add New Address'}
@@ -699,7 +699,7 @@ export default function ProfilePage() {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="bg-surface rounded-2xl border border-line shadow-subtle p-5 sm:p-6"
+                  className="bg-surface rounded-none border border-line p-5 sm:p-6"
                 >
                   <h3 className="text-sm font-bold text-ink mb-1 flex items-center gap-2">
                     <Plus className="w-4 h-4 text-brand" />
@@ -707,7 +707,7 @@ export default function ProfilePage() {
                   </h3>
 
                   {addApiError && (
-                    <div className="flex items-center gap-2 bg-danger-soft text-danger text-xs px-3 py-2 rounded-xl border border-danger/20 my-2">
+                    <div className="flex items-center gap-2 bg-danger-soft text-danger text-xs px-3 py-2 rounded-sm border border-danger/20 my-2">
                       <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                       <span>{addApiError}</span>
                     </div>
@@ -724,9 +724,9 @@ export default function ProfilePage() {
 
             {/* Empty state */}
             {addresses.length === 0 && !showAddForm && (
-              <div className="bg-surface rounded-2xl border border-line p-12 text-center space-y-4 shadow-subtle">
-                <div className="w-16 h-16 rounded-full bg-brand-soft text-brand mx-auto flex items-center justify-center">
-                  <MapPin className="w-8 h-8" />
+              <div className="bg-surface rounded-none border border-line p-12 text-center space-y-4">
+                <div className="w-14 h-14 rounded bg-canvas border border-line text-ink mx-auto flex items-center justify-center">
+                  <MapPin className="w-7 h-7 text-muted" />
                 </div>
                 <h3 className="text-base font-bold text-ink">No Saved Addresses</h3>
                 <p className="text-xs text-muted max-w-xs mx-auto">
@@ -736,7 +736,7 @@ export default function ProfilePage() {
                   variant="primary"
                   size="md"
                   onClick={() => setShowAddForm(true)}
-                  className="shadow-subtle"
+                  className=""
                 >
                   <Plus className="w-4 h-4 mr-1.5" /> Add Your First Address
                 </Button>

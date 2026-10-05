@@ -134,13 +134,13 @@ export default function ReturnRequestModal({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="relative bg-surface rounded-3xl shadow-2xl max-w-xl w-full my-8 overflow-hidden z-10 flex flex-col max-h-[90vh] border border-line"
+          className="relative bg-surface rounded-none sm:rounded-sm shadow-overlay max-w-xl w-full my-8 overflow-hidden z-10 flex flex-col max-h-[90vh] border border-line"
         >
           {/* Header */}
           <div className="px-6 py-5 border-b border-line flex items-center justify-between bg-surface">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 text-brand flex items-center justify-center">
-                <RotateCcw className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-sm bg-brand/10 border border-brand/20 text-brand flex items-center justify-center">
+                <RotateCcw className="w-4 h-4" />
               </div>
               <div>
                 <h3 className="text-base font-bold text-ink leading-tight">
@@ -155,7 +155,7 @@ export default function ReturnRequestModal({
             <button
               onClick={onClose}
               disabled={submitting}
-              className="p-1.5 text-muted hover:text-ink rounded-full hover:bg-canvas transition-colors disabled:opacity-40"
+              className="p-1.5 text-muted hover:text-ink rounded hover:bg-canvas transition-colors disabled:opacity-40"
               aria-label="Close"
             >
               <X className="w-5 h-5" />
@@ -165,7 +165,7 @@ export default function ReturnRequestModal({
           {/* Body Content */}
           <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto flex-1 text-xs bg-surface">
             {/* Rigamart Buyer Protection Strip */}
-            <div className="p-3.5 bg-brand/10 border border-brand/20 rounded-2xl flex items-start gap-3 text-ink">
+            <div className="p-3.5 bg-canvas border border-line rounded-none flex items-start gap-3 text-ink">
               <ShieldCheck className="w-5 h-5 text-brand flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-bold text-ink">100% Buyer Protection Guaranteed</p>
@@ -176,7 +176,7 @@ export default function ReturnRequestModal({
             </div>
 
             {errorMessage && (
-              <div className="p-3.5 bg-danger-soft border border-danger/20 text-danger rounded-xl flex items-center gap-2 font-medium">
+              <div className="p-3 bg-danger-soft border border-danger/20 text-danger rounded-sm flex items-center gap-2 font-medium">
                 <AlertCircle className="w-4 h-4 text-danger flex-shrink-0" />
                 <span>{errorMessage}</span>
               </div>
@@ -195,9 +195,9 @@ export default function ReturnRequestModal({
                       key={cat.id}
                       type="button"
                       onClick={() => setCategory(cat.id)}
-                      className={`text-left p-3 rounded-xl border transition-all text-xs flex flex-col justify-between ${
+                      className={`text-left p-3 rounded-sm border transition-all text-xs flex flex-col justify-between ${
                         isSelected
-                          ? 'border-brand bg-brand/10 ring-2 ring-brand/20 shadow-xs'
+                          ? 'border-brand bg-brand/5 ring-1 ring-brand'
                           : 'border-line hover:border-line/80 bg-surface'
                       }`}
                     >
@@ -224,7 +224,7 @@ export default function ReturnRequestModal({
                 placeholder="e.g., Sole detached after 1 day of light use"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-surface border border-line rounded-xl text-xs text-ink placeholder-muted/60 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
+                className="w-full px-3.5 py-2.5 bg-surface border border-line rounded text-xs text-ink placeholder-muted/60 focus:outline-none focus:border-brand"
               />
             </div>
 
@@ -238,7 +238,7 @@ export default function ReturnRequestModal({
                 placeholder="Share any details that can help the seller process your return faster..."
                 value={comments}
                 onChange={(e) => setComments(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-surface border border-line rounded-xl text-xs text-ink placeholder-muted/60 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand resize-none"
+                className="w-full px-3.5 py-2.5 bg-surface border border-line rounded text-xs text-ink placeholder-muted/60 focus:outline-none focus:border-brand resize-none"
               />
             </div>
 
@@ -258,12 +258,12 @@ export default function ReturnRequestModal({
               {photos.length > 0 && (
                 <div className="grid grid-cols-4 gap-2.5 pt-1">
                   {photos.map((url, idx) => (
-                    <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-line group bg-canvas">
+                    <div key={idx} className="relative aspect-square rounded-none overflow-hidden border border-line group bg-canvas">
                       <img src={url} alt={`Proof ${idx + 1}`} className="w-full h-full object-cover" />
                       <button
                         type="button"
                         onClick={() => handleRemovePhoto(idx)}
-                        className="absolute top-1 right-1 p-1 bg-black/60 hover:bg-danger text-white rounded-full transition-colors"
+                        className="absolute top-1 right-1 p-1 bg-black/60 hover:bg-danger text-white rounded transition-colors"
                         title="Remove photo"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -287,7 +287,7 @@ export default function ReturnRequestModal({
                   />
                   <label
                     htmlFor="return-photo-input"
-                    className="w-full py-4 border-2 border-dashed border-line hover:border-brand bg-canvas hover:bg-surface rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-colors"
+                    className="w-full py-4 border border-dashed border-line hover:border-brand bg-canvas hover:bg-surface rounded-none flex flex-col items-center justify-center cursor-pointer transition-colors"
                   >
                     {uploadingPhotos ? (
                       <div className="flex items-center gap-2 text-brand font-semibold">
@@ -315,9 +315,9 @@ export default function ReturnRequestModal({
                 <button
                   type="button"
                   onClick={() => setResolutionType('REFUND')}
-                  className={`p-3 rounded-xl border text-left transition-all ${
+                  className={`p-3 rounded-sm border text-left transition-all ${
                     resolutionType === 'REFUND'
-                      ? 'border-success bg-success-soft ring-2 ring-success/20'
+                      ? 'border-brand bg-brand/5 ring-1 ring-brand'
                       : 'border-line bg-surface hover:border-line/80'
                   }`}
                 >
@@ -330,9 +330,9 @@ export default function ReturnRequestModal({
                 <button
                   type="button"
                   onClick={() => setResolutionType('REPLACEMENT')}
-                  className={`p-3 rounded-xl border text-left transition-all ${
+                  className={`p-3 rounded-sm border text-left transition-all ${
                     resolutionType === 'REPLACEMENT'
-                      ? 'border-brand bg-brand/10 ring-2 ring-brand/20'
+                      ? 'border-brand bg-brand/5 ring-1 ring-brand'
                       : 'border-line bg-surface hover:border-line/80'
                   }`}
                 >
@@ -350,7 +350,7 @@ export default function ReturnRequestModal({
                 type="button"
                 onClick={onClose}
                 disabled={submitting}
-                className="px-4 py-2.5 rounded-xl border border-line text-muted font-semibold hover:bg-canvas hover:text-ink transition-colors disabled:opacity-40"
+                className="px-4 py-2 rounded border border-line text-muted font-semibold hover:bg-canvas hover:text-ink transition-colors disabled:opacity-40"
               >
                 Cancel
               </button>
@@ -358,7 +358,7 @@ export default function ReturnRequestModal({
               <button
                 type="submit"
                 disabled={submitting || uploadingPhotos}
-                className="px-6 py-2.5 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl shadow-xs transition-all flex items-center gap-2 disabled:opacity-50"
+                className="px-6 py-2 bg-ink hover:bg-black text-white font-bold rounded transition-all flex items-center gap-2 disabled:opacity-50"
               >
                 {submitting ? (
                   <>

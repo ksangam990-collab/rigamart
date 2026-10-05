@@ -107,13 +107,13 @@ export default function AdminDashboardPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-surface p-5 rounded-2xl border border-line space-y-3">
+              <div key={i} className="bg-surface p-5 rounded-none border border-line space-y-3">
                 <div className="flex justify-between">
-                  <div className="h-3 bg-line/40 rounded w-24" />
-                  <div className="w-8 h-8 bg-line/40 rounded-lg" />
+                  <div className="h-3 bg-line/40 rounded-sm w-24" />
+                  <div className="w-8 h-8 bg-line/40 rounded-sm" />
                 </div>
-                <div className="h-7 bg-line/60 rounded w-32" />
-                <div className="h-2.5 bg-line/40 rounded w-40" />
+                <div className="h-7 bg-line/60 rounded-sm w-32" />
+                <div className="h-2.5 bg-line/40 rounded-sm w-40" />
               </div>
             ))}
           </div>
@@ -177,7 +177,7 @@ export default function AdminDashboardPage() {
             size="sm"
             onClick={fetchAdminData}
             title="Refresh platform KPIs"
-            className="text-muted hover:text-ink shadow-subtle self-start sm:self-auto"
+            className="text-muted hover:text-ink self-start sm:self-auto"
           >
             <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
             <span>Refresh</span>
@@ -197,17 +197,17 @@ export default function AdminDashboardPage() {
               <motion.div
                 key={idx}
                 variants={staggerItem}
-                className="bg-surface p-5 rounded-2xl border border-line shadow-subtle space-y-3 hover:border-muted/30 transition-all duration-200"
+                className="bg-surface p-5 rounded-none border border-line space-y-3 hover:border-ink transition-colors duration-150"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-muted uppercase tracking-wider">
                     {kpi.title}
                   </span>
-                  <div className={`w-8 h-8 rounded-xl ${kpi.iconBg} flex items-center justify-center`}>
+                  <div className={`w-8 h-8 rounded-sm ${kpi.iconBg} flex items-center justify-center`}>
                     <Icon className="w-4 h-4" />
                   </div>
                 </div>
-                <div className="text-2xl font-bold tracking-tight text-ink tabular-nums">
+                <div className="text-2xl font-bold tracking-tight text-ink tabular-nums font-mono">
                   {kpi.value}
                 </div>
                 <div className="flex items-center justify-between pt-1 border-t border-line/60">
@@ -293,21 +293,21 @@ export default function AdminDashboardPage() {
                   placeholder="Search user name or email..."
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
-                  className="w-full bg-surface pl-9 pr-4 py-2 border border-line rounded-xl text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand shadow-subtle transition-all placeholder:text-muted"
+                  className="w-full bg-surface pl-9 pr-4 py-2 border border-line rounded text-xs text-ink outline-none focus:border-brand transition-all placeholder:text-muted"
                 />
                 <Search className="w-4 h-4 text-muted absolute left-3 top-2.5" />
               </div>
 
-              <div className="bg-surface rounded-2xl border border-line overflow-hidden shadow-subtle">
+              <div className="bg-surface rounded-none border border-line overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[11px]">
+                    <thead className="sticky top-0 bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[10px] font-mono">
                       <tr>
-                        <th className="py-3.5 px-5">User</th>
-                        <th className="py-3.5 px-4">Email Address</th>
-                        <th className="py-3.5 px-4">Account Role</th>
-                        <th className="py-3.5 px-4">Status</th>
-                        <th className="py-3.5 px-5 text-right">Moderation Actions</th>
+                        <th className="py-3 px-5">User</th>
+                        <th className="py-3 px-4">Email Address</th>
+                        <th className="py-3 px-4">Account Role</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-5 text-right">Moderation Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-line/60">
@@ -319,26 +319,26 @@ export default function AdminDashboardPage() {
                         </tr>
                       ) : (
                         users.map((u) => (
-                          <tr key={u._id} className="hover:bg-canvas/50 transition-colors">
-                            <td className="py-3.5 px-5 font-bold text-ink">{u.name}</td>
-                            <td className="py-3.5 px-4 text-muted">{u.email}</td>
-                            <td className="py-3.5 px-4">
+                          <tr key={u._id} className="hover:bg-canvas/50 transition-colors h-14">
+                            <td className="py-3 px-5 font-bold text-ink">{u.name}</td>
+                            <td className="py-3 px-4 text-muted">{u.email}</td>
+                            <td className="py-3 px-4">
                               <select
                                 value={u.role}
                                 onChange={(e) => handleUpdateRole(u._id, e.target.value)}
-                                className="bg-surface border border-line rounded-lg px-2.5 py-1 text-[11px] font-bold uppercase text-ink outline-none focus:border-brand cursor-pointer shadow-subtle"
+                                className="bg-surface border border-line rounded px-2 py-1 text-[11px] font-bold uppercase text-ink outline-none focus:border-brand cursor-pointer"
                               >
                                 <option value="customer">customer</option>
                                 <option value="seller">seller</option>
                                 <option value="admin">admin</option>
                               </select>
                             </td>
-                            <td className="py-3.5 px-4">
+                            <td className="py-3 px-4">
                               <Badge variant={u.isBanned ? 'danger' : 'success'} size="sm">
                                 {u.isBanned ? 'Banned' : 'Active'}
                               </Badge>
                             </td>
-                            <td className="py-3.5 px-5 text-right">
+                            <td className="py-3 px-5 text-right">
                               <Button
                                 variant={u.isBanned ? 'outline' : 'danger'}
                                 size="sm"
@@ -365,18 +365,18 @@ export default function AdminDashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2 }}
-              className="bg-surface rounded-2xl border border-line overflow-hidden shadow-subtle"
+              className="bg-surface rounded-none border border-line overflow-hidden"
             >
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[11px]">
+                  <thead className="sticky top-0 bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[10px] font-mono">
                     <tr>
-                      <th className="py-3.5 px-5">Product Name</th>
-                      <th className="py-3.5 px-4">Brand</th>
-                      <th className="py-3.5 px-4">Seller Attribution</th>
-                      <th className="py-3.5 px-4">Base Price</th>
-                      <th className="py-3.5 px-4">Marketplace Status</th>
-                      <th className="py-3.5 px-5 text-right">Toggle Visibility</th>
+                      <th className="py-3 px-5">Product Name</th>
+                      <th className="py-3 px-4">Brand</th>
+                      <th className="py-3 px-4">Seller Attribution</th>
+                      <th className="py-3 px-4">Base Price</th>
+                      <th className="py-3 px-4">Marketplace Status</th>
+                      <th className="py-3 px-5 text-right">Toggle Visibility</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-line/60">
@@ -388,21 +388,21 @@ export default function AdminDashboardPage() {
                       </tr>
                     ) : (
                       products.map((p) => (
-                        <tr key={p._id} className="hover:bg-canvas/50 transition-colors">
-                          <td className="py-3.5 px-5 font-bold text-ink">{p.name}</td>
-                          <td className="py-3.5 px-4 text-muted">{p.brand}</td>
-                          <td className="py-3.5 px-4 text-ink font-medium">
+                        <tr key={p._id} className="hover:bg-canvas/50 transition-colors h-14">
+                          <td className="py-3 px-5 font-bold text-ink">{p.name}</td>
+                          <td className="py-3 px-4 text-muted">{p.brand}</td>
+                          <td className="py-3 px-4 text-ink font-medium">
                             {p.seller?.name || 'Verified Merchant'}
                           </td>
-                          <td className="py-3.5 px-4 font-bold text-ink tabular-nums">
+                          <td className="py-3 px-4 font-bold text-ink tabular-nums font-mono">
                             {formatCurrency(p.basePrice || 0)}
                           </td>
-                          <td className="py-3.5 px-4">
+                          <td className="py-3 px-4">
                             <Badge variant={p.isActive ? 'success' : 'danger'} size="sm">
                               {p.isActive ? 'Active Publicly' : 'Suspended'}
                             </Badge>
                           </td>
-                          <td className="py-3.5 px-5 text-right">
+                          <td className="py-3 px-5 text-right">
                             <Button
                               variant={p.isActive ? 'danger' : 'outline'}
                               size="sm"
@@ -428,18 +428,18 @@ export default function AdminDashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2 }}
-              className="bg-surface rounded-2xl border border-line overflow-hidden shadow-subtle"
+              className="bg-surface rounded-none border border-line overflow-hidden"
             >
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[11px]">
+                  <thead className="sticky top-0 bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[10px] font-mono">
                     <tr>
-                      <th className="py-3.5 px-5">Order ID</th>
-                      <th className="py-3.5 px-4">Buyer Name</th>
-                      <th className="py-3.5 px-4">Amount</th>
-                      <th className="py-3.5 px-4">Payment</th>
-                      <th className="py-3.5 px-4">Status</th>
-                      <th className="py-3.5 px-5 text-right">Admin Override</th>
+                      <th className="py-3 px-5">Order ID</th>
+                      <th className="py-3 px-4">Buyer Name</th>
+                      <th className="py-3 px-4">Amount</th>
+                      <th className="py-3 px-4">Payment</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-5 text-right">Admin Override</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-line/60">
@@ -451,31 +451,31 @@ export default function AdminDashboardPage() {
                       </tr>
                     ) : (
                       orders.map((ord) => (
-                        <tr key={ord._id} className="hover:bg-canvas/50 transition-colors">
-                          <td className="py-3.5 px-5 font-mono font-bold text-ink">
+                        <tr key={ord._id} className="hover:bg-canvas/50 transition-colors h-14">
+                          <td className="py-3 px-5 font-mono font-bold text-ink">
                             #{ord.orderNumber || ord._id.slice(-8)}
                           </td>
-                          <td className="py-3.5 px-4 text-ink font-medium">
+                          <td className="py-3 px-4 text-ink font-medium">
                             {ord.user?.name || ord.shippingAddress?.name || 'Customer'}
                           </td>
-                          <td className="py-3.5 px-4 font-bold text-ink tabular-nums">
+                          <td className="py-3 px-4 font-bold text-ink tabular-nums font-mono">
                             {formatCurrency(ord.totalAmount || 0)}
                           </td>
-                          <td className="py-3.5 px-4">
+                          <td className="py-3 px-4">
                             <Badge variant="secondary" size="sm">
                               {ord.paymentInfo?.method || ord.paymentMethod || 'N/A'}
                             </Badge>
                           </td>
-                          <td className="py-3.5 px-4">
+                          <td className="py-3 px-4">
                             <Badge variant="secondary" size="sm">
                               {ord.status}
                             </Badge>
                           </td>
-                          <td className="py-3.5 px-5 text-right">
+                          <td className="py-3 px-5 text-right">
                             <select
                               value={ord.status}
                               onChange={(e) => handleOrderOverride(ord._id, e.target.value)}
-                              className="bg-surface border border-line rounded-lg px-2.5 py-1 text-xs text-ink outline-none focus:border-brand font-medium cursor-pointer shadow-subtle"
+                              className="bg-surface border border-line rounded px-2.5 py-1 text-xs text-ink outline-none focus:border-brand font-medium cursor-pointer"
                             >
                               <option value="Placed">Placed</option>
                               <option value="Confirmed">Confirmed</option>

@@ -128,14 +128,14 @@ export default function CouponDrawer({
               {/* Drawer Header */}
               <div className="p-5 sm:p-6 border-b border-line bg-surface flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 text-brand flex items-center justify-center">
-                    <Tag className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-none bg-canvas border border-line text-ink flex items-center justify-center">
+                    <Tag className="w-5 h-5 text-brand" />
                   </div>
                   <div>
-                    <h2 className="text-base font-bold text-ink tracking-tight flex items-center gap-2">
-                      Coupons & Offers
+                    <h2 className="text-base font-bold font-display text-ink tracking-tight flex items-center gap-2">
+                      Coupons &amp; Offers
                       {coupons.length > 0 && (
-                        <span className="bg-brand/10 text-brand text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        <span className="bg-line/20 text-ink text-[10px] font-bold px-2 py-0.5 rounded-sm font-mono">
                           {coupons.length} AVAILABLE
                         </span>
                       )}
@@ -150,10 +150,9 @@ export default function CouponDrawer({
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.08 }}
-                  whileTap={{ scale: 0.92 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={onClose}
-                  className="p-2 text-muted hover:text-ink hover:bg-canvas rounded-xl transition-colors"
+                  className="p-2 text-muted hover:text-ink hover:bg-canvas rounded-sm transition-colors"
                   aria-label="Close coupon drawer"
                 >
                   <X className="w-5 h-5" />
@@ -163,8 +162,8 @@ export default function CouponDrawer({
               {/* Drawer Body (Scrollable) */}
               <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5 bg-surface">
                 {/* Manual Code Input Form */}
-                <div className="bg-canvas p-3.5 rounded-2xl border border-line">
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-muted mb-2">
+                <div className="bg-canvas p-3.5 rounded-none border border-line">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-muted font-mono mb-2">
                     Have a promo or gift code?
                   </label>
                   <form onSubmit={handleManualSubmit} className="flex gap-2">
@@ -177,7 +176,7 @@ export default function CouponDrawer({
                           if (localError) setLocalError(null);
                         }}
                         placeholder="ENTER COUPON CODE"
-                        className="w-full pl-3.5 pr-8 py-2.5 bg-surface border border-line rounded-xl text-xs font-mono font-bold uppercase text-ink focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand placeholder:font-sans placeholder:font-normal placeholder:text-muted/60 shadow-2xs"
+                        className="w-full pl-3.5 pr-8 py-2.5 bg-surface border border-line rounded text-xs font-mono font-bold uppercase text-ink focus:outline-none focus:border-ink transition-colors placeholder:font-sans placeholder:font-normal placeholder:text-muted"
                       />
                       {manualCode && (
                         <button
@@ -190,11 +189,10 @@ export default function CouponDrawer({
                       )}
                     </div>
                     <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.96 }}
+                      whileTap={{ scale: 0.98 }}
                       type="submit"
                       disabled={isApplying || !manualCode.trim()}
-                      className="px-5 py-2.5 bg-brand hover:bg-brand-dark text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shrink-0 shadow-xs"
+                      className="px-5 py-2.5 bg-ink hover:bg-ink/90 text-canvas text-xs font-semibold uppercase tracking-wider rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shrink-0"
                     >
                       {isApplying ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -210,7 +208,7 @@ export default function CouponDrawer({
                   <motion.div
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-3 bg-danger-soft border border-danger/20 rounded-xl text-xs text-danger flex items-start gap-2"
+                    className="p-3 bg-danger/10 border border-danger/20 rounded-none text-xs text-danger flex items-start gap-2"
                   >
                     <AlertCircle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
                     <span>{localError}</span>
@@ -221,7 +219,7 @@ export default function CouponDrawer({
                   <motion.div
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-3 bg-success-soft border border-success/20 rounded-xl text-xs text-success flex items-start gap-2"
+                    className="p-3 bg-success/10 border border-success/20 rounded-none text-xs text-success flex items-start gap-2"
                   >
                     <CheckCircle2 className="w-4 h-4 text-success shrink-0 mt-0.5" />
                     <span className="font-semibold">{localSuccess}</span>
@@ -230,10 +228,10 @@ export default function CouponDrawer({
 
                 {/* Currently Applied Coupon Banner */}
                 {appliedCoupon && (
-                  <div className="bg-success-soft border border-success/30 rounded-2xl p-4 shadow-xs relative overflow-hidden">
+                  <div className="bg-line/10 border border-line rounded-none p-4 relative overflow-hidden">
                     <div className="flex items-start justify-between gap-3 relative z-10">
                       <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-brand text-white flex items-center justify-center shrink-0 shadow-xs">
+                        <div className="w-8 h-8 rounded-none bg-ink text-canvas flex items-center justify-center shrink-0">
                           <Sparkles className="w-4 h-4" />
                         </div>
                         <div>
@@ -241,11 +239,11 @@ export default function CouponDrawer({
                             <span className="font-mono text-sm font-bold text-ink tracking-wider">
                               {appliedCoupon.code}
                             </span>
-                            <span className="bg-success/20 text-success text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            <span className="bg-success/20 text-success text-[10px] font-bold px-2 py-0.5 rounded-sm">
                               ACTIVE NOW
                             </span>
                           </div>
-                          <p className="text-xs text-success font-bold mt-1">
+                          <p className="text-xs text-success font-bold mt-1 font-mono">
                             Saving ₹{Number(appliedCoupon.discountAmount || 0).toLocaleString('en-IN')} on your order!
                           </p>
                           <p className="text-[11px] text-muted mt-0.5">
@@ -256,9 +254,9 @@ export default function CouponDrawer({
 
                       {onRemoveCoupon && (
                         <motion.button
-                          whileTap={{ scale: 0.92 }}
+                          whileTap={{ scale: 0.95 }}
                           onClick={onRemoveCoupon}
-                          className="text-[11px] font-bold text-danger hover:text-danger/80 bg-surface px-2.5 py-1.5 rounded-lg border border-danger/30 transition-colors shrink-0"
+                          className="text-[11px] font-bold text-danger hover:text-danger/80 bg-surface px-2.5 py-1.5 rounded border border-danger/30 transition-colors shrink-0"
                         >
                           Remove
                         </motion.button>
@@ -304,21 +302,21 @@ export default function CouponDrawer({
                         return (
                           <div
                             key={c.code}
-                            className={`relative rounded-2xl border transition-all overflow-hidden bg-surface ${
+                            className={`relative rounded-none border transition-colors overflow-hidden bg-surface ${
                               isApplied
-                                ? 'border-success ring-2 ring-success/20 shadow-xs'
+                                ? 'border-success ring-1 ring-success'
                                 : isEligible
-                                ? 'border-line hover:border-brand/40 hover:shadow-md'
-                                : 'border-line/60 bg-canvas/40 opacity-80'
+                                ? 'border-line hover:border-ink/40'
+                                : 'border-line/60 bg-canvas/40 opacity-70'
                             }`}
                           >
-                            {/* Decorative Cutout Content */}
+                            {/* Card Content */}
                             <div className="p-4 sm:p-4.5 space-y-3">
                               <div className="flex items-start justify-between gap-3">
                                 <div>
                                   {/* Code Chip */}
                                   <div className="flex items-center gap-2">
-                                    <span className="font-mono text-xs font-bold text-brand bg-brand/10 border border-brand/20 px-2.5 py-1 rounded-lg tracking-wider">
+                                    <span className="font-mono text-xs font-bold text-ink bg-canvas border border-line px-2 py-0.5 rounded-sm tracking-wider">
                                       {c.code}
                                     </span>
                                     <button
@@ -335,7 +333,7 @@ export default function CouponDrawer({
                                     </button>
 
                                     {/* Discount Badge */}
-                                    <span className="text-[10px] font-bold uppercase px-2 py-0.5 bg-warning-soft text-warning border border-warning/20 rounded-md">
+                                    <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 bg-line/20 text-ink border border-line rounded-sm">
                                       {c.discountType === 'percentage'
                                         ? `${c.discountValue}% OFF`
                                         : `FLAT ₹${c.discountValue} OFF`}
@@ -343,7 +341,7 @@ export default function CouponDrawer({
                                   </div>
 
                                   {/* Description */}
-                                  <p className="text-xs text-ink font-medium mt-2 leading-relaxed">
+                                  <p className="text-xs text-muted font-medium mt-2 leading-relaxed">
                                     {c.description}
                                   </p>
                                 </div>
@@ -351,19 +349,18 @@ export default function CouponDrawer({
                                 {/* Apply or Applied Button */}
                                 <div>
                                   {isApplied ? (
-                                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-success bg-success-soft border border-success/30 px-3 py-1.5 rounded-xl">
+                                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-success bg-success/10 border border-success/20 px-2.5 py-1 rounded-sm">
                                       <Check className="w-3 h-3 text-success" /> Applied
                                     </span>
                                   ) : (
                                     <motion.button
-                                      whileHover={{ scale: 1.04 }}
-                                      whileTap={{ scale: 0.94 }}
+                                      whileTap={{ scale: 0.98 }}
                                       type="button"
                                       disabled={isApplying || !isEligible}
                                       onClick={() => executeApply(c.code)}
-                                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-2xs ${
+                                      className={`px-3.5 py-1.5 rounded text-xs font-semibold uppercase tracking-wider transition-colors ${
                                         isEligible
-                                          ? 'bg-brand hover:bg-brand-dark text-white'
+                                          ? 'bg-ink hover:bg-ink/90 text-canvas'
                                           : 'bg-canvas border border-line text-muted cursor-not-allowed'
                                       }`}
                                     >
@@ -376,7 +373,7 @@ export default function CouponDrawer({
                               {/* Footer calculations & eligibility */}
                               <div className="pt-2 border-t border-line flex items-center justify-between text-[11px]">
                                 {isEligible ? (
-                                  <div className="flex items-center gap-1.5 text-success font-bold font-mono">
+                                  <div className="flex items-center gap-1.5 text-success font-semibold font-mono">
                                     <TrendingDown className="w-3.5 h-3.5" />
                                     <span>
                                       Saves ₹{savings.toLocaleString('en-IN')} on this order!
@@ -392,9 +389,9 @@ export default function CouponDrawer({
                                         ₹{currentSubtotal} / ₹{c.minCartValue}
                                       </span>
                                     </div>
-                                    <div className="w-full h-1.5 bg-canvas border border-line/40 rounded-full overflow-hidden">
+                                    <div className="w-full h-1 bg-line rounded-none overflow-hidden">
                                       <div
-                                        className="h-full bg-brand rounded-full transition-all duration-300"
+                                        className="h-full bg-ink rounded-none transition-all duration-300"
                                         style={{ width: `${progress}%` }}
                                       />
                                     </div>
@@ -417,9 +414,9 @@ export default function CouponDrawer({
                   Guaranteed genuine discounts
                 </span>
                 <motion.button
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={onClose}
-                  className="px-4 py-2 bg-canvas hover:bg-surface border border-line text-ink text-xs font-semibold rounded-xl transition-all"
+                  className="px-4 py-2 bg-canvas hover:bg-line/20 border border-line text-ink text-xs font-medium rounded transition-colors"
                 >
                   Continue Shopping
                 </motion.button>

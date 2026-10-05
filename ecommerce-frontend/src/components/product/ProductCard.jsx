@@ -9,7 +9,7 @@ import GuestOtpModal from '../checkout/GuestOtpModal.jsx';
 import Badge from '../ui/Badge.jsx';
 import { cn } from '../../utils/cn.js';
 
-// Format Indian Currency using Intl standard
+// Format Indian Currency standard
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -29,7 +29,7 @@ export default function ProductCard({ product, className }) {
 
   if (!product) return null;
 
-  // Check if item is in wishlist (supporting both populated object and string ID)
+  // Check if item is in wishlist
   const isWishlisted = wishlistItems.some((item) => {
     const id = typeof item === 'object' ? item._id : item;
     return id?.toString() === product._id?.toString();
@@ -42,7 +42,6 @@ export default function ProductCard({ product, className }) {
     if (isAuthenticated) {
       dispatch(toggleWishlist(product._id));
     } else {
-      // Frictionless guest wishlist in localStorage
       dispatch(toggleGuestWishlist(product));
     }
   };
@@ -52,7 +51,6 @@ export default function ProductCard({ product, className }) {
     e.stopPropagation();
 
     if (!isAuthenticated) {
-      // Seamless guest OTP modal instead of disruptive window.location.href = '/login'
       setShowGuestOtp(true);
       return;
     }
@@ -73,7 +71,6 @@ export default function ProductCard({ product, className }) {
 
   const handleGuestOtpSuccess = () => {
     setShowGuestOtp(false);
-    // After login, add the item to cart
     const defaultVariant = product.variants?.[0];
     if (defaultVariant && defaultVariant.stock > 0) {
       dispatch(
@@ -118,15 +115,15 @@ export default function ProductCard({ product, className }) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          'group relative bg-surface border border-line rounded-card flex flex-col overflow-hidden',
-          'shadow-subtle hover:shadow-card transition-all duration-300 ease-out',
+          'group relative bg-surface flex flex-col overflow-hidden select-none',
+          'transition-all duration-150 ease-out',
           className
         )}
       >
-        {/* Media Frame: 4:5 Portrait Aspect Ratio */}
+        {/* Media Frame: 4:5 Portrait Aspect Ratio (Page 8, 9: radius 0, no border) */}
         <Link
           to={`/products/${product._id}`}
-          className="relative block w-full aspect-[4/5] bg-canvas overflow-hidden"
+          className="relative block w-full aspect-[4/5] bg-n-50 overflow-hidden"
         >
           {/* Primary Image */}
           <img
@@ -135,8 +132,8 @@ export default function ProductCard({ product, className }) {
             loading="lazy"
             decoding="async"
             className={cn(
-              'w-full h-full object-cover object-center transition-all duration-500 ease-out',
-              isHovered && secondaryImage ? 'opacity-0 scale-105' : 'opacity-100 group-hover:scale-105'
+              'w-full h-full object-cover object-center transition-all duration-300 ease-out',
+              isHovered && secondaryImage ? 'opacity-0 scale-[1.02]' : 'opacity-100 group-hover:scale-[1.02]'
             )}
           />
 
@@ -148,30 +145,29 @@ export default function ProductCard({ product, className }) {
               loading="lazy"
               decoding="async"
               className={cn(
-                'absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out hidden md:block',
-                isHovered ? 'opacity-100 scale-105' : 'opacity-0'
+                'absolute inset-0 w-full h-full object-cover object-center transition-all duration-300 ease-out hidden md:block',
+                isHovered ? 'opacity-100 scale-[1.02]' : 'opacity-0'
               )}
             />
           )}
 
-          {/* Floating Badges Strip (Top Left) */}
-          <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-10">
-            {discountPercent > 0 && (
-              <span className="bg-brand text-white text-[11px] font-bold px-2 py-0.5 rounded shadow-subtle tabular-nums tracking-tight">
+          {/* Badges Strip (Top Left, Page 10: Height 20, radius 2, max 1 badge per card) */}
+          <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+            {discountPercent > 0 ? (
+              <span className="bg-ink text-canvas text-[11px] font-semibold px-1.5 py-0.5 rounded-sm tabular-nums tracking-wider uppercase">
                 {discountPercent}% OFF
               </span>
-            )}
-            {product.isFeatured && (
-              <Badge color="accent" variant="solid" size="sm">
+            ) : product.isFeatured ? (
+              <Badge color="neutral" variant="solid" size="sm">
                 Curated
               </Badge>
-            )}
+            ) : null}
           </div>
 
-          {/* Out of Stock Ribbon */}
+          {/* Out of Stock Scrim */}
           {isOutOfStock && (
-            <div className="absolute inset-0 bg-ink/50 backdrop-blur-[2px] flex items-center justify-center z-10">
-              <span className="bg-surface text-danger text-xs font-bold tracking-wider uppercase px-3 py-1 rounded shadow-subtle border border-danger/20">
+            <div className="absolute inset-0 bg-[#0A0A0A]/40 backdrop-blur-[1px] flex items-center justify-center z-10">
+              <span className="bg-surface text-ink text-xs font-semibold tracking-wider uppercase px-2.5 py-1 rounded-sm border border-line">
                 Out of Stock
               </span>
             </div>
@@ -179,44 +175,42 @@ export default function ProductCard({ product, className }) {
 
           {/* Low Stock Warning (Honest Scarcity: real count <= 5) */}
           {!isOutOfStock && totalStock > 0 && totalStock <= 5 && (
-            <div className="absolute bottom-2.5 left-2.5 z-10">
-              <span className="bg-surface/90 backdrop-blur-sm text-warning text-[10px] font-semibold px-2 py-0.5 rounded border border-warning/30 shadow-subtle">
+            <div className="absolute bottom-2 left-2 z-10">
+              <span className="bg-surface/95 text-warning text-[10px] font-medium px-1.5 py-0.5 rounded-sm border border-warning/30">
                 Only {totalStock} left
               </span>
             </div>
           )}
 
-          {/* Wishlist Heart Button (120ms spring feedback) */}
+          {/* Wishlist Heart Button (Page 8: 1.5px stroke, filled when wishlisted) */}
           <button
             type="button"
             onClick={handleWishlistToggle}
             aria-label={isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
             className={cn(
-              'absolute top-2.5 right-2.5 p-2 rounded-full backdrop-blur-md shadow-subtle z-10',
-              'transition-all duration-120 ease-out active:scale-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
-              isWishlisted
-                ? 'bg-brand-soft text-brand-dark'
-                : 'bg-surface/85 hover:bg-surface text-muted hover:text-danger'
+              'absolute top-2 right-2 p-2 rounded bg-surface/90 hover:bg-surface text-ink z-10',
+              'transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand'
             )}
           >
             <Heart
+              strokeWidth={1.5}
               className={cn(
                 'w-4 h-4 transition-colors',
-                isWishlisted ? 'fill-current text-brand' : 'text-muted'
+                isWishlisted ? 'fill-danger text-danger' : 'text-n-700'
               )}
             />
           </button>
         </Link>
 
-        {/* Product Information */}
-        <div className="p-4 flex-1 flex flex-col justify-between bg-surface">
+        {/* Product Information (Page 10: seller/brand, title 2 lines max, price row) */}
+        <div className="pt-3 pb-1 flex-1 flex flex-col justify-between bg-surface">
           <div>
-            {/* Category / Brand metadata */}
-            <div className="flex items-center justify-between text-[11px] font-medium text-muted uppercase tracking-wider mb-1">
-              <span>{product.brand || product.category || 'Rigamart'}</span>
+            {/* Seller / Brand Line */}
+            <div className="flex items-center justify-between text-xs text-muted mb-1">
+              <span className="truncate">{product.brand || product.category || 'Rigamart'}</span>
               {product.avgRating > 0 && (
-                <div className="flex items-center gap-1 text-ink font-semibold tabular-nums normal-case">
-                  <Star className="w-3 h-3 fill-accent text-accent" />
+                <div className="flex items-center gap-1 text-ink font-medium tabular-nums">
+                  <Star strokeWidth={1.5} className="w-3 h-3 fill-accent text-accent" />
                   <span>{product.avgRating.toFixed(1)}</span>
                 </div>
               )}
@@ -225,68 +219,70 @@ export default function ProductCard({ product, className }) {
             {/* Product Title */}
             <Link
               to={`/products/${product._id}`}
-              className="text-sm font-semibold text-ink hover:text-brand transition-colors line-clamp-2 leading-snug tracking-tight font-sans"
+              className="text-[14px] font-medium text-ink hover:underline transition-colors line-clamp-2 leading-snug tracking-tight"
               title={product.name}
             >
               {product.name}
             </Link>
           </div>
 
-          {/* Price & Action Row */}
-          <div className="mt-3 pt-3 border-t border-line flex items-center justify-between">
+          {/* Price & Quick Add Row */}
+          <div className="mt-2.5 pt-2.5 border-t border-line flex items-center justify-between">
             <div className="flex flex-col">
-              <div className="flex items-baseline gap-1.5 tabular-nums">
-                <span className="text-base font-bold text-ink tracking-tight">
+              <div className="flex items-baseline gap-2 tabular-nums">
+                <span className="text-[15px] font-semibold text-ink tracking-tight font-mono">
                   {formatCurrency(currentPrice)}
                 </span>
                 {mrp > currentPrice && (
-                  <span className="text-xs text-muted line-through">
+                  <span className="text-xs text-muted line-through font-mono">
                     {formatCurrency(mrp)}
                   </span>
                 )}
               </div>
               {product.variants?.length > 1 && (
-                <span className="text-[10px] text-muted tracking-tight">
-                  {product.variants.length} options available
+                <span className="text-[11px] text-muted">
+                  {product.variants.length} variants
                 </span>
               )}
             </div>
 
-            {/* Quick Add Button */}
+            {/* Quick Add Button (Page 10: 44px hit area / 40px icon, radius 4) */}
             {!isOutOfStock && (
               <button
                 type="button"
                 onClick={handleQuickAdd}
                 aria-label={justAdded ? 'Item added to cart' : 'Quick add to cart'}
                 className={cn(
-                  'w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-150 active:scale-90',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand shadow-subtle',
+                  'h-8 px-2.5 rounded border flex items-center justify-center gap-1.5 transition-colors duration-150',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand text-xs font-medium',
                   justAdded
-                    ? 'bg-success text-white'
-                    : 'bg-brand-soft text-brand-dark hover:bg-brand hover:text-white'
+                    ? 'border-success bg-success text-white'
+                    : 'border-line hover:border-ink bg-surface text-ink hover:bg-n-50'
                 )}
               >
                 <AnimatePresence mode="wait">
                   {justAdded ? (
-                    <motion.div
+                    <motion.span
                       key="check"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      transition={{ duration: 0.12 }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-1 text-white font-medium"
                     >
-                      <Check className="w-4 h-4" />
-                    </motion.div>
+                      <Check strokeWidth={2} className="w-3.5 h-3.5" />
+                      <span>Added</span>
+                    </motion.span>
                   ) : (
-                    <motion.div
+                    <motion.span
                       key="bag"
-                      initial={{ scale: 0.8 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0.8 }}
-                      transition={{ duration: 0.12 }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-1 text-ink"
                     >
-                      <ShoppingBag className="w-4 h-4" />
-                    </motion.div>
+                      <ShoppingBag strokeWidth={1.5} className="w-3.5 h-3.5" />
+                      <span>Add</span>
+                    </motion.span>
                   )}
                 </AnimatePresence>
               </button>

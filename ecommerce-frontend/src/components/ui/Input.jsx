@@ -27,11 +27,11 @@ export const Input = forwardRef(
     const hasError = Boolean(error);
 
     return (
-      <div className={cn('w-full flex flex-col gap-1.5', containerClassName)}>
+      <div className={cn('w-full flex flex-col gap-1', containerClassName)}>
         {label && (
           <label
             htmlFor={inputId}
-            className="text-xs font-semibold text-ink flex items-center justify-between tracking-tight"
+            className="text-[13px] font-medium text-muted flex items-center justify-between tracking-tight"
           >
             <span>
               {label}
@@ -42,11 +42,11 @@ export const Input = forwardRef(
 
         <div
           className={cn(
-            'group relative flex items-center w-full bg-surface border rounded-xl overflow-hidden shadow-subtle',
-            'transition-all duration-150 ease-out',
-            'border-line hover:border-muted/40 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20',
-            hasError && 'border-danger hover:border-danger focus-within:border-danger focus-within:ring-danger/20',
-            disabled && 'opacity-60 bg-canvas cursor-not-allowed pointer-events-none'
+            'group relative flex items-center w-full bg-surface border rounded h-11 overflow-hidden',
+            'transition-colors duration-150 ease-out',
+            'border-n-300 hover:border-n-500 focus-within:border-ink focus-within:ring-2 focus-within:ring-brand focus-within:ring-offset-2 focus-within:ring-offset-canvas',
+            hasError && 'border-danger hover:border-danger focus-within:border-danger focus-within:ring-danger',
+            disabled && 'opacity-60 bg-n-50 cursor-not-allowed pointer-events-none'
           )}
         >
           {prefix && (
@@ -66,7 +66,7 @@ export const Input = forwardRef(
               hasError ? errorId : helperText ? helperId : undefined
             }
             className={cn(
-              'w-full h-10 px-3.5 text-sm bg-transparent text-ink placeholder:text-muted/60',
+              'w-full h-full px-3.5 text-base md:text-[15px] bg-transparent text-ink placeholder:text-muted/60',
               'font-sans outline-none disabled:cursor-not-allowed',
               prefix && 'pl-1.5',
               suffix && 'pr-1.5',
@@ -104,7 +104,7 @@ export const Input = forwardRef(
         )}
 
         {!hasError && helperText && (
-          <p id={helperId} className="text-xs text-muted mt-0.5">
+          <p id={helperId} className="text-[12px] text-muted mt-0.5">
             {helperText}
           </p>
         )}

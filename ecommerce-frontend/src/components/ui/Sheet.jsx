@@ -11,7 +11,7 @@ export function Sheet({
   children,
   footer,
   className,
-  maxWidth = 'max-w-md',
+  maxWidth = 'md:max-w-[420px]',
 }) {
   // Prevent body scrolling when sheet is open
   useEffect(() => {
@@ -42,23 +42,23 @@ export function Sheet({
           role="dialog"
           aria-modal="true"
         >
-          {/* Backdrop */}
+          {/* Backdrop (Scrim: rgb(10 10 10 / .4)) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
             onClick={onClose}
-            className="fixed inset-0 bg-ink/40 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-[#0A0A0A]/40 transition-opacity"
             aria-hidden="true"
           />
 
-          {/* Desktop Drawer (Slide right) / Mobile Bottom Sheet (Slide up + drag dismiss) */}
+          {/* Desktop Drawer (Slide right, 420px) / Mobile Bottom Sheet (radius 12px) */}
           <motion.div
-            initial={{ y: '100%', opacity: 0.8 }}
+            initial={{ y: '100%', opacity: 0.9 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
-            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+            transition={{ duration: 0.24, ease: [0.2, 0.8, 0.2, 1] }}
             drag="y"
             dragConstraints={{ top: 0 }}
             dragElastic={{ top: 0, bottom: 0.5 }}
@@ -68,25 +68,25 @@ export function Sheet({
               }
             }}
             className={cn(
-              'relative z-10 w-full bg-surface text-ink flex flex-col shadow-elevation',
-              // Mobile style: rounded top sheet, max height
-              'max-h-[90vh] rounded-t-sheet md:rounded-none',
-              // Desktop style: full height right rail
-              'md:h-full md:max-h-full md:w-full',
+              'relative z-10 w-full bg-surface text-ink flex flex-col shadow-overlay border-line',
+              // Mobile style: rounded top corners (12px), max height
+              'max-h-[90vh] rounded-t-sheet md:rounded-none border-t md:border-t-0 md:border-l',
+              // Desktop style: full height right rail (width 420px)
+              'md:h-full md:max-h-full md:w-[420px]',
               maxWidth,
               className
             )}
           >
-            {/* Mobile Drag Indicator Pill */}
+            {/* Mobile Drag Grab Handle */}
             <div className="md:hidden flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing">
-              <div className="w-10 h-1 bg-line rounded-full" />
+              <div className="w-10 h-1 bg-n-200 rounded-full" />
             </div>
 
             {/* Header */}
             <div className="px-6 py-4 flex items-start justify-between border-b border-line shrink-0">
               <div className="pr-4">
                 {title && (
-                  <h3 className="text-base font-semibold text-ink tracking-tight">
+                  <h3 className="text-base font-semibold text-ink tracking-tight font-sans">
                     {title}
                   </h3>
                 )}
@@ -98,7 +98,7 @@ export function Sheet({
               <button
                 type="button"
                 onClick={onClose}
-                className="p-1.5 -mr-1.5 -mt-1 text-muted hover:text-ink hover:bg-canvas rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="p-2 -mr-2 -mt-1 text-muted hover:text-ink hover:bg-n-50 rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
                 aria-label="Close dialog"
               >
                 <X className="w-4 h-4" />
@@ -110,9 +110,9 @@ export function Sheet({
               {children}
             </div>
 
-            {/* Footer */}
+            {/* Footer / Sticky Action Bar */}
             {footer && (
-              <div className="px-6 py-4 border-t border-line bg-canvas/40 shrink-0">
+              <div className="px-6 py-4 border-t border-line bg-surface shrink-0">
                 {footer}
               </div>
             )}

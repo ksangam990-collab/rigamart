@@ -95,13 +95,13 @@ export default function SellerDashboardPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-surface p-5 rounded-2xl border border-line space-y-3">
+              <div key={i} className="bg-surface p-5 rounded-none border border-line space-y-3">
                 <div className="flex justify-between">
-                  <div className="h-3 bg-line/40 rounded w-20" />
-                  <div className="w-8 h-8 bg-line/40 rounded-lg" />
+                  <div className="h-3 bg-line/40 rounded-sm w-20" />
+                  <div className="w-8 h-8 bg-line/40 rounded-sm" />
                 </div>
-                <div className="h-7 bg-line/60 rounded w-28" />
-                <div className="h-2.5 bg-line/40 rounded w-32" />
+                <div className="h-7 bg-line/60 rounded-sm w-28" />
+                <div className="h-2.5 bg-line/40 rounded-sm w-32" />
               </div>
             ))}
           </div>
@@ -167,7 +167,7 @@ export default function SellerDashboardPage() {
               size="sm"
               onClick={fetchData}
               title="Refresh metrics"
-              className="text-muted hover:text-ink shadow-subtle"
+              className="text-muted hover:text-ink"
             >
               <RefreshCw className="w-3.5 h-3.5 sm:mr-1.5" />
               <span className="hidden sm:inline">Refresh</span>
@@ -177,7 +177,7 @@ export default function SellerDashboardPage() {
               variant="primary"
               size="sm"
               onClick={() => setIsAddOpen(true)}
-              className="shadow-subtle"
+              className=""
             >
               <Plus className="w-4 h-4 mr-1.5" />
               List New Product
@@ -198,18 +198,18 @@ export default function SellerDashboardPage() {
               <motion.div
                 key={idx}
                 variants={staggerItem}
-                className="bg-surface p-5 rounded-2xl border border-line shadow-subtle space-y-3 hover:border-muted/30 transition-all duration-200"
+                className="bg-surface p-5 rounded-none border border-line space-y-3 hover:border-ink transition-colors duration-150"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-muted uppercase tracking-wider">
                     {kpi.title}
                   </span>
-                  <div className={`w-8 h-8 rounded-xl ${kpi.iconBg} flex items-center justify-center`}>
+                  <div className={`w-8 h-8 rounded-sm ${kpi.iconBg} flex items-center justify-center`}>
                     <Icon className="w-4 h-4" />
                   </div>
                 </div>
                 <div
-                  className={`text-2xl font-bold tracking-tight tabular-nums ${
+                  className={`text-2xl font-bold tracking-tight tabular-nums font-mono ${
                     kpi.isWarning ? 'text-accent' : 'text-ink'
                   }`}
                 >
@@ -313,17 +313,17 @@ export default function SellerDashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2 }}
-              className="bg-surface rounded-2xl border border-line overflow-hidden shadow-subtle"
+              className="bg-surface rounded-none border border-line overflow-hidden"
             >
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[11px]">
+                  <thead className="sticky top-0 bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[10px] font-mono">
                     <tr>
-                      <th className="py-3.5 px-5">Product Details</th>
-                      <th className="py-3.5 px-4">Base Price</th>
-                      <th className="py-3.5 px-4">Variants & Stock</th>
-                      <th className="py-3.5 px-4">Status</th>
-                      <th className="py-3.5 px-5 text-right">Inventory Action</th>
+                      <th className="py-3 px-5">Product Details</th>
+                      <th className="py-3 px-4">Base Price</th>
+                      <th className="py-3 px-4">Variants & Stock</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-5 text-right">Inventory Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-line/60">
@@ -341,43 +341,43 @@ export default function SellerDashboardPage() {
                           'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100';
 
                         return (
-                          <tr key={prod._id} className="hover:bg-canvas/50 transition-colors">
-                            <td className="py-4 px-5 flex items-center gap-3">
+                          <tr key={prod._id} className="hover:bg-canvas/50 transition-colors h-14">
+                            <td className="py-3 px-5 flex items-center gap-3">
                               <img
                                 src={img}
                                 alt={prod.name}
-                                className="w-12 h-14 object-cover rounded-xl border border-line shrink-0 bg-canvas"
+                                className="w-12 h-14 object-cover rounded-none border border-line shrink-0 bg-canvas"
                               />
                               <div>
                                 <div className="font-bold text-ink">{prod.name}</div>
                                 <span className="text-[10px] text-muted font-mono">ID: #{prod._id.slice(-6)}</span>
                               </div>
                             </td>
-                            <td className="py-4 px-4 font-bold text-ink tabular-nums">
+                            <td className="py-3 px-4 font-bold text-ink tabular-nums font-mono">
                               {formatCurrency(prod.basePrice || 0)}
                             </td>
-                            <td className="py-4 px-4">
+                            <td className="py-3 px-4">
                               <div className="space-y-1">
                                 {prod.variants?.map((v) => (
-                                  <div key={v._id} className="flex items-center gap-2 text-[11px]">
-                                    <span className="font-mono text-muted">{v.sku}:</span>
-                                    <span
-                                      className={`font-semibold tabular-nums ${
-                                        v.stock <= 5 ? 'text-accent font-bold' : 'text-ink'
-                                      }`}
-                                    >
-                                      {v.stock} units
-                                    </span>
-                                  </div>
-                                ))}
+                                   <div key={v._id} className="flex items-center gap-2 text-[11px]">
+                                     <span className="font-mono text-muted">{v.sku}:</span>
+                                     <span
+                                       className={`font-semibold tabular-nums font-mono ${
+                                         v.stock <= 5 ? 'text-accent font-bold' : 'text-ink'
+                                       }`}
+                                     >
+                                       {v.stock} units
+                                     </span>
+                                   </div>
+                                 ))}
                               </div>
                             </td>
-                            <td className="py-4 px-4">
+                            <td className="py-3 px-4">
                               <Badge variant={prod.isActive ? 'success' : 'danger'} size="sm">
                                 {prod.isActive ? 'Active' : 'Archived'}
                               </Badge>
                             </td>
-                            <td className="py-4 px-5 text-right">
+                            <td className="py-3 px-5 text-right">
                               <div className="flex flex-col items-end gap-1.5">
                                 {prod.variants?.map((v) => (
                                   <Button
@@ -409,17 +409,17 @@ export default function SellerDashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2 }}
-              className="bg-surface rounded-2xl border border-line overflow-hidden shadow-subtle"
+              className="bg-surface rounded-none border border-line overflow-hidden"
             >
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[11px]">
+                  <thead className="sticky top-0 bg-canvas text-muted uppercase tracking-wider font-bold border-b border-line text-[10px] font-mono">
                     <tr>
-                      <th className="py-3.5 px-5">Order ID</th>
-                      <th className="py-3.5 px-4">Customer Destination</th>
-                      <th className="py-3.5 px-4">Amount</th>
-                      <th className="py-3.5 px-4">Current Status</th>
-                      <th className="py-3.5 px-5 text-right">Fulfillment Update</th>
+                      <th className="py-3 px-5">Order ID</th>
+                      <th className="py-3 px-4">Customer Destination</th>
+                      <th className="py-3 px-4">Amount</th>
+                      <th className="py-3 px-4">Current Status</th>
+                      <th className="py-3 px-5 text-right">Fulfillment Update</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-line/60">
@@ -431,29 +431,29 @@ export default function SellerDashboardPage() {
                       </tr>
                     ) : (
                       orders.map((ord) => (
-                        <tr key={ord._id} className="hover:bg-canvas/50 transition-colors">
-                          <td className="py-4 px-5 font-mono font-bold text-ink">
+                        <tr key={ord._id} className="hover:bg-canvas/50 transition-colors h-14">
+                          <td className="py-3 px-5 font-mono font-bold text-ink">
                             #{ord.orderNumber || ord._id.slice(-8)}
                           </td>
-                          <td className="py-4 px-4 text-ink">
+                          <td className="py-3 px-4 text-ink">
                             <div className="font-semibold">{ord.shippingAddress?.name}</div>
                             <div className="text-[11px] text-muted">
                               {ord.shippingAddress?.city}, {ord.shippingAddress?.state}
                             </div>
                           </td>
-                          <td className="py-4 px-4 font-bold text-ink tabular-nums">
+                          <td className="py-3 px-4 font-bold text-ink tabular-nums font-mono">
                             {formatCurrency(ord.totalAmount || 0)}
                           </td>
-                          <td className="py-4 px-4">
+                          <td className="py-3 px-4">
                             <Badge variant="secondary" size="sm">
                               {ord.status}
                             </Badge>
                           </td>
-                          <td className="py-4 px-5 text-right">
+                          <td className="py-3 px-5 text-right">
                             <select
                               value={ord.status}
                               onChange={(e) => handleUpdateOrderStatus(ord._id, e.target.value)}
-                              className="bg-surface border border-line rounded-lg px-2.5 py-1 text-xs text-ink outline-none focus:border-brand font-medium cursor-pointer shadow-subtle"
+                              className="bg-surface border border-line rounded px-2.5 py-1 text-xs text-ink outline-none focus:border-brand font-medium cursor-pointer"
                             >
                               <option value="Placed" disabled>Placed</option>
                               <option value="Confirmed">Confirmed</option>

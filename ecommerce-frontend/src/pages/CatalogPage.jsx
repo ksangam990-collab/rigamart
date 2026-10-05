@@ -204,13 +204,13 @@ export default function CatalogPage() {
           </Button>
 
           {/* Grid / List View Switcher (Desktop) */}
-          <div className="hidden sm:flex items-center border border-line rounded-xl p-0.5 bg-surface shadow-subtle">
+          <div className="hidden sm:flex items-center border border-line rounded p-0.5 bg-surface shadow-none">
             <button
               type="button"
               onClick={() => setViewMode('grid')}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`p-1.5 rounded transition-colors ${
                 viewMode === 'grid'
-                  ? 'bg-canvas text-brand font-bold shadow-xs'
+                  ? 'bg-n-50 text-ink font-semibold'
                   : 'text-muted hover:text-ink'
               }`}
               title="Grid View"
@@ -221,10 +221,10 @@ export default function CatalogPage() {
             <button
               type="button"
               onClick={() => setViewMode('list')}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`p-1.5 rounded transition-colors ${
                 viewMode === 'list'
-                  ? 'bg-canvas text-brand font-bold shadow-xs'
-                  : 'text-muted hover:text-ink'
+                  ? 'bg-n-50 text-ink font-semibold'
+                : 'text-muted hover:text-ink'
               }`}
               title="Compact View"
               aria-label="Compact View"
@@ -238,7 +238,7 @@ export default function CatalogPage() {
             <select
               value={selectedSort}
               onChange={(e) => updateFilter('sort', e.target.value)}
-              className="bg-surface border border-line text-xs font-semibold text-ink py-2 px-3 rounded-xl outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all cursor-pointer shadow-subtle"
+              className="bg-surface border border-n-300 text-xs font-medium text-ink py-2 px-3 rounded outline-none focus:border-ink transition-colors cursor-pointer shadow-none"
               aria-label="Sort products by"
             >
               <option value="newest">Newest Arrivals</option>
@@ -335,7 +335,7 @@ export default function CatalogPage() {
       {/* Main Catalog Layout (Sidebar + Grid) */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Left Sidebar Filter Column (Desktop) */}
-        <aside className="hidden lg:block space-y-6 bg-surface p-5 rounded-card border border-line shadow-subtle h-fit sticky top-28">
+        <aside className="hidden lg:block space-y-6 bg-surface p-5 border border-line h-fit sticky top-28">
           <div className="flex items-center justify-between pb-3 border-b border-line">
             <h2 className="text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5 font-mono">
               <SlidersHorizontal className="w-3.5 h-3.5 text-brand" />

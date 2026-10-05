@@ -154,10 +154,10 @@ export default function ProductDetailPage() {
         <Skeleton variant="text" className="w-48 h-4" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-5 space-y-4">
-            <Skeleton className="aspect-[4/5] rounded-card w-full" />
+            <Skeleton className="aspect-[4/5] w-full" />
             <div className="flex gap-3">
               {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="w-20 h-20 rounded-xl" />
+                <Skeleton key={i} className="w-20 h-20" />
               ))}
             </div>
           </div>
@@ -165,9 +165,9 @@ export default function ProductDetailPage() {
             <Skeleton variant="text" className="w-24 h-4" />
             <Skeleton variant="text" className="w-3/4 h-8" />
             <Skeleton variant="text" className="w-40 h-5" />
-            <Skeleton className="h-16 rounded-card w-full" />
-            <Skeleton className="h-28 rounded-card w-full" />
-            <Skeleton className="h-12 rounded-xl w-full" />
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-28 w-full" />
+            <Skeleton className="h-11 rounded w-full" />
           </div>
         </div>
       </div>
@@ -306,7 +306,7 @@ export default function ProductDetailPage() {
           <div
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="relative aspect-[4/5] bg-surface rounded-card border border-line overflow-hidden shadow-subtle group"
+            className="relative aspect-[4/5] bg-n-50 border border-line overflow-hidden group"
           >
             <AnimatePresence mode="wait">
               <motion.img
@@ -317,7 +317,7 @@ export default function ProductDetailPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0.8 }}
                 transition={{ duration: 0.2 }}
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-300 ease-out"
                 loading="eager"
               />
             </AnimatePresence>
@@ -334,7 +334,7 @@ export default function ProductDetailPage() {
 
             {/* Discount Badge */}
             {discountPercent > 0 && (
-              <span className="absolute top-3.5 left-3.5 bg-brand text-white text-xs font-bold px-2.5 py-0.5 rounded shadow-subtle tabular-nums tracking-tight">
+              <span className="absolute top-3 left-3 bg-ink text-canvas text-[11px] font-semibold px-2 py-0.5 rounded-sm tabular-nums tracking-wider uppercase">
                 {discountPercent}% OFF
               </span>
             )}
@@ -345,17 +345,14 @@ export default function ProductDetailPage() {
               onClick={handleWishlistToggle}
               variants={heartBounceVariants}
               animate={heartAnim}
-              whileTap={{ scale: 0.85 }}
+              whileTap={{ scale: 0.95 }}
               aria-label={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-              className={`absolute top-3.5 right-3.5 p-2.5 rounded-full backdrop-blur-md shadow-subtle transition-colors z-10 ${
-                isWishlisted
-                  ? 'bg-brand-soft text-brand-dark'
-                  : 'bg-surface/85 hover:bg-surface text-muted hover:text-danger'
-              }`}
+              className="absolute top-3 right-3 p-2 rounded bg-surface/90 hover:bg-surface text-ink transition-colors z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <Heart
+                strokeWidth={1.5}
                 className={`w-5 h-5 transition-colors ${
-                  isWishlisted ? 'fill-current text-brand' : 'text-muted'
+                  isWishlisted ? 'fill-danger text-danger' : 'text-n-700'
                 }`}
               />
             </motion.button>
@@ -363,25 +360,23 @@ export default function ProductDetailPage() {
 
           {/* Thumbnail Gallery Row */}
           {product.images?.length > 1 && (
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
+            <div className="flex gap-2.5 overflow-x-auto pb-1 scrollbar-none">
               {product.images.map((img, i) => {
                 const url = img?.url || img;
                 const isSelected = selectedImage === url;
                 return (
-                  <motion.button
+                  <button
                     key={i}
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
                     type="button"
                     onClick={() => setSelectedImage(url)}
-                    className={`relative w-18 h-18 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all shadow-subtle ${
+                    className={`relative w-16 h-16 sm:w-18 sm:h-18 shrink-0 overflow-hidden border transition-colors ${
                       isSelected
-                        ? 'border-brand ring-2 ring-brand/20'
-                        : 'border-line hover:border-muted/50'
+                        ? 'border-ink'
+                        : 'border-line hover:border-n-500'
                     }`}
                   >
                     <img src={url} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
-                  </motion.button>
+                  </button>
                 );
               })}
             </div>
@@ -411,7 +406,7 @@ export default function ProductDetailPage() {
 
             {/* Ratings & Customer Reviews Summary */}
             <div className="flex items-center gap-3 mt-3">
-              <div className="inline-flex items-center gap-1 bg-brand text-white text-xs font-bold px-2 py-0.5 rounded tabular-nums">
+              <div className="inline-flex items-center gap-1 bg-brand text-white text-xs font-bold px-2 py-0.5 rounded-sm tabular-nums">
                 <span>{(product.avgRating || 0).toFixed(1)}</span>
                 <Star className="w-3 h-3 fill-accent text-accent" />
               </div>
@@ -422,20 +417,23 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Pricing Surface */}
-          <div className="p-4 bg-surface rounded-card border border-line flex items-baseline gap-3 tabular-nums shadow-subtle">
-            <span className="text-3xl font-black text-ink tracking-tight">
+          <div className="p-4 bg-surface border border-line flex flex-wrap items-baseline gap-3 tabular-nums">
+            <span className="text-2xl sm:text-3xl font-bold font-mono text-ink tracking-tight">
               {formatCurrency(price)}
             </span>
             {mrp > price && (
-              <span className="text-sm text-muted line-through">
+              <span className="text-sm text-muted line-through font-mono">
                 {formatCurrency(mrp)}
               </span>
             )}
             {discountPercent > 0 && (
-              <span className="text-xs font-bold text-success bg-success/10 px-2 py-0.5 rounded">
+              <span className="text-xs font-medium text-success bg-success/10 px-2 py-0.5 rounded-sm">
                 Save {formatCurrency(Math.round(mrp) - price)} ({discountPercent}% off)
               </span>
             )}
+            <span className="text-[11px] text-muted w-full -mt-1">
+              Inclusive of all taxes
+            </span>
           </div>
 
           {/* Dynamic Variant Selector */}
@@ -450,7 +448,7 @@ export default function ProductDetailPage() {
 
           {/* Truthful Inventory Status (Honest Persuasion) */}
           {isOutOfStock ? (
-            <div className="p-3.5 bg-danger/10 border border-danger/20 rounded-xl flex items-center gap-3 text-danger">
+            <div className="p-3.5 bg-danger/10 border border-danger/20 rounded-none flex items-center gap-3 text-danger">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider">Currently Unavailable</p>
@@ -460,14 +458,14 @@ export default function ProductDetailPage() {
               </div>
             </div>
           ) : stock <= 5 ? (
-            <div className="p-3 bg-warning/10 border border-warning/20 rounded-xl flex items-center gap-2.5 text-warning">
+            <div className="p-3 bg-warning/10 border border-warning/20 rounded-none flex items-center gap-2.5 text-warning">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span className="text-xs font-semibold">
                 Only {stock} {stock === 1 ? 'item' : 'items'} remaining in stock
               </span>
             </div>
           ) : (
-            <div className="p-3 bg-brand-soft border border-brand/20 rounded-xl flex items-center gap-2.5 text-brand-dark">
+            <div className="p-3 bg-brand-soft border border-brand/20 rounded-none flex items-center gap-2.5 text-brand-dark">
               <Check className="w-4 h-4 text-brand shrink-0" />
               <span className="text-xs font-semibold">
                 In Stock &amp; Verified for Express Courier Dispatch
@@ -481,24 +479,24 @@ export default function ProductDetailPage() {
               <label className="text-xs font-bold uppercase tracking-wider text-muted font-mono">
                 Quantity:
               </label>
-              <div className="flex items-center border border-line rounded-lg overflow-hidden bg-surface shadow-subtle">
+              <div className="flex items-center border border-line rounded h-10 overflow-hidden bg-surface">
                 <button
                   type="button"
                   disabled={quantity <= 1}
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="w-8 h-8 flex items-center justify-center bg-canvas hover:bg-line/40 text-ink font-bold disabled:opacity-30 transition-colors"
+                  className="w-10 h-10 flex items-center justify-center bg-canvas hover:bg-line/40 text-ink font-mono text-base disabled:opacity-30 transition-colors"
                   aria-label="Decrease quantity"
                 >
                   &minus;
                 </button>
-                <span className="px-3 py-1 text-xs font-bold text-ink tabular-nums">
+                <span className="px-4 text-sm font-semibold font-mono text-ink tabular-nums">
                   {quantity}
                 </span>
                 <button
                   type="button"
                   disabled={quantity >= Math.min(stock, 10)}
                   onClick={() => setQuantity((q) => Math.min(Math.min(stock, 10), q + 1))}
-                  className="w-8 h-8 flex items-center justify-center bg-canvas hover:bg-line/40 text-ink font-bold disabled:opacity-30 transition-colors"
+                  className="w-10 h-10 flex items-center justify-center bg-canvas hover:bg-line/40 text-ink font-mono text-base disabled:opacity-30 transition-colors"
                   aria-label="Increase quantity"
                 >
                   +
@@ -560,17 +558,17 @@ export default function ProductDetailPage() {
 
           {/* Trust Guarantees Strip */}
           <div className="grid grid-cols-3 gap-3 pt-4 border-t border-line text-center">
-            <div className="p-3 bg-surface rounded-xl border border-line space-y-1">
+            <div className="p-3 bg-surface border border-line space-y-1">
               <Truck className="w-4 h-4 text-brand mx-auto" />
               <div className="text-[11px] font-bold text-ink">Express Delivery</div>
               <div className="text-[10px] text-muted">24-48 hr dispatch</div>
             </div>
-            <div className="p-3 bg-surface rounded-xl border border-line space-y-1">
+            <div className="p-3 bg-surface border border-line space-y-1">
               <RotateCcw className="w-4 h-4 text-brand mx-auto" />
               <div className="text-[11px] font-bold text-ink">7-Day Returns</div>
               <div className="text-[10px] text-muted">Doorstep pickup</div>
             </div>
-            <div className="p-3 bg-surface rounded-xl border border-line space-y-1">
+            <div className="p-3 bg-surface border border-line space-y-1">
               <ShieldCheck className="w-4 h-4 text-brand mx-auto" />
               <div className="text-[11px] font-bold text-ink">Escrow Security</div>
               <div className="text-[10px] text-muted">Razorpay protected</div>
@@ -579,9 +577,9 @@ export default function ProductDetailPage() {
 
           {/* Verified Seller Card */}
           {product.seller && (
-            <div className="p-4 bg-surface rounded-card border border-line flex items-center justify-between shadow-subtle">
+            <div className="p-4 bg-surface border border-line flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-brand-soft text-brand-dark rounded-xl">
+                <div className="p-2.5 bg-brand-soft text-brand-dark rounded-sm">
                   <Store className="w-5 h-5" />
                 </div>
                 <div>
@@ -605,7 +603,7 @@ export default function ProductDetailPage() {
           <h2 className="text-lg font-bold font-display text-ink tracking-tight">
             Product Specifications
           </h2>
-          <div className="text-sm text-muted leading-relaxed whitespace-pre-line bg-surface p-6 rounded-card border border-line shadow-subtle">
+          <div className="text-sm text-muted leading-relaxed whitespace-pre-line bg-surface p-6 border border-line">
             {product.description}
           </div>
         </div>
@@ -674,7 +672,7 @@ export default function ProductDetailPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
-            className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-surface/95 backdrop-blur-md border-t border-line px-4 py-2.5 shadow-elevation flex items-center justify-between gap-3"
+            className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-surface/95 backdrop-blur-md border-t border-line px-4 py-2.5 flex items-center justify-between gap-3"
             style={{ paddingBottom: 'max(10px, env(safe-area-inset-bottom, 10px))' }}
           >
             {/* Left: Thumbnail & Price */}
@@ -682,7 +680,7 @@ export default function ProductDetailPage() {
               <img
                 src={selectedImage || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100'}
                 alt={product.name}
-                className="w-10 h-10 rounded-lg object-cover border border-line shrink-0"
+                className="w-10 h-10 object-cover border border-line shrink-0"
               />
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-bold text-ink truncate leading-tight">{product.name}</p>

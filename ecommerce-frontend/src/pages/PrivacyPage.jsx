@@ -203,9 +203,9 @@ export default function PrivacyPage() {
                 <li key={id}>
                   <button
                     onClick={() => scrollTo(id)}
-                    className={`w-full text-left text-xs px-3 py-2 rounded-xl transition-colors font-medium ${
+                    className={`w-full text-left text-xs px-3 py-2 rounded transition-colors font-medium ${
                       activeId === id
-                        ? 'bg-brand-soft text-brand-dark font-bold'
+                        ? 'bg-brand text-white font-bold'
                         : 'text-muted hover:text-ink hover:bg-surface'
                     }`}
                   >
@@ -218,7 +218,7 @@ export default function PrivacyPage() {
 
           {/* Content */}
           <div className="flex-1 min-w-0 space-y-6 sm:space-y-8">
-            <div className="bg-accent-soft/40 border border-accent/20 rounded-2xl p-5 text-xs text-ink leading-relaxed shadow-subtle">
+            <div className="bg-accent-soft/30 border border-accent/30 rounded-none p-5 text-xs text-ink leading-relaxed">
               <strong className="font-bold block text-sm mb-1 text-ink">Demonstration Environment Notice</strong>
               Rigamart is a full-stack multi-vendor e-commerce platform demonstration. Real payment transactions are captured in <strong>Razorpay Test Mode</strong> (no actual currency is debited), media assets are hosted via <strong>Cloudinary CDN</strong>, and transactional notifications use <strong>Gmail SMTP</strong>. Please do not submit real credit card details or confidential passwords.
             </div>
@@ -228,7 +228,7 @@ export default function PrivacyPage() {
                 key={id}
                 id={id}
                 ref={(el) => (sectionRefs.current[id] = el)}
-                className="bg-surface rounded-2xl shadow-subtle border border-line p-6 sm:p-8 scroll-mt-24"
+                className="bg-surface rounded-none border border-line p-6 sm:p-8 scroll-mt-24"
               >
                 <h2 className="text-base sm:text-lg font-bold text-ink mb-4 pb-3 border-b border-line">
                   {title}
