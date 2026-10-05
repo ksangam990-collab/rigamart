@@ -17,9 +17,13 @@
   
   /* Functional Accents */
   --color-accent: #F2A93B;
+  --color-accent-soft: #FEF3C7;
   --color-success: #2E9E6B;
+  --color-success-soft: #E6F7F0;
   --color-warning: #C77700;
+  --color-warning-soft: #FFFBEB;
   --color-danger: #D64545;
+  --color-danger-soft: #FDE8E8;
 }
 
 [data-theme="dark"] {
@@ -39,7 +43,11 @@
   
   /* Functional Accents */
   --color-accent: #F5B955;
+  --color-accent-soft: #382A12;
   --color-success: #38B87D;
+  --color-success-soft: #102E20;
   --color-warning: #E08A0A;
+  --color-warning-soft: #332007;
   --color-danger: #E25858;
+  --color-danger-soft: #331515;
 }

@@ -61,16 +61,16 @@ export default function RecentlyViewedRibbon({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.35 }}
-      className="pt-6 border-t border-gray-200 space-y-4"
+      className="pt-6 border-t border-line space-y-4"
     >
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-black text-gray-900 tracking-tight flex items-center gap-2">
-            <Clock className="w-5 h-5 text-brand-600" />
+          <h2 className="text-xl font-bold text-ink tracking-tight flex items-center gap-2">
+            <Clock className="w-5 h-5 text-brand" />
             {title}
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
+          <p className="text-xs text-muted mt-0.5">{subtitle}</p>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
@@ -78,7 +78,7 @@ export default function RecentlyViewedRibbon({
           <button
             type="button"
             onClick={clearRecentlyViewed}
-            className="text-xs font-semibold text-gray-400 hover:text-rose-600 transition-colors flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:bg-rose-50"
+            className="text-xs font-semibold text-muted hover:text-danger transition-colors flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:bg-danger-soft"
             title="Clear recently viewed history"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -87,11 +87,11 @@ export default function RecentlyViewedRibbon({
 
           {/* Left / Right Carousel Controls */}
           {items.length > 3 && (
-            <div className="flex items-center gap-1 pl-2 border-l border-gray-200">
+            <div className="flex items-center gap-1 pl-2 border-l border-line">
               <button
                 type="button"
                 onClick={() => handleScroll('left')}
-                className="p-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs transition-colors"
+                className="p-1.5 rounded-lg border border-line bg-surface hover:bg-canvas text-muted hover:text-ink shadow-2xs transition-colors"
                 aria-label="Scroll left"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -99,7 +99,7 @@ export default function RecentlyViewedRibbon({
               <button
                 type="button"
                 onClick={() => handleScroll('right')}
-                className="p-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs transition-colors"
+                className="p-1.5 rounded-lg border border-line bg-surface hover:bg-canvas text-muted hover:text-ink shadow-2xs transition-colors"
                 aria-label="Scroll right"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -132,7 +132,7 @@ export default function RecentlyViewedRibbon({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.2 }}
-                className="relative flex-shrink-0 w-52 sm:w-56 bg-white rounded-2xl border border-gray-100 hover:border-gray-200 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden group snap-start"
+                className="relative flex-shrink-0 w-52 sm:w-56 bg-surface rounded-2xl border border-line hover:border-line-dark shadow-xs hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden group snap-start"
               >
                 {/* Remove single item button */}
                 <button
@@ -142,7 +142,7 @@ export default function RecentlyViewedRibbon({
                     e.stopPropagation();
                     removeRecentlyViewed(item._id);
                   }}
-                  className="absolute top-2 right-2 z-20 p-1 rounded-full bg-white/80 hover:bg-white text-gray-400 hover:text-rose-600 shadow-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 z-20 p-1 rounded-full bg-surface/80 hover:bg-surface text-muted hover:text-danger shadow-xs opacity-0 group-hover:opacity-100 transition-opacity"
                   title="Remove from history"
                   aria-label="Remove item"
                 >
@@ -152,7 +152,7 @@ export default function RecentlyViewedRibbon({
                 {/* Product Thumbnail */}
                 <Link
                   to={`/products/${item._id}`}
-                  className="relative block aspect-square bg-gray-50 overflow-hidden"
+                  className="relative block aspect-square bg-canvas overflow-hidden"
                 >
                   <img
                     src={item.image}
@@ -163,7 +163,7 @@ export default function RecentlyViewedRibbon({
 
                   {/* Discount Badge */}
                   {discount > 0 && (
-                    <span className="absolute top-2.5 left-2.5 bg-emerald-600 text-white text-[10px] font-black px-2 py-0.5 rounded shadow-sm">
+                    <span className="absolute top-2.5 left-2.5 bg-success text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
                       {discount}% OFF
                     </span>
                   )}
@@ -171,7 +171,7 @@ export default function RecentlyViewedRibbon({
                   {/* Out of Stock Overlay */}
                   {isOutOfStock && (
                     <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] flex items-center justify-center">
-                      <span className="bg-red-600 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded shadow">
+                      <span className="bg-danger text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded shadow-xs">
                         Out of Stock
                       </span>
                     </div>
@@ -179,7 +179,7 @@ export default function RecentlyViewedRibbon({
 
                   {/* Low Stock Badge */}
                   {isLowStock && (
-                    <span className="absolute bottom-2 left-2 bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
+                    <span className="absolute bottom-2 left-2 bg-warning text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
                       <Flame className="w-3 h-3 fill-current" />
                       <span>Only {item.totalStock} left</span>
                     </span>
@@ -190,13 +190,13 @@ export default function RecentlyViewedRibbon({
                 <div className="p-3.5 flex flex-col flex-1 justify-between space-y-2">
                   <div className="space-y-1">
                     {item.category && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted">
                         {item.category}
                       </span>
                     )}
                     <Link
                       to={`/products/${item._id}`}
-                      className="block text-xs font-bold text-gray-900 hover:text-brand-600 transition-colors line-clamp-2 leading-tight"
+                      className="block text-xs font-semibold text-ink hover:text-brand transition-colors line-clamp-2 leading-tight"
                       title={item.name}
                     >
                       {item.name}
@@ -206,8 +206,8 @@ export default function RecentlyViewedRibbon({
                   {/* Rating & Pricing */}
                   <div className="space-y-1.5 pt-1">
                     {item.avgRating > 0 && (
-                      <div className="flex items-center gap-1 text-[11px] text-gray-500">
-                        <span className="inline-flex items-center gap-0.5 font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded text-[10px]">
+                      <div className="flex items-center gap-1 text-[11px] text-muted">
+                        <span className="inline-flex items-center gap-0.5 font-semibold text-success bg-success-soft px-1.5 py-0.5 rounded text-[10px]">
                           {item.avgRating.toFixed(1)}{' '}
                           <Star className="w-2.5 h-2.5 fill-current" />
                         </span>
@@ -215,12 +215,12 @@ export default function RecentlyViewedRibbon({
                       </div>
                     )}
 
-                    <div className="flex items-baseline gap-1.5 tabular-nums">
-                      <span className="text-sm font-black text-gray-900">
+                    <div className="flex items-baseline gap-1.5 font-mono">
+                      <span className="text-sm font-bold text-ink">
                         ₹{(item.price || 0).toLocaleString('en-IN')}
                       </span>
                       {item.mrp > item.price && (
-                        <span className="text-[10px] text-gray-400 line-through">
+                        <span className="text-[10px] text-muted line-through">
                           ₹{Math.round(item.mrp).toLocaleString('en-IN')}
                         </span>
                       )}
@@ -228,7 +228,7 @@ export default function RecentlyViewedRibbon({
 
                     <Link
                       to={`/products/${item._id}`}
-                      className="w-full py-1.5 bg-gray-50 hover:bg-brand-50 border border-gray-200 hover:border-brand-200 text-gray-700 hover:text-brand-700 font-bold text-[11px] rounded-lg transition-colors flex items-center justify-center gap-1 mt-1"
+                      className="w-full py-1.5 bg-canvas hover:bg-brand-soft border border-line hover:border-brand/30 text-ink hover:text-brand font-semibold text-[11px] rounded-lg transition-colors flex items-center justify-center gap-1 mt-1"
                     >
                       <span>View Item</span>
                       <ArrowRight className="w-3 h-3" />

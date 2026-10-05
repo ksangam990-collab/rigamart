@@ -7,6 +7,7 @@ import { loginUser, clearError } from '../features/auth/authSlice.js';
 import Logo from '../components/common/Logo.jsx';
 import GoogleAuthButton from '../components/auth/GoogleAuthButton.jsx';
 import GuestOtpModal from '../components/checkout/GuestOtpModal.jsx';
+import { Button } from '../components/ui/index.js';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -32,35 +33,31 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-[85vh] bg-canvas flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
       <motion.div
-        initial={{ opacity: 0, y: 16, scale: 0.98 }}
+        initial={{ opacity: 0, y: 12, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-100 p-8 space-y-6"
+        transition={{ duration: 0.3 }}
+        className="max-w-md w-full bg-surface rounded-2xl shadow-subtle border border-line p-7 sm:p-8 space-y-6"
       >
         <div className="text-center">
           <div className="flex justify-center mb-3">
             <Logo variant="icon" size="lg" />
           </div>
-          <h2 className="text-2xl font-black text-gray-900 tracking-tight">Welcome Back</h2>
-          <p className="text-sm text-gray-500 mt-1">Sign in to manage orders, wishlist & addresses</p>
+          <h1 className="text-2xl font-bold text-ink tracking-tight">Welcome Back</h1>
+          <p className="text-xs text-muted mt-1">Sign in to manage orders, wishlist & addresses</p>
         </div>
 
         {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg"
-          >
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="flex items-center gap-2 p-3 bg-danger-soft border border-danger/20 text-danger text-xs rounded-xl">
+            <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
-          </motion.div>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-muted mb-1.5">
               Email Address
             </label>
             <div className="relative">
@@ -70,14 +67,14 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-line rounded-xl text-xs text-ink outline-none focus:bg-surface focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-muted"
               />
-              <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-3 pointer-events-none" />
+              <Mail className="w-4 h-4 text-muted absolute left-3.5 top-3 pointer-events-none" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-muted mb-1.5">
               Password
             </label>
             <div className="relative">
@@ -87,40 +84,31 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-line rounded-xl text-xs text-ink outline-none focus:bg-surface focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-muted"
               />
-              <Lock className="w-4 h-4 text-gray-400 absolute left-3.5 top-3 pointer-events-none" />
+              <Lock className="w-4 h-4 text-muted absolute left-3.5 top-3 pointer-events-none" />
             </div>
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          <Button
             type="submit"
-            disabled={isLoading}
-            className="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            variant="primary"
+            size="lg"
+            isLoading={isLoading}
+            className="w-full text-xs font-bold shadow-subtle"
           >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Signing in...
-              </>
-            ) : (
-              <>
-                Sign In
-                <ArrowRight className="w-4 h-4" />
-              </>
-            )}
-          </motion.button>
+            <span>Sign In</span>
+            <ArrowRight className="w-4 h-4 ml-1.5" />
+          </Button>
         </form>
 
         {/* Divider */}
         <div className="relative my-3">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
+            <div className="w-full border-t border-line" />
           </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-3 text-gray-400 font-semibold tracking-wider">Or continue with</span>
+          <div className="relative flex justify-center text-[10px] uppercase">
+            <span className="bg-surface px-3 text-muted font-bold tracking-wider">Or continue with</span>
           </div>
         </div>
 
@@ -128,20 +116,20 @@ export default function LoginPage() {
         <GoogleAuthButton mode="login" enableOneTap={true} />
 
         {/* Mobile OTP Instant Login Button */}
-        <motion.button
+        <Button
           type="button"
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.98 }}
+          variant="outline"
+          size="md"
           onClick={() => setIsOtpModalOpen(true)}
-          className="w-full py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/90 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors shadow-2xs"
+          className="w-full text-xs text-ink"
         >
-          <Phone className="w-3.5 h-3.5 text-emerald-600" />
+          <Phone className="w-3.5 h-3.5 mr-2 text-brand" />
           <span>Sign In with Mobile OTP (Instant)</span>
-        </motion.button>
+        </Button>
 
-        <div className="text-center pt-1 text-xs text-gray-500">
+        <div className="text-center pt-1 text-xs text-muted">
           New to Rigamart?{' '}
-          <Link to="/register" className="font-bold text-brand-600 hover:underline">
+          <Link to="/register" className="font-bold text-brand hover:underline">
             Create an account
           </Link>
         </div>

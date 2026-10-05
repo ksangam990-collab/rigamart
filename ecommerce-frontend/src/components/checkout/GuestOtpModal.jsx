@@ -200,7 +200,7 @@ export default function GuestOtpModal({
           animate="visible"
           exit="hidden"
           onClick={onClose}
-          className="fixed inset-0 bg-gray-900/60 backdrop-blur-xs transition-opacity"
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
         />
 
         <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
@@ -209,12 +209,12 @@ export default function GuestOtpModal({
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md p-6 sm:p-7 border border-gray-100"
+            className="relative transform overflow-hidden rounded-2xl bg-surface text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md p-6 sm:p-7 border border-line"
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 p-1.5 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
+              className="absolute right-4 top-4 p-1.5 text-muted hover:text-ink rounded-full hover:bg-canvas transition-colors"
               aria-label="Close modal"
             >
               <X className="w-5 h-5" />
@@ -222,24 +222,24 @@ export default function GuestOtpModal({
 
             {/* Header Icon & Title */}
             <div className="text-center sm:text-left">
-              <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-200/80 flex items-center justify-center text-brand-600 mb-3 shadow-2xs mx-auto sm:mx-0">
+              <div className="w-12 h-12 rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand mb-3 shadow-2xs mx-auto sm:mx-0">
                 {step === 1 ? (
                   <Phone className="w-6 h-6 stroke-[2.2]" />
                 ) : (
-                  <ShieldCheck className="w-6 h-6 stroke-[2.2] text-emerald-600" />
+                  <ShieldCheck className="w-6 h-6 stroke-[2.2] text-success" />
                 )}
               </div>
 
-              <h3 className="text-xl font-black text-gray-900 tracking-tight">
+              <h3 className="text-xl font-bold text-ink tracking-tight">
                 {step === 1 ? title : 'Verify Mobile OTP'}
               </h3>
-              <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+              <p className="text-xs text-muted mt-1 leading-relaxed">
                 {step === 1 ? (
                   subtitle
                 ) : (
                   <>
                     Enter the 6-digit code sent to{' '}
-                    <strong className="text-gray-900">+91 {mobile}</strong>
+                    <strong className="text-ink">+91 {mobile}</strong>
                   </>
                 )}
               </p>
@@ -250,9 +250,9 @@ export default function GuestOtpModal({
               <motion.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2.5 text-rose-700 text-xs"
+                className="mt-4 p-3 bg-danger-soft border border-danger/20 rounded-xl flex items-start gap-2.5 text-danger text-xs"
               >
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-danger" />
                 <span className="leading-snug">{errorMsg}</span>
               </motion.div>
             )}
@@ -262,16 +262,16 @@ export default function GuestOtpModal({
               <motion.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2.5 text-emerald-800 text-xs font-bold"
+                className="mt-4 p-3 bg-success-soft border border-success/20 rounded-xl flex items-center gap-2.5 text-success text-xs font-bold"
               >
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-success" />
                 <span>{successMsg}</span>
               </motion.div>
             )}
 
             {/* Dev OTP Hint Banner (development mode only) */}
             {devOtpHint && step === 2 && (
-              <div className="mt-3 p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 flex items-center justify-between">
+              <div className="mt-3 p-2.5 bg-warning-soft border border-warning/30 rounded-lg text-[11px] text-warning flex items-center justify-between">
                 <span>🔑 Test OTP Code: <strong className="font-mono text-xs">{devOtpHint}</strong></span>
                 <button
                   type="button"
@@ -280,7 +280,7 @@ export default function GuestOtpModal({
                     setOtp(digits);
                     submitVerifyOtp(devOtpHint);
                   }}
-                  className="px-2 py-0.5 bg-amber-200 hover:bg-amber-300 text-amber-900 font-bold rounded text-[10px]"
+                  className="px-2 py-0.5 bg-warning/20 hover:bg-warning/30 text-warning font-bold rounded text-[10px]"
                 >
                   Auto-Fill
                 </button>
@@ -291,11 +291,11 @@ export default function GuestOtpModal({
             {step === 1 && (
               <form onSubmit={handleSendOtp} className="mt-5 space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
                     Mobile Number
                   </label>
-                  <div className="relative flex rounded-xl border border-gray-300 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-100 overflow-hidden shadow-2xs transition-all">
-                    <span className="inline-flex items-center gap-1.5 px-3 bg-gray-50 text-gray-600 text-xs font-bold border-r border-gray-200 select-none">
+                  <div className="relative flex rounded-xl border border-line focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20 overflow-hidden shadow-2xs transition-all bg-surface">
+                    <span className="inline-flex items-center gap-1.5 px-3 bg-canvas text-muted text-xs font-bold border-r border-line select-none">
                       <span className="text-base">🇮🇳</span>
                       <span>+91</span>
                     </span>
@@ -307,21 +307,21 @@ export default function GuestOtpModal({
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
                       placeholder="Enter 10-digit number"
-                      className="w-full px-3 py-2.5 text-sm text-gray-900 font-semibold tracking-wide outline-none placeholder:font-normal placeholder:text-gray-400"
+                      className="w-full px-3 py-2.5 text-sm text-ink font-semibold tracking-wide outline-none placeholder:font-normal placeholder:text-muted/60 bg-transparent"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                    Full Name <span className="text-gray-400 font-normal lowercase">(optional)</span>
+                  <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-1.5">
+                    Full Name <span className="text-muted/70 font-normal lowercase">(optional)</span>
                   </label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Rahul Sharma"
-                    className="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-xl text-xs text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 shadow-2xs transition-all"
+                    className="w-full px-3.5 py-2.5 bg-surface border border-line rounded-xl text-xs text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 shadow-2xs transition-all placeholder:text-muted/60"
                   />
                 </div>
 
@@ -330,7 +330,7 @@ export default function GuestOtpModal({
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   disabled={isSubmitting || mobile.length < 10}
-                  className="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="w-full py-3 bg-brand hover:bg-brand-dark text-white font-bold text-sm rounded-xl shadow-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
                   {isSubmitting ? (
                     <>
@@ -339,15 +339,15 @@ export default function GuestOtpModal({
                     </>
                   ) : (
                     <>
-                      <Zap className="w-4 h-4 text-amber-300 fill-amber-300" />
+                      <Zap className="w-4 h-4 text-warning fill-warning" />
                       <span>Send Verification Code</span>
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </>
                   )}
                 </motion.button>
 
-                <div className="pt-2 flex items-center justify-center gap-2 text-[11px] text-gray-500 font-medium">
-                  <Lock className="w-3.5 h-3.5 text-emerald-600" />
+                <div className="pt-2 flex items-center justify-center gap-2 text-[11px] text-muted font-medium">
+                  <Lock className="w-3.5 h-3.5 text-success" />
                   <span>Zero password friction • Instant order tracking</span>
                 </div>
               </form>
@@ -358,13 +358,13 @@ export default function GuestOtpModal({
               <form onSubmit={handleVerifySubmit} className="mt-5 space-y-5">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-muted uppercase tracking-wider">
                       Enter 6-Digit OTP
                     </label>
                     <button
                       type="button"
                       onClick={() => setStep(1)}
-                      className="text-xs font-semibold text-brand-600 hover:text-brand-800 hover:underline"
+                      className="text-xs font-semibold text-brand hover:underline"
                     >
                       Change Number
                     </button>
@@ -381,10 +381,10 @@ export default function GuestOtpModal({
                         value={digit}
                         onChange={(e) => handleOtpChange(idx, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                        className={`w-11 h-12 sm:w-12 sm:h-13 text-center text-lg font-black rounded-xl border outline-none transition-all ${
+                        className={`w-11 h-12 sm:w-12 sm:h-13 text-center text-lg font-bold rounded-xl border outline-none transition-all ${
                           digit
-                            ? 'border-brand-600 bg-brand-50/40 text-brand-900 ring-2 ring-brand-100'
-                            : 'border-gray-300 bg-gray-50 text-gray-900 focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-100'
+                            ? 'border-brand bg-brand/10 text-brand ring-2 ring-brand/20'
+                            : 'border-line bg-canvas text-ink focus:bg-surface focus:border-brand focus:ring-2 focus:ring-brand/20'
                         }`}
                       />
                     ))}
@@ -392,20 +392,20 @@ export default function GuestOtpModal({
                 </div>
 
                 {/* Resend Timer / Resend Button */}
-                <div className="flex items-center justify-between text-xs text-gray-500 pt-1">
+                <div className="flex items-center justify-between text-xs text-muted pt-1">
                   <span>Didn&apos;t receive code?</span>
                   {canResend ? (
                     <button
                       type="button"
                       onClick={handleSendOtp}
                       disabled={isSubmitting}
-                      className="font-bold text-brand-600 hover:text-brand-800 flex items-center gap-1 hover:underline"
+                      className="font-bold text-brand hover:underline flex items-center gap-1"
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
                       <span>Resend OTP</span>
                     </button>
                   ) : (
-                    <span className="font-semibold text-gray-400">
+                    <span className="font-semibold text-muted">
                       Resend in {resendTimer}s
                     </span>
                   )}
@@ -416,7 +416,7 @@ export default function GuestOtpModal({
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   disabled={isSubmitting || otp.join('').length < 6}
-                  className="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="w-full py-3 bg-brand hover:bg-brand-dark text-white font-bold text-sm rounded-xl shadow-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
                   {isSubmitting ? (
                     <>

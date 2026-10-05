@@ -183,24 +183,24 @@ export default function FrequentlyBoughtTogether({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.35 }}
-      className="my-10 bg-white border border-gray-200/90 rounded-2xl p-5 sm:p-7 shadow-xs overflow-hidden"
+      className="my-10 bg-surface border border-line rounded-2xl p-5 sm:p-7 shadow-xs overflow-hidden"
     >
       {/* Header with Smart Bundle Savings Badge */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-gray-100">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-line">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/70">
-              <Sparkles className="w-3 h-3 text-amber-500 fill-amber-400" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-warning-soft text-warning border border-warning/30">
+              <Sparkles className="w-3 h-3 text-warning fill-warning" />
               Smart Bundle Offer
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-success-soft text-success border border-success/30">
               Extra 10% OFF
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight mt-1.5">
+          <h2 className="text-xl sm:text-2xl font-bold text-ink tracking-tight mt-1.5">
             Frequently Bought Together
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-muted mt-0.5">
             Select items to buy together and automatically unlock bundle discount savings.
           </p>
         </div>
@@ -218,7 +218,7 @@ export default function FrequentlyBoughtTogether({
               return (
                 <React.Fragment key={item._id}>
                   {index > 0 && (
-                    <div className="w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-600 font-extrabold shadow-2xs shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold shadow-2xs shrink-0">
                       <Plus className="w-4 h-4 stroke-[2.5]" />
                     </div>
                   )}
@@ -227,8 +227,8 @@ export default function FrequentlyBoughtTogether({
                     onClick={() => toggleItem(item._id)}
                     className={`group relative flex flex-col items-center p-3 rounded-xl border-2 transition-all cursor-pointer w-32 sm:w-40 select-none ${
                       isChecked
-                        ? 'border-brand-500 bg-brand-50/20 shadow-xs ring-2 ring-brand-100'
-                        : 'border-gray-200 bg-gray-50/70 opacity-60 grayscale-[30%] hover:grayscale-0'
+                        ? 'border-brand bg-brand/10 shadow-xs ring-2 ring-brand/20'
+                        : 'border-line bg-canvas opacity-60 grayscale-[30%] hover:grayscale-0'
                     }`}
                   >
                     {/* Checkbox indicator */}
@@ -239,19 +239,19 @@ export default function FrequentlyBoughtTogether({
                         onChange={() => toggleItem(item._id)}
                         onClick={(e) => e.stopPropagation()}
                         aria-label={`Select ${item.name}`}
-                        className="w-4 h-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500 cursor-pointer"
+                        className="w-4 h-4 text-brand rounded border-line focus:ring-brand cursor-pointer"
                       />
                     </div>
 
                     {/* Tag badge for current product */}
                     {item.isCurrent && (
-                      <span className="absolute top-2 right-2 text-[9px] font-black uppercase tracking-wider bg-brand-600 text-white px-1.5 py-0.5 rounded shadow-2xs">
+                      <span className="absolute top-2 right-2 text-[9px] font-bold uppercase tracking-wider bg-brand text-white px-1.5 py-0.5 rounded shadow-2xs">
                         This Item
                       </span>
                     )}
 
                     {/* Product Image */}
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg overflow-hidden bg-white border border-gray-100 flex items-center justify-center p-1 mt-3">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg overflow-hidden bg-surface border border-line flex items-center justify-center p-1 mt-3">
                       {item.image ? (
                         <img
                           src={item.image}
@@ -260,21 +260,21 @@ export default function FrequentlyBoughtTogether({
                           loading="lazy"
                         />
                       ) : (
-                        <Package className="w-8 h-8 text-gray-300" />
+                        <Package className="w-8 h-8 text-muted" />
                       )}
                     </div>
 
                     {/* Product Mini Info */}
                     <div className="mt-2.5 text-center w-full">
-                      <p className="text-xs font-semibold text-gray-900 line-clamp-2 leading-tight">
+                      <p className="text-xs font-semibold text-ink line-clamp-2 leading-tight">
                         {item.name}
                       </p>
                       <div className="mt-1 flex items-baseline justify-center gap-1.5">
-                        <span className="text-xs font-black text-brand-700">
+                        <span className="text-xs font-bold text-brand font-mono">
                           ₹{item.price.toLocaleString('en-IN')}
                         </span>
                         {item.mrp > item.price && (
-                          <span className="text-[10px] text-gray-400 line-through">
+                          <span className="text-[10px] text-muted line-through font-mono">
                             ₹{item.mrp.toLocaleString('en-IN')}
                           </span>
                         )}
@@ -287,37 +287,37 @@ export default function FrequentlyBoughtTogether({
           </div>
 
           {/* Itemized Selection Checkboxes List */}
-          <div className="pt-4 border-t border-gray-100 space-y-2.5 text-xs">
+          <div className="pt-4 border-t border-line space-y-2.5 text-xs">
             {bundleItems.map((item) => {
               const isChecked = selectedIds.includes(item._id);
 
               return (
                 <label
                   key={item._id}
-                  className="flex items-start gap-2.5 cursor-pointer select-none text-gray-700 hover:text-gray-900 group"
+                  className="flex items-start gap-2.5 cursor-pointer select-none text-muted hover:text-ink group"
                 >
                   <input
                     type="checkbox"
                     checked={isChecked}
                     onChange={() => toggleItem(item._id)}
-                    className="mt-0.5 w-4 h-4 text-brand-600 rounded border-gray-300 focus:ring-brand-500 cursor-pointer"
+                    className="mt-0.5 w-4 h-4 text-brand rounded border-line focus:ring-brand accent-brand cursor-pointer"
                   />
                   <div className="leading-snug flex-1">
                     {item.isCurrent ? (
-                      <strong className="text-brand-900 font-bold">This item: </strong>
+                      <strong className="text-brand font-bold">This item: </strong>
                     ) : null}
                     <Link
                       to={`/products/${item.productId}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="font-medium hover:text-brand-600 hover:underline transition-colors"
+                      className="font-medium hover:text-brand hover:underline transition-colors text-ink"
                     >
                       {item.name}
                     </Link>
-                    <span className="ml-2 font-black text-gray-900">
+                    <span className="ml-2 font-bold text-ink font-mono">
                       ₹{item.price.toLocaleString('en-IN')}
                     </span>
                     {item.mrp > item.price && (
-                      <span className="ml-1.5 text-gray-400 line-through text-[11px]">
+                      <span className="ml-1.5 text-muted line-through text-[11px] font-mono">
                         ₹{item.mrp.toLocaleString('en-IN')}
                       </span>
                     )}
@@ -329,13 +329,13 @@ export default function FrequentlyBoughtTogether({
         </div>
 
         {/* Right Column: Bundle Pricing & 1-Click Buy Box */}
-        <div className="lg:col-span-4 bg-gradient-to-br from-amber-50/60 via-orange-50/30 to-brand-50/40 border border-amber-200/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+        <div className="lg:col-span-4 bg-canvas border border-line rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between text-xs text-gray-600">
-              <span className="font-semibold uppercase tracking-wider text-[11px] text-amber-900">
+            <div className="flex items-center justify-between text-xs text-muted">
+              <span className="font-semibold uppercase tracking-wider text-[11px] text-ink">
                 Bundle Price
               </span>
-              <span className="font-medium text-gray-500">
+              <span className="font-medium text-muted">
                 {selectedItems.length} of {bundleItems.length} selected
               </span>
             </div>
@@ -343,11 +343,11 @@ export default function FrequentlyBoughtTogether({
             {/* Price Display */}
             <div className="mt-3">
               <div className="flex items-baseline gap-2.5">
-                <span className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+                <span className="text-2xl sm:text-3xl font-bold text-ink tracking-tight font-mono">
                   ₹{finalBundlePrice.toLocaleString('en-IN')}
                 </span>
                 {hasBundleDiscount && (
-                  <span className="text-sm font-semibold text-gray-400 line-through">
+                  <span className="text-sm font-semibold text-muted line-through font-mono">
                     ₹{totalOriginalPrice.toLocaleString('en-IN')}
                   </span>
                 )}
@@ -356,22 +356,22 @@ export default function FrequentlyBoughtTogether({
               {/* Discount Savings Pills */}
               {hasBundleDiscount ? (
                 <div className="mt-2.5 space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-2.5 py-1 rounded-lg">
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-600 fill-emerald-500" />
+                  <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-success bg-success-soft border border-success/20 px-2.5 py-1 rounded-lg">
+                    <Sparkles className="w-3.5 h-3.5 text-success fill-success/20" />
                     <span>Save ₹{bundleDiscountSavings.toLocaleString('en-IN')} with 10% Bundle Discount</span>
                   </div>
                   {totalCombinedSavings > bundleDiscountSavings && (
-                    <p className="text-[11px] text-emerald-700 font-medium">
+                    <p className="text-[11px] text-success font-medium">
                       Total savings: ₹{totalCombinedSavings.toLocaleString('en-IN')} off MRP!
                     </p>
                   )}
                 </div>
               ) : selectedItems.length === 1 ? (
-                <p className="mt-2 text-[11px] text-amber-800 font-medium">
+                <p className="mt-2 text-[11px] text-warning font-medium">
                   Select at least 2 items to activate the 10% bundle discount!
                 </p>
               ) : (
-                <p className="mt-2 text-[11px] text-gray-500 font-medium">
+                <p className="mt-2 text-[11px] text-muted font-medium">
                   Please select at least 1 item to proceed.
                 </p>
               )}
@@ -386,12 +386,12 @@ export default function FrequentlyBoughtTogether({
               whileTap={{ scale: selectedItems.length > 0 && !isAdding ? 0.97 : 1 }}
               onClick={handleAddBundleToCart}
               disabled={selectedItems.length === 0 || isAdding}
-              className={`w-full py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all ${
+              className={`w-full py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all ${
                 addedSuccess
-                  ? 'bg-emerald-600 text-white shadow-emerald-200'
+                  ? 'bg-success text-white'
                   : selectedItems.length === 0
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-brand-600 hover:bg-brand-700 text-white shadow-brand-200'
+                  ? 'bg-canvas text-muted border border-line cursor-not-allowed'
+                  : 'bg-brand hover:bg-brand-dark text-white'
               }`}
             >
               {isAdding ? (
@@ -415,13 +415,13 @@ export default function FrequentlyBoughtTogether({
             </motion.button>
 
             {/* Quick Benefits Guarantee */}
-            <div className="pt-2 border-t border-amber-200/50 space-y-1 text-[11px] text-gray-600 font-medium">
+            <div className="pt-3 border-t border-line space-y-1.5 text-[11px] text-muted font-medium">
               <div className="flex items-center gap-1.5">
-                <Truck className="w-3.5 h-3.5 text-brand-600 shrink-0" />
+                <Truck className="w-3.5 h-3.5 text-brand shrink-0" />
                 <span>Free delivery eligible on bundle orders</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <ShieldCheck className="w-3.5 h-3.5 text-success shrink-0" />
                 <span>7-Day Hassle-Free Returns on all items</span>
               </div>
             </div>

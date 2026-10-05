@@ -32,10 +32,22 @@ export default {
             dark: '#c2410c'
           }
         },
-        accent: 'var(--color-accent)',
-        success: 'var(--color-success)',
-        warning: 'var(--color-warning)',
-        danger: 'var(--color-danger)'
+        accent: {
+          DEFAULT: 'var(--color-accent)',
+          soft: 'var(--color-accent-soft)',
+        },
+        success: {
+          DEFAULT: 'var(--color-success)',
+          soft: 'var(--color-success-soft)',
+        },
+        warning: {
+          DEFAULT: 'var(--color-warning)',
+          soft: 'var(--color-warning-soft)',
+        },
+        danger: {
+          DEFAULT: 'var(--color-danger)',
+          soft: 'var(--color-danger-soft)',
+        }
       },
       fontFamily: {
         display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],

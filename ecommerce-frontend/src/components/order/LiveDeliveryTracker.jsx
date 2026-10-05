@@ -140,29 +140,29 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
   ];
 
   return (
-    <div className="bg-white rounded-3xl border border-gray-200/90 shadow-sm overflow-hidden space-y-0">
+    <div className="bg-surface rounded-3xl border border-line shadow-xs overflow-hidden space-y-0">
       {/* ── Header Bar ── */}
-      <div className="p-5 sm:p-6 bg-gradient-to-r from-gray-900 via-slate-900 to-indigo-950 text-white flex flex-wrap items-center justify-between gap-4">
+      <div className="p-5 sm:p-6 bg-gradient-to-r from-ink via-ink/95 to-brand-dark text-white flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-brand-400 flex items-center justify-center shrink-0">
-            <Truck className="w-6 h-6 text-amber-400" />
+          <div className="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-brand flex items-center justify-center shrink-0">
+            <Truck className="w-6 h-6 text-brand-light" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-black text-white tracking-tight">
+              <h2 className="text-base font-bold text-white tracking-tight">
                 Live Courier Tracking & Checkpoints
               </h2>
               {!isTerminal && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-success/20 text-success border border-success/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success animate-ping" />
                   LIVE GPS
                 </span>
               )}
             </div>
-            <p className="text-xs text-gray-300 mt-0.5">
+            <p className="text-xs text-white/80 mt-0.5">
               Carrier:{' '}
               <strong className="text-white font-bold">{carrier}</strong> • AWB:{' '}
-              <span className="font-mono text-indigo-200">{awbNumber}</span>
+              <span className="font-mono text-emerald-200">{awbNumber}</span>
             </p>
           </div>
         </div>
@@ -187,23 +187,23 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
             title="Refresh Tracking Status"
             aria-label="Refresh tracking data"
           >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-amber-400' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-brand-light' : ''}`} />
           </motion.button>
         </div>
       </div>
 
       {/* ── Real-Time Milestone Status Progress Bar ── */}
-      <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+      <div className="p-6 border-b border-line bg-canvas">
         <div className="max-w-4xl mx-auto">
           {/* Progress track */}
           <div className="relative mb-6">
             {/* Background rail */}
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-line/60 rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercent}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="h-full bg-gradient-to-r from-brand-600 via-indigo-600 to-emerald-500 rounded-full"
+                className="h-full bg-brand rounded-full"
               />
             </div>
 
@@ -218,16 +218,16 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
                     <div
                       className={`w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-xs ${
                         isCompleted
-                          ? 'bg-emerald-600 text-white ring-4 ring-emerald-50'
+                          ? 'bg-success text-white ring-4 ring-success/20'
                           : isCurrent
-                          ? 'bg-brand-600 text-white ring-4 ring-brand-100 animate-pulse'
-                          : 'bg-white border-2 border-gray-300 text-gray-400'
+                          ? 'bg-brand text-white ring-4 ring-brand/20 animate-pulse'
+                          : 'bg-surface border-2 border-line text-muted'
                       }`}
                     >
                       {isCompleted ? (
                         <CheckCircle2 className="w-4 h-4" />
                       ) : (
-                        <span className="text-[10px] font-bold">{idx + 1}</span>
+                        <span className="text-[10px] font-bold font-mono">{idx + 1}</span>
                       )}
                     </div>
                   </div>
@@ -245,13 +245,13 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
               return (
                 <div key={m.key} className="space-y-0.5">
                   <p
-                    className={`text-xs font-black ${
-                      isCompleted || isCurrent ? 'text-gray-900' : 'text-gray-400'
+                    className={`text-xs font-bold ${
+                      isCompleted || isCurrent ? 'text-ink' : 'text-muted'
                     }`}
                   >
                     {m.label}
                   </p>
-                  <p className="text-[10px] text-gray-500 hidden sm:block">
+                  <p className="text-[10px] text-muted hidden sm:block">
                     {m.desc}
                   </p>
                 </div>
@@ -277,7 +277,7 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 mb-6">
           <div className="flex items-center gap-2 text-xs">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-mono text-gray-300">
+            <span className="font-mono text-white/80">
               CURRENT LOCATION: <strong className="text-white">{trackingInfo.currentLocation || `${city} Sorting Facility`}</strong>
             </span>
           </div>
@@ -302,19 +302,19 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercent}%` }}
                 transition={{ duration: 1.2, ease: 'easeInOut' }}
-                className="h-full bg-gradient-to-r from-brand-500 via-indigo-400 to-emerald-400 shadow-[0_0_12px_rgba(99,102,241,0.8)]"
+                className="h-full bg-gradient-to-r from-brand via-accent to-success shadow-[0_0_12px_rgba(14,107,92,0.8)]"
               />
             </div>
 
             {/* Waypoint 1: Origin Hub */}
             <div className="flex flex-col items-center text-center space-y-2 relative z-10 w-full md:w-48">
-              <div className="w-14 h-14 rounded-2xl bg-slate-700 border-2 border-slate-600 flex items-center justify-center text-indigo-300 shadow-lg">
+              <div className="w-14 h-14 rounded-2xl bg-slate-700 border-2 border-slate-600 flex items-center justify-center text-brand-light shadow-lg">
                 <Building2 className="w-7 h-7" />
               </div>
               <div>
-                <p className="text-xs font-bold text-gray-200">Origin Hub</p>
-                <p className="text-[11px] text-gray-400">Bengaluru Center</p>
-                <span className="text-[10px] text-emerald-400 font-semibold block mt-0.5">
+                <p className="text-xs font-bold text-white/90">Origin Hub</p>
+                <p className="text-[11px] text-white/60">Bengaluru Center</p>
+                <span className="text-[10px] text-success font-semibold block mt-0.5">
                   ✓ Dispatched
                 </span>
               </div>
@@ -325,16 +325,16 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
               <div
                 className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all ${
                   milestoneIdx >= 1
-                    ? 'bg-indigo-600 text-white border-2 border-indigo-400 ring-4 ring-indigo-500/20'
-                    : 'bg-slate-800 text-gray-500 border-2 border-slate-700'
+                    ? 'bg-brand text-white border-2 border-brand-light ring-4 ring-brand/20'
+                    : 'bg-slate-800 text-white/40 border-2 border-slate-700'
                 }`}
               >
                 <Radio className="w-7 h-7" />
               </div>
               <div>
-                <p className="text-xs font-bold text-gray-200">National Sorting</p>
-                <p className="text-[11px] text-gray-400">Express Corridor</p>
-                <span className="text-[10px] text-indigo-300 font-semibold block mt-0.5">
+                <p className="text-xs font-bold text-white/90">National Sorting</p>
+                <p className="text-[11px] text-white/60">Express Corridor</p>
+                <span className="text-[10px] text-brand-light font-semibold block mt-0.5">
                   {milestoneIdx >= 1 ? '✓ Processed' : 'Upcoming'}
                 </span>
               </div>
@@ -345,15 +345,15 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
               <div
                 className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all ${
                   milestoneIdx >= 2
-                    ? 'bg-amber-600 text-white border-2 border-amber-400 ring-4 ring-amber-500/20'
-                    : 'bg-slate-800 text-gray-500 border-2 border-slate-700'
+                    ? 'bg-warning text-white border-2 border-warning/60 ring-4 ring-warning/20'
+                    : 'bg-slate-800 text-white/40 border-2 border-slate-700'
                 }`}
               >
                 <Truck className="w-7 h-7" />
               </div>
               <div>
-                <p className="text-xs font-bold text-gray-200">Local Delivery Hub</p>
-                <p className="text-[11px] text-gray-400">{city} Station</p>
+                <p className="text-xs font-bold text-white/90">Local Delivery Hub</p>
+                <p className="text-[11px] text-white/60">{city} Station</p>
                 <span className="text-[10px] text-amber-300 font-semibold block mt-0.5">
                   {milestoneIdx >= 2 ? '✓ Out for delivery' : 'Pending Arrival'}
                 </span>
@@ -365,18 +365,18 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
               <div
                 className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all ${
                   status === 'Delivered'
-                    ? 'bg-emerald-600 text-white border-2 border-emerald-400 ring-4 ring-emerald-500/30'
-                    : 'bg-slate-800 text-gray-500 border-2 border-slate-700'
+                    ? 'bg-success text-white border-2 border-success/60 ring-4 ring-success/30'
+                    : 'bg-slate-800 text-white/40 border-2 border-slate-700'
                 }`}
               >
                 <Home className="w-7 h-7" />
               </div>
               <div>
-                <p className="text-xs font-bold text-gray-200">Delivery Destination</p>
-                <p className="text-[11px] text-gray-400">
+                <p className="text-xs font-bold text-white/90">Delivery Destination</p>
+                <p className="text-[11px] text-white/60">
                   {city} {pincode ? `(${pincode})` : ''}
                 </p>
-                <span className="text-[10px] text-emerald-400 font-semibold block mt-0.5">
+                <span className="text-[10px] text-success font-semibold block mt-0.5">
                   {status === 'Delivered' ? '✓ Delivered' : 'Final Step'}
                 </span>
               </div>
@@ -394,7 +394,7 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
               </div>
               <div>
                 <p className="text-xs font-black text-white">{courierPartner.name}</p>
-                <p className="text-[11px] text-gray-400">Delhivery Express Associate</p>
+                <p className="text-[11px] text-white/60">Delhivery Express Associate</p>
               </div>
             </div>
             <a
@@ -420,14 +420,14 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
       </div>
 
       {/* ── Detailed Activity Logs (Expandable) ── */}
-      <div className="p-5 sm:p-6 bg-white border-t border-gray-100">
+      <div className="p-5 sm:p-6 bg-surface border-t border-line">
         <button
           type="button"
           onClick={() => setShowAllCheckpoints((prev) => !prev)}
-          className="w-full flex items-center justify-between text-xs font-bold text-gray-700 hover:text-brand-600 transition-colors"
+          className="w-full flex items-center justify-between text-xs font-bold text-ink hover:text-brand transition-colors"
         >
           <span className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-brand-600" />
+            <Clock className="w-4 h-4 text-brand" />
             Detailed Transit Activity Log ({checkpoints.length} Checkpoints)
           </span>
           {showAllCheckpoints ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -440,7 +440,7 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="overflow-hidden pt-4 mt-4 border-t border-gray-100 space-y-4"
+              className="overflow-hidden pt-4 mt-4 border-t border-line space-y-4"
             >
               {checkpoints.map((cp, idx) => (
                 <div key={idx} className="flex items-start gap-3 text-xs">
@@ -448,21 +448,21 @@ export default function LiveDeliveryTracker({ order, onRefresh }) {
                     <div
                       className={`w-3.5 h-3.5 rounded-full mt-1 ${
                         cp.status === 'completed'
-                          ? 'bg-emerald-500 ring-2 ring-emerald-100'
-                          : 'bg-gray-300'
+                          ? 'bg-success ring-2 ring-success/20'
+                          : 'bg-line'
                       }`}
                     />
                     {idx < checkpoints.length - 1 && (
-                      <div className="w-0.5 h-8 bg-gray-200 my-1" />
+                      <div className="w-0.5 h-8 bg-line my-1" />
                     )}
                   </div>
                   <div className="flex-1 pb-1">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="font-bold text-gray-900">{cp.title}</p>
-                      <span className="text-[11px] text-gray-400 font-mono">{cp.time}</span>
+                      <p className="font-bold text-ink">{cp.title}</p>
+                      <span className="text-[11px] text-muted font-mono">{cp.time}</span>
                     </div>
-                    <p className="text-[11px] text-gray-600 font-medium">{cp.location}</p>
-                    <p className="text-[11px] text-gray-500 mt-0.5">{cp.desc}</p>
+                    <p className="text-[11px] text-muted font-medium">{cp.location}</p>
+                    <p className="text-[11px] text-muted mt-0.5">{cp.desc}</p>
                   </div>
                 </div>
               ))}

@@ -58,77 +58,72 @@ We use essential cookies and browser storage strictly required for application f
 
 **Authentication Tokens:** Secure tokens stored to authenticate API requests for customer, seller, and admin routes.
 
-**Local State:** Cart items and interface preferences stored locally in memory and browser state.
-
-We do not embed third-party advertising tracking cookies or ad networks.
+**Guest Wishlist & Cart:** Local storage used to persist guest wishlist selections and shopping preferences before user sign-in.
     `.trim(),
   },
   {
     id: 'security',
-    title: 'Technical Security Measures',
+    title: 'Data Security Measures',
     content: `
-We implement modern security best practices across the application architecture:
+We implement modern security practices across the application:
 
-**Password Hashing:** Passwords are never stored in plain text and are hashed with bcrypt.
-
-**Role-Based Access Control:** API routes enforce strict role checks (Customer, Seller, Admin) to prevent unauthorized access.
-
-**Sanitization & Validation:** Request inputs are validated and sanitized to guard against injection attacks.
-
-**Signature Verification:** Razorpay payment webhooks and capture callbacks require cryptographic HMAC SHA-256 signature verification.
+- Passwords hashed using bcrypt before storage.
+- All network communications protected with HTTPS in production.
+- Razorpay webhook verification with cryptographic HMAC SHA256 signatures.
+- MongoDB injection prevention via Mongoose schema casting.
+- Rate limiting on authentication routes to mitigate automated brute-force attempts.
     `.trim(),
   },
   {
     id: 'rights',
-    title: 'Your Rights & Data Access',
+    title: 'Your Privacy Rights',
     content: `
-As a user of Rigamart, you have full control over the data associated with your account:
+You retain full control over your personal data:
 
-**Access & Correction:** You can view and modify your name, mobile number, and delivery addresses at any time directly through your My Profile dashboard.
-
-**Order History:** Your placed orders, tracking logs, and tax invoice PDFs can be viewed and downloaded directly from the My Orders view.
+- **Access:** View all saved addresses and personal information in your Profile dashboard.
+- **Correction:** Edit your display name, contact mobile, and shipping addresses at any time.
+- **Portability:** Export or download PDF invoices for all completed purchases.
     `.trim(),
   },
   {
     id: 'contact',
-    title: 'Platform Contact',
+    title: 'Contact Information',
     content: `
-For inquiries, enterprise white-label deployment, or technical questions regarding this platform:
+For inquiries regarding this portfolio demonstration or architectural implementation:
 
-**Repository & Codebase:** https://github.com/ksangam990-collab/rigamart
+- **Lead Engineer:** Sangam Kumar
+- **GitHub Repository:** [github.com/ksangam990-collab/rigamart](https://github.com/ksangam990-collab/rigamart)
 
 This policy was last updated in **September 2026**.
     `.trim(),
   },
 ];
 
-// ─── Markdown-lite renderer (bold only) ─────────────────────────────────────
+// ─── Markdown-lite renderer ───────────────────────────────────────────────────
 
 function RenderContent({ text }) {
   const paragraphs = text.split('\n\n');
   return (
     <div className="space-y-4">
       {paragraphs.map((para, i) => {
-        // Handle bullet lists
         if (para.startsWith('- ')) {
           const items = para.split('\n').filter((l) => l.startsWith('- '));
           return (
             <ul key={i} className="list-disc list-inside space-y-1.5 pl-2">
               {items.map((item, j) => (
-                <li key={j} className="text-sm text-gray-600 leading-relaxed">
+                <li key={j} className="text-xs sm:text-sm text-muted leading-relaxed">
                   {item.slice(2)}
                 </li>
               ))}
             </ul>
           );
         }
-        // Bold replacement
         const parts = para.split(/(\*\*[^*]+\*\*)/g);
         return (
-          <p key={i} className="text-sm text-gray-600 leading-relaxed">
+          <p key={i} className="text-xs sm:text-sm text-muted leading-relaxed">
             {parts.map((part, j) =>
               part.startsWith('**') && part.endsWith('**') ? (
-                <strong key={j} className="text-gray-800 font-semibold">
+                <strong key={j} className="text-ink font-semibold">
                   {part.slice(2, -2)}
                 </strong>
               ) : (
@@ -148,7 +143,6 @@ export default function PrivacyPage() {
   const [activeId, setActiveId] = useState(SECTIONS[0].id);
   const sectionRefs = useRef({});
 
-  // Intersection observer to sync left nav with scroll position
   useEffect(() => {
     const observers = [];
     SECTIONS.forEach(({ id }) => {
@@ -172,15 +166,15 @@ export default function PrivacyPage() {
   }
 
   return (
-    <div className="font-sans bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-canvas text-ink font-sans">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-14">
+      <div className="bg-gradient-to-br from-brand-dark via-brand to-brand-dark text-white py-14 sm:py-18">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h1
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="text-3xl sm:text-4xl font-extrabold mb-2"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-2"
           >
             Privacy Policy
           </motion.h1>
@@ -189,30 +183,30 @@ export default function PrivacyPage() {
             initial="hidden"
             animate="visible"
             custom={{ delay: 0.1 }}
-            className="text-gray-400 text-sm"
+            className="text-white/80 text-xs sm:text-sm"
           >
-            Last updated: <span className="text-gray-200 font-medium">September 2026</span>
+            Last updated: <span className="text-white font-medium">September 2026</span>
           </motion.p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="flex gap-10 items-start">
-          {/* ── Sticky Left Nav (desktop) ───────────────────────────────── */}
+          {/* Sticky Left Nav */}
           <nav
-            className="hidden lg:block w-56 flex-shrink-0 sticky top-20 self-start"
+            className="hidden lg:block w-56 shrink-0 sticky top-24 self-start"
             aria-label="Privacy policy sections"
           >
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4 px-2">Contents</p>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-muted mb-3 px-2">Table of Contents</p>
             <ul className="space-y-1">
               {SECTIONS.map(({ id, title }) => (
                 <li key={id}>
                   <button
                     onClick={() => scrollTo(id)}
-                    className={`w-full text-left text-xs px-3 py-2 rounded-lg transition-colors font-medium ${
+                    className={`w-full text-left text-xs px-3 py-2 rounded-xl transition-colors font-medium ${
                       activeId === id
-                        ? 'bg-brand-50 text-brand-700 font-semibold'
-                        : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
+                        ? 'bg-brand-soft text-brand-dark font-bold'
+                        : 'text-muted hover:text-ink hover:bg-surface'
                     }`}
                   >
                     {title}
@@ -222,12 +216,11 @@ export default function PrivacyPage() {
             </ul>
           </nav>
 
-          {/* ── Content ─────────────────────────────────────────────────── */}
-          <div className="flex-1 min-w-0 space-y-8">
-            {/* Demonstration Notice */}
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 text-xs text-amber-900 leading-relaxed shadow-sm">
-              <strong className="font-bold block text-sm mb-1 text-amber-950">Demonstration Platform Notice</strong>
-              Rigamart is a full-stack multi-vendor e-commerce platform demonstration. Real payment transactions are processed in <strong>Razorpay Test Mode</strong> (no actual currency is debited), media assets are hosted via <strong>Cloudinary CDN</strong>, and transactional notifications use <strong>Gmail SMTP</strong>. Because this is a portfolio demonstration environment, please do not submit sensitive personal, financial, or proprietary information.
+          {/* Content */}
+          <div className="flex-1 min-w-0 space-y-6 sm:space-y-8">
+            <div className="bg-accent-soft/40 border border-accent/20 rounded-2xl p-5 text-xs text-ink leading-relaxed shadow-subtle">
+              <strong className="font-bold block text-sm mb-1 text-ink">Demonstration Environment Notice</strong>
+              Rigamart is a full-stack multi-vendor e-commerce platform demonstration. Real payment transactions are captured in <strong>Razorpay Test Mode</strong> (no actual currency is debited), media assets are hosted via <strong>Cloudinary CDN</strong>, and transactional notifications use <strong>Gmail SMTP</strong>. Please do not submit real credit card details or confidential passwords.
             </div>
 
             {SECTIONS.map(({ id, title, content }) => (
@@ -235,9 +228,9 @@ export default function PrivacyPage() {
                 key={id}
                 id={id}
                 ref={(el) => (sectionRefs.current[id] = el)}
-                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 scroll-mt-24"
+                className="bg-surface rounded-2xl shadow-subtle border border-line p-6 sm:p-8 scroll-mt-24"
               >
-                <h2 className="text-lg font-extrabold text-gray-900 mb-5 pb-4 border-b border-gray-100">
+                <h2 className="text-base sm:text-lg font-bold text-ink mb-4 pb-3 border-b border-line">
                   {title}
                 </h2>
                 <RenderContent text={content} />

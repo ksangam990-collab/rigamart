@@ -102,12 +102,12 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
   // Status meter data
   const totalStatusOrders = Object.values(statusCounts).reduce((a, b) => a + b, 0) || 1;
   const statuses = [
-    { label: 'Delivered', count: statusCounts.Delivered || 0, color: 'bg-emerald-500', icon: CheckCircle2, text: 'text-emerald-700' },
-    { label: 'Shipped', count: statusCounts.Shipped || 0, color: 'bg-purple-500', icon: Truck, text: 'text-purple-700' },
-    { label: 'Confirmed', count: statusCounts.Confirmed || 0, color: 'bg-blue-500', icon: Clock, text: 'text-blue-700' },
-    { label: 'Placed', count: statusCounts.Placed || 0, color: 'bg-amber-500', icon: Package, text: 'text-amber-700' },
-    { label: 'Cancelled', count: statusCounts.Cancelled || 0, color: 'bg-rose-500', icon: AlertTriangle, text: 'text-rose-700' },
-    { label: 'Returned', count: statusCounts.Returned || 0, color: 'bg-gray-400', icon: RotateCcw, text: 'text-gray-700' }
+    { label: 'Delivered', count: statusCounts.Delivered || 0, color: 'bg-success', icon: CheckCircle2, text: 'text-success' },
+    { label: 'Shipped', count: statusCounts.Shipped || 0, color: 'bg-accent', icon: Truck, text: 'text-accent' },
+    { label: 'Confirmed', count: statusCounts.Confirmed || 0, color: 'bg-brand', icon: Clock, text: 'text-brand' },
+    { label: 'Placed', count: statusCounts.Placed || 0, color: 'bg-warning', icon: Package, text: 'text-warning' },
+    { label: 'Cancelled', count: statusCounts.Cancelled || 0, color: 'bg-danger', icon: AlertTriangle, text: 'text-danger' },
+    { label: 'Returned', count: statusCounts.Returned || 0, color: 'bg-muted', icon: RotateCcw, text: 'text-muted' }
   ];
 
   const highestSellingProductRevenue = topProducts[0]?.totalRevenue || 1;
@@ -115,20 +115,20 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
   return (
     <div className="space-y-8">
       {/* Controls Bar: Range & Metric Selectors */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-gray-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface p-4 rounded-2xl border border-line shadow-xs">
         <div>
-          <h2 className="text-base font-black text-gray-900 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-brand-600" />
+          <h2 className="text-base font-bold text-ink flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-brand" />
             Merchant Sales Performance & Revenue Intelligence
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-muted mt-0.5">
             Real-time visual breakdown of revenue, volume, and top product velocity
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Time Range Pills */}
-          <div className="inline-flex rounded-xl bg-gray-100 p-1 text-xs font-bold">
+          <div className="inline-flex rounded-xl bg-canvas border border-line p-1 text-xs font-semibold">
             {[
               { id: '7d', label: '7 Days' },
               { id: '30d', label: '30 Days' },
@@ -141,8 +141,8 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                 onClick={() => setRange(t.id)}
                 className={`px-3 py-1.5 rounded-lg transition-all ${
                   range === t.id
-                    ? 'bg-white text-gray-900 shadow-xs font-black'
-                    : 'text-gray-500 hover:text-gray-900'
+                    ? 'bg-surface text-ink shadow-xs font-bold'
+                    : 'text-muted hover:text-ink'
                 }`}
               >
                 {t.label}
@@ -154,7 +154,7 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
             type="button"
             onClick={fetchAnalytics}
             disabled={isLoading}
-            className="p-2 text-gray-500 hover:text-brand-600 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-2xs"
+            className="p-2 text-muted hover:text-brand border border-line rounded-xl hover:bg-canvas transition-colors shadow-2xs"
             title="Refresh analytics"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -166,109 +166,109 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <motion.div
           whileHover={{ y: -2 }}
-          className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-2"
+          className="bg-surface p-5 rounded-2xl border border-line shadow-xs space-y-2"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-muted uppercase tracking-wider">
               Period Gross Sales
             </span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-success-soft text-success flex items-center justify-center">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-gray-900">
+          <div className="text-2xl font-bold text-ink font-mono">
             {formatCurrency(summary.periodRevenue)}
           </div>
-          <div className="text-[11px] text-gray-500">
+          <div className="text-[11px] text-muted">
             Past {analyticsData?.range || range} revenue
           </div>
         </motion.div>
 
         <motion.div
           whileHover={{ y: -2 }}
-          className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-2"
+          className="bg-surface p-5 rounded-2xl border border-line shadow-xs space-y-2"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-muted uppercase tracking-wider">
               Total Units Sold
             </span>
-            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-brand/10 text-brand flex items-center justify-center">
               <Package className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-gray-900">
+          <div className="text-2xl font-bold text-ink font-mono">
             {summary.periodUnits} units
           </div>
-          <div className="text-[11px] text-gray-500">
+          <div className="text-[11px] text-muted">
             Fulfilled across {summary.periodOrders} orders
           </div>
         </motion.div>
 
         <motion.div
           whileHover={{ y: -2 }}
-          className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-2"
+          className="bg-surface p-5 rounded-2xl border border-line shadow-xs space-y-2"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-muted uppercase tracking-wider">
               Average Order Value (AOV)
             </span>
-            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-brand/10 text-brand flex items-center justify-center">
               <ShoppingBag className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-gray-900">
+          <div className="text-2xl font-bold text-ink font-mono">
             {formatCurrency(summary.averageOrderValue)}
           </div>
-          <div className="text-[11px] text-gray-500">
+          <div className="text-[11px] text-muted">
             Average basket size per customer
           </div>
         </motion.div>
 
         <motion.div
           whileHover={{ y: -2 }}
-          className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-2"
+          className="bg-surface p-5 rounded-2xl border border-line shadow-xs space-y-2"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-muted uppercase tracking-wider">
               Delivery Success Rate
             </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-warning-soft text-warning flex items-center justify-center">
               <Award className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-emerald-600">
+          <div className="text-2xl font-bold text-success font-mono">
             {totalStatusOrders > 0
               ? `${Math.round(((statusCounts.Delivered || 0) / totalStatusOrders) * 100)}%`
               : '100%'}
           </div>
-          <div className="text-[11px] text-gray-500">
+          <div className="text-[11px] text-muted">
             {statusCounts.Delivered || 0} successful deliveries
           </div>
         </motion.div>
       </div>
 
       {/* Main Revenue Over Time SVG Chart Card */}
-      <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+      <div className="bg-surface p-6 rounded-2xl border border-line shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-brand-600" />
+            <h3 className="text-base font-bold text-ink flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-brand" />
               Sales & Revenue Trajectory ({analyticsData?.range || range})
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted">
               Interactive timeline graph (hover data points for detailed metrics)
             </p>
           </div>
 
           {/* Toggle Revenue vs Units */}
-          <div className="inline-flex rounded-lg bg-gray-100 p-0.5 text-xs font-bold self-start sm:self-auto">
+          <div className="inline-flex rounded-lg bg-canvas border border-line p-0.5 text-xs font-semibold self-start sm:self-auto">
             <button
               type="button"
               onClick={() => setMetricMode('revenue')}
               className={`px-3 py-1 rounded-md transition-all ${
                 metricMode === 'revenue'
-                  ? 'bg-brand-600 text-white shadow-xs'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-brand text-white shadow-xs'
+                  : 'text-muted hover:text-ink'
               }`}
             >
               Revenue (₹)
@@ -278,8 +278,8 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
               onClick={() => setMetricMode('units')}
               className={`px-3 py-1 rounded-md transition-all ${
                 metricMode === 'units'
-                  ? 'bg-brand-600 text-white shadow-xs'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-brand text-white shadow-xs'
+                  : 'text-muted hover:text-ink'
               }`}
             >
               Units Sold
@@ -291,11 +291,11 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
         <div className="relative w-full overflow-x-auto pt-2">
           {isLoading ? (
             <div className="h-64 flex items-center justify-center">
-              <div className="w-8 h-8 border-2 border-brand-600 border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-brand border-t-transparent rounded-full animate-spin" />
             </div>
           ) : points.length === 0 ? (
-            <div className="h-64 flex flex-col items-center justify-center text-gray-400 space-y-2">
-              <TrendingUp className="w-8 h-8 text-gray-300" />
+            <div className="h-64 flex flex-col items-center justify-center text-muted space-y-2">
+              <TrendingUp className="w-8 h-8 text-muted/60" />
               <p className="text-xs">No orders recorded in this date range.</p>
             </div>
           ) : (
@@ -305,16 +305,16 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                 className="w-full h-auto overflow-visible select-none"
               >
                 <defs>
-                  {/* Saffron brand gradient fill */}
+                  {/* Forest emerald brand gradient fill */}
                   <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#ea580c" stopOpacity="0.35" />
-                    <stop offset="70%" stopColor="#ea580c" stopOpacity="0.08" />
-                    <stop offset="100%" stopColor="#ea580c" stopOpacity="0.00" />
+                    <stop offset="0%" stopColor="#0E6B5C" stopOpacity="0.35" />
+                    <stop offset="70%" stopColor="#0E6B5C" stopOpacity="0.08" />
+                    <stop offset="100%" stopColor="#0E6B5C" stopOpacity="0.00" />
                   </linearGradient>
 
                   <linearGradient id="lineGlow" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#ea580c" />
-                    <stop offset="100%" stopColor="#f97316" />
+                    <stop offset="0%" stopColor="#0E6B5C" />
+                    <stop offset="100%" stopColor="#138573" />
                   </linearGradient>
                 </defs>
 
@@ -329,7 +329,8 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                         y1={y}
                         x2={chartWidth - padding.right}
                         y2={y}
-                        stroke="#f1f5f9"
+                        stroke="currentColor"
+                        className="text-line/40"
                         strokeDasharray={ratio > 0 && ratio < 1 ? '4 4' : '0'}
                         strokeWidth="1"
                       />
@@ -337,7 +338,7 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                         x={padding.left - 10}
                         y={y + 4}
                         textAnchor="end"
-                        className="text-[10px] fill-gray-400 font-mono font-medium"
+                        className="text-[10px] fill-muted font-mono font-medium"
                       >
                         {formatYAxis(labelVal)}
                       </text>
@@ -382,10 +383,10 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                           r={isHovered ? '6' : '3.5'}
                           className={`transition-all duration-150 ${
                             isHovered
-                              ? 'fill-white stroke-brand-600 stroke-[3px]'
+                              ? 'fill-surface stroke-brand stroke-[3px]'
                               : pt.val > 0
-                              ? 'fill-brand-600'
-                              : 'fill-gray-300'
+                              ? 'fill-brand'
+                              : 'fill-line'
                           }`}
                         />
                       )}
@@ -411,7 +412,7 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                       x={pt.x}
                       y={chartHeight - 12}
                       textAnchor="middle"
-                      className="text-[10px] fill-gray-400 font-medium font-mono"
+                      className="text-[10px] fill-muted font-medium font-mono"
                     >
                       {label}
                     </text>
@@ -427,13 +428,13 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.12 }}
-                    className="absolute bg-gray-900/95 text-white px-3.5 py-2.5 rounded-xl shadow-xl backdrop-blur-md pointer-events-none text-xs z-30 space-y-1"
+                    className="absolute bg-surface border border-line text-ink px-3.5 py-2.5 rounded-xl shadow-xl pointer-events-none text-xs z-30 space-y-1"
                     style={{
                       left: `${Math.min(Math.max(10, (hoveredPoint.x / chartWidth) * 100), 85)}%`,
                       top: '15px'
                     }}
                   >
-                    <p className="font-bold text-gray-300 text-[11px] border-b border-gray-800 pb-1">
+                    <p className="font-bold text-muted text-[11px] border-b border-line pb-1">
                       {new Date(hoveredPoint.date).toLocaleDateString('en-IN', {
                         weekday: 'short',
                         day: 'numeric',
@@ -442,20 +443,20 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                       })}
                     </p>
                     <div className="flex justify-between gap-4">
-                      <span className="text-gray-400">Revenue:</span>
-                      <span className="font-bold text-amber-400">
+                      <span className="text-muted">Revenue:</span>
+                      <span className="font-bold text-brand font-mono">
                         {formatCurrency(hoveredPoint.revenue)}
                       </span>
                     </div>
                     <div className="flex justify-between gap-4">
-                      <span className="text-gray-400">Units Sold:</span>
-                      <span className="font-bold text-white">
+                      <span className="text-muted">Units Sold:</span>
+                      <span className="font-bold text-ink font-mono">
                         {hoveredPoint.unitsSold} units
                       </span>
                     </div>
                     <div className="flex justify-between gap-4">
-                      <span className="text-gray-400">Orders:</span>
-                      <span className="font-bold text-white">
+                      <span className="text-muted">Orders:</span>
+                      <span className="font-bold text-ink font-mono">
                         {hoveredPoint.orderCount}
                       </span>
                     </div>
@@ -470,21 +471,21 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
       {/* 2-Column Grid: Order Fulfillment Breakdown & Top Products Leaderboard */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Order Status Distribution Card */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-5">
+        <div className="bg-surface p-6 rounded-2xl border border-line shadow-xs space-y-5">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
-                <Package className="w-4 h-4 text-brand-600" />
+              <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                <Package className="w-4 h-4 text-brand" />
                 Order Pipeline & Fulfillment Status
               </h3>
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="text-xs text-muted mt-0.5">
                 Distribution across all customer orders ({totalStatusOrders} total)
               </p>
             </div>
           </div>
 
           {/* Proportional Multi-Segment Progress Bar */}
-          <div className="h-4 bg-gray-100 rounded-full overflow-hidden flex shadow-inner">
+          <div className="h-4 bg-canvas border border-line/40 rounded-full overflow-hidden flex shadow-inner">
             {statuses.map((s) => {
               const widthPct = (s.count / totalStatusOrders) * 100;
               if (widthPct === 0) return null;
@@ -507,18 +508,18 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
               return (
                 <div
                   key={s.label}
-                  className="p-3 bg-gray-50 rounded-xl border border-gray-100 space-y-1"
+                  className="p-3 bg-canvas rounded-xl border border-line space-y-1"
                 >
-                  <div className="flex items-center justify-between text-xs font-semibold text-gray-600">
+                  <div className="flex items-center justify-between text-xs font-semibold text-muted">
                     <span className="flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full ${s.color}`} />
                       {s.label}
                     </span>
-                    <Icon className="w-3.5 h-3.5 text-gray-400" />
+                    <Icon className="w-3.5 h-3.5 text-muted" />
                   </div>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-lg font-black text-gray-900">{s.count}</span>
-                    <span className="text-[11px] font-mono text-gray-500">{pct}%</span>
+                    <span className="text-lg font-bold text-ink font-mono">{s.count}</span>
+                    <span className="text-[11px] font-mono text-muted">{pct}%</span>
                   </div>
                 </div>
               );
@@ -527,25 +528,25 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
         </div>
 
         {/* Top-Selling Products Leaderboard Card */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-5">
+        <div className="bg-surface p-6 rounded-2xl border border-line shadow-xs space-y-5">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
-                <Award className="w-4 h-4 text-brand-600" />
+              <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                <Award className="w-4 h-4 text-brand" />
                 Top Performing Products
               </h3>
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="text-xs text-muted mt-0.5">
                 Highest velocity listings by revenue and units in this timeframe
               </p>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-brand-50 text-brand-700 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-brand/10 text-brand rounded-full">
               Top 5
             </span>
           </div>
 
           {topProducts.length === 0 ? (
-            <div className="py-12 text-center text-gray-400 space-y-1">
-              <ShoppingBag className="w-8 h-8 mx-auto text-gray-300" />
+            <div className="py-12 text-center text-muted space-y-1">
+              <ShoppingBag className="w-8 h-8 mx-auto text-muted/60" />
               <p className="text-xs">No sales recorded yet for this period.</p>
             </div>
           ) : (
@@ -558,25 +559,25 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                 return (
                   <div
                     key={prod._id || idx}
-                    className="p-3 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all flex items-center gap-3.5"
+                    className="p-3 rounded-xl border border-line hover:border-brand/40 hover:bg-canvas/50 transition-all flex items-center gap-3.5"
                   >
                     {/* Rank Badge */}
                     <div
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs shrink-0 ${
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
                         idx === 0
-                          ? 'bg-amber-100 text-amber-800'
+                          ? 'bg-warning-soft text-warning'
                           : idx === 1
-                          ? 'bg-gray-200 text-gray-700'
+                          ? 'bg-canvas text-ink border border-line'
                           : idx === 2
-                          ? 'bg-amber-50 text-amber-700'
-                          : 'bg-gray-100 text-gray-500'
+                          ? 'bg-brand/10 text-brand'
+                          : 'bg-canvas text-muted'
                       }`}
                     >
                       #{idx + 1}
                     </div>
 
                     {/* Thumbnail */}
-                    <div className="w-11 h-11 rounded-lg bg-gray-100 overflow-hidden shrink-0 border border-gray-200">
+                    <div className="w-11 h-11 rounded-lg bg-canvas overflow-hidden shrink-0 border border-line">
                       {prod.image ? (
                         <img
                           src={prod.image}
@@ -584,7 +585,7 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <div className="w-full h-full flex items-center justify-center text-muted">
                           <Package className="w-5 h-5" />
                         </div>
                       )}
@@ -593,23 +594,23 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                     {/* Title & relative bar */}
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center justify-between gap-2">
-                        <h4 className="text-xs font-bold text-gray-900 truncate">
+                        <h4 className="text-xs font-semibold text-ink truncate">
                           {prod.name}
                         </h4>
-                        <span className="text-xs font-black text-gray-900 whitespace-nowrap">
+                        <span className="text-xs font-bold text-ink font-mono whitespace-nowrap">
                           {formatCurrency(prod.totalRevenue)}
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] text-gray-500">
+                      <div className="flex items-center justify-between text-[11px] text-muted">
                         <span>{prod.totalUnits} units sold</span>
                         <span className="font-mono text-[10px]">{relativePct}% share</span>
                       </div>
 
-                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-canvas border border-line/40 rounded-full overflow-hidden">
                         <div
                           style={{ width: `${relativePct}%` }}
-                          className="h-full bg-brand-500 rounded-full"
+                          className="h-full bg-brand rounded-full"
                         />
                       </div>
                     </div>
@@ -623,14 +624,14 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
 
       {/* Category Performance Breakdown Card */}
       {categories.length > 0 && (
-        <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
+        <div className="bg-surface p-6 rounded-2xl border border-line shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-brand-600" />
+              <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                <Layers className="w-4 h-4 text-brand" />
                 Category Sales Distribution
               </h3>
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="text-xs text-muted mt-0.5">
                 Revenue contribution grouped by store product categories
               </p>
             </div>
@@ -640,17 +641,17 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
             {categories.map((cat, idx) => (
               <div
                 key={cat.categoryName || idx}
-                className="p-4 bg-gray-50 rounded-xl border border-gray-100 space-y-2"
+                className="p-4 bg-canvas rounded-xl border border-line space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-gray-800 truncate">
+                  <span className="text-xs font-semibold text-ink truncate">
                     {cat.categoryName}
                   </span>
-                  <span className="text-xs font-black text-brand-600">
+                  <span className="text-xs font-bold text-brand font-mono">
                     {formatCurrency(cat.revenue)}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-gray-500">
+                <div className="flex items-center justify-between text-[11px] text-muted">
                   <span>{cat.unitsSold} units ordered</span>
                 </div>
               </div>

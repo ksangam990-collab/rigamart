@@ -97,7 +97,8 @@ These Terms of Service are governed by and construed in accordance with applicab
 
 For enterprise deployment, technical inquiries, or platform governance questions:
 
-**Repository & Codebase:** https://github.com/ksangam990-collab/rigamart
+- **Lead Engineer:** Sangam Kumar
+- **GitHub Repository:** [github.com/ksangam990-collab/rigamart](https://github.com/ksangam990-collab/rigamart)
     `.trim(),
   },
   {
@@ -111,20 +112,19 @@ These terms were last updated in **September 2026**.
   },
 ];
 
-// ─── Markdown-lite renderer (bold only) ─────────────────────────────────────
+// ─── Markdown-lite renderer ───────────────────────────────────────────────────
 
 function RenderContent({ text }) {
   const paragraphs = text.split('\n\n');
   return (
     <div className="space-y-4">
       {paragraphs.map((para, i) => {
-        // Handle bullet lists
         if (para.startsWith('- ')) {
           const items = para.split('\n').filter((l) => l.startsWith('- '));
           return (
             <ul key={i} className="list-disc list-inside space-y-1.5 pl-2">
               {items.map((item, j) => (
-                <li key={j} className="text-sm text-gray-600 leading-relaxed">
+                <li key={j} className="text-xs sm:text-sm text-muted leading-relaxed">
                   {item.slice(2)}
                 </li>
               ))}
@@ -133,10 +133,10 @@ function RenderContent({ text }) {
         }
         const parts = para.split(/(\*\*[^*]+\*\*)/g);
         return (
-          <p key={i} className="text-sm text-gray-600 leading-relaxed">
+          <p key={i} className="text-xs sm:text-sm text-muted leading-relaxed">
             {parts.map((part, j) =>
               part.startsWith('**') && part.endsWith('**') ? (
-                <strong key={j} className="text-gray-800 font-semibold">
+                <strong key={j} className="text-ink font-semibold">
                   {part.slice(2, -2)}
                 </strong>
               ) : (
@@ -179,15 +179,15 @@ export default function TermsPage() {
   }
 
   return (
-    <div className="font-sans bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-canvas text-ink font-sans">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-14">
+      <div className="bg-gradient-to-br from-brand-dark via-brand to-brand-dark text-white py-14 sm:py-18">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h1
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="text-3xl sm:text-4xl font-extrabold mb-2"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-2"
           >
             Terms of Service
           </motion.h1>
@@ -196,30 +196,30 @@ export default function TermsPage() {
             initial="hidden"
             animate="visible"
             custom={{ delay: 0.1 }}
-            className="text-gray-400 text-sm"
+            className="text-white/80 text-xs sm:text-sm"
           >
-            Last updated: <span className="text-gray-200 font-medium">September 2026</span>
+            Last updated: <span className="text-white font-medium">September 2026</span>
           </motion.p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="flex gap-10 items-start">
-          {/* ── Sticky Left Nav (desktop) ───────────────────────────────── */}
+          {/* Sticky Left Nav */}
           <nav
-            className="hidden lg:block w-56 flex-shrink-0 sticky top-20 self-start"
+            className="hidden lg:block w-56 shrink-0 sticky top-24 self-start"
             aria-label="Terms of service sections"
           >
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4 px-2">Contents</p>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-muted mb-3 px-2">Table of Contents</p>
             <ul className="space-y-1">
               {SECTIONS.map(({ id, title }) => (
                 <li key={id}>
                   <button
                     onClick={() => scrollTo(id)}
-                    className={`w-full text-left text-xs px-3 py-2 rounded-lg transition-colors font-medium ${
+                    className={`w-full text-left text-xs px-3 py-2 rounded-xl transition-colors font-medium ${
                       activeId === id
-                        ? 'bg-brand-50 text-brand-700 font-semibold'
-                        : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
+                        ? 'bg-brand-soft text-brand-dark font-bold'
+                        : 'text-muted hover:text-ink hover:bg-surface'
                     }`}
                   >
                     {title}
@@ -229,22 +229,16 @@ export default function TermsPage() {
             </ul>
           </nav>
 
-          {/* ── Content ─────────────────────────────────────────────────── */}
-          <div className="flex-1 min-w-0 space-y-8">
-            {/* Demonstration Notice */}
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 text-xs text-amber-900 leading-relaxed shadow-sm">
-              <strong className="font-bold block text-sm mb-1 text-amber-950">Demonstration Platform Notice</strong>
-              This website is an interactive multi-vendor e-commerce platform demonstration. Store transactions, seller listings, and test payments (processed via <strong>Razorpay Test Mode</strong>) are functional simulations for portfolio and evaluation purposes.
-            </div>
-
+          {/* Content */}
+          <div className="flex-1 min-w-0 space-y-6 sm:space-y-8">
             {SECTIONS.map(({ id, title, content }) => (
               <section
                 key={id}
                 id={id}
                 ref={(el) => (sectionRefs.current[id] = el)}
-                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 scroll-mt-24"
+                className="bg-surface rounded-2xl shadow-subtle border border-line p-6 sm:p-8 scroll-mt-24"
               >
-                <h2 className="text-lg font-extrabold text-gray-900 mb-5 pb-4 border-b border-gray-100">
+                <h2 className="text-base sm:text-lg font-bold text-ink mb-4 pb-3 border-b border-line">
                   {title}
                 </h2>
                 <RenderContent text={content} />

@@ -46,36 +46,36 @@ export default function RestockModal({ isOpen, onClose, product, variant, onStoc
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4 z-10"
+            className="bg-surface rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4 z-10 border border-line"
           >
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={onClose}
-              className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              className="absolute top-4 right-4 p-1.5 text-muted hover:text-ink rounded-lg hover:bg-canvas transition-colors"
             >
               <X className="w-5 h-5" />
             </motion.button>
 
             <div>
-              <h3 className="text-lg font-bold text-gray-900 tracking-tight">Update Variant Stock</h3>
-              <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{product.name}</p>
-              <p className="text-[11px] font-mono text-brand-600 mt-0.5">SKU: {variant.sku}</p>
+              <h3 className="text-lg font-bold text-ink tracking-tight">Update Variant Stock</h3>
+              <p className="text-xs text-muted mt-0.5 line-clamp-1">{product.name}</p>
+              <p className="text-[11px] font-mono text-brand mt-0.5">SKU: {variant.sku}</p>
             </div>
 
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 p-3 bg-red-50 text-red-700 text-xs rounded-lg border border-red-200"
+                className="flex items-center gap-2 p-3 bg-danger-soft text-danger text-xs rounded-lg border border-danger/20"
               >
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 flex-shrink-0 text-danger" />
                 <span>{error}</span>
               </motion.div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-muted mb-1.5">
                   Available Units
                 </label>
                 <input
@@ -84,7 +84,7 @@ export default function RestockModal({ isOpen, onClose, product, variant, onStoc
                   required
                   value={stock}
                   onChange={(e) => setStock(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-semibold outline-none focus:bg-white focus:border-brand-500 transition-colors"
+                  className="w-full px-3 py-2 bg-canvas border border-line rounded-lg text-sm font-semibold text-ink outline-none focus:bg-surface focus:border-brand transition-colors"
                 />
               </div>
 
@@ -92,7 +92,7 @@ export default function RestockModal({ isOpen, onClose, product, variant, onStoc
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-3.5 py-1.5 border border-gray-200 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-3.5 py-1.5 border border-line text-muted text-xs font-semibold rounded-lg hover:bg-canvas hover:text-ink transition-colors"
                 >
                   Cancel
                 </button>
@@ -101,7 +101,7 @@ export default function RestockModal({ isOpen, onClose, product, variant, onStoc
                   whileTap={{ scale: 0.96 }}
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg shadow-sm transition-all flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-4 py-1.5 bg-brand hover:bg-brand-dark text-white font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-1.5 disabled:opacity-50"
                 >
                   {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   Save Changes

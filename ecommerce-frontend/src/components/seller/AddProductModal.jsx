@@ -139,26 +139,26 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative space-y-6 my-8 z-10"
+            className="bg-surface rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative space-y-6 my-8 z-10 border border-line"
           >
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={onClose}
-              className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              className="absolute top-4 right-4 p-1.5 text-muted hover:text-ink rounded-lg hover:bg-canvas transition-colors"
             >
               <X className="w-5 h-5" />
             </motion.button>
 
         <div>
-          <h2 className="text-xl font-black text-gray-900">List New Product on Rigamart</h2>
-          <p className="text-xs text-gray-500 mt-1">
+          <h2 className="text-xl font-bold text-ink">List New Product on Rigamart</h2>
+          <p className="text-xs text-muted mt-1">
             Provide details, high-resolution imagery, and variant inventory.
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="flex items-center gap-2 p-3 bg-danger-soft text-danger text-xs rounded-xl border border-danger/20">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 text-danger" />
             <span>{error}</span>
           </div>
         )}
@@ -166,7 +166,7 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-muted mb-1">
                 Product Title
               </label>
               <input
@@ -175,12 +175,12 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Slim Fit Cotton Oxford Shirt"
-                className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:bg-white focus:border-brand-500"
+                className="w-full px-3.5 py-2.5 bg-canvas border border-line rounded-lg text-sm text-ink outline-none focus:bg-surface focus:border-brand placeholder:text-muted/60"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-muted mb-1">
                 Brand Name
               </label>
               <input
@@ -189,21 +189,21 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
                 placeholder="e.g. Raymond / Roadster"
-                className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:bg-white focus:border-brand-500"
+                className="w-full px-3.5 py-2.5 bg-canvas border border-line rounded-lg text-sm text-ink outline-none focus:bg-surface focus:border-brand placeholder:text-muted/60"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-muted mb-1">
                 Category
               </label>
               <select
                 required
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:bg-white focus:border-brand-500"
+                className="w-full px-3.5 py-2.5 bg-canvas border border-line rounded-lg text-sm text-ink outline-none focus:bg-surface focus:border-brand"
               >
                 {categories.map((c) => (
                   <option key={c._id} value={c._id}>
@@ -214,7 +214,7 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-muted mb-1">
                 Base Price (₹)
               </label>
               <input
@@ -224,13 +224,13 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                 value={basePrice}
                 onChange={(e) => setBasePrice(e.target.value)}
                 placeholder="1499"
-                className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:bg-white focus:border-brand-500"
+                className="w-full px-3.5 py-2.5 bg-canvas border border-line rounded-lg text-sm text-ink outline-none focus:bg-surface focus:border-brand placeholder:text-muted/60"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted mb-1">
               Description & Specifications
             </label>
             <textarea
@@ -239,17 +239,17 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Material, fit, wash care instructions, etc."
-              className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:bg-white focus:border-brand-500"
+              className="w-full px-3.5 py-2.5 bg-canvas border border-line rounded-lg text-sm text-ink outline-none focus:bg-surface focus:border-brand placeholder:text-muted/60"
             />
           </div>
 
           {/* Cloudinary Image Upload Section */}
           <div className="space-y-2">
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted">
               Product Images (Cloudinary CDN)
             </label>
             <div className="flex items-center gap-3">
-              <label className="cursor-pointer px-4 py-2 border-2 border-dashed border-gray-300 hover:border-brand-500 rounded-xl text-xs font-semibold text-gray-600 hover:text-brand-600 flex items-center gap-2 bg-gray-50 hover:bg-brand-50 transition-colors">
+              <label className="cursor-pointer px-4 py-2 border-2 border-dashed border-line hover:border-brand rounded-xl text-xs font-semibold text-muted hover:text-brand flex items-center gap-2 bg-canvas hover:bg-surface transition-colors">
                 <Upload className="w-4 h-4" />
                 <span>Upload Media</span>
                 <input
@@ -261,7 +261,7 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                 />
               </label>
               {uploadingImages && (
-                <span className="text-xs text-brand-600 flex items-center gap-1 font-medium">
+                <span className="text-xs text-brand flex items-center gap-1 font-medium">
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
                   Uploading to Cloudinary...
                 </span>
@@ -275,7 +275,7 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                     key={i}
                     src={img.url}
                     alt="Upload thumbnail"
-                    className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                    className="w-16 h-16 object-cover rounded-lg border border-line"
                   />
                 ))}
               </div>
@@ -283,15 +283,15 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
           </div>
 
           {/* Variants Builder */}
-          <div className="space-y-3 pt-2 border-t border-gray-100">
+          <div className="space-y-3 pt-2 border-t border-line">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-gray-700">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted">
                 Product Variants & Inventory Stock
               </label>
               <button
                 type="button"
                 onClick={handleAddVariant}
-                className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1"
+                className="text-xs font-bold text-brand hover:underline flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Variant
@@ -302,7 +302,7 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
               {variants.map((v, idx) => (
                 <div
                   key={idx}
-                  className="p-3 bg-gray-50 rounded-xl border border-gray-200 grid grid-cols-2 sm:grid-cols-6 gap-2 items-center"
+                  className="p-3 bg-canvas rounded-xl border border-line grid grid-cols-2 sm:grid-cols-6 gap-2 items-center"
                 >
                   <input
                     type="text"
@@ -310,7 +310,7 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                     placeholder="SKU (e.g. SHT-M-BLK)"
                     value={v.sku}
                     onChange={(e) => handleVariantChange(idx, 'sku', e.target.value)}
-                    className="px-2 py-1.5 bg-white border border-gray-200 rounded text-xs"
+                    className="px-2 py-1.5 bg-surface border border-line rounded text-xs text-ink placeholder:text-muted/60"
                   />
                   <input
                     type="number"
@@ -318,14 +318,14 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                     placeholder="Price ₹"
                     value={v.price}
                     onChange={(e) => handleVariantChange(idx, 'price', e.target.value)}
-                    className="px-2 py-1.5 bg-white border border-gray-200 rounded text-xs"
+                    className="px-2 py-1.5 bg-surface border border-line rounded text-xs text-ink placeholder:text-muted/60"
                   />
                   <input
                     type="number"
                     placeholder="MRP ₹"
                     value={v.mrp}
                     onChange={(e) => handleVariantChange(idx, 'mrp', e.target.value)}
-                    className="px-2 py-1.5 bg-white border border-gray-200 rounded text-xs"
+                    className="px-2 py-1.5 bg-surface border border-line rounded text-xs text-ink placeholder:text-muted/60"
                   />
                   <input
                     type="number"
@@ -334,14 +334,14 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                     placeholder="Stock"
                     value={v.stock}
                     onChange={(e) => handleVariantChange(idx, 'stock', e.target.value)}
-                    className="px-2 py-1.5 bg-white border border-gray-200 rounded text-xs"
+                    className="px-2 py-1.5 bg-surface border border-line rounded text-xs text-ink placeholder:text-muted/60"
                   />
                   <input
                     type="text"
                     placeholder="Size"
                     value={v.size}
                     onChange={(e) => handleVariantChange(idx, 'size', e.target.value)}
-                    className="px-2 py-1.5 bg-white border border-gray-200 rounded text-xs"
+                    className="px-2 py-1.5 bg-surface border border-line rounded text-xs text-ink placeholder:text-muted/60"
                   />
                   <div className="flex items-center gap-1">
                     <input
@@ -349,13 +349,13 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
                       placeholder="Color"
                       value={v.color}
                       onChange={(e) => handleVariantChange(idx, 'color', e.target.value)}
-                      className="w-full px-2 py-1.5 bg-white border border-gray-200 rounded text-xs"
+                      className="w-full px-2 py-1.5 bg-surface border border-line rounded text-xs text-ink placeholder:text-muted/60"
                     />
                     {variants.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveVariant(idx)}
-                        className="p-1 text-red-500 hover:text-red-700"
+                        className="p-1 text-danger hover:text-danger/80"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -366,18 +366,18 @@ export default function AddProductModal({ isOpen, onClose, onProductCreated }) {
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-3 border-t border-gray-100">
+          <div className="flex justify-end gap-3 pt-3 border-t border-line">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-200 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 border border-line text-muted text-xs font-semibold rounded-lg hover:bg-canvas hover:text-ink transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm flex items-center gap-2 disabled:opacity-50"
+              className="px-5 py-2 bg-brand hover:bg-brand-dark text-white text-xs font-bold rounded-lg shadow-xs flex items-center gap-2 disabled:opacity-50"
             >
               {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               Publish Product Listing

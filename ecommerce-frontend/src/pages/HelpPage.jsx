@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Search, MessageCircle } from 'lucide-react';
 import { fadeInUp, staggerContainer, staggerItem } from '../utils/animations.js';
+import { Button } from '../components/ui/index.js';
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -10,7 +11,6 @@ const FAQ_SECTIONS = [
   {
     id: 'ordering',
     title: 'Ordering & Payments',
-    color: 'border-brand-500',
     faqs: [
       {
         q: 'How do I place an order?',
@@ -29,7 +29,6 @@ const FAQ_SECTIONS = [
   {
     id: 'delivery',
     title: 'Delivery & Tracking',
-    color: 'border-emerald-500',
     faqs: [
       {
         q: 'How long does delivery take?',
@@ -37,18 +36,17 @@ const FAQ_SECTIONS = [
       },
       {
         q: 'How do I track my order?',
-        a: "Log in, go to 'My Orders', and click on any order card to view the full delivery status timeline.",
+        a: "Log in, go to 'My Orders', and click on any order card to view the full delivery status timeline and live checkpoint tracker.",
       },
       {
         q: 'What if my order is delayed?',
-        a: 'This is a demonstration project — for simulated orders, review the real-time status timeline on your My Orders page.',
+        a: 'Orders can be tracked in real-time. If an order exceeds expected delivery timelines, our support team proactively investigates with the logistics courier.',
       },
     ],
   },
   {
     id: 'returns',
     title: 'Returns & Refunds',
-    color: 'border-amber-500',
     faqs: [
       {
         q: "What is Rigamart's return policy?",
@@ -67,15 +65,14 @@ const FAQ_SECTIONS = [
   {
     id: 'seller',
     title: 'Seller Program',
-    color: 'border-violet-500',
     faqs: [
       {
         q: 'How do I become a seller?',
-        a: "Register an account, select 'Join as Seller', complete your seller profile, and start listing your products. Approval takes less than 24 hours.",
+        a: "Register an account, select 'I'm a Seller' during registration, complete your seller profile, and start listing your products. Approval takes less than 24 hours.",
       },
       {
         q: 'What are the fees for sellers?',
-        a: 'There are no listing fees or monthly subscription charges. Rigamart charges only a small platform commission on successful sales.',
+        a: 'There are no listing fees or monthly subscription charges. Rigamart charges only a transparent platform commission on completed sales.',
       },
       {
         q: 'How do I receive payouts?',
@@ -86,19 +83,18 @@ const FAQ_SECTIONS = [
   {
     id: 'account',
     title: 'Account & Security',
-    color: 'border-rose-500',
     faqs: [
       {
         q: 'How do I update my profile?',
-        a: "Log in and go to 'My Profile' via the user menu. You can update your name, mobile number, and saved addresses.",
+        a: "Log in and go to 'My Profile' via the user menu. You can update your name, mobile number, and saved shipping destinations.",
       },
       {
-        q: 'I forgot my password. What should I do?',
-        a: "On the Login page, click 'Forgot Password' to receive a reset link on your registered email address.",
+        q: 'Can I check out without creating an account?',
+        a: "Yes! Rigamart provides seamless guest checkout via mobile OTP verification with no prior password setup required.",
       },
       {
-        q: 'How do I delete my account?',
-        a: 'In this demonstration project, test accounts can be reset or re-registered anytime through the database seed scripts.',
+        q: 'How do I manage my saved addresses?',
+        a: 'In your Profile page, you can add multiple delivery destinations with automatic GPS geolocation detection and default tagging.',
       },
     ],
   },
@@ -108,19 +104,19 @@ const FAQ_SECTIONS = [
 
 function FaqItem({ faq, isOpen, onToggle }) {
   return (
-    <div className="border-b border-gray-100 last:border-0">
+    <div className="border-b border-line last:border-0">
       <button
-        className="w-full text-left py-4 flex items-center justify-between gap-4 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 rounded-lg"
+        className="w-full text-left py-4 flex items-center justify-between gap-4 group focus:outline-none rounded-lg"
         onClick={onToggle}
         aria-expanded={isOpen}
       >
-        <span className="text-sm font-semibold text-gray-800 group-hover:text-brand-600 transition-colors pr-4">
+        <span className="text-sm font-semibold text-ink group-hover:text-brand transition-colors pr-4">
           {faq.q}
         </span>
         <motion.span
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
-          className="flex-shrink-0 text-gray-400"
+          className="shrink-0 text-muted"
           aria-hidden="true"
         >
           <ChevronDown className="w-4 h-4" />
@@ -133,10 +129,10 @@ function FaqItem({ faq, isOpen, onToggle }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.22 }}
             className="overflow-hidden"
           >
-            <p className="pb-4 text-sm text-gray-600 leading-relaxed">{faq.a}</p>
+            <p className="pb-4 text-xs sm:text-sm text-muted leading-relaxed">{faq.a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -150,15 +146,16 @@ function FaqSection({ section, openKey, onToggle }) {
     <motion.div
       id={section.id}
       variants={staggerItem}
-      className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 scroll-mt-28 ${
-        isAnyOpen ? 'ring-2 ring-brand-200' : ''
+      className={`bg-surface rounded-2xl shadow-subtle border border-line overflow-hidden transition-all duration-200 scroll-mt-28 ${
+        isAnyOpen ? 'border-brand/40 ring-1 ring-brand/20' : ''
       }`}
     >
       <div
-        className={`border-l-4 ${section.color} px-6 py-5`}
-        style={{ backgroundColor: isAnyOpen ? '#EFF6FF' : 'white' }}
+        className={`border-l-4 border-brand px-6 py-4 transition-colors ${
+          isAnyOpen ? 'bg-brand-soft/40' : 'bg-canvas/50'
+        }`}
       >
-        <h2 className="font-bold text-gray-900 text-base">{section.title}</h2>
+        <h2 className="font-bold text-ink text-sm sm:text-base">{section.title}</h2>
       </div>
       <div className="px-6 divide-y-0">
         {section.faqs.map((faq, i) => {
@@ -214,15 +211,15 @@ export default function HelpPage() {
   }, [query]);
 
   return (
-    <div className="font-sans">
+    <div className="min-h-screen bg-canvas text-ink font-sans">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="bg-gradient-to-br from-brand-700 to-indigo-800 text-white py-16">
+      <section className="bg-gradient-to-br from-brand-dark via-brand to-brand-dark text-white py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h1
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="text-3xl sm:text-4xl font-extrabold mb-3"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3"
           >
             Help Center & FAQs
           </motion.h1>
@@ -231,9 +228,9 @@ export default function HelpPage() {
             initial="hidden"
             animate="visible"
             custom={{ delay: 0.1 }}
-            className="text-blue-100 mb-8 max-w-lg mx-auto"
+            className="text-white/85 mb-8 max-w-lg mx-auto text-sm"
           >
-            Find answers to the most common questions about ordering, delivery, returns, and selling on Rigamart.
+            Find immediate answers regarding order status, express fulfillment, returns, and selling factory-direct.
           </motion.p>
 
           {/* Search Input */}
@@ -244,13 +241,13 @@ export default function HelpPage() {
             custom={{ delay: 0.18 }}
             className="max-w-xl mx-auto relative"
           >
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" aria-hidden="true" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" aria-hidden="true" />
             <input
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search FAQs, e.g. 'track order' or 'refund'…"
-              className="w-full pl-11 pr-4 py-3.5 rounded-full bg-white text-gray-900 text-sm shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-400 placeholder:text-gray-400"
+              className="w-full pl-11 pr-4 py-3.5 rounded-full bg-surface text-ink text-sm shadow-subtle border border-line focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand placeholder:text-muted"
               aria-label="Search frequently asked questions"
             />
           </motion.div>
@@ -258,7 +255,7 @@ export default function HelpPage() {
       </section>
 
       {/* ── FAQ Sections ─────────────────────────────────────────────────── */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-canvas">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredSections.length === 0 ? (
             <motion.div
@@ -266,10 +263,10 @@ export default function HelpPage() {
               animate={{ opacity: 1 }}
               className="text-center py-16"
             >
-              <p className="text-gray-500 text-base">
-                No results found for "<span className="font-semibold text-gray-700">{query}</span>".
+              <p className="text-muted text-base">
+                No answers found matching "<span className="font-semibold text-ink">{query}</span>".
               </p>
-              <p className="text-sm text-gray-400 mt-2">Try a different keyword or browse all sections below.</p>
+              <p className="text-xs text-muted mt-2">Try a different keyword or clear search to browse all categories.</p>
             </motion.div>
           ) : (
             <motion.div
@@ -289,32 +286,29 @@ export default function HelpPage() {
             </motion.div>
           )}
 
-          {/* ── Still have questions? ───────────────────────────────────── */}
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="mt-12 bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center"
-          >
-            <div className="flex justify-center mb-4">
-              <div className="p-3 bg-brand-50 text-brand-600 rounded-full">
+          {/* ── Contact Support ─────────────────────────────────────────── */}
+          <div className="mt-12 bg-surface rounded-2xl border border-line shadow-subtle p-8 text-center space-y-3">
+            <div className="flex justify-center">
+              <div className="p-3 bg-brand-soft text-brand-dark rounded-full">
                 <MessageCircle className="w-6 h-6" />
               </div>
             </div>
-            <h3 className="font-bold text-gray-900 text-lg mb-2">Have questions about this project?</h3>
-            <p className="text-sm text-gray-500 mb-4 max-w-md mx-auto">
-              Rigamart is an open-source demonstration application developed by <strong className="text-gray-700 font-semibold">Sangam Kumar</strong>. Explore the source code or report issues on GitHub.
+            <h3 className="font-bold text-ink text-base sm:text-lg">Still need assistance?</h3>
+            <p className="text-xs sm:text-sm text-muted max-w-md mx-auto leading-relaxed">
+              Our concierge team is available to assist with custom orders, seller inquiries, and order delivery resolutions.
             </p>
-            <a
-              href="https://github.com/ksangam990-collab/rigamart"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-brand-700 transition-colors"
-            >
-              View on GitHub
-            </a>
-          </motion.div>
+            <div className="pt-2">
+              <a
+                href="https://github.com/ksangam990-collab/rigamart"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="primary" size="md">
+                  Contact Support
+                </Button>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </div>
