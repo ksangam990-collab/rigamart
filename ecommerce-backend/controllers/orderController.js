@@ -223,7 +223,13 @@ const cancelOrder = async (req, res) => {
 const returnOrder = async (req, res) => {
   try {
     const { id } = req.params;
-    const { reason = 'Customer requested return' } = req.body;
+    const {
+      reason = 'Customer requested return',
+      reasonCategory = 'OTHER',
+      comments = '',
+      photos = [],
+      resolutionType = 'REFUND'
+    } = req.body;
 
     const order = await Order.findById(id);
     if (!order) {
@@ -250,23 +256,66 @@ const returnOrder = async (req, res) => {
       });
     }
 
-    order.status = 'Returned';
+    // Check 7-day return window from deliveredAt (or updatedAt if deliveredAt not explicitly set)
+    const deliveryDate = order.deliveredAt || order.updatedAt;
+    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+    if (Date.now() - new Date(deliveryDate).getTime() > sevenDaysInMs) {
+      return res.status(400).json({
+        success: false,
+        message: 'Return window expired: Items must be returned within 7 days of delivery',
+        data: null
+      });
+    }
+
+    order.status = 'Return Requested';
     order.returnReason = reason;
+    order.returnRequest = {
+      reason,
+      reasonCategory,
+      comments,
+      photos: Array.isArray(photos) ? photos : [],
+      resolutionType,
+      status: 'Requested',
+      sellerNotes: '',
+      requestedAt: new Date()
+    };
+
     order.statusTimeline.push({
-      status: 'Returned',
-      comment: `Return initiated by customer. Reason: ${reason}`,
+      status: 'Return Requested',
+      comment: `Customer requested return (${reasonCategory.replace(/_/g, ' ')}): "${reason}". Resolution requested: ${resolutionType}`,
       timestamp: new Date()
     });
 
     await order.save();
-    await restoreInventory(order.items);
 
-    // Non-blocking in-app notification
-    notifyOrderStatusChange(order, 'Returned', `Return requested for order #${order.orderNumber}. Reason: ${reason}`).catch(() => {});
+    // In-app notification to buyer
+    notifyOrderStatusChange(
+      order,
+      'Return Requested',
+      `Return request submitted for Order #${order.orderNumber}. The seller will review your request shortly.`
+    ).catch(() => {});
+
+    // In-app notification to item sellers
+    const { createNotification } = require('../utils/notificationService');
+    const sellerIds = [...new Set(order.items.map((i) => i.seller?.toString()).filter(Boolean))];
+    for (const sId of sellerIds) {
+      createNotification({
+        user: sId,
+        title: 'New Return Request ⚠️',
+        message: `Customer initiated a return for Order #${order.orderNumber} (${reasonCategory.replace(/_/g, ' ')}). Please review.`,
+        type: 'ORDER_STATUS',
+        data: {
+          orderId: order._id,
+          orderNumber: order.orderNumber,
+          link: '/seller/dashboard',
+          icon: 'alert'
+        }
+      }).catch(() => {});
+    }
 
     res.status(200).json({
       success: true,
-      message: 'Return request submitted successfully',
+      message: 'Return request submitted successfully and is pending seller review',
       data: {
         order
       }
@@ -552,6 +601,192 @@ const getInvoice = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Get all orders with return requests for the seller
+ * @route   GET /api/orders/seller/returns or /api/seller/returns
+ * @access  Private (Seller or Admin)
+ */
+const getSellerReturns = async (req, res) => {
+  try {
+    const { status } = req.query;
+    const filter = {
+      'items.seller': req.user._id,
+      $or: [
+        { returnRequest: { $ne: null } },
+        { status: { $in: ['Return Requested', 'Returned'] } }
+      ]
+    };
+
+    if (status) {
+      filter['returnRequest.status'] = status;
+    }
+
+    const returns = await Order.find(filter)
+      .populate('user', 'name email mobile')
+      .populate('items.seller', 'name email')
+      .sort({ 'returnRequest.requestedAt': -1, updatedAt: -1 })
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      message: 'Seller return requests retrieved successfully',
+      data: {
+        returns
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Failed to fetch seller returns: ${error.message}`,
+      data: null
+    });
+  }
+};
+
+/**
+ * @desc    Seller or Admin advances or resolves a return request
+ * @route   PUT /api/orders/seller/:id/return-status or /api/seller/orders/:id/return-status
+ * @access  Private (Seller or Admin)
+ */
+const updateReturnStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, sellerNotes = '', pickupDate = null } = req.body;
+
+    const validStatuses = ['Approved', 'Rejected', 'Pickup_Scheduled', 'Item_Received', 'Refunded'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid return status. Permitted: ${validStatuses.join(', ')}`,
+        data: null
+      });
+    }
+
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+        data: null
+      });
+    }
+
+    const isAdmin = req.user.role === 'admin';
+    const isSeller = order.items.some(
+      (item) => item.seller && item.seller.toString() === req.user._id.toString()
+    );
+
+    if (!isAdmin && !isSeller) {
+      return res.status(403).json({
+        success: false,
+        message: 'Forbidden: You do not have permission to manage this return',
+        data: null
+      });
+    }
+
+    if (!order.returnRequest) {
+      order.returnRequest = {
+        reason: order.returnReason || 'Return initiated',
+        status: 'Requested',
+        requestedAt: new Date()
+      };
+    }
+
+    order.returnRequest.status = status;
+    if (sellerNotes) order.returnRequest.sellerNotes = sellerNotes;
+    if (pickupDate) order.returnRequest.pickupDate = new Date(pickupDate);
+
+    let timelineComment = `Return status changed to '${status}' by seller.`;
+    if (status === 'Approved') {
+      timelineComment = `Return request approved by seller. Pickup will be coordinated soon. ${sellerNotes ? 'Note: ' + sellerNotes : ''}`;
+    } else if (status === 'Pickup_Scheduled') {
+      const dateStr = pickupDate ? ` for ${new Date(pickupDate).toLocaleDateString('en-IN')}` : '';
+      timelineComment = `Return courier pickup scheduled${dateStr}. Please keep the item packed with original tags intact.`;
+    } else if (status === 'Item_Received') {
+      timelineComment = `Returned item received at seller fulfillment hub and verified in original condition.`;
+    } else if (status === 'Refunded') {
+      order.status = 'Returned';
+      order.paymentInfo.status = 'Refunded';
+      order.returnRequest.refundAmount = order.totalAmount;
+      order.returnRequest.resolvedAt = new Date();
+      timelineComment = `Full refund of ₹${order.totalAmount.toLocaleString('en-IN')} successfully initiated to buyer. ${sellerNotes ? 'Note: ' + sellerNotes : ''}`;
+      // Atomically restore variant stock
+      await restoreInventory(order.items);
+    } else if (status === 'Rejected') {
+      order.returnRequest.resolvedAt = new Date();
+      timelineComment = `Return request declined by seller. Reason: ${sellerNotes || 'Item condition does not satisfy policy guidelines'}`;
+    }
+
+    order.statusTimeline.push({
+      status: `Return: ${status.replace(/_/g, ' ')}`,
+      comment: timelineComment,
+      timestamp: new Date()
+    });
+
+    await order.save();
+
+    // Buyer notification
+    const buyerNotifConfig = {
+      Approved: {
+        title: 'Return Approved! 📦',
+        message: `Your return request for Order #${order.orderNumber} has been approved by the seller.`,
+        icon: 'package'
+      },
+      Pickup_Scheduled: {
+        title: 'Return Pickup Scheduled 🚚',
+        message: `Courier pickup for Order #${order.orderNumber} has been scheduled. Please keep item ready.`,
+        icon: 'truck'
+      },
+      Item_Received: {
+        title: 'Return Received at Hub 🏢',
+        message: `Returned package for Order #${order.orderNumber} was received and verified.`,
+        icon: 'check'
+      },
+      Refunded: {
+        title: 'Refund Processed! 💳',
+        message: `Refund of ₹${order.totalAmount.toLocaleString('en-IN')} for Order #${order.orderNumber} was successfully processed.`,
+        icon: 'sparkles'
+      },
+      Rejected: {
+        title: 'Return Request Declined ⚠️',
+        message: `Return for Order #${order.orderNumber} was not approved: ${sellerNotes || 'Please contact support for assistance.'}`,
+        icon: 'alert'
+      }
+    };
+
+    const notif = buyerNotifConfig[status];
+    if (notif) {
+      const { createNotification } = require('../utils/notificationService');
+      createNotification({
+        user: order.user,
+        title: notif.title,
+        message: notif.message,
+        type: 'ORDER_STATUS',
+        data: {
+          orderId: order._id,
+          orderNumber: order.orderNumber,
+          link: `/orders/${order._id}`,
+          icon: notif.icon
+        }
+      }).catch(() => {});
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Return status updated to '${status}' successfully`,
+      data: {
+        order
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Failed to update return status: ${error.message}`,
+      data: null
+    });
+  }
+};
+
 module.exports = {
   getMyOrders,
   getOrderById,
@@ -559,6 +794,8 @@ module.exports = {
   returnOrder,
   getSellerOrders,
   updateSellerOrderStatus,
+  getSellerReturns,
+  updateReturnStatus,
   getAllOrders,
   getInvoice
 };

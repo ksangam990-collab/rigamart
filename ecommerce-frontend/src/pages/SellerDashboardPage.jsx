@@ -10,12 +10,14 @@ import {
   RefreshCw,
   CheckCircle2,
   TrendingUp,
-  BarChart3
+  BarChart3,
+  RotateCcw
 } from 'lucide-react';
 import api from '../utils/api.js';
 import RestockModal from '../components/seller/RestockModal.jsx';
 import AddProductModal from '../components/seller/AddProductModal.jsx';
 import SellerAnalyticsTab from '../components/seller/SellerAnalyticsTab.jsx';
+import SellerReturnsTab from '../components/seller/SellerReturnsTab.jsx';
 import { staggerContainer, staggerItem } from '../utils/animations.js';
 
 export default function SellerDashboardPage() {
@@ -23,6 +25,7 @@ export default function SellerDashboardPage() {
   const [statusCounts, setStatusCounts] = useState({});
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [returns, setReturns] = useState([]);
   const [activeTab, setActiveTab] = useState('analytics');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,16 +36,18 @@ export default function SellerDashboardPage() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const [dashRes, prodRes, ordRes] = await Promise.all([
+      const [dashRes, prodRes, ordRes, retRes] = await Promise.all([
         api.get('/seller/dashboard').catch(() => ({ data: { data: null } })),
         api.get('/seller/products').catch(() => ({ data: { data: { products: [] } } })),
-        api.get('/seller/orders').catch(() => ({ data: { data: { orders: [] } } }))
+        api.get('/seller/orders').catch(() => ({ data: { data: { orders: [] } } })),
+        api.get('/seller/returns').catch(() => ({ data: { data: { returns: [] } } }))
       ]);
 
       setDashboardData(dashRes.data.data?.metrics || null);
       setStatusCounts(dashRes.data.data?.statusCounts || {});
       setProducts(prodRes.data.data?.products || []);
       setOrders(ordRes.data.data?.orders || []);
+      setReturns(retRes.data.data?.returns || []);
     } catch (e) {
       // Gracefully handle initial loads
     } finally {
@@ -274,6 +279,34 @@ export default function SellerDashboardPage() {
             />
           )}
         </button>
+        <button
+          onClick={() => setActiveTab('returns')}
+          className={`pb-3 transition-colors relative flex items-center gap-1.5 ${
+            activeTab === 'returns'
+              ? 'text-brand-600 font-black'
+              : 'text-gray-500 hover:text-gray-900'
+          }`}
+        >
+          <RotateCcw className="w-4 h-4" />
+          Returns &amp; Disputes
+          {returns.length > 0 && (
+            <span
+              className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                returns.some((r) => r.returnRequest?.status === 'Requested')
+                  ? 'bg-amber-500 text-white'
+                  : 'bg-gray-100 text-gray-700'
+              }`}
+            >
+              {returns.length}
+            </span>
+          )}
+          {activeTab === 'returns' && (
+            <motion.div
+              layoutId="sellerTab"
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-600"
+            />
+          )}
+        </button>
       </div>
 
       {/* Tab Panels */}
@@ -459,6 +492,22 @@ export default function SellerDashboardPage() {
             transition={{ duration: 0.2 }}
           >
             <SellerAnalyticsTab statusCounts={statusCounts} />
+          </motion.div>
+        )}
+
+        {activeTab === 'returns' && (
+          <motion.div
+            key="returns"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SellerReturnsTab
+              returns={returns}
+              isLoading={isLoading}
+              onRefresh={fetchData}
+            />
           </motion.div>
         )}
       </AnimatePresence>

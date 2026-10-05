@@ -45,6 +45,19 @@ router.post(
   uploadMultipleImages
 );
 
+// Return evidence photo upload (accessible by any authenticated user/customer)
+router.post(
+  '/return-images',
+  protect,
+  uploadMultiple,
+  handleUploadErrors,
+  (req, res, next) => {
+    req.body.folder = 'rigamart/returns';
+    next();
+  },
+  uploadMultipleImages
+);
+
 router.delete(
   '/:publicId(*)',
   protect,

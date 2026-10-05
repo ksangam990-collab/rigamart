@@ -69,6 +69,66 @@ const timelineSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const returnRequestSchema = new mongoose.Schema(
+  {
+    reason: {
+      type: String,
+      required: true
+    },
+    reasonCategory: {
+      type: String,
+      enum: [
+        'DEFECTIVE_DAMAGED',
+        'WRONG_ITEM',
+        'NOT_AS_DESCRIBED',
+        'SIZE_FIT_ISSUE',
+        'QUALITY_UNSATISFACTORY',
+        'OTHER'
+      ],
+      default: 'OTHER'
+    },
+    comments: {
+      type: String,
+      default: ''
+    },
+    photos: {
+      type: [String],
+      default: []
+    },
+    resolutionType: {
+      type: String,
+      enum: ['REFUND', 'REPLACEMENT'],
+      default: 'REFUND'
+    },
+    status: {
+      type: String,
+      enum: ['Requested', 'Approved', 'Rejected', 'Pickup_Scheduled', 'Item_Received', 'Refunded'],
+      default: 'Requested'
+    },
+    sellerNotes: {
+      type: String,
+      default: ''
+    },
+    pickupDate: {
+      type: Date,
+      default: null
+    },
+    refundAmount: {
+      type: Number,
+      default: 0
+    },
+    requestedAt: {
+      type: Date,
+      default: Date.now
+    },
+    resolvedAt: {
+      type: Date,
+      default: null
+    }
+  },
+  { _id: false }
+);
+
 const orderSchema = new mongoose.Schema(
   {
     orderNumber: {
@@ -118,7 +178,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Placed', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled', 'Returned'],
+      enum: ['Placed', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled', 'Returned', 'Return Requested'],
       default: 'Placed'
     },
     statusTimeline: {
@@ -175,6 +235,10 @@ const orderSchema = new mongoose.Schema(
     returnReason: {
       type: String,
       default: ''
+    },
+    returnRequest: {
+      type: returnRequestSchema,
+      default: null
     },
     invoiceUrl: {
       type: String,

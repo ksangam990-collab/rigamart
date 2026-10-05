@@ -132,6 +132,8 @@ export const modalContentVariants = {
   },
 };
 
+export const modalPanelVariants = modalContentVariants;
+
 // Drawer / Slide-Down Menu Variants
 export const drawerSlideDown = {
   hidden: { opacity: 0, height: 0, overflow: 'hidden' },

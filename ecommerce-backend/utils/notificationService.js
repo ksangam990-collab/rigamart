@@ -66,10 +66,15 @@ const notifyOrderStatusChange = async (order, status, customMessage = '') => {
       message: customMessage || `Order #${order.orderNumber} has been cancelled.`,
       icon: 'alert'
     },
-    Returned: {
+    'Return Requested': {
       title: 'Return Request Received 🔄',
-      message: customMessage || `Return requested for order #${order.orderNumber}. Pickup will be arranged soon.`,
+      message: customMessage || `Return requested for order #${order.orderNumber}. Pending seller review.`,
       icon: 'refresh'
+    },
+    Returned: {
+      title: 'Order Refunded & Returned 🔄',
+      message: customMessage || `Return and refund for order #${order.orderNumber} has been processed.`,
+      icon: 'check'
     }
   };
 

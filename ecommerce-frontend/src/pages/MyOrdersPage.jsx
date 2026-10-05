@@ -9,7 +9,8 @@ import {
   XCircle,
   AlertCircle,
   ArrowRight,
-  Download
+  Download,
+  RotateCcw
 } from 'lucide-react';
 import api from '../utils/api.js';
 import { staggerContainer, staggerItem } from '../utils/animations.js';
@@ -45,7 +46,7 @@ export default function MyOrdersPage() {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `Rigamart_Invoice_${orderId.slice(-8)}.pdf`);
+      link.setAttribute('download', `Rigamart_Tax_Invoice_${orderId.slice(-8)}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -99,10 +100,16 @@ export default function MyOrdersPage() {
             <XCircle className="w-3.5 h-3.5" /> Cancelled
           </span>
         );
+      case 'Return Requested':
+        return (
+          <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full border border-amber-300">
+            <RotateCcw className="w-3.5 h-3.5" /> Return Requested
+          </span>
+        );
       case 'Returned':
         return (
-          <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs font-bold px-2.5 py-1 rounded-full border border-gray-300">
-            <AlertCircle className="w-3.5 h-3.5" /> Returned
+          <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-300">
+            <CheckCircle2 className="w-3.5 h-3.5" /> Returned &amp; Refunded
           </span>
         );
       default:

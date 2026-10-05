@@ -8,7 +8,9 @@ const {
 } = require('../controllers/sellerController');
 const {
   getSellerOrders,
-  updateSellerOrderStatus
+  updateSellerOrderStatus,
+  getSellerReturns,
+  updateReturnStatus
 } = require('../controllers/orderController');
 const { protect } = require('../middleware/auth');
 const { authorize } = require('../middleware/roleCheck');
@@ -27,5 +29,9 @@ router.patch('/products/:productId/variants/:variantId/stock', updateVariantStoc
 // Seller Order Management
 router.get('/orders', getSellerOrders);
 router.put('/orders/:id/status', updateSellerOrderStatus);
+
+// Seller Returns & Disputes Management
+router.get('/returns', getSellerReturns);
+router.put('/orders/:id/return-status', updateReturnStatus);
 
 module.exports = router;
