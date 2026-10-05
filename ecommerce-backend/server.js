@@ -21,6 +21,7 @@ const sellerRoutes = require('./routes/sellerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const couponRoutes = require('./routes/couponRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const aiRoutes = require('./routes/aiRoutes');
 const { verifyEmailConfig } = require('./config/nodemailer');
 const { initKeepAlive } = require('./utils/keepAlive');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -128,6 +129,7 @@ app.use('/api/seller', sellerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Root fallback route
 app.get('/', (req, res) => {

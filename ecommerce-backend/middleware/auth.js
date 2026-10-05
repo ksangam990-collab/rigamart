@@ -65,9 +65,38 @@ const protect = async (req, res, next) => {
   }
 };
 
+/**
+ * Optional Auth: Attaches user if valid token present, otherwise continues without error
+ */
+const optionalAuth = async (req, res, next) => {
+  try {
+    let token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer ')
+    ) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.id).select('-password');
+      if (user && !user.isBanned) {
+        req.user = user;
+      }
+    }
+  } catch (error) {
+    // Silently continue for optional auth
+    req.user = null;
+  }
+  next();
+};
+
 const { authorize } = require('./roleCheck');
 
 module.exports = {
   protect,
+  optionalAuth,
   authorize
 };
+

@@ -29,6 +29,7 @@ import Breadcrumb from '../components/common/Breadcrumb.jsx';
 import FrequentlyBoughtTogether from '../components/product/FrequentlyBoughtTogether.jsx';
 import GuestOtpModal from '../components/checkout/GuestOtpModal.jsx';
 import RecentlyViewedRibbon from '../components/product/RecentlyViewedRibbon.jsx';
+import ProductAiAssistant from '../components/ai/ProductAiAssistant.jsx';
 import { recordRecentlyViewed } from '../utils/recentlyViewed.js';
 import { heartBounceVariants, staggerContainer, staggerItem } from '../utils/animations.js';
 
@@ -713,6 +714,14 @@ export default function ProductDetailPage() {
             : 'Enter your mobile number to add items and checkout quickly'
         }
       />
+
+      {/* Gemini AI Product Assistant */}
+      <ProductAiAssistant
+        product={product}
+        onAddToCart={handleAddToCart}
+        onBuyNow={handleBuyNow}
+      />
     </div>
   );
 }
+

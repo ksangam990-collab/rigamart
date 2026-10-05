@@ -2,57 +2,82 @@ const Coupon = require('../models/Coupon');
 const Cart = require('../models/Cart');
 
 /**
- * Seed starter promo codes if collection is empty
+ * Seed starter promo codes if collection is empty or missing key codes
  */
 const seedInitialCoupons = async () => {
   try {
-    const count = await Coupon.countDocuments();
-    if (count === 0) {
-      const oneYearAhead = new Date();
-      oneYearAhead.setFullYear(oneYearAhead.getFullYear() + 1);
+    const oneYearAhead = new Date();
+    oneYearAhead.setFullYear(oneYearAhead.getFullYear() + 1);
 
-      await Coupon.insertMany([
-        {
-          code: 'WELCOME10',
-          description: 'Get 10% OFF up to ₹150 on orders above ₹499',
-          discountType: 'percentage',
-          discountValue: 10,
-          maxDiscount: 150,
-          minCartValue: 499,
-          expiryDate: oneYearAhead,
-          isActive: true
-        },
-        {
-          code: 'FESTIVE20',
-          description: 'Special 20% festive discount up to ₹300 on orders above ₹999',
-          discountType: 'percentage',
-          discountValue: 20,
-          maxDiscount: 300,
-          minCartValue: 999,
-          expiryDate: oneYearAhead,
-          isActive: true
-        },
-        {
-          code: 'FLAT50',
-          description: 'Flat ₹50 instant discount on orders above ₹399',
-          discountType: 'flat',
-          discountValue: 50,
-          maxDiscount: null,
-          minCartValue: 399,
-          expiryDate: oneYearAhead,
-          isActive: true
-        },
-        {
-          code: 'MEGA100',
-          description: 'Flat ₹100 instant discount on orders above ₹799',
-          discountType: 'flat',
-          discountValue: 100,
-          maxDiscount: null,
-          minCartValue: 799,
-          expiryDate: oneYearAhead,
-          isActive: true
-        }
-      ]);
+    const starterCoupons = [
+      {
+        code: 'FIRST50',
+        description: 'Special newcomer offer! Flat ₹50 instant discount on your first order above ₹299',
+        discountType: 'flat',
+        discountValue: 50,
+        maxDiscount: null,
+        minCartValue: 299,
+        expiryDate: oneYearAhead,
+        isActive: true
+      },
+      {
+        code: 'FESTIVE10',
+        description: 'Festive season treat: 10% instant savings up to ₹150 on orders above ₹499',
+        discountType: 'percentage',
+        discountValue: 10,
+        maxDiscount: 150,
+        minCartValue: 499,
+        expiryDate: oneYearAhead,
+        isActive: true
+      },
+      {
+        code: 'SAVE20',
+        description: 'Big cart bonus: 20% discount up to ₹400 on orders above ₹1,499',
+        discountType: 'percentage',
+        discountValue: 20,
+        maxDiscount: 400,
+        minCartValue: 1499,
+        expiryDate: oneYearAhead,
+        isActive: true
+      },
+      {
+        code: 'WELCOME10',
+        description: 'Get 10% OFF up to ₹150 on orders above ₹499',
+        discountType: 'percentage',
+        discountValue: 10,
+        maxDiscount: 150,
+        minCartValue: 499,
+        expiryDate: oneYearAhead,
+        isActive: true
+      },
+      {
+        code: 'FESTIVE20',
+        description: 'Special 20% festive discount up to ₹300 on orders above ₹999',
+        discountType: 'percentage',
+        discountValue: 20,
+        maxDiscount: 300,
+        minCartValue: 999,
+        expiryDate: oneYearAhead,
+        isActive: true
+      },
+      {
+        code: 'MEGA100',
+        description: 'Flat ₹100 instant discount on orders above ₹799',
+        discountType: 'flat',
+        discountValue: 100,
+        maxDiscount: null,
+        minCartValue: 799,
+        expiryDate: oneYearAhead,
+        isActive: true
+      }
+    ];
+
+    for (const c of starterCoupons) {
+      await Coupon.updateOne(
+        { code: c.code },
+        { $setOnInsert: c },
+        { upsert: true }
+      );
     }
   } catch (err) {
     console.error('[COUPON SEED ERROR]', err.message);
@@ -61,6 +86,7 @@ const seedInitialCoupons = async () => {
 
 // Trigger seed check non-blocking
 seedInitialCoupons();
+
 
 /**
  * @desc    Get active, unexpired coupons for shoppers

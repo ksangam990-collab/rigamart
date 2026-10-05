@@ -22,7 +22,14 @@ const loadRazorpayScript = () => {
   });
 };
 
-export default function CheckoutModal({ isOpen, onClose, cart, selectedAddress, appliedCoupon }) {
+export default function CheckoutModal({
+  isOpen,
+  onClose,
+  cart,
+  selectedAddress,
+  appliedCoupon,
+  onOpenCouponDrawer
+}) {
   const [paymentMethod, setPaymentMethod] = useState('RAZORPAY');
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -243,19 +250,52 @@ export default function CheckoutModal({ isOpen, onClose, cart, selectedAddress, 
               </div>
             </div>
 
-            {/* Applied Coupon Display in Modal */}
-            {appliedCoupon && appliedCoupon.discountAmount > 0 && (
-              <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2 text-xs">
+            {/* Applied Coupon or Apply Offer Drawer Trigger */}
+            {appliedCoupon && appliedCoupon.discountAmount > 0 ? (
+              <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2.5 text-xs">
                 <div className="flex items-center gap-2 text-emerald-800 font-semibold">
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>
-                    Coupon: <strong className="font-mono text-emerald-950">{appliedCoupon.code}</strong>
-                  </span>
+                  <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div>
+                    <span>
+                      Coupon: <strong className="font-mono text-emerald-950">{appliedCoupon.code}</strong>
+                    </span>
+                    <span className="text-[10px] text-emerald-700 block font-normal">
+                      Applied discount
+                    </span>
+                  </div>
                 </div>
-                <span className="font-bold text-emerald-700 tabular-nums">
-                  -₹{appliedCoupon.discountAmount.toLocaleString('en-IN')}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="font-black text-emerald-700 text-sm tabular-nums">
+                    -₹{appliedCoupon.discountAmount.toLocaleString('en-IN')}
+                  </span>
+                  {onOpenCouponDrawer && (
+                    <button
+                      type="button"
+                      onClick={onOpenCouponDrawer}
+                      className="text-[11px] font-bold text-brand-600 hover:text-brand-700 underline"
+                    >
+                      Change
+                    </button>
+                  )}
+                </div>
               </div>
+            ) : (
+              onOpenCouponDrawer && (
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  type="button"
+                  onClick={onOpenCouponDrawer}
+                  className="w-full flex items-center justify-between p-3 bg-amber-50/70 hover:bg-amber-50 border border-dashed border-amber-300 rounded-xl text-xs text-amber-900 transition-colors"
+                >
+                  <div className="flex items-center gap-2 font-bold">
+                    <Tag className="w-4 h-4 text-amber-600" />
+                    <span>Apply Coupon or Promo Code</span>
+                  </div>
+                  <span className="text-[11px] font-bold text-brand-600 hover:underline">
+                    View Offers →
+                  </span>
+                </motion.button>
+              )
             )}
 
             {/* Order Final Amount */}

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
+const { protect, optionalAuth } = require('../middleware/auth');
 const { authorize } = require('../middleware/roleCheck');
 const {
   getActiveCoupons,
@@ -13,8 +13,8 @@ const {
 // Public active coupons discovery (for cart banners/drawers)
 router.get('/active', getActiveCoupons);
 
-// Authenticated shopper coupon application
-router.post('/apply', protect, applyCoupon);
+// Shopper coupon application (supports both guest cart calculations and authenticated users)
+router.post('/apply', optionalAuth, applyCoupon);
 
 // Admin coupon management
 router.use(protect, authorize('admin'));

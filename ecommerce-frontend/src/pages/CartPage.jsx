@@ -32,6 +32,7 @@ import {
 } from '../features/cart/cartSlice.js';
 import CheckoutModal from '../components/checkout/CheckoutModal.jsx';
 import GuestOtpModal from '../components/checkout/GuestOtpModal.jsx';
+import CouponDrawer from '../components/checkout/CouponDrawer.jsx';
 import { drawerSlideDown, EASINGS } from '../utils/animations.js';
 
 export default function CartPage() {
@@ -44,6 +45,7 @@ export default function CartPage() {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isGuestOtpOpen, setIsGuestOtpOpen] = useState(false);
+  const [isCouponDrawerOpen, setIsCouponDrawerOpen] = useState(false);
 
   // Coupon state
   const [couponInput, setCouponInput] = useState('');
@@ -259,7 +261,7 @@ export default function CartPage() {
     const targetCode = (codeOverride || couponInput || '').trim().toUpperCase();
     if (!targetCode) {
       setCouponError('Please enter a coupon code');
-      return;
+      return { success: false, message: 'Please enter a coupon code' };
     }
 
     setIsApplyingCoupon(true);
@@ -278,15 +280,18 @@ export default function CartPage() {
         setCouponSuccess(res.data.message || `Coupon "${targetCode}" applied!`);
         triggerConfetti({ origin: { x: 0.75, y: 0.45 } });
         setTimeout(() => setCouponSuccess(null), 5000);
+        return { success: true, data: res.data.data };
       }
+      return { success: false, message: 'Failed to apply coupon' };
     } catch (err) {
-      setCouponError(
-        err.response?.data?.message || 'Invalid or expired coupon code. Please try again.'
-      );
+      const msg = err.response?.data?.message || 'Invalid or expired coupon code. Please try again.';
+      setCouponError(msg);
+      return { success: false, message: msg };
     } finally {
       setIsApplyingCoupon(false);
     }
   };
+
 
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
@@ -754,16 +759,18 @@ export default function CartPage() {
                 <Tag className="w-4 h-4 text-brand-600" />
                 Coupons & Offers
               </h3>
-              {availableCoupons.length > 0 && (
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setShowAvailableCoupons((prev) => !prev)}
-                  className="text-[11px] font-bold text-brand-600 hover:text-brand-700 hover:underline flex items-center gap-1 transition-colors"
+                  onClick={() => setIsCouponDrawerOpen(true)}
+                  className="text-[11px] font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 border border-brand-200 px-2 py-0.5 rounded-lg flex items-center gap-1 transition-colors"
                 >
-                  {showAvailableCoupons ? 'Hide Offers' : `${availableCoupons.length} Available`}
+                  <Sparkles className="w-3 h-3 text-brand-600" />
+                  View All Offers
                 </button>
-              )}
+              </div>
             </div>
+
 
             {/* Applied Coupon Banner */}
             <AnimatePresence>
@@ -1038,6 +1045,17 @@ export default function CartPage() {
         onSuccess={handleGuestOtpSuccess}
       />
 
+      {/* Interactive Coupons & Promo Code Drawer */}
+      <CouponDrawer
+        isOpen={isCouponDrawerOpen}
+        onClose={() => setIsCouponDrawerOpen(false)}
+        currentSubtotal={itemsSubtotal}
+        appliedCoupon={appliedCoupon}
+        onApplyCoupon={handleApplyCoupon}
+        onRemoveCoupon={handleRemoveCoupon}
+        isApplying={isApplyingCoupon}
+      />
+
       {/* Checkout Modal */}
       <CheckoutModal
         isOpen={isCheckoutOpen}
@@ -1045,7 +1063,9 @@ export default function CartPage() {
         cart={{ ...cart, totalAmount: totalPayable, discountPrice: couponDiscount }}
         appliedCoupon={appliedCoupon}
         selectedAddress={selectedAddress}
+        onOpenCouponDrawer={() => setIsCouponDrawerOpen(true)}
       />
     </div>
   );
 }
+
