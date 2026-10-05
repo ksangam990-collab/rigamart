@@ -38,7 +38,7 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 12, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="max-w-md w-full bg-surface rounded-none border border-line p-7 sm:p-8 space-y-6"
+        className="max-w-md w-full bg-surface rounded-2xl shadow-subtle border border-line p-7 sm:p-8 space-y-6"
       >
         <div className="text-center">
           <div className="flex justify-center mb-3">
@@ -49,7 +49,7 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 p-3 bg-danger-soft border border-danger/20 text-danger text-xs rounded-sm">
+          <div className="flex items-center gap-2 p-3 bg-danger-soft border border-danger/20 text-danger text-xs rounded-xl">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -67,7 +67,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-line rounded text-xs text-ink outline-none focus:bg-surface focus:border-brand transition-all placeholder:text-muted"
+                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-line rounded-xl text-xs text-ink outline-none focus:bg-surface focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-muted"
               />
               <Mail className="w-4 h-4 text-muted absolute left-3.5 top-3 pointer-events-none" />
             </div>
@@ -84,7 +84,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-line rounded text-xs text-ink outline-none focus:bg-surface focus:border-brand transition-all placeholder:text-muted"
+                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-line rounded-xl text-xs text-ink outline-none focus:bg-surface focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-muted"
               />
               <Lock className="w-4 h-4 text-muted absolute left-3.5 top-3 pointer-events-none" />
             </div>
@@ -95,7 +95,7 @@ export default function LoginPage() {
             variant="primary"
             size="lg"
             isLoading={isLoading}
-            className="w-full text-xs font-bold"
+            className="w-full text-xs font-bold shadow-subtle"
           >
             <span>Sign In</span>
             <ArrowRight className="w-4 h-4 ml-1.5" />

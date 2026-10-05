@@ -216,9 +216,9 @@ export default function TermsPage() {
                 <li key={id}>
                   <button
                     onClick={() => scrollTo(id)}
-                    className={`w-full text-left text-xs px-3 py-2 rounded transition-colors font-medium ${
+                    className={`w-full text-left text-xs px-3 py-2 rounded-xl transition-colors font-medium ${
                       activeId === id
-                        ? 'bg-brand text-white font-bold'
+                        ? 'bg-brand-soft text-brand-dark font-bold'
                         : 'text-muted hover:text-ink hover:bg-surface'
                     }`}
                   >
@@ -236,7 +236,7 @@ export default function TermsPage() {
                 key={id}
                 id={id}
                 ref={(el) => (sectionRefs.current[id] = el)}
-                className="bg-surface rounded-none border border-line p-6 sm:p-8 scroll-mt-24"
+                className="bg-surface rounded-2xl shadow-subtle border border-line p-6 sm:p-8 scroll-mt-24"
               >
                 <h2 className="text-base sm:text-lg font-bold text-ink mb-4 pb-3 border-b border-line">
                   {title}

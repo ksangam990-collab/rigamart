@@ -183,21 +183,21 @@ export default function FrequentlyBoughtTogether({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.35 }}
-      className="my-10 bg-surface border border-line rounded-none p-5 sm:p-7 overflow-hidden"
+      className="my-10 bg-surface border border-line rounded-2xl p-5 sm:p-7 shadow-xs overflow-hidden"
     >
       {/* Header with Smart Bundle Savings Badge */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-line">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm text-[11px] font-semibold uppercase tracking-wider bg-warning/10 text-warning border border-warning/20">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-warning-soft text-warning border border-warning/30">
               <Sparkles className="w-3 h-3 text-warning fill-warning" />
               Smart Bundle Offer
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[11px] font-semibold bg-success/10 text-success border border-success/20">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-success-soft text-success border border-success/30">
               Extra 10% OFF
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold font-display text-ink tracking-tight mt-1.5">
+          <h2 className="text-xl sm:text-2xl font-bold text-ink tracking-tight mt-1.5">
             Frequently Bought Together
           </h2>
           <p className="text-xs text-muted mt-0.5">
@@ -218,16 +218,16 @@ export default function FrequentlyBoughtTogether({
               return (
                 <React.Fragment key={item._id}>
                   {index > 0 && (
-                    <div className="w-8 h-8 rounded-full bg-canvas border border-line flex items-center justify-center text-ink font-bold shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold shadow-2xs shrink-0">
                       <Plus className="w-4 h-4 stroke-[2.5]" />
                     </div>
                   )}
 
                   <div
                     onClick={() => toggleItem(item._id)}
-                    className={`group relative flex flex-col items-center p-3 rounded-none border transition-all cursor-pointer w-32 sm:w-40 select-none ${
+                    className={`group relative flex flex-col items-center p-3 rounded-xl border-2 transition-all cursor-pointer w-32 sm:w-40 select-none ${
                       isChecked
-                        ? 'border-ink bg-surface ring-1 ring-ink'
+                        ? 'border-brand bg-brand/10 shadow-xs ring-2 ring-brand/20'
                         : 'border-line bg-canvas opacity-60 grayscale-[30%] hover:grayscale-0'
                     }`}
                   >
@@ -239,19 +239,19 @@ export default function FrequentlyBoughtTogether({
                         onChange={() => toggleItem(item._id)}
                         onClick={(e) => e.stopPropagation()}
                         aria-label={`Select ${item.name}`}
-                        className="w-4 h-4 text-ink rounded-none border-line focus:ring-ink cursor-pointer"
+                        className="w-4 h-4 text-brand rounded border-line focus:ring-brand cursor-pointer"
                       />
                     </div>
 
                     {/* Tag badge for current product */}
                     {item.isCurrent && (
-                      <span className="absolute top-2 right-2 text-[9px] font-bold uppercase tracking-wider bg-ink text-canvas px-1.5 py-0.5 rounded-sm">
+                      <span className="absolute top-2 right-2 text-[9px] font-bold uppercase tracking-wider bg-brand text-white px-1.5 py-0.5 rounded shadow-2xs">
                         This Item
                       </span>
                     )}
 
                     {/* Product Image */}
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-none overflow-hidden bg-surface border border-line flex items-center justify-center p-1 mt-3">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg overflow-hidden bg-surface border border-line flex items-center justify-center p-1 mt-3">
                       {item.image ? (
                         <img
                           src={item.image}
@@ -329,7 +329,7 @@ export default function FrequentlyBoughtTogether({
         </div>
 
         {/* Right Column: Bundle Pricing & 1-Click Buy Box */}
-        <div className="lg:col-span-4 bg-surface border border-line rounded-none p-5 sm:p-6 flex flex-col justify-between">
+        <div className="lg:col-span-4 bg-canvas border border-line rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between text-xs text-muted">
               <span className="font-semibold uppercase tracking-wider text-[11px] text-ink">
@@ -356,7 +356,7 @@ export default function FrequentlyBoughtTogether({
               {/* Discount Savings Pills */}
               {hasBundleDiscount ? (
                 <div className="mt-2.5 space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-success bg-success/10 border border-success/20 px-2.5 py-1 rounded-sm">
+                  <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-success bg-success-soft border border-success/20 px-2.5 py-1 rounded-lg">
                     <Sparkles className="w-3.5 h-3.5 text-success fill-success/20" />
                     <span>Save ₹{bundleDiscountSavings.toLocaleString('en-IN')} with 10% Bundle Discount</span>
                   </div>
@@ -382,20 +382,21 @@ export default function FrequentlyBoughtTogether({
           <div className="mt-6 space-y-3">
             <motion.button
               type="button"
-              whileTap={{ scale: selectedItems.length > 0 && !isAdding ? 0.99 : 1 }}
+              whileHover={{ scale: selectedItems.length > 0 && !isAdding ? 1.02 : 1 }}
+              whileTap={{ scale: selectedItems.length > 0 && !isAdding ? 0.97 : 1 }}
               onClick={handleAddBundleToCart}
               disabled={selectedItems.length === 0 || isAdding}
-              className={`w-full py-3 px-4 rounded font-bold text-sm flex items-center justify-center gap-2 transition-colors ${
+              className={`w-full py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition-all ${
                 addedSuccess
                   ? 'bg-success text-white'
                   : selectedItems.length === 0
                   ? 'bg-canvas text-muted border border-line cursor-not-allowed'
-                  : 'bg-ink hover:bg-ink/90 text-canvas'
+                  : 'bg-brand hover:bg-brand-dark text-white'
               }`}
             >
               {isAdding ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-canvas border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   <span>Adding Bundle to Cart...</span>
                 </>
               ) : addedSuccess ? (

@@ -6,7 +6,6 @@ import { Heart, ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
 import { fetchWishlist, removeFromWishlist } from '../features/wishlist/wishlistSlice.js';
 import { addToCart } from '../features/cart/cartSlice.js';
 import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
-import { Button } from '../components/ui/index.js';
 
 export default function WishlistPage() {
   const dispatch = useDispatch();
@@ -32,9 +31,9 @@ export default function WishlistPage() {
 
   if (isLoading && items.length === 0) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <div className="h-6 bg-line/60 rounded w-48 animate-pulse" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <div className="h-6 bg-gray-200 rounded w-48 animate-pulse" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
             <ProductCardSkeleton key={i} />
           ))}
@@ -45,39 +44,42 @@ export default function WishlistPage() {
 
   if (items.length === 0) {
     return (
-      <div className="max-w-md mx-auto py-20 px-4 text-center space-y-4">
-        <div className="w-14 h-14 rounded bg-canvas border border-line text-muted mx-auto flex items-center justify-center">
-          <Heart className="w-6 h-6 text-muted" />
-        </div>
-        <h2 className="text-xl font-bold text-ink tracking-tight">Your Wishlist is Empty</h2>
-        <p className="text-xs text-muted max-w-sm mx-auto leading-relaxed">
-          Save your favorite products to keep track of seasonal sales, price drops, and restocks.
+      <div className="max-w-xl mx-auto py-20 px-4 text-center space-y-5">
+        <motion.div
+          animate={{ scale: [1, 1.12, 1] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-20 h-20 rounded-full bg-rose-50 text-rose-500 mx-auto flex items-center justify-center shadow-inner"
+        >
+          <Heart className="w-10 h-10 fill-rose-500" />
+        </motion.div>
+        <h2 className="text-2xl font-black text-gray-900 tracking-tight">Your Wishlist is Empty</h2>
+        <p className="text-xs text-gray-500 max-w-sm mx-auto leading-relaxed">
+          Save your favorite products to keep track of seasonal sales, price drops, and restocks!
         </p>
-        <div className="pt-2">
-          <Link to="/search">
-            <Button variant="primary" size="md">
-              Explore Catalog Now
-              <ArrowRight className="w-4 h-4 ml-1.5" />
-            </Button>
+        <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} className="pt-2">
+          <Link
+            to="/search"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-all"
+          >
+            Explore Catalog Now
+            <ArrowRight className="w-4 h-4" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div className="pb-4 border-b border-line flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight flex items-center gap-2">
-            <Heart className="w-5 h-5 text-accent fill-accent" />
-            My Wishlist ({items.length})
-          </h1>
-          <p className="text-xs text-muted mt-0.5">Saved items reserved for quick checkout</p>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="pb-4 border-b border-gray-200">
+        <h1 className="text-2xl font-black text-gray-900 tracking-tight flex items-center gap-2">
+          <Heart className="w-6 h-6 text-rose-500 fill-rose-500" />
+          My Wishlist ({items.length} items)
+        </h1>
+        <p className="text-xs text-gray-500 mt-1">Saved items reserved for quick checkout</p>
       </div>
 
-      <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <AnimatePresence mode="popLayout">
           {items.map((product) => {
             const defaultVariant = product.variants?.[0] || {};
@@ -94,44 +96,45 @@ export default function WishlistPage() {
               <motion.div
                 key={product._id}
                 layout
-                initial={{ opacity: 0, scale: 0.98 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
-                className="bg-surface rounded-none border border-line overflow-hidden hover:border-ink transition-colors duration-150 flex flex-col justify-between"
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative aspect-[4/5] bg-canvas overflow-hidden group border-b border-line">
+                  <div className="relative aspect-square bg-gray-50 overflow-hidden group">
                     <img
                       src={imageUrl}
                       alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500 ease-out"
                     />
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => dispatch(removeFromWishlist(product._id))}
-                      className="absolute top-2 right-2 p-1.5 bg-surface/90 hover:bg-surface text-muted hover:text-danger rounded border border-line transition-colors"
+                      className="absolute top-2.5 right-2.5 p-2 bg-white/85 hover:bg-white text-gray-400 hover:text-rose-600 rounded-full shadow-sm transition-colors"
                       title="Remove from wishlist"
-                      aria-label="Remove item from wishlist"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                      <Trash2 className="w-4 h-4" />
+                    </motion.button>
                   </div>
 
-                  <div className="p-3.5 space-y-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted font-mono block">
+                  <div className="p-4 space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                       {product.brand || 'Rigamart'}
                     </span>
                     <Link
                       to={`/products/${product._id}`}
-                      className="text-xs font-bold text-ink hover:text-brand line-clamp-1 block transition-colors"
+                      className="text-xs font-bold text-gray-900 hover:text-brand-600 line-clamp-1 block transition-colors"
                     >
                       {product.name}
                     </Link>
-                    <div className="flex items-baseline gap-2 pt-0.5">
-                      <span className="text-sm font-bold text-ink font-mono tabular-nums">
+                    <div className="flex items-baseline gap-2 pt-1">
+                      <span className="text-sm font-black text-gray-900">
                         ₹{price.toLocaleString('en-IN')}
                       </span>
                       {mrp > price && (
-                        <span className="text-xs text-muted line-through font-mono tabular-nums">
+                        <span className="text-xs text-gray-400 line-through">
                           ₹{Math.round(mrp).toLocaleString('en-IN')}
                         </span>
                       )}
@@ -139,15 +142,17 @@ export default function WishlistPage() {
                   </div>
                 </div>
 
-                <div className="p-3.5 pt-0">
-                  <button
+                <div className="p-4 pt-0">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={() => handleMoveToCart(product)}
                     disabled={!inStock}
-                    className="w-full py-2 bg-ink hover:bg-black text-white font-bold text-xs rounded transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
+                    className="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                   >
-                    <ShoppingCart className="w-3.5 h-3.5" />
-                    <span>{inStock ? 'Move to Cart' : 'Out of Stock'}</span>
-                  </button>
+                    <ShoppingCart className="w-4 h-4" />
+                    {inStock ? 'Move to Cart' : 'Out of Stock'}
+                  </motion.button>
                 </div>
               </motion.div>
             );

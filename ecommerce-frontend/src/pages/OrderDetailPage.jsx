@@ -56,42 +56,42 @@ function OrderDetailSkeleton() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-pulse space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
-          <div className="w-28 h-8 bg-line/60 rounded" />
+          <div className="w-28 h-8 bg-line/60 rounded-lg" />
           <div className="flex-1 space-y-1.5">
-            <div className="h-5 bg-line/60 rounded-sm w-48" />
-            <div className="h-3 bg-line/40 rounded-sm w-32" />
+            <div className="h-5 bg-line/60 rounded w-48" />
+            <div className="h-3 bg-line/40 rounded w-32" />
           </div>
-          <div className="h-7 bg-line/60 rounded-sm w-24" />
+          <div className="h-7 bg-line/60 rounded-full w-24" />
         </div>
         {/* Timeline */}
-        <div className="bg-surface rounded-none border border-line p-6">
+        <div className="bg-surface rounded-2xl border border-line p-6">
           <div className="flex justify-between">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="flex flex-col items-center gap-2 flex-1">
-                <div className="w-9 h-9 rounded-full bg-line/60" />
-                <div className="h-3 bg-line/60 rounded-sm w-16" />
-                <div className="h-2.5 bg-line/40 rounded-sm w-20" />
+                <div className="w-10 h-10 rounded-full bg-line/60" />
+                <div className="h-3 bg-line/60 rounded w-16" />
+                <div className="h-2.5 bg-line/40 rounded w-20" />
               </div>
             ))}
           </div>
         </div>
         {/* 2-col */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-8 bg-surface rounded-none border border-line p-6 space-y-4">
+          <div className="lg:col-span-8 bg-surface rounded-2xl border border-line p-6 space-y-4">
             {[...Array(2)].map((_, i) => (
               <div key={i} className="flex gap-4">
-                <div className="w-16 h-20 bg-line/60 rounded-none shrink-0" />
+                <div className="w-16 h-16 bg-line/60 rounded-xl shrink-0" />
                 <div className="flex-1 space-y-2 pt-1">
-                  <div className="h-4 bg-line/60 rounded-sm w-3/4" />
-                  <div className="h-3 bg-line/40 rounded-sm w-1/2" />
+                  <div className="h-4 bg-line/60 rounded w-3/4" />
+                  <div className="h-3 bg-line/40 rounded w-1/2" />
                 </div>
-                <div className="h-5 bg-line/60 rounded-sm w-16" />
+                <div className="h-5 bg-line/60 rounded w-16" />
               </div>
             ))}
           </div>
           <div className="lg:col-span-4 space-y-4">
-            <div className="bg-surface rounded-none border border-line p-5 space-y-3 h-56" />
-            <div className="bg-surface rounded-none border border-line p-5 h-32 space-y-2" />
+            <div className="bg-surface rounded-2xl border border-line p-5 space-y-3 h-56" />
+            <div className="bg-surface rounded-2xl border border-line p-5 h-32 space-y-2" />
           </div>
         </div>
       </div>
@@ -132,11 +132,11 @@ function TimelineStep({ label, timestamp, state, index }) {
 
       {/* Step Circle */}
       <div
-        className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 ${
+        className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
           isDone
-            ? 'bg-ink text-white'
+            ? 'bg-brand text-white shadow-subtle'
             : isCurrent
-            ? 'bg-surface border-2 border-brand text-brand'
+            ? 'bg-surface border-2 border-brand text-brand ring-4 ring-brand-soft shadow-subtle'
             : 'bg-canvas text-muted border border-line'
         }`}
       >
@@ -144,13 +144,13 @@ function TimelineStep({ label, timestamp, state, index }) {
           <CheckCircle2 className="w-4 h-4" />
         ) : isCurrent ? (
           <motion.div
-            animate={{ scale: [1, 1.1, 1] }}
+            animate={{ scale: [1, 1.12, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
             <Package className="w-4 h-4" />
           </motion.div>
         ) : (
-          <div className="w-1.5 h-1.5 rounded-full bg-muted/60" />
+          <div className="w-2 h-2 rounded-full bg-muted/40" />
         )}
       </div>
 
@@ -160,7 +160,7 @@ function TimelineStep({ label, timestamp, state, index }) {
           {label}
         </p>
         {timestamp && (
-          <p className="text-[10px] text-muted mt-0.5 max-w-[84px] tabular-nums font-mono">
+          <p className="text-[10px] text-muted mt-0.5 max-w-[84px] tabular-nums">
             {new Date(timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
           </p>
         )}
@@ -183,20 +183,20 @@ function VerticalTimeline({ steps, currentStatus }) {
           <div key={step.label} className="flex items-stretch gap-4">
             <div className="flex flex-col items-center">
               <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
+                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                   state === 'done'
-                    ? 'bg-ink text-white'
+                    ? 'bg-brand text-white shadow-subtle'
                     : state === 'current'
-                    ? 'bg-surface border-2 border-brand text-brand'
+                    ? 'bg-surface border-2 border-brand text-brand ring-4 ring-brand-soft shadow-subtle'
                     : 'bg-canvas text-muted border border-line'
                 }`}
               >
                 {state === 'done' ? (
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <CheckCircle2 className="w-4 h-4" />
                 ) : state === 'current' ? (
-                  <Package className="w-3.5 h-3.5" />
+                  <Package className="w-4 h-4" />
                 ) : (
-                  <div className="w-1.5 h-1.5 rounded-full bg-muted/60" />
+                  <div className="w-2 h-2 rounded-full bg-muted/40" />
                 )}
               </div>
               {!isLast && (
@@ -398,7 +398,7 @@ export default function OrderDetailPage() {
             size="sm"
             onClick={handleDownloadInvoice}
             isLoading={downloadingInvoice}
-            className="text-xs"
+            className="text-xs shadow-subtle"
           >
             <Download className="w-3.5 h-3.5 mr-1.5" />
             Download Tax Invoice
@@ -406,7 +406,7 @@ export default function OrderDetailPage() {
         </div>
 
         {/* Status Timeline */}
-        <div className="bg-surface rounded-none border border-line p-5 sm:p-6">
+        <div className="bg-surface rounded-2xl border border-line shadow-subtle p-5 sm:p-6">
           {/* Desktop horizontal */}
           <div className="hidden sm:flex justify-between gap-0 relative">
             {timelineSteps.map((step, i) => (
@@ -430,10 +430,10 @@ export default function OrderDetailPage() {
 
         {/* Return & Dispute Lifecycle */}
         {order.returnRequest && (
-          <div className="bg-surface rounded-none border border-line overflow-hidden">
-            <div className="p-4 bg-accent-soft/30 border-b border-line flex flex-wrap items-center justify-between gap-3">
+          <div className="bg-surface rounded-2xl border border-accent/30 shadow-subtle overflow-hidden">
+            <div className="p-4 bg-accent-soft/30 border-b border-accent/20 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-sm bg-accent text-white flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-lg bg-accent text-white flex items-center justify-center font-bold shadow-subtle">
                   <RotateCcw className="w-4 h-4" />
                 </div>
                 <div>
@@ -481,7 +481,7 @@ export default function OrderDetailPage() {
                       : 'Full refund to original payment source'}
                   </p>
                   {order.returnRequest.status === 'Refunded' && (
-                    <div className="mt-2 p-2.5 bg-brand-soft border border-brand/20 rounded-sm text-brand font-bold flex items-center gap-1.5">
+                    <div className="mt-2 p-2.5 bg-brand-soft border border-brand/20 rounded-xl text-brand-dark font-bold flex items-center gap-1.5">
                       <CheckCircle2 className="w-4 h-4 text-brand shrink-0" />
                       <span>
                         Refund of {formatCurrency(order.returnRequest.refundAmount || order.totalAmount || 0)} Credited
@@ -497,7 +497,7 @@ export default function OrderDetailPage() {
         {/* 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* LEFT: Order Items (8 cols) */}
-          <div className="lg:col-span-8 bg-surface rounded-none border border-line overflow-hidden">
+          <div className="lg:col-span-8 bg-surface rounded-2xl border border-line shadow-subtle overflow-hidden">
             <div className="px-5 sm:px-6 py-4 border-b border-line flex items-center justify-between">
               <h2 className="text-xs font-bold uppercase tracking-wider text-muted flex items-center gap-2">
                 <ShoppingBag className="w-4 h-4 text-brand" />
@@ -525,7 +525,7 @@ export default function OrderDetailPage() {
                         <img
                           src={imageUrl}
                           alt={product.name || item.name}
-                          className="w-18 h-22 sm:w-20 sm:h-24 object-cover rounded-none bg-canvas border border-line shrink-0 hover:opacity-90 transition-opacity"
+                          className="w-18 h-22 sm:w-20 sm:h-24 object-cover rounded-xl bg-canvas border border-line shrink-0 hover:opacity-90 transition-opacity"
                         />
                       </Link>
                       <div className="space-y-1">
@@ -555,14 +555,14 @@ export default function OrderDetailPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-muted pt-1 tabular-nums font-mono">
+                        <p className="text-xs text-muted pt-1 tabular-nums">
                           Qty: <strong className="text-ink">{item.quantity}</strong> &times; {formatCurrency(item.price || 0)}
                         </p>
                       </div>
                     </div>
 
                     <div className="sm:text-right shrink-0">
-                      <p className="text-sm font-bold text-ink tabular-nums font-mono">
+                      <p className="text-sm font-bold text-ink tabular-nums">
                         {formatCurrency((item.price || 0) * (item.quantity || 1))}
                       </p>
                     </div>
@@ -575,43 +575,43 @@ export default function OrderDetailPage() {
           {/* RIGHT: Summary & Actions (4 cols, Sticky) */}
           <div className="lg:col-span-4 sticky top-24 space-y-4">
             {/* Price Breakdown */}
-            <div className="bg-surface rounded-none border border-line p-5 sm:p-6 space-y-4">
+            <div className="bg-surface rounded-2xl border border-line shadow-subtle p-5 sm:p-6 space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted pb-2 border-b border-line">
                 Price Breakdown
               </h3>
-              <div className="space-y-2.5 text-xs tabular-nums font-mono">
-                <div className="flex justify-between text-muted font-sans">
+              <div className="space-y-2.5 text-xs tabular-nums">
+                <div className="flex justify-between text-muted">
                   <span>Items Subtotal</span>
-                  <span className="font-semibold text-ink font-mono">{formatCurrency(order.itemsPrice || 0)}</span>
+                  <span className="font-semibold text-ink">{formatCurrency(order.itemsPrice || 0)}</span>
                 </div>
-                <div className="flex justify-between text-muted font-sans">
+                <div className="flex justify-between text-muted">
                   <span>Express Delivery</span>
-                  <span className="font-semibold font-mono">
+                  <span className="font-semibold">
                     {order.shippingPrice === 0 ? (
-                      <span className="text-brand font-bold uppercase font-sans">Free</span>
+                      <span className="text-brand font-bold uppercase">Free</span>
                     ) : (
                       formatCurrency(order.shippingPrice || 0)
                     )}
                   </span>
                 </div>
                 {order.discountPrice > 0 && (
-                  <div className="flex justify-between text-brand font-semibold font-sans">
+                  <div className="flex justify-between text-brand font-semibold">
                     <span>Coupon Discount</span>
-                    <span className="font-mono">&minus;{formatCurrency(order.discountPrice)}</span>
+                    <span>&minus;{formatCurrency(order.discountPrice)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-muted font-sans">
+                <div className="flex justify-between text-muted">
                   <span>Taxes (GST)</span>
-                  <span className="font-semibold text-ink font-mono">{formatCurrency(order.taxPrice || 0)}</span>
+                  <span className="font-semibold text-ink">{formatCurrency(order.taxPrice || 0)}</span>
                 </div>
-                <div className="border-t border-line pt-2.5 flex justify-between text-base font-bold text-ink font-sans">
+                <div className="border-t border-line pt-2.5 flex justify-between text-base font-bold text-ink tabular-nums">
                   <span>Total Amount</span>
-                  <span className="text-lg font-mono">{formatCurrency(order.totalAmount || 0)}</span>
+                  <span className="text-lg">{formatCurrency(order.totalAmount || 0)}</span>
                 </div>
               </div>
 
               {/* Payment Info */}
-              <div className="flex items-center gap-2.5 bg-canvas rounded-none p-3 border border-line">
+              <div className="flex items-center gap-2.5 bg-canvas rounded-xl p-3 border border-line">
                 <CreditCard className="w-4 h-4 text-muted shrink-0" />
                 <div className="flex-1">
                   <p className="text-[10px] text-muted uppercase font-bold tracking-wide">Payment Method</p>
@@ -627,7 +627,7 @@ export default function OrderDetailPage() {
 
             {/* Delivery Destination */}
             {order.shippingAddress && (
-              <div className="bg-surface rounded-none border border-line p-5 space-y-2">
+              <div className="bg-surface rounded-2xl border border-line shadow-subtle p-5 space-y-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-muted flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-brand" /> Delivery Address
                 </h3>
@@ -644,7 +644,7 @@ export default function OrderDetailPage() {
             )}
 
             {/* Cancellation & Return Actions */}
-            <div className="bg-surface rounded-none border border-line p-5 space-y-3">
+            <div className="bg-surface rounded-2xl border border-line shadow-subtle p-5 space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted">Order Actions</h3>
 
               {/* Cancel Button */}
@@ -652,14 +652,14 @@ export default function OrderDetailPage() {
                 <div>
                   <AnimatePresence mode="wait">
                     {cancelState === 'done' ? (
-                      <div className="flex items-center gap-2 text-xs text-brand font-semibold p-2 bg-brand-soft rounded-sm border border-brand/20">
+                      <div className="flex items-center gap-2 text-xs text-brand font-semibold p-2 bg-brand-soft rounded-lg">
                         <CheckCircle2 className="w-4 h-4 text-brand" /> Cancellation submitted.
                       </div>
                     ) : cancelState === 'confirm' || cancelState === 'saving' || cancelState === 'error' ? (
-                      <div className="space-y-3 p-3 bg-danger-soft/40 border border-danger/20 rounded-none">
+                      <div className="space-y-3 p-3 bg-danger-soft/40 border border-danger/20 rounded-xl">
                         <p className="text-xs font-bold text-ink">Reason for cancellation</p>
                         <textarea
-                          className="w-full border border-line rounded px-3 py-2 text-xs text-ink bg-surface focus:outline-none focus:border-brand resize-none"
+                          className="w-full border border-line rounded-lg px-3 py-2 text-xs text-ink bg-surface focus:outline-none focus:border-brand resize-none"
                           rows={2}
                           placeholder="Optional: Reason for cancelling…"
                           value={cancelReason}

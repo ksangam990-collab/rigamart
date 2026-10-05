@@ -3,27 +3,25 @@ import { cn } from '../../utils/cn';
 
 const variantClasses = {
   primary:
-    'bg-ink text-canvas hover:bg-n-700 active:bg-n-900 border border-transparent focus-visible:ring-brand shadow-none',
+    'bg-brand text-white hover:bg-brand-dark active:bg-brand-dark shadow-subtle focus-visible:ring-brand',
   secondary:
-    'bg-transparent text-ink hover:bg-n-50 active:bg-n-100 border border-ink focus-visible:ring-brand shadow-none',
+    'bg-surface text-ink hover:bg-canvas border border-line shadow-subtle focus-visible:ring-line',
   outline:
-    'bg-transparent text-ink hover:bg-n-50 active:bg-n-100 border border-line focus-visible:ring-brand shadow-none',
+    'bg-transparent border border-brand text-brand hover:bg-brand-soft focus-visible:ring-brand',
   ghost:
-    'bg-transparent text-ink hover:bg-n-50 active:bg-n-100 border border-transparent focus-visible:ring-brand shadow-none',
-  brand:
-    'bg-brand text-white hover:bg-brand-dark active:bg-brand-dark border border-transparent focus-visible:ring-brand shadow-none',
-  accent:
-    'bg-brand text-white hover:bg-brand-dark active:bg-brand-dark border border-transparent focus-visible:ring-brand shadow-none',
+    'bg-transparent text-ink hover:bg-brand-soft/60 active:bg-brand-soft focus-visible:ring-brand',
   destructive:
-    'bg-danger text-white hover:bg-danger/90 active:bg-danger/90 border border-transparent focus-visible:ring-danger shadow-none',
+    'bg-danger text-white hover:bg-danger/90 active:bg-danger/90 shadow-subtle focus-visible:ring-danger',
+  accent:
+    'bg-accent text-ink hover:brightness-95 active:brightness-90 shadow-subtle font-semibold focus-visible:ring-accent',
 };
 
 const sizeClasses = {
-  sm: 'h-10 px-3.5 text-xs font-semibold rounded gap-1.5',
-  md: 'h-11 px-4 text-sm font-semibold rounded gap-2',
-  lg: 'h-12 px-6 text-sm sm:text-base font-semibold rounded gap-2.5',
-  icon: 'h-11 w-11 p-0 rounded justify-center',
-  'icon-sm': 'h-10 w-10 p-0 rounded justify-center',
+  sm: 'h-8 px-3 text-xs rounded-lg gap-1.5',
+  md: 'h-10 px-4 text-sm rounded-xl gap-2',
+  lg: 'h-12 px-6 text-base rounded-xl gap-2.5',
+  icon: 'h-10 w-10 p-0 rounded-xl justify-center',
+  'icon-sm': 'h-8 w-8 p-0 rounded-lg justify-center',
 };
 
 export const Button = forwardRef(
@@ -50,13 +48,13 @@ export const Button = forwardRef(
         type={type}
         disabled={isDisabled}
         className={cn(
-          'inline-flex items-center justify-center font-sans select-none tracking-tight',
-          'transition-colors duration-150 ease-out',
+          'inline-flex items-center justify-center font-medium font-sans select-none tracking-tight',
+          'transition-all duration-150 ease-out',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
-          'active:scale-[0.99]',
+          'active:scale-[0.98]',
           variantClasses[variant] || variantClasses.primary,
           sizeClasses[size] || sizeClasses.md,
-          isDisabled && 'opacity-40 cursor-not-allowed pointer-events-none active:scale-100',
+          isDisabled && 'opacity-50 cursor-not-allowed pointer-events-none active:scale-100',
           className
         )}
         {...props}

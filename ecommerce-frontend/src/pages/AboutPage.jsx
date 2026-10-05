@@ -9,21 +9,25 @@ import { Button } from '../components/ui/index.js';
 
 const VALUE_PILLARS = [
   {
+    emoji: '🤝',
     icon: Handshake,
     title: 'Zero Hidden Fees',
     desc: 'Transparent multi-vendor pricing architecture with zero surprise deductions.',
   },
   {
+    emoji: '🔍',
     icon: Search,
     title: 'Verified Catalog Engine',
     desc: 'Structured product validation with size and color SKU variant support.',
   },
   {
+    emoji: '⚡',
     icon: Zap,
     title: 'Instant Inventory Sync',
     desc: 'Atomic inventory deduction at checkout to prevent overselling across sessions.',
   },
   {
+    emoji: '🛡️',
     icon: ShieldCheck,
     title: 'Secure Sandbox Checkout',
     desc: 'Razorpay test mode integration with real-time signature verification.',
@@ -117,23 +121,18 @@ export default function AboutPage() {
             viewport={{ once: true, margin: '-60px' }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
           >
-            {VALUE_PILLARS.map((pillar) => {
-              const Icon = pillar.icon;
-              return (
-                <motion.div
-                  key={pillar.title}
-                  variants={staggerItem}
-                  whileHover={{ y: -2, transition: { duration: 0.15 } }}
-                  className="bg-surface rounded-none p-6 border border-line flex flex-col hover:border-ink transition-colors duration-150"
-                >
-                  <div className="w-10 h-10 rounded bg-canvas border border-line flex items-center justify-center mb-4 text-brand">
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <h3 className="font-bold text-ink text-base mb-2">{pillar.title}</h3>
-                  <p className="text-xs text-muted leading-relaxed">{pillar.desc}</p>
-                </motion.div>
-              );
-            })}
+            {VALUE_PILLARS.map((pillar) => (
+              <motion.div
+                key={pillar.title}
+                variants={staggerItem}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className="bg-surface rounded-2xl p-6 shadow-subtle border border-line flex flex-col hover:border-muted/30 transition-all"
+              >
+                <span className="text-3xl mb-4" aria-hidden="true">{pillar.emoji}</span>
+                <h3 className="font-bold text-ink text-base mb-2">{pillar.title}</h3>
+                <p className="text-xs text-muted leading-relaxed">{pillar.desc}</p>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
@@ -145,7 +144,7 @@ export default function AboutPage() {
         <div id="press" className="scroll-mt-24" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold text-brand uppercase tracking-widest bg-brand-soft border border-brand/20 px-3 py-1 rounded-sm">
+            <span className="text-xs font-bold text-brand uppercase tracking-widest bg-brand-soft border border-brand/20 px-3 py-1 rounded-full">
               Engineering Highlights
             </span>
             <h2 className="text-2xl sm:text-3xl font-bold text-ink mt-3 tracking-tight">Platform Architecture</h2>
@@ -155,19 +154,19 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-canvas rounded-none p-6 border border-line">
+            <div className="bg-canvas rounded-2xl p-6 border border-line shadow-subtle">
               <h3 className="font-bold text-ink text-sm sm:text-base mb-2">Frontend</h3>
               <p className="text-xs text-muted leading-relaxed">
                 React 18 SPA built with Vite, Redux Toolkit for cart and auth state, Tailwind CSS with semantic design tokens, code-splitting via React.lazy/Suspense, and Framer Motion transitions.
               </p>
             </div>
-            <div className="bg-canvas rounded-none p-6 border border-line">
+            <div className="bg-canvas rounded-2xl p-6 border border-line shadow-subtle">
               <h3 className="font-bold text-ink text-sm sm:text-base mb-2">Backend &amp; Database</h3>
               <p className="text-xs text-muted leading-relaxed">
                 RESTful API built with Node.js and Express. MongoDB Atlas with Mongoose schemas, atomic inventory deduction transactions, and role-based access control.
               </p>
             </div>
-            <div className="bg-canvas rounded-none p-6 border border-line">
+            <div className="bg-canvas rounded-2xl p-6 border border-line shadow-subtle">
               <h3 className="font-bold text-ink text-sm sm:text-base mb-2">Integrations</h3>
               <p className="text-xs text-muted leading-relaxed">
                 Razorpay payment gateway in test/sandbox mode, Cloudinary CDN for product image storage, and Nodemailer via Gmail SMTP for order confirmation alerts.
@@ -176,9 +175,9 @@ export default function AboutPage() {
           </div>
 
           {/* Creator & Developer Profile Card */}
-          <div className="mt-8 bg-canvas rounded-none p-6 sm:p-8 border border-line flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="mt-8 bg-canvas rounded-2xl p-6 sm:p-8 border border-line shadow-subtle flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
-              <div className="w-14 h-14 rounded bg-surface border border-line flex items-center justify-center font-bold text-xl text-ink shrink-0">
+              <div className="w-14 h-14 rounded-2xl bg-brand-soft border border-brand/20 flex items-center justify-center font-bold text-xl text-brand-dark shrink-0 shadow-subtle">
                 SK
               </div>
               <div>
@@ -195,7 +194,7 @@ export default function AboutPage() {
               href="https://github.com/ksangam990-collab"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 rounded bg-surface hover:bg-canvas border border-line text-ink font-semibold text-xs transition-colors shrink-0 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-surface hover:bg-canvas border border-line text-ink font-semibold text-xs transition-colors shrink-0 flex items-center gap-2 shadow-subtle"
             >
               <span>GitHub Profile</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -205,7 +204,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Footer CTA ───────────────────────────────────────────────────── */}
-      <section className="bg-surface py-16 border-t border-line text-center">
+      <section className="bg-brand py-16 text-white text-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={fadeInUp}
@@ -213,18 +212,18 @@ export default function AboutPage() {
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
           >
-            <h2 className="text-2xl sm:text-3xl font-bold text-ink mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 tracking-tight">
               Explore Our Curated Catalog
             </h2>
-            <p className="text-muted mb-8 max-w-lg mx-auto text-sm">
+            <p className="text-white/80 mb-8 max-w-lg mx-auto text-sm">
               Discover verified factory-direct pieces and everyday essentials with express pan-India delivery.
             </p>
             <div>
-              <Link to="/search">
-                <Button variant="primary" size="lg">
+              <Link to="/catalog">
+                <button className="inline-flex items-center gap-2 bg-surface text-brand font-bold px-8 py-3.5 rounded-xl shadow-subtle hover:bg-canvas transition-colors text-xs uppercase tracking-wider">
                   <span>Explore Catalog</span>
-                  <ArrowRight className="w-4 h-4 ml-1.5" />
-                </Button>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </Link>
             </div>
           </motion.div>

@@ -39,12 +39,12 @@ export default function VariantSelector({ variants = [], selectedVariant, onSele
               disabled={isOut}
               onClick={() => onSelectVariant(variant)}
               className={cn(
-                'p-2.5 rounded-sm border text-left flex flex-col justify-between transition-colors',
+                'p-3 rounded-xl border text-left flex flex-col justify-between transition-all shadow-subtle',
                 isSelected
-                  ? 'border-ink bg-line/20 text-ink font-semibold ring-1 ring-ink'
+                  ? 'border-brand bg-brand-soft ring-2 ring-brand/30 text-brand-dark font-semibold'
                   : isOut
-                  ? 'border-line/60 bg-canvas/60 opacity-40 cursor-not-allowed text-muted'
-                  : 'border-line bg-surface hover:border-ink/40 text-ink'
+                  ? 'border-line bg-canvas/60 opacity-40 cursor-not-allowed text-muted'
+                  : 'border-line bg-surface hover:border-muted/40 hover:bg-canvas text-ink'
               )}
             >
               <div className="flex items-center justify-between gap-1 mb-1">

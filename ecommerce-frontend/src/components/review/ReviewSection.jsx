@@ -276,19 +276,20 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
   };
 
   return (
-    <div className="space-y-8 pt-8 border-t border-line">
+    <div className="space-y-8 pt-8 border-t border-gray-200">
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold font-display text-ink tracking-tight flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-brand" />
-            Customer Ratings &amp; Reviews
+          <h2 className="text-2xl font-black text-gray-900 tracking-tight flex items-center gap-2">
+            <MessageSquare className="w-6 h-6 text-brand-600" />
+            Customer Ratings & Reviews
           </h2>
-          <p className="text-xs text-muted mt-1">Verified feedback &amp; photos from real Rigamart buyers</p>
+          <p className="text-xs text-gray-500 mt-1">Verified feedback & photos from real Rigamart buyers</p>
         </div>
 
         <motion.button
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
           onClick={() => {
             if (!isAuthenticated) {
               window.location.href = '/login';
@@ -296,7 +297,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
             }
             setModalOpen(true);
           }}
-          className="px-4 py-2 bg-ink hover:bg-ink/90 text-canvas font-medium text-xs rounded transition-colors self-start md:self-auto flex items-center gap-2"
+          className="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all self-start md:self-auto flex items-center gap-2"
         >
           <Camera className="w-4 h-4" />
           Write a Customer Review
@@ -304,14 +305,14 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
       </div>
 
       {/* Ratings Breakdown Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-6 bg-surface border border-line rounded-none items-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-6 bg-gray-50 rounded-2xl border border-gray-100 items-center">
         {/* Overall Score */}
-        <div className="flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-line pb-6 md:pb-0 md:pr-6">
-          <span className="text-5xl font-bold font-mono text-ink">{(avgRating || 0).toFixed(1)}</span>
+        <div className="flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-gray-200 pb-6 md:pb-0 md:pr-6">
+          <span className="text-5xl font-black text-gray-900">{(avgRating || 0).toFixed(1)}</span>
           <div className="my-2">
             <RatingStars rating={avgRating} size="w-5 h-5" />
           </div>
-          <span className="text-xs text-muted font-medium">Based on {numReviews} ratings</span>
+          <span className="text-xs text-gray-500 font-medium">Based on {numReviews} ratings</span>
         </div>
 
         {/* 5-star to 1-star Progress Bars */}
@@ -325,23 +326,23 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
               <div
                 key={starLevel}
                 onClick={() => setSelectedRatingFilter(isSelected ? null : starLevel)}
-                className={`flex items-center gap-3 text-xs cursor-pointer p-1 rounded-sm transition-colors ${
-                  isSelected ? 'bg-line/20 font-bold' : 'hover:bg-canvas'
+                className={`flex items-center gap-3 text-xs cursor-pointer p-1 rounded-lg transition-colors ${
+                  isSelected ? 'bg-amber-50 font-bold' : 'hover:bg-gray-100/60'
                 }`}
                 title={`Filter by ${starLevel} stars`}
               >
-                <span className="w-12 font-bold text-ink flex items-center gap-1">
+                <span className="w-12 font-bold text-gray-700 flex items-center gap-1">
                   {starLevel} <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                 </span>
-                <div className="flex-1 h-2 bg-line rounded-none overflow-hidden">
+                <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${percentage}%` }}
                     transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="h-full bg-amber-400 rounded-none"
+                    className="h-full bg-amber-400 rounded-full"
                   />
                 </div>
-                <span className="w-12 text-right text-muted font-mono text-[11px]">
+                <span className="w-12 text-right text-gray-500 font-mono text-[11px]">
                   {count} ({percentage}%)
                 </span>
               </div>
@@ -351,9 +352,9 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
       </div>
 
       {/* Filter & Sort Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-surface p-3.5 border border-line rounded-none">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-xs">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold text-muted flex items-center gap-1 mr-1">
+          <span className="text-xs font-bold text-gray-500 flex items-center gap-1 mr-1">
             <Filter className="w-3.5 h-3.5" /> Filter:
           </span>
 
@@ -361,10 +362,10 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
           <button
             type="button"
             onClick={() => setHasImagesFilter(!hasImagesFilter)}
-            className={`px-3 py-1.5 rounded-sm text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
               hasImagesFilter
-                ? 'bg-ink text-canvas'
-                : 'bg-canvas hover:bg-line/40 text-ink border border-line'
+                ? 'bg-brand-600 text-white shadow-xs'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
             }`}
           >
             <Camera className="w-3.5 h-3.5" />
@@ -375,10 +376,10 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
           <button
             type="button"
             onClick={() => setVerifiedOnlyFilter(!verifiedOnlyFilter)}
-            className={`px-3 py-1.5 rounded-sm text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
               verifiedOnlyFilter
-                ? 'bg-success text-white'
-                : 'bg-canvas hover:bg-line/40 text-ink border border-line'
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
             }`}
           >
             <CheckCircle className="w-3.5 h-3.5" />
@@ -390,7 +391,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
             <button
               type="button"
               onClick={() => setSelectedRatingFilter(null)}
-              className="px-3 py-1.5 rounded-sm text-xs font-semibold bg-line text-ink flex items-center gap-1 hover:bg-line/70 transition-colors"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-100 text-amber-800 flex items-center gap-1 hover:bg-amber-200 transition-colors"
             >
               <span>{selectedRatingFilter} Stars</span>
               <X className="w-3 h-3" />
@@ -406,7 +407,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                 setVerifiedOnlyFilter(false);
                 setSelectedRatingFilter(null);
               }}
-              className="text-xs text-brand hover:text-brand-dark font-semibold px-2 py-1 transition-colors"
+              className="text-xs text-brand-600 hover:text-brand-700 font-semibold px-2 py-1 transition-colors"
             >
               Reset Filters
             </button>
@@ -415,14 +416,14 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
 
         {/* Sort Select */}
         <div className="flex items-center gap-2 text-xs">
-          <label htmlFor="review-sort" className="font-semibold text-muted whitespace-nowrap">
+          <label htmlFor="review-sort" className="font-semibold text-gray-500 whitespace-nowrap">
             Sort by:
           </label>
           <select
             id="review-sort"
             value={selectedSort}
             onChange={(e) => setSelectedSort(e.target.value)}
-            className="px-3 py-1.5 bg-surface border border-line rounded-sm text-xs font-medium text-ink outline-none focus:border-ink transition-colors"
+            className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-semibold text-gray-800 outline-none focus:border-brand-500 focus:bg-white transition-colors"
           >
             <option value="recent">Most Recent</option>
             <option value="helpful">Most Helpful</option>
@@ -436,12 +437,12 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
       <div className="space-y-4">
         {isLoading ? (
           <div className="py-12 flex justify-center">
-            <div className="w-8 h-8 border-2 border-ink border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-brand-600 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : reviews.length === 0 ? (
-          <div className="text-center py-12 bg-surface rounded-none border border-line p-8">
-            <p className="text-muted text-sm font-medium">No reviews match the selected filters.</p>
-            <p className="text-xs text-muted/70 mt-1">
+          <div className="text-center py-12 bg-white rounded-2xl border border-gray-100 p-8 shadow-xs">
+            <p className="text-gray-500 text-sm font-medium">No reviews match the selected filters.</p>
+            <p className="text-xs text-gray-400 mt-1">
               Try adjusting your filters or be the first to submit a review with photos!
             </p>
           </div>
@@ -463,18 +464,18 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
-                className="bg-surface p-6 rounded-none border border-line space-y-3"
+                className="bg-white p-6 rounded-2xl border border-gray-100 shadow-xs space-y-3"
               >
                 {/* Header: User, verified badge, date */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-canvas border border-line text-ink font-bold text-xs flex items-center justify-center uppercase">
+                    <div className="w-8 h-8 rounded-full bg-brand-50 text-brand-700 font-black text-xs flex items-center justify-center uppercase">
                       {(rev.user?.name || 'Customer').charAt(0)}
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-ink">{rev.user?.name || 'Customer'}</h4>
+                      <h4 className="text-sm font-bold text-gray-900">{rev.user?.name || 'Customer'}</h4>
                       {rev.verifiedPurchase && (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-success bg-success/10 px-1.5 py-0.5 rounded-sm">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
                           <CheckCircle className="w-3 h-3" />
                           Verified Purchase
                         </span>
@@ -482,7 +483,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                     </div>
                   </div>
 
-                  <span className="text-xs text-muted font-mono">
+                  <span className="text-xs text-gray-400">
                     {new Date(rev.createdAt).toLocaleDateString('en-IN', {
                       day: 'numeric',
                       month: 'short',
@@ -494,17 +495,17 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                 {/* Rating & Title */}
                 <div className="flex items-center gap-2">
                   <RatingStars rating={rev.rating} size="w-3.5 h-3.5" />
-                  {rev.title && <h5 className="text-sm font-bold text-ink">{rev.title}</h5>}
+                  {rev.title && <h5 className="text-sm font-bold text-gray-800">{rev.title}</h5>}
                 </div>
 
                 {/* Body Text */}
-                <p className="text-xs sm:text-sm text-muted leading-relaxed">{rev.body}</p>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{rev.body}</p>
 
                 {/* Customer Uploaded Photos Row */}
                 {rev.images && rev.images.length > 0 && (
                   <div className="pt-1">
-                    <p className="text-[11px] font-bold text-muted uppercase tracking-wider mb-2 flex items-center gap-1 font-mono">
-                      <Camera className="w-3 h-3 text-brand" />
+                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                      <Camera className="w-3 h-3 text-brand-500" />
                       Customer Photos ({rev.images.length})
                     </p>
                     <div className="flex flex-wrap gap-2.5">
@@ -512,17 +513,17 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                         <div
                           key={img.public_id || idx}
                           onClick={() => openLightbox(rev, idx)}
-                          className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-none overflow-hidden border border-line cursor-pointer group"
+                          className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-gray-200 cursor-pointer group shadow-2xs hover:shadow-md transition-all"
                           title="Click to view full photo"
                         >
                           <img
                             src={img.url}
                             alt={`Customer review photo ${idx + 1}`}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-200"
                             loading="lazy"
                           />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                            <Maximize2 className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <Maximize2 className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-sm" />
                           </div>
                         </div>
                       ))}
@@ -531,22 +532,23 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                 )}
 
                 {/* Helpful Voting Bar */}
-                <div className="pt-2 flex items-center justify-between border-t border-line">
+                <div className="pt-2 flex items-center justify-between border-t border-gray-50">
                   <motion.button
                     type="button"
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.94 }}
                     onClick={() => handleHelpfulVote(rev)}
                     disabled={isAuthor}
-                    className={`inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded transition-colors ${
+                    className={`inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-all ${
                       isHelpfulActive
-                        ? 'bg-ink text-canvas font-medium'
-                        : 'text-ink hover:bg-canvas border border-line'
+                        ? 'bg-brand-50 text-brand-700 border border-brand-200 font-bold shadow-xs'
+                        : 'text-gray-600 hover:text-brand-600 hover:bg-gray-100/70 border border-gray-200'
                     } ${isAuthor ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                     title={isAuthor ? 'You cannot vote on your own review' : isHelpfulActive ? 'Remove helpful vote' : 'Mark as helpful'}
                   >
                     <ThumbsUp
                       className={`w-3.5 h-3.5 transition-transform ${
-                        isHelpfulActive ? 'fill-canvas text-canvas' : ''
+                        isHelpfulActive ? 'fill-brand-600 text-brand-600 scale-110' : ''
                       }`}
                     />
                     <span>
@@ -554,7 +556,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                     </span>
                   </motion.button>
 
-                  <span className="text-[11px] text-muted">
+                  <span className="text-[11px] text-gray-400">
                     {rev.helpfulVotes > 0
                       ? `${rev.helpfulVotes} person${rev.helpfulVotes === 1 ? '' : 's'} found this helpful`
                       : 'Was this review helpful?'}
@@ -584,27 +586,27 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="bg-surface rounded-none border border-line max-w-lg w-full p-6 space-y-5 relative z-10 max-h-[92vh] overflow-y-auto my-auto"
+              className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 relative z-10 max-h-[92vh] overflow-y-auto my-auto"
             >
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setModalOpen(false)}
-                className="absolute top-4 right-4 p-1.5 text-muted hover:text-ink rounded-sm hover:bg-canvas transition-colors"
+                className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
               </motion.button>
 
               <div>
-                <h3 className="text-lg font-bold font-display text-ink tracking-tight">Write a Review</h3>
-                <p className="text-xs text-muted mt-1">Share your feedback &amp; photos to help other buyers</p>
+                <h3 className="text-lg font-black text-gray-900 tracking-tight">Write a Review</h3>
+                <p className="text-xs text-gray-500 mt-1">Share your feedback & photos to help other buyers</p>
               </div>
 
               {formError && (
                 <motion.div
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-2 p-3 bg-danger/10 text-danger text-xs rounded-none border border-danger/20"
+                  className="flex items-center gap-2 p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200"
                 >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   <span>{formError}</span>
@@ -615,7 +617,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex items-center gap-2 p-3 bg-success/10 text-success text-xs rounded-none border border-success/20"
+                  className="flex items-center gap-2 p-3 bg-emerald-50 text-emerald-700 text-xs rounded-xl border border-emerald-200"
                 >
                   <CheckCircle className="w-4 h-4 flex-shrink-0" />
                   <span>{formSuccess}</span>
@@ -625,7 +627,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
               <form onSubmit={handleSubmitReview} className="space-y-4">
                 {/* Overall Rating */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-muted font-mono mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
                     Overall Rating
                   </label>
                   <RatingStars
@@ -638,7 +640,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
 
                 {/* Review Headline */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-muted font-mono mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
                     Review Headline / Title
                   </label>
                   <input
@@ -647,13 +649,13 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Excellent fabric quality and perfect fit!"
-                    className="w-full px-3.5 py-2.5 bg-canvas border border-line rounded text-sm text-ink outline-none focus:border-ink transition-colors"
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-brand-500 focus:bg-white transition-colors"
                   />
                 </div>
 
                 {/* Review Description */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-muted font-mono mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
                     Review Description
                   </label>
                   <textarea
@@ -662,7 +664,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                     placeholder="Tell others what you liked or disliked about this product..."
-                    className="w-full px-3.5 py-2.5 bg-canvas border border-line rounded text-sm text-ink outline-none focus:border-ink transition-colors"
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-brand-500 focus:bg-white transition-colors"
                   />
                 </div>
 
@@ -683,7 +685,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                       {reviewImages.map((img, idx) => (
                         <div
                           key={img.public_id || idx}
-                          className="relative aspect-square rounded-none overflow-hidden border border-line group"
+                          className="relative aspect-square rounded-xl overflow-hidden border border-gray-200 group shadow-2xs"
                         >
                           <img
                             src={img.url}
@@ -693,7 +695,7 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                           <button
                             type="button"
                             onClick={() => handleRemoveImage(idx)}
-                            className="absolute top-1 right-1 p-1 bg-danger text-white rounded-none opacity-80 hover:opacity-100 transition-opacity"
+                            className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full opacity-80 hover:opacity-100 transition-opacity shadow-sm"
                             title="Remove photo"
                           >
                             <Trash2 className="w-3 h-3" />
@@ -718,16 +720,16 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isUploadingImages}
-                        className="w-full py-3 px-4 border border-dashed border-line hover:border-ink rounded bg-canvas hover:bg-surface flex items-center justify-center gap-2 text-xs font-medium text-ink transition-colors disabled:opacity-50"
+                        className="w-full py-3 px-4 border-2 border-dashed border-gray-200 hover:border-brand-500 rounded-xl bg-gray-50 hover:bg-brand-50/30 flex items-center justify-center gap-2 text-xs font-semibold text-gray-600 hover:text-brand-600 transition-all disabled:opacity-50"
                       >
                         {isUploadingImages ? (
                           <>
-                            <Loader2 className="w-4 h-4 animate-spin text-ink" />
+                            <Loader2 className="w-4 h-4 animate-spin text-brand-600" />
                             <span>Uploading photos...</span>
                           </>
                         ) : (
                           <>
-                            <UploadCloud className="w-4 h-4 text-muted" />
+                            <UploadCloud className="w-4 h-4 text-brand-500" />
                             <span>Add product photos (JPG, PNG up to 5MB)</span>
                           </>
                         )}
@@ -737,19 +739,20 @@ export default function ReviewSection({ productId, initialRating = 0, initialNum
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex justify-end gap-3 pt-3 border-t border-line">
+                <div className="flex justify-end gap-3 pt-3 border-t border-gray-100">
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="px-4 py-2 border border-line text-ink font-medium text-xs rounded hover:bg-canvas transition-colors"
+                    className="px-4 py-2 border border-gray-200 text-gray-700 font-semibold text-xs rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>
                   <motion.button
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
                     type="submit"
                     disabled={isSubmitting || isUploadingImages}
-                    className="px-5 py-2 bg-ink hover:bg-ink/90 text-canvas font-medium text-xs rounded flex items-center gap-2 disabled:opacity-50 transition-colors"
+                    className="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg shadow-sm flex items-center gap-2 disabled:opacity-50 transition-all"
                   >
                     {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                     Submit Review

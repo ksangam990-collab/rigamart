@@ -146,13 +146,13 @@ function FaqSection({ section, openKey, onToggle }) {
     <motion.div
       id={section.id}
       variants={staggerItem}
-      className={`bg-surface rounded-none border border-line overflow-hidden transition-colors duration-150 scroll-mt-28 ${
-        isAnyOpen ? 'border-brand' : ''
+      className={`bg-surface rounded-2xl shadow-subtle border border-line overflow-hidden transition-all duration-200 scroll-mt-28 ${
+        isAnyOpen ? 'border-brand/40 ring-1 ring-brand/20' : ''
       }`}
     >
       <div
-        className={`border-l-2 border-brand px-6 py-4 transition-colors ${
-          isAnyOpen ? 'bg-canvas' : 'bg-surface'
+        className={`border-l-4 border-brand px-6 py-4 transition-colors ${
+          isAnyOpen ? 'bg-brand-soft/40' : 'bg-canvas/50'
         }`}
       >
         <h2 className="font-bold text-ink text-sm sm:text-base">{section.title}</h2>
@@ -247,7 +247,7 @@ export default function HelpPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search FAQs, e.g. 'track order' or 'refund'…"
-              className="w-full pl-11 pr-4 py-3 rounded bg-surface text-ink text-sm border border-line focus:outline-none focus:border-brand placeholder:text-muted"
+              className="w-full pl-11 pr-4 py-3.5 rounded-full bg-surface text-ink text-sm shadow-subtle border border-line focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand placeholder:text-muted"
               aria-label="Search frequently asked questions"
             />
           </motion.div>
@@ -287,10 +287,10 @@ export default function HelpPage() {
           )}
 
           {/* ── Contact Support ─────────────────────────────────────────── */}
-          <div className="mt-12 bg-surface rounded-none border border-line p-8 text-center space-y-3">
+          <div className="mt-12 bg-surface rounded-2xl border border-line shadow-subtle p-8 text-center space-y-3">
             <div className="flex justify-center">
-              <div className="w-12 h-12 rounded bg-canvas border border-line flex items-center justify-center text-ink">
-                <MessageCircle className="w-6 h-6 text-brand" />
+              <div className="p-3 bg-brand-soft text-brand-dark rounded-full">
+                <MessageCircle className="w-6 h-6" />
               </div>
             </div>
             <h3 className="font-bold text-ink text-base sm:text-lg">Still need assistance?</h3>

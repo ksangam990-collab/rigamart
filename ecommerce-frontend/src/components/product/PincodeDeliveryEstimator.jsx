@@ -57,7 +57,7 @@ export default function PincodeDeliveryEstimator() {
   };
 
   return (
-    <div className="p-4 bg-canvas rounded-none border border-line space-y-3 font-sans">
+    <div className="p-4 bg-canvas rounded-xl border border-line space-y-3 font-sans">
       <div className="flex items-center justify-between">
         <label
           htmlFor="pincode-input"
@@ -87,7 +87,7 @@ export default function PincodeDeliveryEstimator() {
               setPincode(val);
               if (error) setError('');
             }}
-            className="w-full h-9 px-3 text-xs bg-surface border border-line rounded text-ink placeholder:text-muted/60 focus:border-ink focus:ring-1 focus:ring-ink outline-none tabular-nums font-medium"
+            className="w-full h-9 px-3 text-xs bg-surface border border-line rounded-lg text-ink placeholder:text-muted/60 focus:border-brand focus:ring-1 focus:ring-brand outline-none tabular-nums font-medium"
           />
         </div>
 
