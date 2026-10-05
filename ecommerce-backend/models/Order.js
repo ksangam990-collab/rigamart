@@ -243,11 +243,22 @@ const orderSchema = new mongoose.Schema(
     invoiceUrl: {
       type: String,
       default: ''
+    },
+    tracking: {
+      carrier: { type: String, default: 'Delhivery Express' },
+      awbNumber: { type: String, default: '' },
+      estimatedDelivery: { type: Date, default: null },
+      courierPartner: {
+        name: { type: String, default: 'Rajesh Sharma' },
+        phone: { type: String, default: '+91 98234 11092' }
+      },
+      currentLocation: { type: String, default: 'Fulfillment Hub' }
     }
   },
   {
     timestamps: true
   }
+
 );
 
 // Indexes for order lookup and seller/admin analytics

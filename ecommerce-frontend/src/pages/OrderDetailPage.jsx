@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import api from '../utils/api.js';
 import ReturnRequestModal from '../components/order/ReturnRequestModal.jsx';
+import LiveDeliveryTracker from '../components/order/LiveDeliveryTracker.jsx';
 import {
   fadeInUp,
   staggerContainer,
@@ -415,6 +416,13 @@ export default function OrderDetailPage() {
           />
         </div>
       </motion.div>
+
+      {/* ── Live Courier Tracking & Checkpoint Map ───────── */}
+      {!isCancelledOrReturned && (
+        <motion.div variants={fadeInUp} initial="hidden" animate="visible">
+          <LiveDeliveryTracker order={order} onRefresh={fetchOrder} />
+        </motion.div>
+      )}
 
       {/* ── Return & Dispute Lifecycle Card ──────────────── */}
       {order.returnRequest && (
