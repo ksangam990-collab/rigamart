@@ -82,14 +82,14 @@ export default function CatalogPage() {
         const params = new URLSearchParams(searchParams);
         res = await api.get(`/products?${params.toString()}`);
       }
-      setProducts(res.data.data?.products || []);
-      setPagination(
-        res.data.data?.pagination || {
-          page: 1,
-          pages: 1,
-          total: res.data.data?.products?.length || 0,
-        }
-      );
+      const fetchedProducts = res.data.data?.products || [];
+      const rawPag = res.data.data?.pagination || {};
+      setProducts(fetchedProducts);
+      setPagination({
+        page: rawPag.currentPage || rawPag.page || 1,
+        pages: rawPag.totalPages || rawPag.pages || 1,
+        total: rawPag.totalCount ?? rawPag.total ?? fetchedProducts.length,
+      });
     } catch {
       setProducts([]);
     } finally {

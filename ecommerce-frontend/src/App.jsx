@@ -39,11 +39,21 @@ const StyleguidePage = lazy(() => import('./pages/StyleguidePage.jsx'));
 
 function RouteLoadingFallback({ message = 'Loading...' }) {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
-      <div className="w-10 h-10 animate-pulse">
-        <Logo variant="icon" size="sm" />
+    <div className="min-h-[65vh] flex flex-col items-center justify-center gap-4">
+      <div className="relative flex items-center justify-center">
+        <div className="absolute w-12 h-12 rounded-2xl bg-brand/20 animate-ping opacity-60 pointer-events-none" />
+        <div className="relative z-10 transition-transform duration-300">
+          <Logo variant="icon" size="md" />
+        </div>
       </div>
-      <span className="text-xs text-gray-400 font-medium tracking-wide">{message}</span>
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce [animation-delay:-0.3s]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-bounce [animation-delay:-0.15s]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce" />
+        </div>
+        <span className="text-xs text-muted font-medium tracking-wide">{message}</span>
+      </div>
     </div>
   );
 }
