@@ -1,53 +1,53 @@
-/* ─── Rigamart Design System Tokens (Calm Editorial Marketplace) ─── */
+/* ─── Rigamart Design System Tokens (Editorial Sapphire & Saffron Marketplace) ─── */
 
 :root {
   /* Surfaces */
-  --color-canvas: #FAF8F5;
+  --color-canvas: #F8FAFC;
   --color-surface: #FFFFFF;
   
   /* Typography */
-  --color-ink: #14161A;
-  --color-muted: #5B6270;
-  --color-line: #E7E2DA;
+  --color-ink: #0F172A;
+  --color-muted: #64748B;
+  --color-line: #E2E8F0;
   
-  /* Brand: Forest Emerald */
-  --color-brand: #0E6B5C;
-  --color-brand-dark: #0A4F44;
-  --color-brand-soft: #E3F1EE;
+  /* Brand: Royal Sapphire Blue */
+  --color-brand: #2563EB;
+  --color-brand-dark: #1D4ED8;
+  --color-brand-soft: #EFF6FF;
   
-  /* Functional Accents */
-  --color-accent: #F2A93B;
-  --color-accent-soft: #FEF3C7;
-  --color-success: #2E9E6B;
-  --color-success-soft: #E6F7F0;
-  --color-warning: #C77700;
+  /* Functional Accents: Warm Indian Saffron */
+  --color-accent: #FF7A00;
+  --color-accent-soft: #FFF7ED;
+  --color-success: #10B981;
+  --color-success-soft: #ECFDF5;
+  --color-warning: #F59E0B;
   --color-warning-soft: #FFFBEB;
-  --color-danger: #D64545;
-  --color-danger-soft: #FDE8E8;
+  --color-danger: #EF4444;
+  --color-danger-soft: #FEF2F2;
 }
 
 [data-theme="dark"] {
   /* Surfaces */
-  --color-canvas: #0F1113;
-  --color-surface: #181B1F;
+  --color-canvas: #0B0F19;
+  --color-surface: #111827;
   
   /* Typography */
-  --color-ink: #F2F2F0;
-  --color-muted: #A3A9B3;
-  --color-line: #2A2F35;
+  --color-ink: #F8FAFC;
+  --color-muted: #94A3B8;
+  --color-line: #1F2937;
   
-  /* Brand: Forest Emerald (accessible on dark surfaces) */
-  --color-brand: #3FB9A3;
-  --color-brand-dark: #2F9B87;
-  --color-brand-soft: #142E28;
+  /* Brand: Royal Sapphire Blue (accessible on dark surfaces) */
+  --color-brand: #3B82F6;
+  --color-brand-dark: #2563EB;
+  --color-brand-soft: #1E293B;
   
   /* Functional Accents */
-  --color-accent: #F5B955;
-  --color-accent-soft: #382A12;
-  --color-success: #38B87D;
-  --color-success-soft: #102E20;
-  --color-warning: #E08A0A;
-  --color-warning-soft: #332007;
-  --color-danger: #E25858;
-  --color-danger-soft: #331515;
+  --color-accent: #FB923C;
+  --color-accent-soft: #431407;
+  --color-success: #34D399;
+  --color-success-soft: #064E3B;
+  --color-warning: #FBBF24;
+  --color-warning-soft: #451A03;
+  --color-danger: #F87171;
+  --color-danger-soft: #450A0A;
 }

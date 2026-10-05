@@ -305,16 +305,16 @@ export default function SellerAnalyticsTab({ statusCounts = {} }) {
                 className="w-full h-auto overflow-visible select-none"
               >
                 <defs>
-                  {/* Forest emerald brand gradient fill */}
+                  {/* Royal Sapphire brand gradient fill */}
                   <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0E6B5C" stopOpacity="0.35" />
-                    <stop offset="70%" stopColor="#0E6B5C" stopOpacity="0.08" />
-                    <stop offset="100%" stopColor="#0E6B5C" stopOpacity="0.00" />
+                    <stop offset="0%" stopColor="#2563EB" stopOpacity="0.35" />
+                    <stop offset="70%" stopColor="#2563EB" stopOpacity="0.08" />
+                    <stop offset="100%" stopColor="#2563EB" stopOpacity="0.00" />
                   </linearGradient>
 
                   <linearGradient id="lineGlow" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#0E6B5C" />
-                    <stop offset="100%" stopColor="#138573" />
+                    <stop offset="0%" stopColor="#2563EB" />
+                    <stop offset="100%" stopColor="#3B82F6" />
                   </linearGradient>
                 </defs>
 

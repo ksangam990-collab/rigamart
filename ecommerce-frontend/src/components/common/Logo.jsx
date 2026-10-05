@@ -34,9 +34,9 @@ export default function Logo({
   const saffronGradEnd = monochrome ? 'currentColor' : '#FF5400';
   const rLetterColor = monochrome ? 'rgba(0, 0, 0, 0.2)' : '#FFFFFF';
 
-  // Wordmark color logic
-  let wordmarkLeadColor = '#0F172A';
-  let wordmarkTailColor = '#2563EB';
+  // Wordmark color logic - supports light/dark theme via CSS variables
+  let wordmarkLeadColor = 'var(--color-ink, #0F172A)';
+  let wordmarkTailColor = 'var(--color-brand, #2563EB)';
 
   if (wordmarkColor === 'white') {
     wordmarkLeadColor = '#F8FAFC';

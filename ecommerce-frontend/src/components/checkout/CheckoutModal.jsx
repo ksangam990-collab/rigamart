@@ -131,7 +131,7 @@ export default function CheckoutModal({
           contact: selectedAddress.mobile,
         },
         theme: {
-          color: '#0E6B5C',
+          color: '#2563EB',
         },
       };
 

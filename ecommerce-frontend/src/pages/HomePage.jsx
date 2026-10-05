@@ -169,7 +169,7 @@ export default function HomePage() {
               <motion.div variants={staggerItem}>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-soft text-brand-dark border border-brand/20 text-xs font-semibold tracking-tight shadow-subtle">
                   <Sparkles className="w-3.5 h-3.5 text-brand" />
-                  <span>The Calm Editorial Marketplace</span>
+                  <span>India&apos;s Premier Multi-Vendor Marketplace</span>
                 </div>
               </motion.div>
 

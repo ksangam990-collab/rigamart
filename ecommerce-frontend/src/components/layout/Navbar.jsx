@@ -52,7 +52,7 @@ const CURATED_CATEGORIES = [
   { name: 'Home & Kitchen', href: '/search?category=home-kitchen', badge: null },
   { name: 'Beauty & Wellness', href: '/search?category=beauty-health', badge: null },
   { name: 'Trending Now', href: '/search?sort=newest', badge: '🔥 Hot' },
-  { name: 'Styleguide', href: '/styleguide', badge: 'v2.0' },
+  { name: 'Sell on Rigamart', href: '/sell', badge: 'Earn' },
 ];
 
 const loadRecentSearches = () => {
