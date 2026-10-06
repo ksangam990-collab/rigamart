@@ -334,7 +334,118 @@ const getSuggestedQuestions = async (req, res) => {
   }
 };
 
+/**
+ * @desc    General-purpose Rigamart AI Stylist Chat (homepage chat card)
+ * @route   POST /api/ai/chat
+ * @access  Public
+ */
+const askStylistChat = async (req, res) => {
+  try {
+    const { message, context = 'stylist', chatHistory = [] } = req.body;
+
+    if (!message || !message.trim()) {
+      return res.status(400).json({ success: false, message: 'Message is required', data: null });
+    }
+
+    const q = message.toLowerCase();
+
+    // Active coupons for discount-related queries
+    const now = new Date();
+    const activeCoupons = await Coupon.find({ isActive: true, expiryDate: { $gte: now } })
+      .select('code description discountType discountValue maxDiscount minCartValue')
+      .sort({ minCartValue: 1 })
+      .lean();
+
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+
+    if (apiKey && GoogleGenAI) {
+      try {
+        const ai = new GoogleGenAI({ apiKey });
+
+        const couponsSummary = activeCoupons
+          .map((c) => `Code: ${c.code}, Offer: ${c.description}, Min Cart: ₹${c.minCartValue}`)
+          .join('\n') || 'No active coupons at the moment.';
+
+        const systemInstruction = `You are Rigamart AI Assistant — a friendly, helpful, concise shopping advisor for Rigamart, an Indian multi-vendor e-commerce marketplace.
+Answer customer questions about: sizing/fit guidance, fashion styling, order tracking, returns, refunds, delivery timelines, coupon codes, and general shopping help.
+
+STORE POLICIES:
+- Returns: 7-day hassle-free doorstep returns and exchanges.
+- Delivery: 3–5 business days nationwide. Free shipping on orders ₹500+.
+- Payments: Razorpay (UPI, Cards, NetBanking) and Cash on Delivery.
+- Refunds: Processed within 5–7 business days after return is verified.
+
+ACTIVE COUPONS:
+${couponsSummary}
+
+RESPONSE STYLE: Be warm, concise (2-4 sentences or short bullets), use ₹ for currency, use markdown bold for key info. Always end with a helpful follow-up offer.`;
+
+        let promptContent = '';
+        if (Array.isArray(chatHistory) && chatHistory.length > 0) {
+          chatHistory.slice(-4).forEach((msg) => {
+            promptContent += `${msg.sender === 'user' ? 'Customer' : 'Assistant'}: ${msg.text}\n`;
+          });
+          promptContent += '\n';
+        }
+        promptContent += `Customer: ${message}\n\nAssistant:`;
+
+        let responseText = null;
+        try {
+          const resp = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: promptContent,
+            config: { systemInstruction, temperature: 0.7, maxOutputTokens: 400 }
+          });
+          responseText = resp?.text || resp?.candidates?.[0]?.content?.parts?.[0]?.text;
+        } catch (e) {
+          console.warn('[STYLIST GEMINI FALLBACK]', e.message);
+        }
+
+        if (responseText && responseText.trim()) {
+          return res.status(200).json({
+            success: true,
+            message: 'AI stylist response generated',
+            data: { reply: responseText.trim(), source: 'gemini-api' }
+          });
+        }
+      } catch (e) {
+        console.warn('[STYLIST AI ERROR]', e.message);
+      }
+    }
+
+    // Heuristic fallback for stylist chat
+    let reply = '✨ I\'m your Rigamart AI Assistant! I can help you with sizing, styling tips, order tracking, returns, and finding the best coupons. What would you like to know?';
+
+    if (q.includes('coupon') || q.includes('discount') || q.includes('promo') || q.includes('offer') || q.includes('code')) {
+      const best = activeCoupons[0];
+      reply = best
+        ? `🏷️ Use code **${best.code}** — ${best.description} (min cart ₹${best.minCartValue}). Apply it in your Cart or Checkout drawer!`
+        : `🏷️ New users can try **FIRST50** for ₹50 off on orders above ₹299! More deals appear in your checkout drawer.`;
+    } else if (q.includes('return') || q.includes('refund') || q.includes('exchange')) {
+      reply = `🛡️ Rigamart offers a **7-day doorstep return** policy. Go to **My Orders → Request Return**, and our courier will pick it up within 48 hours. Refunds are processed in 5–7 business days!`;
+    } else if (q.includes('deliver') || q.includes('shipping') || q.includes('track')) {
+      reply = `⚡ Most orders arrive in **3–5 business days** nationwide. **Free shipping** on orders ₹500+. Track live status under **My Orders** once your order is shipped!`;
+    } else if (q.includes('size') || q.includes('fit') || q.includes('chest') || q.includes('measurement')) {
+      reply = `📏 Our sizes follow standard Indian tailored cuts. Size M fits a **38–40 inch chest**. If you prefer a relaxed look or plan to layer, we recommend sizing up. All items have a **7-day free exchange** if the fit isn't perfect!`;
+    } else if (q.includes('shoes') || q.includes('chinos') || q.includes('outfit') || q.includes('style') || q.includes('pair')) {
+      reply = `👟 For Khaki chinos, **white court sneakers** give the cleanest smart-casual look. For ethnic wear evenings, try tan Peshawari sandals. Need more outfit ideas for a specific occasion?`;
+    } else if (q.includes('payment') || q.includes('upi') || q.includes('card') || q.includes('cod')) {
+      reply = `💳 We accept **UPI, Credit/Debit Cards, NetBanking** via Razorpay, and **Cash on Delivery** across all serviceable pincodes. Razorpay is PCI-DSS Level 1 compliant — your payment is completely secure!`;
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Stylist response resolved',
+      data: { reply, source: 'rigamart-assistant' }
+    });
+  } catch (error) {
+    console.error('[STYLIST CHAT ERROR]', error);
+    res.status(500).json({ success: false, message: error.message, data: null });
+  }
+};
+
 module.exports = {
   askProductAssistant,
-  getSuggestedQuestions
+  getSuggestedQuestions,
+  askStylistChat
 };

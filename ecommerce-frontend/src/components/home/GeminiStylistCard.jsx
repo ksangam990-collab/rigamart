@@ -38,43 +38,41 @@ export default function GeminiStylistCard() {
     setIsThinking(true);
 
     try {
-      // Try to call backend AI endpoint if available
-      const res = await api
-        .post('/ai/chat', { message: query, context: 'stylist' })
-        .catch(() => null);
+      const res = await api.post('/ai/chat', {
+        message: query,
+        context: 'stylist',
+        chatHistory: messages.slice(-6) // send last 6 messages for context
+      });
 
       if (res?.data?.success && res.data.data?.reply) {
         setMessages((prev) => [
           ...prev,
           { id: `ai-${Date.now()}`, sender: 'ai', text: res.data.data.reply }
         ]);
-      } else {
-        // High-fidelity domain-intelligent conversational responses
-        setTimeout(() => {
-          let aiReply = "Based on your inquiry, our stylists recommend pairing with crisp white sneakers and a neutral leather belt. For sizing, our measurements follow standard Indian tailored cuts with a 94% fit confidence score.";
-          const lower = query.toLowerCase();
-
-          if (lower.includes('chest') || lower.includes('size m')) {
-            aiReply = "✅ Yes! Our Size M is tailored for a 38-40 inch chest with a 2-inch comfort ease. If you prefer a relaxed or layered look over a tee, Size L will give you that breezy Mediterranean aesthetic.";
-          } else if (lower.includes('shoes') || lower.includes('chinos') || lower.includes('khaki')) {
-            aiReply = "👟 For Khaki chinos, our Minimalist White Court Sneakers (item #3 in the Lookbook above) create the cleanest smart-casual contrast. For evening ethnic wear, tan Peshawari sandals or loafers work best!";
-          } else if (lower.includes('return') || lower.includes('doorstep')) {
-            aiReply = "🛡️ Rigamart offers a 7-day zero-friction doorstep return policy. Simply go to 'My Orders', tap 'Request Return', and our courier associate collects the sealed package from your home with instant escrow refund!";
-          }
-
-          setMessages((prev) => [
-            ...prev,
-            { id: `ai-${Date.now()}`, sender: 'ai', text: aiReply }
-          ]);
-          setIsThinking(false);
-        }, 600);
         return;
       }
     } catch {
-      // Fallback
+      // silent — fall through to local heuristic below
     } finally {
       setIsThinking(false);
     }
+
+    // Local heuristic fallback (used if backend is down)
+    const lower = query.toLowerCase();
+    let aiReply = "Based on your inquiry, our stylists recommend pairing with crisp white sneakers and a neutral leather belt. For sizing, our measurements follow standard Indian tailored cuts with a 94% fit confidence score.";
+
+    if (lower.includes('chest') || lower.includes('size m')) {
+      aiReply = "✅ Yes! Our Size M is tailored for a 38-40 inch chest with a 2-inch comfort ease. If you prefer a relaxed or layered look over a tee, Size L will give you that breezy Mediterranean aesthetic.";
+    } else if (lower.includes('shoes') || lower.includes('chinos') || lower.includes('khaki')) {
+      aiReply = "👟 For Khaki chinos, our Minimalist White Court Sneakers create the cleanest smart-casual contrast. For evening ethnic wear, tan Peshawari sandals or loafers work best!";
+    } else if (lower.includes('return') || lower.includes('doorstep')) {
+      aiReply = "🛡️ Rigamart offers a 7-day zero-friction doorstep return policy. Simply go to 'My Orders', tap 'Request Return', and our courier associate collects the sealed package from your home with instant escrow refund!";
+    }
+
+    setMessages((prev) => [
+      ...prev,
+      { id: `ai-${Date.now()}`, sender: 'ai', text: aiReply }
+    ]);
   };
 
   return (
