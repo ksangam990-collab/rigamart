@@ -85,14 +85,16 @@ export default function LightningDrop({ onOpenResellerModal, product: customProd
         {/* Header: Scarcity Pill + Countdown Timer */}
         <div className="flex items-center justify-between pb-2.5 border-b border-line">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping" />
-            <span className="text-[11px] sm:text-xs font-black uppercase text-rose-600 tracking-wider flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5 fill-current" />
-              <span>LIGHTNING DROP</span>
+            <span className="relative flex items-center justify-center">
+              <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-rose-500/40"></span>
+              <Flame className="relative w-4 h-4 fill-rose-500 text-rose-600" />
+            </span>
+            <span className="text-[11px] sm:text-xs font-black uppercase text-rose-600 tracking-wider">
+              FLASH DEAL OF THE DAY
             </span>
           </div>
 
-          <div className="font-mono tabular-nums font-bold text-xs bg-rose-50 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300 px-2 py-0.5 rounded-lg border border-rose-200 dark:border-rose-800 shadow-2xs flex items-center gap-1">
+          <div className="font-mono tabular-nums font-bold text-xs bg-rose-50 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300 px-2.5 py-0.5 rounded-lg border border-rose-200 dark:border-rose-800 shadow-2xs flex items-center gap-1.5">
             <Clock className="w-3 h-3 text-rose-600 dark:text-rose-400" />
             <span>{formatTimer(timeLeft)}</span>
           </div>
@@ -119,7 +121,7 @@ export default function LightningDrop({ onOpenResellerModal, product: customProd
             <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-brand block">
               {deal.category}
             </span>
-            <h3 className="text-sm sm:text-base font-bold text-ink leading-snug truncate">
+            <h3 className="text-sm sm:text-base font-bold text-ink leading-snug line-clamp-1 sm:line-clamp-none">
               {deal.name}
             </h3>
             <div className="flex items-baseline gap-2 pt-0.5">

@@ -18,7 +18,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
     },
     {
       id: 'mens',
-      name: 'Men Sartorial',
+      name: "Men's Wear",
       badge: 'New',
       image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=mens-fashion',
@@ -27,7 +27,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
     },
     {
       id: 'womens',
-      name: 'Ethnic Luxe',
+      name: 'Ethnic Wear',
       badge: 'Festive',
       image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=womens-ethnic',
@@ -36,7 +36,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
     },
     {
       id: 'tech',
-      name: 'Smart Tech',
+      name: 'Gadgets',
       badge: 'ANC',
       image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=electronics',
@@ -45,7 +45,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
     },
     {
       id: 'footwear',
-      name: 'Sneakers & Kicks',
+      name: 'Sneakers',
       badge: 'Trending',
       image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=footwear',
@@ -54,7 +54,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
     },
     {
       id: 'home',
-      name: 'Home & Craft',
+      name: 'Home Decor',
       badge: 'Artisan',
       image: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=home-kitchen',
@@ -103,7 +103,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
                 whileHover={{ y: -2, scale: 1.04 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                className="flex flex-col items-center gap-1 shrink-0 cursor-pointer group/bubble w-[64px] sm:w-auto"
+                className="flex flex-col items-center gap-1 shrink-0 cursor-pointer group/bubble w-[68px] sm:w-auto"
               >
                 {/* Circular Story Bubble */}
                 <div
@@ -134,7 +134,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
 
                 {/* Title */}
                 <span
-                  className={`text-[10px] sm:text-xs font-bold text-center truncate max-w-[62px] sm:max-w-none leading-tight transition-colors ${
+                  className={`text-[10px] sm:text-xs font-bold text-center line-clamp-1 max-w-[68px] sm:max-w-none leading-tight transition-colors ${
                     cat.isSpecial
                       ? 'text-emerald-600 group-hover/bubble:text-emerald-700'
                       : 'text-ink group-hover/bubble:text-brand'

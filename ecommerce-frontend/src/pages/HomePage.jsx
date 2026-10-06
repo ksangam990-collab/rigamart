@@ -165,29 +165,29 @@ export default function HomePage() {
 
   const curatedCategories = [
     {
-      name: "Men's Sartorial",
-      tagline: 'Linens, Kurtas & Tailoring',
+      name: "Men's Fashion",
+      offer: 'Starting ₹499',
       image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80',
       link: '/search?category=mens-fashion',
       pill: 'New Arrivals'
     },
     {
-      name: "Women's Ethnic Luxe",
-      tagline: 'Handloom Sarees & Anarkalis',
+      name: "Women's Ethnic",
+      offer: 'Up to 60% Off',
       image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop&q=80',
       link: '/search?category=womens-ethnic',
-      pill: 'Handpicked'
+      pill: 'Festive Special'
     },
     {
-      name: 'Smart Audio & Gear',
-      tagline: 'Noise Cancelling & Wearables',
+      name: 'Audio & Gadgets',
+      offer: 'Up to 70% Off',
       image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&auto=format&fit=crop&q=80',
       link: '/search?category=electronics',
-      pill: 'Verified Tech'
+      pill: 'Top Rated'
     },
     {
-      name: 'Sneakers & Footwear',
-      tagline: 'Everyday Comfort & Athletics',
+      name: 'Footwear & Kicks',
+      offer: 'Min 40% Off',
       image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80',
       link: '/search?category=footwear',
       pill: 'Trending'
@@ -197,23 +197,23 @@ export default function HomePage() {
   const trustBadges = [
     {
       icon: ShieldCheck,
-      title: '100% Genuine Guaranteed',
-      desc: 'Direct authentication and verified Indian manufacturers.'
+      title: '100% Genuine',
+      shortDesc: 'Verified Indian Makers'
     },
     {
       icon: Truck,
-      title: 'Express Nationwide Delivery',
-      desc: 'Free logistics on orders above ₹500 across 28 states.'
+      title: 'Free Shipping',
+      shortDesc: 'On Orders Above ₹500'
     },
     {
       icon: RotateCcw,
-      title: '7-Day Doorstep Returns',
-      desc: 'Zero-friction pickups with instant escrow refund.'
+      title: '7-Day Easy Returns',
+      shortDesc: 'Doorstep Pickup & Refund'
     },
     {
       icon: CreditCard,
-      title: 'Escrow Protected Payments',
-      desc: 'Razorpay encrypted UPI, Cards, Net Banking & COD.'
+      title: 'Escrow Protected',
+      shortDesc: 'UPI, Cards & COD'
     }
   ];
 
@@ -253,55 +253,51 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="space-y-12 sm:space-y-20 pb-20 overflow-hidden font-sans">
+    <div className="space-y-6 sm:space-y-12 pb-16 sm:pb-20 overflow-hidden font-sans">
       {/* ── 0A. Top Bank Offer Ticker Ribbon ─────────────────────────────────── */}
       <BankOfferTicker />
 
       {/* ── 0B. Flipkart Circular Category Story Rail ───────────────────────── */}
       <CategoryStoryRail onOpenResellerModal={handleOpenResellerModal} />
 
-      {/* ── 1. Editorial Hero Showcase ────────────────────────────────────────── */}
-      <section className="relative pt-2 sm:pt-4 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="relative rounded-3xl bg-surface border border-line shadow-card overflow-hidden">
-          {/* Subtle warm ambient radial background glow */}
+      {/* ── 1. Hero Showcase (Desktop: 12-col festive banner, Mobile: Clean Flash Deal + Pills) ── */}
+      <section className="relative pt-1 sm:pt-4 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        {/* Desktop Hero Showcase (12-col) */}
+        <div className="hidden lg:block relative rounded-3xl bg-surface border border-line shadow-card overflow-hidden">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-soft/50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
 
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-6 sm:p-10 lg:p-14 items-center">
-            {/* Editorial Headline & Copy (Second on mobile, First on desktop) */}
+          <div className="relative z-10 grid grid-cols-12 gap-12 p-10 lg:p-14 items-center">
+            {/* Left Column: Commercial Headline & Intent */}
             <motion.div
               variants={staggerContainer(0.08)}
               initial="hidden"
               animate="visible"
-              className="order-2 lg:order-1 lg:col-span-7 space-y-6"
+              className="col-span-7 space-y-6"
             >
-              {/* Trust Badge Pill */}
               <motion.div variants={staggerItem}>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-soft text-brand-dark border border-brand/20 text-xs font-semibold tracking-tight shadow-subtle">
                   <Sparkles className="w-3.5 h-3.5 text-brand" />
-                  <span>India&apos;s Premier Multi-Vendor Marketplace</span>
+                  <span>Mega Festive Season Live • Up to 70% Off</span>
                 </div>
               </motion.div>
 
-              {/* Main Headline */}
               <motion.h1
                 variants={staggerItem}
-                className="text-4xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-ink leading-[1.08]"
+                className="text-5xl lg:text-6xl font-black font-display tracking-tight text-ink leading-[1.08]"
               >
-                Curated commerce. <br className="hidden sm:inline" />
-                <span className="text-brand">Photos first</span>, chrome second.
+                Authentic Brands. <br />
+                <span className="text-brand">Direct Pricing.</span> Verified Sellers.
               </motion.h1>
 
-              {/* Editorial Subtitle */}
               <motion.p
                 variants={staggerItem}
-                className="text-muted text-base sm:text-lg max-w-xl leading-relaxed"
+                className="text-muted text-base lg:text-lg max-w-xl leading-relaxed"
               >
-                A modern multi-vendor marketplace built for discerning shoppers across India. Authentic brands, verified artisans, direct pricing, and zero fake scarcity.
+                Shop thousands of verified products from top artisans, verified manufacturers, and trusted brands across India with 100% buyer protection.
               </motion.p>
 
-              {/* Action Buttons */}
-              <motion.div variants={staggerItem} className="flex flex-wrap items-center gap-3 pt-2">
+              <motion.div variants={staggerItem} className="flex items-center gap-3 pt-2">
                 <Link to="/catalog">
                   <Button
                     variant="primary"
@@ -321,7 +317,7 @@ export default function HomePage() {
                 )}
               </motion.div>
 
-              {/* Quick Search Intent Pills */}
+              {/* Popular Searches Horizontal Row */}
               <motion.div variants={staggerItem} className="pt-4 border-t border-line">
                 <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mb-2.5">
                   Popular Searches
@@ -340,93 +336,72 @@ export default function HomePage() {
               </motion.div>
             </motion.div>
 
-            {/* Lightning Drop Deal Box (First on mobile, Second on desktop) */}
+            {/* Right Column: Lightning Drop Deal Box */}
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
-              className="order-1 lg:order-2 lg:col-span-5 flex items-center justify-center"
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="col-span-5 flex items-center justify-center"
             >
               <LightningDrop onOpenResellerModal={handleOpenResellerModal} />
             </motion.div>
           </div>
         </div>
+
+        {/* Mobile Hero: Streamlined Flash Deal + Horizontal Trending Searches (Zero clutter!) */}
+        <div className="lg:hidden space-y-3">
+          <LightningDrop onOpenResellerModal={handleOpenResellerModal} />
+
+          {/* Sleek Horizontal Trending Search Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1 px-1 -mx-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted shrink-0 pl-1">
+              Popular:
+            </span>
+            {quickFilterPills.map((pill) => (
+              <Link
+                key={pill.label}
+                to={pill.link}
+                className="text-[11px] whitespace-nowrap px-3 py-1 rounded-full bg-surface text-ink hover:text-brand border border-line shadow-2xs font-medium shrink-0 active:scale-95 transition-transform"
+              >
+                {pill.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* ── 2. Trust & Transparency Strip ────────────────────────────────────── */}
+      {/* ── 2. Featured Categories (Myntra-Style Categories To Bag) ──────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.35 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-surface rounded-card border border-line shadow-subtle"
-        >
-          {trustBadges.map((badge, idx) => {
-            const Icon = badge.icon;
-            return (
-              <div key={idx} className="flex items-start gap-3.5 p-2">
-                <div className="p-2.5 rounded-xl bg-brand-soft text-brand-dark shrink-0">
-                  <Icon className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-ink tracking-tight font-sans">
-                    {badge.title}
-                  </h3>
-                  <p className="text-[11px] text-muted mt-0.5 leading-relaxed">
-                    {badge.desc}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </motion.div>
-      </section>
-
-      {/* ── 3. Curated Category Story Tiles ──────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 rounded-full bg-brand" />
-              <span className="text-[11px] font-bold uppercase tracking-wider text-brand font-mono">
-                COLLECTIONS
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black font-display text-ink tracking-tight">
-              Explore by Curated Department
+        <div className="flex items-center justify-between mb-3.5 sm:mb-6">
+          <div className="flex items-center gap-2">
+            <span className="text-brand text-base sm:text-lg">🛍️</span>
+            <h2 className="text-lg sm:text-2xl font-black font-display text-ink tracking-tight">
+              Featured Categories
             </h2>
-            <p className="text-muted text-xs sm:text-sm mt-1">
-              Handpicked merchandise from verified sellers and artisan workshops
-            </p>
+            <span className="hidden sm:inline-block text-[10px] font-bold bg-amber-400/20 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full uppercase tracking-wider">
+              Hot Picks
+            </span>
           </div>
 
           <Link
             to="/catalog"
-            className="text-xs sm:text-sm font-semibold text-brand hover:text-brand-dark flex items-center gap-1 group shrink-0"
+            className="text-xs sm:text-sm font-bold text-brand hover:text-brand-dark flex items-center gap-1 group shrink-0"
           >
-            <span>View All Departments</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <span>See All</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        <motion.div
-          variants={staggerContainer(0.06)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
-        >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
           {curatedCategories.map((cat, idx) => (
             <motion.div
               key={idx}
-              variants={staggerItem}
-              whileHover={{ y: -4 }}
+              whileHover={{ y: -3 }}
               transition={{ duration: 0.2 }}
             >
               <Link
                 to={cat.link}
-                className="group block relative rounded-card bg-surface border border-line shadow-subtle hover:shadow-card transition-all duration-300 overflow-hidden"
+                className="group block relative rounded-2xl bg-surface border border-line shadow-subtle hover:shadow-card transition-all duration-300 overflow-hidden"
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-canvas">
                   <img
@@ -435,24 +410,26 @@ export default function HomePage() {
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
                     loading="lazy"
                   />
-                  <div className="absolute top-2.5 left-2.5">
-                    <span className="text-[10px] font-bold bg-surface/90 backdrop-blur-sm text-ink px-2 py-0.5 rounded-full border border-line shadow-subtle">
+                  {/* Floating Glassmorphic Pill */}
+                  <div className="absolute top-2 right-2">
+                    <span className="text-[9.5px] sm:text-[10px] font-bold bg-slate-950/75 backdrop-blur-md text-white px-2 py-0.5 rounded-full border border-white/10 shadow-xs">
                       {cat.pill}
                     </span>
                   </div>
                 </div>
-                <div className="p-4 text-left bg-surface">
-                  <h3 className="text-sm font-bold text-ink group-hover:text-brand transition-colors tracking-tight">
+
+                <div className="p-3 sm:p-4 text-left bg-surface">
+                  <h3 className="text-xs sm:text-sm font-bold text-ink group-hover:text-brand transition-colors tracking-tight truncate">
                     {cat.name}
                   </h3>
-                  <p className="text-[11px] text-muted truncate mt-0.5">
-                    {cat.tagline}
+                  <p className="text-[11px] sm:text-xs font-black text-brand uppercase tracking-tight mt-0.5">
+                    {cat.offer}
                   </p>
                 </div>
               </Link>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </section>
 
       {/* ── 3.5. Myntra Style Studio Lookbook ("Shop The Look") ───────────────── */}
@@ -497,7 +474,7 @@ export default function HomePage() {
             variants={staggerContainer(0.05)}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "200px" }}
             className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
           >
             {trendingProducts.map((product) => (
@@ -546,7 +523,7 @@ export default function HomePage() {
               key={idx}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "200px" }}
               transition={{ duration: 0.35, delay: idx * 0.1 }}
               className="bg-surface rounded-card border border-line p-6 shadow-subtle flex flex-col justify-between"
             >
@@ -586,6 +563,30 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch">
           <ScratchVoucherCard />
           <GeminiStylistCard />
+        </div>
+      </section>
+
+      {/* ── 5.8. Trust & Confidence Bar (Like Amazon & Myntra) ──────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 p-3 sm:p-5 bg-surface rounded-2xl border border-line shadow-subtle">
+          {trustBadges.map((badge, idx) => {
+            const Icon = badge.icon;
+            return (
+              <div key={idx} className="flex items-center gap-2.5 sm:gap-3 p-2 sm:p-2.5 rounded-xl bg-canvas/60">
+                <div className="p-2 rounded-lg bg-brand-soft text-brand shrink-0">
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-xs sm:text-sm font-bold text-ink truncate leading-tight">
+                    {badge.title}
+                  </h3>
+                  <p className="text-[10px] sm:text-xs text-muted truncate mt-0.5">
+                    {badge.shortDesc}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 

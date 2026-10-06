@@ -1197,7 +1197,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={handleClearSearch}
-            className="absolute right-12 p-1 text-muted hover:text-ink rounded-full transition-colors"
+            className="absolute right-8 p-1 text-muted hover:text-ink rounded-full transition-colors"
             title="Clear search"
           >
             <X className="w-3.5 h-3.5" />
@@ -1205,11 +1205,11 @@ export default function Navbar() {
         )}
         <motion.button
           type="submit"
-          whileTap={{ scale: 0.94 }}
-          className="absolute right-1 px-3 py-1.5 bg-brand text-white text-xs font-semibold rounded-lg shadow-subtle flex items-center justify-center transition-colors"
+          whileTap={{ scale: 0.92 }}
+          className="absolute right-1.5 p-1.5 text-muted hover:text-brand transition-colors rounded-lg flex items-center justify-center"
           aria-label="Submit search"
         >
-          Go
+          <Search className="w-4 h-4 text-brand" />
         </motion.button>
 
         {/* Mobile Predictive Dropdown */}
