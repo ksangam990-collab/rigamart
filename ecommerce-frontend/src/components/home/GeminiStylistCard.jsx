@@ -8,7 +8,7 @@ export default function GeminiStylistCard() {
     {
       id: 'init-1',
       sender: 'ai',
-      text: 'Namaste! 🙏 I am your Rigamart Gemini AI Stylist. Ask me about sizing recommendations, fabric care, outfit coordination, or festival delivery timelines!'
+      text: 'Namaste! 🙏 I am your Rigamart AI Assistant. Ask me about sizing recommendations, fabric care, outfit coordination, or order delivery timelines!'
     }
   ]);
   const [inputText, setInputText] = useState('');
@@ -80,23 +80,23 @@ export default function GeminiStylistCard() {
   return (
     <div className="bg-surface border border-line rounded-3xl p-5 sm:p-6 shadow-card flex flex-col justify-between space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-brand text-white flex items-center justify-center font-bold text-sm shadow-subtle">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-brand text-white flex items-center justify-center font-bold text-sm shadow-subtle shrink-0">
             <Sparkles className="w-4 h-4" />
           </div>
-          <div>
-            <h3 className="text-xs sm:text-sm font-bold text-ink">
-              Gemini AI Shopping Stylist
+          <div className="min-w-0">
+            <h3 className="text-xs sm:text-sm font-bold text-ink truncate">
+              Rigamart AI Assistant
             </h3>
-            <p className="text-[10px] sm:text-[11px] text-muted">
-              Live styling advisor, fit calculator &amp; order assistant
+            <p className="text-[10px] sm:text-[11px] text-muted truncate">
+              Smart shopping advisor, fit guide &amp; order assistant
             </p>
           </div>
         </div>
 
-        <span className="text-[10px] font-black uppercase bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full">
-          Live AI
+        <span className="text-[10px] font-black uppercase bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 px-2.5 py-0.5 rounded-full shrink-0 tracking-wider">
+          ● AI Live
         </span>
       </div>
 
@@ -132,7 +132,7 @@ export default function GeminiStylistCard() {
         {isThinking && (
           <div className="flex items-center gap-2 text-muted text-xs">
             <Loader2 className="w-4 h-4 animate-spin text-brand" />
-            <span>Gemini Stylist is thinking...</span>
+            <span>Rigamart AI is typing...</span>
           </div>
         )}
       </div>
@@ -163,7 +163,7 @@ export default function GeminiStylistCard() {
           type="text"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          placeholder="Ask a style or sizing question..."
+          placeholder="Ask Rigamart AI about size, style, or orders..."
           className="flex-1 bg-canvas border border-line rounded-xl px-3 py-2 text-xs text-ink focus:outline-none focus:ring-2 focus:ring-brand"
         />
         <button

@@ -40,11 +40,11 @@ export default function ScratchVoucherCard() {
     ctx.fillStyle = '#78350f';
     ctx.font = 'bold 15px system-ui, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('✨ SCRATCH HERE WITH CURSOR / FINGER ✨', rect.width / 2, rect.height / 2 - 8);
+    ctx.fillText('✨ SCRATCH HERE TO UNLOCK ✨', rect.width / 2, rect.height / 2 - 8);
 
     ctx.font = '11px system-ui, sans-serif';
     ctx.fillStyle = '#92400e';
-    ctx.fillText('Reveal secret festival jackpot code', rect.width / 2, rect.height / 2 + 14);
+    ctx.fillText('Win up to ₹500 instant discount', rect.width / 2, rect.height / 2 + 14);
 
     // Non-passive touch listener to prevent page scrolling during scratching on mobile
     const onTouchStart = (e) => {
@@ -148,23 +148,23 @@ export default function ScratchVoucherCard() {
       <div className="absolute top-0 right-0 w-36 h-36 bg-amber-400/10 rounded-full blur-2xl pointer-events-none" />
 
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-amber-500 text-amber-950 flex items-center justify-center font-bold text-sm shadow-subtle">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-amber-500 text-amber-950 flex items-center justify-center font-bold text-sm shadow-subtle shrink-0">
             <Gift className="w-4 h-4 text-white" />
           </div>
-          <div>
-            <h3 className="text-xs sm:text-sm font-bold text-ink">
-              Interactive Gold Scratch Card
+          <div className="min-w-0">
+            <h3 className="text-xs sm:text-sm font-bold text-ink truncate">
+              Festive Gold Scratch Card
             </h3>
-            <p className="text-[10px] sm:text-[11px] text-muted">
-              Scratch off the foil below to uncover your festival voucher!
+            <p className="text-[10px] sm:text-[11px] text-muted truncate">
+              Scratch the gold foil to uncover your surprise discount!
             </p>
           </div>
         </div>
 
-        <span className="text-[10px] font-black uppercase bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full">
-          HTML5 Canvas
+        <span className="text-[10px] font-black uppercase bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 px-2.5 py-0.5 rounded-full shrink-0 tracking-wider">
+          ✨ Win ₹500
         </span>
       </div>
 
@@ -241,11 +241,11 @@ export default function ScratchVoucherCard() {
         {isScratched ? (
           <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center gap-1">
             <Check className="w-3.5 h-3.5" />
-            <span>Voucher revealed! Use code <strong>{voucherCode}</strong> for instant ₹500 discount.</span>
+            <span>Voucher unlocked! Apply code <strong>{voucherCode}</strong> at checkout for flat ₹500 discount.</span>
           </span>
         ) : (
           <span>
-            💡 Drag finger or cursor across the gold surface to scratch off the foil ({scratchPercent}% scratched).
+            💡 Scratch across the golden foil with your finger or cursor to uncover your reward.
           </span>
         )}
       </div>

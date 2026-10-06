@@ -38,7 +38,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
       {
         id: 'welcome_msg',
         sender: 'ai',
-        text: `👋 Hi! I'm **Rigamart's Gemini AI Assistant** for the **${product.name}**.\n\n` +
+        text: `👋 Hi! I'm **Rigamart AI Assistant** for the **${product.name}**.\n\n` +
           `Ask me anything about **sizing & fit**, **materials**, **warranty**, or **coupon discounts**!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
@@ -278,7 +278,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
                     <h3 className="text-xs font-bold tracking-tight text-white truncate">
-                      Gemini AI Product Concierge
+                      Rigamart AI Assistant
                     </h3>
                     <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
                   </div>
@@ -398,7 +398,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
                       <span className="w-1.5 h-1.5 bg-brand rounded-full animate-bounce" />
                     </div>
                     <span className="text-[11px] font-medium text-brand">
-                      Gemini is analyzing specifications...
+                      Rigamart AI is analyzing specifications...
                     </span>
                   </div>
                 </motion.div>
