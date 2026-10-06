@@ -264,12 +264,22 @@ const googleAuth = async (req, res) => {
 
     let payload = null;
 
-    // Verify Google ID token against Google's tokeninfo endpoint
+    // Verify Google token (supports both OAuth2 access token and OpenID Connect ID token)
     try {
-      const googleRes = await axios.get('https://oauth2.googleapis.com/tokeninfo', {
-        params: { id_token: credential },
-        timeout: 6000
-      });
+      let googleRes;
+      if (typeof credential === 'string' && (credential.startsWith('ya29.') || credential.length < 500)) {
+        // OAuth2 Access Token (from native popup initTokenClient)
+        googleRes = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${credential}` },
+          timeout: 6000
+        });
+      } else {
+        // OpenID Connect JWT ID Token (from One-Tap)
+        googleRes = await axios.get('https://oauth2.googleapis.com/tokeninfo', {
+          params: { id_token: credential },
+          timeout: 6000
+        });
+      }
       payload = googleRes.data;
     } catch (err) {
       // In non-production testing, allow decoded JWT if provided
