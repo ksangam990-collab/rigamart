@@ -22,7 +22,7 @@ export default function GoogleAuthButton({
 
   const clientId =
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GOOGLE_CLIENT_ID) ||
-    '389712046820-rigamartdummygoogleclientid.apps.googleusercontent.com';
+    '618958392141-fij6dape2cl1plhnhg02sirp0flhnmei.apps.googleusercontent.com';
 
   const redirectPath = location.state?.from?.pathname || '/';
 
@@ -100,7 +100,7 @@ export default function GoogleAuthButton({
         window.google.accounts.id.renderButton(googleBtnContainerRef.current, {
           theme: 'outline',
           size: 'large',
-          width: '100%',
+          width: 360,
           text: mode === 'register' ? 'signup_with' : 'signin_with',
           shape: 'rectangular',
           logo_alignment: 'left'
