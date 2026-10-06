@@ -24,9 +24,6 @@ import { Button, Badge } from '../components/ui';
 import BankOfferTicker from '../components/home/BankOfferTicker.jsx';
 import CategoryStoryRail from '../components/home/CategoryStoryRail.jsx';
 import LightningDrop from '../components/home/LightningDrop.jsx';
-import WhatsAppShareModal from '../components/home/WhatsAppShareModal.jsx';
-import ShopTheLook from '../components/home/ShopTheLook.jsx';
-import MeeshoResellerHub from '../components/home/MeeshoResellerHub.jsx';
 import ScratchVoucherCard from '../components/home/ScratchVoucherCard.jsx';
 import GeminiStylistCard from '../components/home/GeminiStylistCard.jsx';
 import {
@@ -106,20 +103,7 @@ export default function HomePage() {
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [shareModalProduct, setShareModalProduct] = useState(null);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-
-  const handleOpenResellerModal = (product) => {
-    setShareModalProduct(product || {
-      title: 'Aura Studio ANC Wireless Headphones',
-      wholesalePrice: 2399,
-      mrp: 5999,
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80',
-      category: 'Electronics & Audio'
-    });
-    setIsShareModalOpen(true);
-  };
 
   // Fetch catalog shelves on mount with automatic grid balancing
   useEffect(() => {
@@ -254,11 +238,11 @@ export default function HomePage() {
 
   return (
     <div className="space-y-6 sm:space-y-12 pb-16 sm:pb-20 overflow-hidden font-sans">
-      {/* ── 0A. Top Bank Offer Ticker Ribbon ─────────────────────────────────── */}
+      {/* ── 0A. Top Bank Offer Ticker Ribbon (Desktop Only) ───────────────────── */}
       <BankOfferTicker />
 
-      {/* ── 0B. Flipkart Circular Category Story Rail ───────────────────────── */}
-      <CategoryStoryRail onOpenResellerModal={handleOpenResellerModal} />
+      {/* ── 0B. Circular Category Story Rail ───────────────────────────────── */}
+      <CategoryStoryRail />
 
       {/* ── 1. Hero Showcase (Desktop: 12-col festive banner, Mobile: Clean Flash Deal + Pills) ── */}
       <section className="relative pt-1 sm:pt-4 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -343,14 +327,14 @@ export default function HomePage() {
               transition={{ duration: 0.5, delay: 0.15 }}
               className="col-span-5 flex items-center justify-center"
             >
-              <LightningDrop onOpenResellerModal={handleOpenResellerModal} />
+              <LightningDrop />
             </motion.div>
           </div>
         </div>
 
         {/* Mobile Hero: Streamlined Flash Deal + Horizontal Trending Searches (Zero clutter!) */}
         <div className="lg:hidden space-y-3">
-          <LightningDrop onOpenResellerModal={handleOpenResellerModal} />
+          <LightningDrop />
 
           {/* Sleek Horizontal Trending Search Pills */}
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1 px-1 -mx-1">
@@ -432,10 +416,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 3.5. Myntra Style Studio Lookbook ("Shop The Look") ───────────────── */}
-      <ShopTheLook onOpenResellerModal={handleOpenResellerModal} />
-
-      {/* ── 4. Shelf A: Trending Now (ProductCard 2.0 Grid) ──────────────────── */}
+      {/* ── 3. Shelf A: Trending Now (ProductCard 2.0 Grid) ──────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
@@ -499,10 +480,7 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* ── 4.5. Meesho Zero-Capital WhatsApp Reselling Hub ──────────────────── */}
-      <MeeshoResellerHub onOpenResellerModal={handleOpenResellerModal} />
-
-      {/* ── 5. Social Proof: Customer & Seller Reviews Wall ──────────────────── */}
+      {/* ── 4. Social Proof: Customer & Seller Reviews Wall ──────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/15 text-accent text-xs font-semibold mb-2">
@@ -619,13 +597,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ── Meesho 1-Tap WhatsApp Share Modal ── */}
-      <WhatsAppShareModal
-        isOpen={isShareModalOpen}
-        onClose={() => setIsShareModalOpen(false)}
-        product={shareModalProduct}
-      />
     </div>
   );
 }

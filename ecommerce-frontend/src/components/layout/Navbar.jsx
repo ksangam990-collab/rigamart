@@ -662,10 +662,10 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 transition-all duration-200 ${
+        className={`sticky top-0 z-50 transition-all duration-200 bg-surface ${
           isScrolled
-            ? 'bg-surface/90 backdrop-blur-xl border-b border-line shadow-card'
-            : 'bg-surface border-b border-line'
+            ? 'border-b border-line shadow-card'
+            : 'border-b border-line'
         }`}
       >
         {/* Top Banner for Trust / Free Delivery (hidden on mobile for maximum vertical space, collapses smoothly on desktop) */}
@@ -681,23 +681,21 @@ export default function Navbar() {
           </span>
         </div>
 
-        {/* Main Navbar Bar (Compact 52px on mobile) */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        {/* Main Navbar Bar (Standard 56px on mobile, 64px on desktop) */}
+        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
           <div
-            className={`flex items-center justify-between gap-2.5 sm:gap-4 transition-all duration-200 ${
-              isBannerCollapsed ? 'h-13 sm:h-14' : 'h-13 sm:h-16'
+            className={`flex items-center justify-between gap-3 sm:gap-4 transition-all duration-200 ${
+              isBannerCollapsed ? 'h-14' : 'h-14 sm:h-16'
             }`}
           >
           {/* Brand Logo */}
-          <div className="flex items-center gap-6">
-            <Link to="/" className="flex items-center group" aria-label="Rigamart Homepage">
+          <div className="flex items-center shrink-0">
+            <Link to="/" className="flex items-center py-1 group focus:outline-none" aria-label="Rigamart Homepage">
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.15 }}
-                className={`transition-transform duration-200 origin-left ${
-                  isBannerCollapsed ? 'scale-95' : 'scale-100'
-                }`}
+                className="flex items-center"
               >
                 <Logo variant="full" size="responsive" />
               </motion.div>
@@ -766,19 +764,7 @@ export default function Navbar() {
           </form>
 
           {/* User Actions & Action Cluster */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Mobile Quick Search Button */}
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.92 }}
-              onClick={handleMobileSearchFocus}
-              className="md:hidden p-2 text-muted hover:text-brand hover:bg-brand-soft/40 transition-colors rounded-xl flex items-center justify-center"
-              title="Search"
-              aria-label="Search products"
-            >
-              <Search className="w-5 h-5" />
-            </motion.button>
-
+          <div className="flex items-center gap-1.5 sm:gap-3">
             {/* Theme Toggle (Sun / Moon) */}
             <motion.button
               type="button"

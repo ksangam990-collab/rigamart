@@ -62,11 +62,13 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
       isSpecial: false
     },
     {
-      id: 'reseller',
-      name: 'Share & Earn',
-      badge: '₹ Profit',
-      isSpecial: true,
-      gradient: 'from-emerald-500 to-green-600'
+      id: 'offers',
+      name: 'All Offers',
+      badge: '🏷️ Deals',
+      image: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=200&auto=format&fit=crop&q=80',
+      link: '/search?sort=newest',
+      gradient: 'from-purple-500 to-indigo-600',
+      isSpecial: false
     }
   ];
 
@@ -144,14 +146,6 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
                 </span>
               </motion.div>
             );
-
-            if (cat.isSpecial) {
-              return (
-                <div key={cat.id} onClick={onOpenResellerModal} className="shrink-0">
-                  {content}
-                </div>
-              );
-            }
 
             return (
               <Link key={cat.id} to={cat.link} className="shrink-0 no-underline">

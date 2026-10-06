@@ -46,7 +46,7 @@ export default function BankOfferTicker() {
   const current = offers[activeOfferIdx];
 
   return (
-    <div className="w-full bg-gradient-to-r from-[#0a1128] via-[#101f42] to-[#0a1128] text-white shadow-sm border-b border-amber-400/25 relative z-20">
+    <div className="hidden sm:block w-full bg-gradient-to-r from-[#0a1128] via-[#101f42] to-[#0a1128] text-white shadow-sm border-b border-amber-400/25 relative z-20">
       <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-1.5 sm:py-2 flex items-center justify-between gap-2.5 sm:gap-3 text-xs">
         
         {/* Left: Animated Bank Offer Ticker */}

@@ -22,7 +22,7 @@ export default function Logo({
     md: { height: 36, iconSize: 36, fullWidth: 165, textClass: 'text-xl', iconClass: 'w-9 h-9' },
     lg: { height: 44, iconSize: 44, fullWidth: 200, textClass: 'text-2xl', iconClass: 'w-11 h-11' },
     xl: { height: 52, iconSize: 52, fullWidth: 240, textClass: 'text-3xl', iconClass: 'w-13 h-13' },
-    responsive: { height: 32, iconSize: 32, fullWidth: 150, textClass: 'text-lg sm:text-xl md:text-2xl', iconClass: 'w-7 h-7 sm:w-9 sm:h-9' }
+    responsive: { height: 32, iconSize: 32, fullWidth: 150, textClass: 'text-xl sm:text-2xl', iconClass: 'w-8 h-8 sm:w-9 sm:h-9' }
   };
 
   const currentScale = scales[size] || scales.responsive;
@@ -110,12 +110,12 @@ export default function Logo({
 
       {/* Styled Wordmark */}
       <span
-        className={`font-sans font-extrabold tracking-tight flex items-baseline leading-none ${currentScale.textClass}`}
+        className={`font-sans font-extrabold tracking-tight flex items-center leading-none ${currentScale.textClass}`}
       >
         <span style={{ color: wordmarkLeadColor }}>Riga</span>
         <span style={{ color: wordmarkTailColor }}>mart</span>
         <span
-          className="inline-block w-1.5 h-1.5 rounded-full ml-0.5"
+          className="inline-block w-1.5 h-1.5 rounded-full ml-0.5 shrink-0"
           style={{ backgroundColor: saffronColor }}
         />
       </span>

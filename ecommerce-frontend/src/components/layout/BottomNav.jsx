@@ -46,7 +46,7 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface/95 backdrop-blur-md border-t border-line transition-colors duration-150"
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface border-t border-line shadow-[0_-4px_20px_rgba(0,0,0,0.08)] transition-colors duration-150"
       aria-label="Mobile bottom navigation"
     >
       <div className="flex items-stretch h-16">

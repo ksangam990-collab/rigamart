@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Star, ShoppingBag, Check, Share2 } from 'lucide-react';
+import { Heart, Star, ShoppingBag, Check } from 'lucide-react';
 import { toggleWishlist, toggleGuestWishlist } from '../../features/wishlist/wishlistSlice.js';
 import { addToCart } from '../../features/cart/cartSlice.js';
 import GuestOtpModal from '../checkout/GuestOtpModal.jsx';
-import WhatsAppShareModal from '../home/WhatsAppShareModal.jsx';
 import Badge from '../ui/Badge.jsx';
 import { cn } from '../../utils/cn.js';
 
@@ -23,7 +22,6 @@ export default function ProductCard({ product, className }) {
   const [justAdded, setJustAdded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showGuestOtp, setShowGuestOtp] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const dispatch = useDispatch();
   const wishlistItems = useSelector((state) => state.wishlist?.items || []);
@@ -88,12 +86,6 @@ export default function ProductCard({ product, className }) {
       setJustAdded(true);
       setTimeout(() => setJustAdded(false), 1400);
     }
-  };
-
-  const handleShareClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsShareModalOpen(true);
   };
 
   // Image assets
@@ -261,17 +253,6 @@ export default function ProductCard({ product, className }) {
             </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
-              {/* Meesho WhatsApp Reseller Share Button */}
-              <button
-                type="button"
-                onClick={handleShareClick}
-                aria-label="Share on WhatsApp and earn margin"
-                title={`Share & Earn ₹${Math.round(currentPrice * 0.15 || 100)}`}
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 transition-all duration-150 active:scale-90 shadow-subtle cursor-pointer"
-              >
-                <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 dark:text-emerald-400" />
-              </button>
-
               {/* Quick Add Button */}
               {!isOutOfStock && (
                 <button
@@ -315,19 +296,6 @@ export default function ProductCard({ product, className }) {
           </div>
         </div>
       </div>
-
-      {/* Meesho WhatsApp Reseller Share Modal */}
-      <WhatsAppShareModal
-        isOpen={isShareModalOpen}
-        onClose={() => setIsShareModalOpen(false)}
-        product={{
-          title: product.name,
-          wholesalePrice: currentPrice,
-          mrp: mrp || currentPrice * 1.3,
-          image: primaryImage,
-          category: product.brand || product.category?.name || product.category || 'Curated Rigamart'
-        }}
-      />
 
       {/* Guest OTP Drawer / Modal if quick adding while unauthenticated */}
       <GuestOtpModal
