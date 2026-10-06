@@ -237,15 +237,17 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="space-y-6 sm:space-y-12 pb-16 sm:pb-20 overflow-hidden font-sans">
-      {/* ── 0A. Top Bank Offer Ticker Ribbon (Desktop Only) ───────────────────── */}
-      <BankOfferTicker />
-
-      {/* ── 0B. Circular Category Story Rail ───────────────────────────────── */}
+    <div className="pb-16 sm:pb-20 overflow-hidden font-sans">
+      {/* ── 0A. Circular Category Story Rail (Primary Category Navigation) ── */}
       <CategoryStoryRail />
 
-      {/* ── 1. Hero Showcase (Desktop: 12-col festive banner, Mobile: Clean Flash Deal + Pills) ── */}
-      <section className="relative pt-1 sm:pt-4 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* ── 0B. Top Bank Offer & Delivery Ticker Ribbon (Desktop Only) ─────── */}
+      <BankOfferTicker />
+
+      {/* ── Main Page Content Stream ────────────────────────────────────────── */}
+      <div className="space-y-8 sm:space-y-12 pt-3 sm:pt-6">
+        {/* ── 1. Hero Showcase (Desktop: 12-col festive banner, Mobile: Clean Flash Deal + Pills) ── */}
+        <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Desktop Hero Showcase (12-col) */}
         <div className="hidden lg:block relative rounded-3xl bg-surface border border-line shadow-card overflow-hidden">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-soft/50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
@@ -597,6 +599,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }

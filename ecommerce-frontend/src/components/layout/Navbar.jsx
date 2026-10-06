@@ -999,30 +999,34 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Curated Category Navigation Strip (Desktop) */}
-        <div className="hidden md:flex items-center gap-6 overflow-x-auto py-2 border-t border-line/60 scrollbar-none text-xs">
-          {CURATED_CATEGORIES.map((cat) => {
-            const isActive = location.pathname + location.search === cat.href;
-            return (
-              <Link
-                key={cat.name}
-                to={cat.href}
-                className={`whitespace-nowrap transition-colors flex items-center gap-1.5 font-medium py-0.5 tracking-tight ${
-                  isActive
-                    ? 'text-brand font-semibold border-b-2 border-brand pb-0'
-                    : 'text-muted hover:text-ink'
-                }`}
-              >
-                <span>{cat.name}</span>
-                {cat.badge && (
-                  <span className="text-[10px] font-bold bg-accent/20 text-accent px-1.5 py-0.2 rounded-full leading-tight">
-                    {cat.badge}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-        </div>
+        {/* Curated Category Navigation Strip (Desktop) - Shown on interior pages; Homepage renders the visual CategoryStoryRail */}
+        {location.pathname !== '/' && (
+          <div className="hidden md:block border-t border-line/60 bg-surface">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-6 overflow-x-auto py-2 scrollbar-none text-xs">
+              {CURATED_CATEGORIES.map((cat) => {
+                const isActive = location.pathname + location.search === cat.href;
+                return (
+                  <Link
+                    key={cat.name}
+                    to={cat.href}
+                    className={`whitespace-nowrap transition-colors flex items-center gap-1.5 font-medium py-0.5 tracking-tight ${
+                      isActive
+                        ? 'text-brand font-semibold border-b-2 border-brand pb-0'
+                        : 'text-muted hover:text-ink'
+                    }`}
+                  >
+                    <span>{cat.name}</span>
+                    {cat.badge && (
+                      <span className="text-[10px] font-bold bg-accent/20 text-accent px-1.5 py-0.2 rounded-full leading-tight">
+                        {cat.badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Mobile Slide-Down Menu */}
         <AnimatePresence>
