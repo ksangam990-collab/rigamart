@@ -7,9 +7,9 @@ import Skeleton from '../ui/Skeleton.jsx';
  */
 export default function ProductCardSkeleton() {
   return (
-    <div className="bg-surface rounded-card border border-line shadow-subtle flex flex-col overflow-hidden animate-pulse">
-      {/* 4:5 Media Aspect Ratio */}
-      <div className="w-full aspect-[4/5] bg-line/60" />
+    <div className="bg-surface rounded-xl border border-line shadow-2xs flex flex-col overflow-hidden animate-pulse">
+      {/* 1:1 Square Media Aspect Ratio (Flipkart reference) */}
+      <div className="w-full aspect-square bg-line/60" />
 
       {/* Product Content Placeholder */}
       <div className="p-4 flex-1 flex flex-col justify-between space-y-4">

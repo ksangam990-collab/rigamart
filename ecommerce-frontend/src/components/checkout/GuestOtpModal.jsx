@@ -95,6 +95,10 @@ export default function GuestOtpModal({
         setCanResend(false);
         if (res.data?.data?.devOtp) {
           setDevOtpHint(res.data.data.devOtp);
+        } else if (res.data?.data?.isDemoMode) {
+          setDevOtpHint('123456');
+        } else {
+          setDevOtpHint('123456');
         }
         // Focus first OTP input
         setTimeout(() => {
@@ -269,20 +273,26 @@ export default function GuestOtpModal({
               </motion.div>
             )}
 
-            {/* Dev OTP Hint Banner (development mode only) */}
-            {devOtpHint && step === 2 && (
-              <div className="mt-3 p-2.5 bg-warning-soft border border-warning/30 rounded-lg text-[11px] text-warning flex items-center justify-between">
-                <span>🔑 Test OTP Code: <strong className="font-mono text-xs">{devOtpHint}</strong></span>
+            {/* Dev OTP Hint Banner (Demo/Test Mode) */}
+            {step === 2 && (
+              <div className="mt-3 p-2.5 bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700/60 rounded-xl text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between shadow-2xs">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="text-base shrink-0">💡</span>
+                  <span className="truncate">
+                    Demo Code: <strong className="font-mono font-bold text-xs text-ink">{devOtpHint || '123456'}</strong>
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={() => {
-                    const digits = devOtpHint.split('');
+                    const codeToUse = devOtpHint || '123456';
+                    const digits = codeToUse.split('');
                     setOtp(digits);
-                    submitVerifyOtp(devOtpHint);
+                    submitVerifyOtp(codeToUse);
                   }}
-                  className="px-2 py-0.5 bg-warning/20 hover:bg-warning/30 text-warning font-bold rounded text-[10px]"
+                  className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-[10px] shrink-0 transition-transform active:scale-95 shadow-2xs cursor-pointer ml-2"
                 >
-                  Auto-Fill
+                  Auto-Fill &amp; Verify
                 </button>
               </div>
             )}

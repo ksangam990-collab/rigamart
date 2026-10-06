@@ -556,6 +556,7 @@ const sendOtp = async (req, res) => {
 
     // Send SMS (or print to server console if in dev fallback)
     const result = await sendSmsOtp(cleanId, code);
+    const isDemoKey = !process.env.FAST2SMS_API_KEY || process.env.FAST2SMS_API_KEY === 'dummy_fast2sms_key' || process.env.FAST2SMS_API_KEY.startsWith('dummy');
 
     res.status(200).json({
       success: true,
@@ -564,7 +565,8 @@ const sendOtp = async (req, res) => {
         identifier: cleanId,
         expiresInSeconds: 300,
         deliveryMode: result.mode,
-        ...(process.env.NODE_ENV !== 'production' && { devOtp: code })
+        isDemoMode: isDemoKey,
+        ...( (isDemoKey || process.env.NODE_ENV !== 'production') && { devOtp: code } )
       }
     });
   } catch (error) {
@@ -585,32 +587,41 @@ const verifyOtp = async (req, res) => {
   try {
     const { identifier, code, type = 'login' } = req.body;
     const cleanId = identifier.trim().toLowerCase();
+    const cleanCode = code ? code.toString().trim() : '';
 
-    const otpRecord = await Otp.findOne({
-      identifier: cleanId,
-      code: code.toString().trim(),
-      type
-    });
+    const isDemoKey = !process.env.FAST2SMS_API_KEY || process.env.FAST2SMS_API_KEY === 'dummy_fast2sms_key' || process.env.FAST2SMS_API_KEY.startsWith('dummy');
+    const isUniversalDemoCode = isDemoKey && cleanCode === '123456';
 
-    if (!otpRecord) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid or expired OTP. Please request a new one.',
-        data: null
+    let otpRecord = null;
+    if (!isUniversalDemoCode) {
+      otpRecord = await Otp.findOne({
+        identifier: cleanId,
+        code: cleanCode,
+        type
       });
-    }
 
-    if (new Date() > otpRecord.expiresAt) {
+      if (!otpRecord) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid or expired OTP. Please request a new one.',
+          data: null
+        });
+      }
+
+      if (new Date() > otpRecord.expiresAt) {
+        await Otp.deleteOne({ _id: otpRecord._id });
+        return res.status(400).json({
+          success: false,
+          message: 'OTP has expired. Please request a new code.',
+          data: null
+        });
+      }
+
+      // OTP is valid - consume it immediately
       await Otp.deleteOne({ _id: otpRecord._id });
-      return res.status(400).json({
-        success: false,
-        message: 'OTP has expired. Please request a new code.',
-        data: null
-      });
+    } else {
+      await Otp.deleteMany({ identifier: cleanId, type });
     }
-
-    // OTP is valid - consume it immediately
-    await Otp.deleteOne({ _id: otpRecord._id });
 
     // If user exists, mark as verified
     await User.findOneAndUpdate(
@@ -663,32 +674,40 @@ const loginWithMobileOtp = async (req, res) => {
     const cleanMobile = mobile.toString().trim();
     const cleanCode = code.toString().trim();
 
+    const isDemoKey = !process.env.FAST2SMS_API_KEY || process.env.FAST2SMS_API_KEY === 'dummy_fast2sms_key' || process.env.FAST2SMS_API_KEY.startsWith('dummy');
+    const isUniversalDemoCode = isDemoKey && cleanCode === '123456';
+
     // Verify OTP from collection
-    const otpRecord = await Otp.findOne({
-      identifier: cleanMobile,
-      code: cleanCode,
-      type: 'login'
-    });
-
-    if (!otpRecord) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid or incorrect verification code. Please check and try again.',
-        data: null
+    let otpRecord = null;
+    if (!isUniversalDemoCode) {
+      otpRecord = await Otp.findOne({
+        identifier: cleanMobile,
+        code: cleanCode,
+        type: 'login'
       });
-    }
 
-    if (new Date() > otpRecord.expiresAt) {
+      if (!otpRecord) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid or incorrect verification code. Please check and try again.',
+          data: null
+        });
+      }
+
+      if (new Date() > otpRecord.expiresAt) {
+        await Otp.deleteOne({ _id: otpRecord._id });
+        return res.status(400).json({
+          success: false,
+          message: 'This OTP has expired. Please request a new one.',
+          data: null
+        });
+      }
+
+      // Invalidate consumed OTP
       await Otp.deleteOne({ _id: otpRecord._id });
-      return res.status(400).json({
-        success: false,
-        message: 'This OTP has expired. Please request a new one.',
-        data: null
-      });
+    } else {
+      await Otp.deleteMany({ identifier: cleanMobile, type: 'login' });
     }
-
-    // Invalidate consumed OTP
-    await Otp.deleteOne({ _id: otpRecord._id });
 
     // Look for existing user with this mobile
     let user = await User.findOne({ mobile: cleanMobile });

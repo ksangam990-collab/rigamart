@@ -485,7 +485,7 @@ export default function CatalogPage() {
         <main className="lg:col-span-3 space-y-8">
           {isLoading ? (
             /* Skeleton Loading Grid matching exact aspect ratio */
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4 md:gap-6">
               {[...Array(6)].map((_, i) => (
                 <ProductCardSkeleton key={i} />
               ))}
@@ -519,7 +519,7 @@ export default function CatalogPage() {
               animate="visible"
               className={
                 viewMode === 'grid'
-                  ? 'grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6'
+                  ? 'grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4 md:gap-6'
                   : 'grid grid-cols-1 gap-4'
               }
             >

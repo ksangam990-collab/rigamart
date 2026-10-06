@@ -640,7 +640,7 @@ export default function ProductDetailPage() {
           </div>
 
           {relatedLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-6">
               {[...Array(4)].map((_, i) => (
                 <ProductCardSkeleton key={i} />
               ))}
@@ -651,7 +651,7 @@ export default function ProductDetailPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
+              className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-6"
             >
               {relatedProducts.map((p) => (
                 <motion.div key={p._id} variants={staggerItem}>

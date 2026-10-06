@@ -40,7 +40,7 @@ const CURATED_TRENDING_FALLBACKS = [
     category: 'electronics',
     basePrice: 2399,
     images: [
-      { url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80', isPrimary: true },
+      { url: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&auto=format&fit=crop&q=80', isPrimary: true },
       { url: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&auto=format&fit=crop&q=80' }
     ],
     variants: [
@@ -445,7 +445,7 @@ export default function HomePage() {
 
         {/* Product Cards with Skeletons to prevent CLS */}
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-6">
             {[...Array(8)].map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
@@ -456,7 +456,7 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "200px" }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
+            className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-6"
           >
             {trendingProducts.map((product) => (
               <motion.div key={product._id} variants={staggerItem}>
