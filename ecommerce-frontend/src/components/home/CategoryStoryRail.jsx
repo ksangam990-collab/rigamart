@@ -78,8 +78,8 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
   };
 
   return (
-    <div className="relative w-full bg-surface border-b border-line py-3 select-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative group">
+    <div className="relative w-full bg-surface border-b border-line py-2 sm:py-3 select-none">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative group">
         
         {/* Left Arrow (Desktop) */}
         <button
@@ -94,27 +94,27 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
         {/* Story Rail Container */}
         <div
           ref={scrollRef}
-          className="flex items-center gap-4 sm:gap-6 overflow-x-auto scrollbar-none py-1 px-1 scroll-smooth"
+          className="flex items-center gap-2.5 sm:gap-6 overflow-x-auto scrollbar-none py-0.5 px-0.5 scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {categories.map((cat, idx) => {
             const content = (
               <motion.div
-                whileHover={{ y: -3, scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
+                whileHover={{ y: -2, scale: 1.04 }}
+                whileTap={{ scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group/bubble"
+                className="flex flex-col items-center gap-1 shrink-0 cursor-pointer group/bubble w-[64px] sm:w-auto"
               >
                 {/* Circular Story Bubble */}
                 <div
-                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full p-[2.5px] bg-gradient-to-tr ${cat.gradient} shadow-subtle group-hover/bubble:shadow-md transition-shadow relative`}
+                  className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full p-[2px] sm:p-[2.5px] bg-gradient-to-tr ${cat.gradient} shadow-subtle group-hover/bubble:shadow-md transition-shadow relative`}
                 >
                   {cat.isSpecial ? (
                     <div className="w-full h-full rounded-full bg-emerald-600 flex items-center justify-center text-white">
-                      <span className="font-mono text-xl sm:text-2xl font-black">₹</span>
+                      <span className="font-mono text-lg sm:text-2xl font-black">₹</span>
                     </div>
                   ) : (
-                    <div className="w-full h-full rounded-full overflow-hidden bg-surface p-[2px]">
+                    <div className="w-full h-full rounded-full overflow-hidden bg-surface p-[1.5px] sm:p-[2px]">
                       <img
                         src={cat.image}
                         alt={cat.name}
@@ -126,7 +126,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
 
                   {/* Pulsing Dot or Pill on Bubble */}
                   {cat.badge && (
-                    <span className="absolute -bottom-1 -right-0.5 bg-amber-400 text-amber-950 font-black text-[9px] px-1.5 py-0.2 rounded-full border border-surface shadow-2xs">
+                    <span className="absolute -bottom-1 -right-0.5 bg-amber-400 text-amber-950 font-black text-[8px] sm:text-[9px] px-1 sm:px-1.5 py-0.2 rounded-full border border-surface shadow-2xs">
                       {cat.badge}
                     </span>
                   )}
@@ -134,7 +134,7 @@ export default function CategoryStoryRail({ onOpenResellerModal }) {
 
                 {/* Title */}
                 <span
-                  className={`text-[11px] sm:text-xs font-bold text-center whitespace-nowrap leading-tight transition-colors ${
+                  className={`text-[10px] sm:text-xs font-bold text-center truncate max-w-[62px] sm:max-w-none leading-tight transition-colors ${
                     cat.isSpecial
                       ? 'text-emerald-600 group-hover/bubble:text-emerald-700'
                       : 'text-ink group-hover/bubble:text-brand'

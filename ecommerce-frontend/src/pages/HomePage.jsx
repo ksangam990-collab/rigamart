@@ -35,6 +35,73 @@ import {
   staggerItem
 } from '../utils/animations.js';
 
+const CURATED_TRENDING_FALLBACKS = [
+  {
+    _id: 'curated-drop-1',
+    name: 'Aura Studio ANC Wireless Over-Ear Headphones',
+    brand: 'Aura Sound',
+    category: 'electronics',
+    basePrice: 2399,
+    images: [
+      { url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80', isPrimary: true },
+      { url: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&auto=format&fit=crop&q=80' }
+    ],
+    variants: [
+      { _id: 'var-c1', price: 2399, mrp: 5999, stock: 18, color: 'Midnight Black' }
+    ],
+    ratings: { average: 4.8, count: 124 },
+    badge: '🔥 Bestseller'
+  },
+  {
+    _id: 'curated-drop-2',
+    name: 'Chanderi Handloom Pure Silk Embroidered Kurta Set',
+    brand: 'Jaipur Weaves',
+    category: 'womens-ethnic',
+    basePrice: 1899,
+    images: [
+      { url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80', isPrimary: true },
+      { url: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop&q=80' }
+    ],
+    variants: [
+      { _id: 'var-c2', price: 1899, mrp: 3499, stock: 12, size: 'M' }
+    ],
+    ratings: { average: 4.9, count: 86 },
+    badge: 'Handloom'
+  },
+  {
+    _id: 'curated-drop-3',
+    name: 'Kravitz Handcrafted Italian Tan Leather Derby',
+    brand: 'Kravitz Atelier',
+    category: 'footwear',
+    basePrice: 2999,
+    images: [
+      { url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&auto=format&fit=crop&q=80', isPrimary: true },
+      { url: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800&auto=format&fit=crop&q=80' }
+    ],
+    variants: [
+      { _id: 'var-c3', price: 2999, mrp: 4999, stock: 8, size: 'UK 9' }
+    ],
+    ratings: { average: 4.7, count: 95 },
+    badge: 'Pure Leather'
+  },
+  {
+    _id: 'curated-drop-4',
+    name: 'Minimalist Ceramic Matte Artisan Pour-Over Pot',
+    brand: 'Clay & Kiln',
+    category: 'home-kitchen',
+    basePrice: 1199,
+    images: [
+      { url: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&auto=format&fit=crop&q=80', isPrimary: true },
+      { url: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop&q=80' }
+    ],
+    variants: [
+      { _id: 'var-c4', price: 1199, mrp: 2199, stock: 15, color: 'Stone Grey' }
+    ],
+    ratings: { average: 4.9, count: 64 },
+    badge: 'Artisan Pick'
+  }
+];
+
 export default function HomePage() {
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -54,7 +121,7 @@ export default function HomePage() {
     setIsShareModalOpen(true);
   };
 
-  // Fetch catalog shelves on mount
+  // Fetch catalog shelves on mount with automatic grid balancing
   useEffect(() => {
     let isMounted = true;
     const fetchCatalog = async () => {
@@ -65,11 +132,27 @@ export default function HomePage() {
         ]);
 
         if (isMounted) {
-          setTrendingProducts(trendingRes.data.data?.products || []);
+          const apiTrending = trendingRes.data.data?.products || [];
+          if (apiTrending.length === 0) {
+            setTrendingProducts(CURATED_TRENDING_FALLBACKS);
+          } else if (apiTrending.length < 4) {
+            const existingIds = new Set(apiTrending.map((p) => p._id));
+            const additions = CURATED_TRENDING_FALLBACKS.filter((f) => !existingIds.has(f._id));
+            setTrendingProducts([...apiTrending, ...additions].slice(0, 4));
+          } else if (apiTrending.length % 2 !== 0) {
+            const existingIds = new Set(apiTrending.map((p) => p._id));
+            const addition = CURATED_TRENDING_FALLBACKS.find((f) => !existingIds.has(f._id));
+            setTrendingProducts(addition ? [...apiTrending, addition] : apiTrending);
+          } else {
+            setTrendingProducts(apiTrending);
+          }
           setFeaturedProducts(featuredRes.data.data?.products || []);
         }
       } catch {
         // Silent fail — preserve pristine homepage presentation
+        if (isMounted) {
+          setTrendingProducts(CURATED_TRENDING_FALLBACKS);
+        }
       } finally {
         if (isMounted) setIsLoading(false);
       }
@@ -185,12 +268,12 @@ export default function HomePage() {
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-6 sm:p-10 lg:p-14 items-center">
-            {/* Left Column: Editorial Headline & Copy */}
+            {/* Editorial Headline & Copy (Second on mobile, First on desktop) */}
             <motion.div
               variants={staggerContainer(0.08)}
               initial="hidden"
               animate="visible"
-              className="lg:col-span-7 space-y-6"
+              className="order-2 lg:order-1 lg:col-span-7 space-y-6"
             >
               {/* Trust Badge Pill */}
               <motion.div variants={staggerItem}>
@@ -257,12 +340,12 @@ export default function HomePage() {
               </motion.div>
             </motion.div>
 
-            {/* Right Column: Flipkart Lightning Drop Deal Box */}
+            {/* Lightning Drop Deal Box (First on mobile, Second on desktop) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
-              className="lg:col-span-5 flex items-center justify-center"
+              className="order-1 lg:order-2 lg:col-span-5 flex items-center justify-center"
             >
               <LightningDrop onOpenResellerModal={handleOpenResellerModal} />
             </motion.div>

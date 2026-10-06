@@ -10,18 +10,21 @@ export default function BankOfferTicker() {
     {
       code: 'RIGAMART10',
       title: '10% Instant Discount on HDFC, SBI & ICICI Cards',
+      shortTitle: '10% Off on Top Bank Cards',
       subtext: 'Min order ₹1,499 | Max discount ₹750',
       tag: 'BANK OFFER'
     },
     {
       code: 'SUPERFESTIVE',
       title: 'Flat ₹300 Off on First UPI Order via Razorpay & PhonePe',
+      shortTitle: '₹300 Off on First UPI',
       subtext: 'Zero processing fee | Instant cashback in wallet',
       tag: 'UPI CASHBACK'
     },
     {
       code: 'EXPRESS24',
       title: 'Free Express 24h Metro Delivery on Orders ₹499+',
+      shortTitle: 'Free 24h Metro Delivery',
       subtext: 'Dispatched from nearest regional fulfillment hub',
       tag: 'FAST DISPATCH'
     }
@@ -44,11 +47,11 @@ export default function BankOfferTicker() {
 
   return (
     <div className="w-full bg-gradient-to-r from-[#0a1128] via-[#101f42] to-[#0a1128] text-white shadow-sm border-b border-amber-400/25 relative z-20">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-3 text-xs">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-1.5 sm:py-2 flex items-center justify-between gap-2.5 sm:gap-3 text-xs">
         
         {/* Left: Animated Bank Offer Ticker */}
-        <div className="flex items-center gap-2.5 overflow-hidden flex-1 min-w-0">
-          <span className="bg-amber-400 text-slate-950 font-black text-[10px] px-2 py-0.5 rounded tracking-wider uppercase shrink-0 shadow-xs">
+        <div className="flex items-center gap-2 sm:gap-2.5 overflow-hidden flex-1 min-w-0">
+          <span className="bg-amber-400 text-slate-950 font-black text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded tracking-wider uppercase shrink-0 shadow-xs">
             {current.tag}
           </span>
 
@@ -59,11 +62,12 @@ export default function BankOfferTicker() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.25 }}
-              className="flex items-center gap-2 truncate"
+              className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1"
             >
               <CreditCard className="w-3.5 h-3.5 text-amber-300 shrink-0 hidden sm:inline" />
-              <span className="font-semibold text-[11px] sm:text-xs truncate text-white">
-                {current.title}
+              <span className="font-semibold text-[11px] sm:text-xs text-white truncate shrink-0 max-w-[170px] sm:max-w-none">
+                <span className="hidden sm:inline">{current.title}</span>
+                <span className="sm:hidden">{current.shortTitle}</span>
               </span>
               <span className="text-blue-200 text-[10px] hidden md:inline">
                 • {current.subtext}
@@ -71,7 +75,7 @@ export default function BankOfferTicker() {
               <button
                 type="button"
                 onClick={() => copyCode(current.code)}
-                className="inline-flex items-center gap-1 bg-amber-400/15 hover:bg-amber-400/25 text-amber-200 border border-amber-400/30 font-mono text-[10px] px-2 py-0.5 rounded transition-all shrink-0 cursor-pointer active:scale-95"
+                className="inline-flex items-center gap-1 bg-amber-400/15 hover:bg-amber-400/25 text-amber-200 border border-amber-400/30 font-mono text-[9.5px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded transition-all shrink-0 cursor-pointer active:scale-95 ml-auto sm:ml-0"
                 title="Copy coupon code"
               >
                 <span>Code: <strong className="text-white">{current.code}</strong></span>

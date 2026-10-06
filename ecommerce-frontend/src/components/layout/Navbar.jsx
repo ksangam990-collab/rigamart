@@ -377,6 +377,7 @@ export default function Navbar() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const searchRef = useRef(null);
   const mobileSearchRef = useRef(null);
+  const mobileInputRef = useRef(null);
   const notificationRef = useRef(null);
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -387,6 +388,17 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleMobileSearchFocus = () => {
+    if (mobileInputRef.current) {
+      mobileInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        mobileInputRef.current?.focus();
+      }, 200);
+    } else {
+      navigate('/search');
+    }
+  };
 
   // Save recent search term to localStorage
   const saveRecentSearch = (term) => {
@@ -648,33 +660,34 @@ export default function Navbar() {
   };
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-200 ${
-        isScrolled
-          ? 'bg-surface/90 backdrop-blur-xl border-b border-line shadow-card'
-          : 'bg-surface border-b border-line'
-      }`}
-    >
-      {/* Top Banner for Trust / Free Delivery (collapses smoothly on scroll) */}
-      <div
-        className={`bg-brand text-white text-xs text-center font-medium tracking-wide transition-all duration-300 overflow-hidden ${
-          isBannerCollapsed
-            ? 'max-h-0 py-0 opacity-0 pointer-events-none'
-            : 'max-h-10 py-1.5 px-4 opacity-100'
+    <>
+      <header
+        className={`sticky top-0 z-50 transition-all duration-200 ${
+          isScrolled
+            ? 'bg-surface/90 backdrop-blur-xl border-b border-line shadow-card'
+            : 'bg-surface border-b border-line'
         }`}
       >
-        <span className="opacity-90">
-          Super Saver Delivery: Free shipping across India on orders above ₹500
-        </span>
-      </div>
-
-      {/* Main Navbar Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Top Banner for Trust / Free Delivery (hidden on mobile for maximum vertical space, collapses smoothly on desktop) */}
         <div
-          className={`flex items-center justify-between gap-4 transition-all duration-200 ${
-            isBannerCollapsed ? 'h-14' : 'h-16'
+          className={`hidden sm:block bg-brand text-white text-xs text-center font-medium tracking-wide transition-all duration-300 overflow-hidden ${
+            isBannerCollapsed
+              ? 'max-h-0 py-0 opacity-0 pointer-events-none'
+              : 'max-h-10 py-1.5 px-4 opacity-100'
           }`}
         >
+          <span className="opacity-90">
+            Super Saver Delivery: Free shipping across India on orders above ₹500
+          </span>
+        </div>
+
+        {/* Main Navbar Bar (Compact 52px on mobile) */}
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div
+            className={`flex items-center justify-between gap-2.5 sm:gap-4 transition-all duration-200 ${
+              isBannerCollapsed ? 'h-13 sm:h-14' : 'h-13 sm:h-16'
+            }`}
+          >
           {/* Brand Logo */}
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center group" aria-label="Rigamart Homepage">
@@ -754,6 +767,18 @@ export default function Navbar() {
 
           {/* User Actions & Action Cluster */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Mobile Quick Search Button */}
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.92 }}
+              onClick={handleMobileSearchFocus}
+              className="md:hidden p-2 text-muted hover:text-brand hover:bg-brand-soft/40 transition-colors rounded-xl flex items-center justify-center"
+              title="Search"
+              aria-label="Search products"
+            >
+              <Search className="w-5 h-5" />
+            </motion.button>
+
             {/* Theme Toggle (Sun / Moon) */}
             <motion.button
               type="button"
@@ -1013,67 +1038,6 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Mobile Search Bar (under header bar) */}
-        <div ref={mobileSearchRef} className="md:hidden pb-3 relative">
-          <form
-            onSubmit={handleSearchSubmit}
-            className="relative flex items-center"
-            role="combobox"
-            aria-expanded={showDropdown}
-            aria-haspopup="listbox"
-          >
-            <input
-              type="text"
-              placeholder="Search products, brands..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setShowDropdown(true)}
-              onKeyDown={handleKeyDown}
-              className="w-full bg-canvas text-sm rounded-xl pl-9 pr-14 py-2 border border-line focus:bg-surface focus:border-brand focus:outline-none transition-all text-ink placeholder:text-muted/60"
-            />
-            {isSearching ? (
-              <Loader2 className="w-4 h-4 text-brand animate-spin absolute left-3 pointer-events-none" />
-            ) : (
-              <Search className="w-4 h-4 text-muted absolute left-3 pointer-events-none" />
-            )}
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={handleClearSearch}
-                className="absolute right-12 p-1 text-muted hover:text-ink rounded-full transition-colors"
-                title="Clear search"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
-            <motion.button
-              type="submit"
-              whileTap={{ scale: 0.94 }}
-              className="absolute right-1 px-3 py-1.5 bg-brand text-white text-xs font-semibold rounded-lg shadow-subtle flex items-center justify-center transition-colors"
-              aria-label="Submit search"
-            >
-              Go
-            </motion.button>
-
-            {/* Mobile Predictive Dropdown */}
-            <SearchSuggestionsDropdown
-              show={showDropdown}
-              isSearching={isSearching}
-              searchQuery={searchQuery}
-              suggestions={suggestions}
-              recentSearches={recentSearches}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              onSelectRecentSearch={handleSelectRecentSearch}
-              onRemoveRecentSearch={handleRemoveRecentSearch}
-              onClearRecentSearches={handleClearRecentSearches}
-              onSelectCategory={handleSelectCategory}
-              onSelectProduct={handleSelectProduct}
-              onSubmitSearch={handleSearchSubmit}
-            />
-          </form>
-        </div>
-
         {/* Mobile Slide-Down Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
@@ -1201,5 +1165,71 @@ export default function Navbar() {
         </AnimatePresence>
       </div>
     </header>
+
+    {/* Mobile Search Bar (In normal page flow below 52px sticky header: scrolls naturally like Myntra) */}
+    <div
+      ref={mobileSearchRef}
+      className="md:hidden bg-surface border-b border-line/70 px-3.5 py-2 relative z-30 shadow-2xs"
+    >
+      <form
+        onSubmit={handleSearchSubmit}
+        className="relative flex items-center"
+        role="combobox"
+        aria-expanded={showDropdown}
+        aria-haspopup="listbox"
+      >
+        <input
+          ref={mobileInputRef}
+          type="text"
+          placeholder="Search products, brands, or categories..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setShowDropdown(true)}
+          onKeyDown={handleKeyDown}
+          className="w-full bg-canvas text-xs sm:text-sm rounded-xl pl-9 pr-14 py-2 border border-line focus:bg-surface focus:border-brand focus:outline-none transition-all text-ink placeholder:text-muted/60"
+        />
+        {isSearching ? (
+          <Loader2 className="w-4 h-4 text-brand animate-spin absolute left-3 pointer-events-none" />
+        ) : (
+          <Search className="w-4 h-4 text-muted absolute left-3 pointer-events-none" />
+        )}
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={handleClearSearch}
+            className="absolute right-12 p-1 text-muted hover:text-ink rounded-full transition-colors"
+            title="Clear search"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        )}
+        <motion.button
+          type="submit"
+          whileTap={{ scale: 0.94 }}
+          className="absolute right-1 px-3 py-1.5 bg-brand text-white text-xs font-semibold rounded-lg shadow-subtle flex items-center justify-center transition-colors"
+          aria-label="Submit search"
+        >
+          Go
+        </motion.button>
+
+        {/* Mobile Predictive Dropdown */}
+        <SearchSuggestionsDropdown
+          show={showDropdown}
+          isSearching={isSearching}
+          searchQuery={searchQuery}
+          suggestions={suggestions}
+          recentSearches={recentSearches}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+          onSelectRecentSearch={handleSelectRecentSearch}
+          onRemoveRecentSearch={handleRemoveRecentSearch}
+          onClearRecentSearches={handleClearRecentSearches}
+          onSelectCategory={handleSelectCategory}
+          onSelectProduct={handleSelectProduct}
+          onSubmitSearch={handleSearchSubmit}
+        />
+      </form>
+    </div>
+  </>
   );
 }
