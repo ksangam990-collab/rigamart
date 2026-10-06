@@ -21,6 +21,14 @@ import api from '../utils/api.js';
 import ProductCard from '../components/product/ProductCard.jsx';
 import ProductCardSkeleton from '../components/product/ProductCardSkeleton.jsx';
 import { Button, Badge } from '../components/ui';
+import BankOfferTicker from '../components/home/BankOfferTicker.jsx';
+import CategoryStoryRail from '../components/home/CategoryStoryRail.jsx';
+import LightningDrop from '../components/home/LightningDrop.jsx';
+import WhatsAppShareModal from '../components/home/WhatsAppShareModal.jsx';
+import ShopTheLook from '../components/home/ShopTheLook.jsx';
+import MeeshoResellerHub from '../components/home/MeeshoResellerHub.jsx';
+import ScratchVoucherCard from '../components/home/ScratchVoucherCard.jsx';
+import GeminiStylistCard from '../components/home/GeminiStylistCard.jsx';
 import {
   fadeInUp,
   staggerContainer,
@@ -31,7 +39,20 @@ export default function HomePage() {
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [shareModalProduct, setShareModalProduct] = useState(null);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+  const handleOpenResellerModal = (product) => {
+    setShareModalProduct(product || {
+      title: 'Aura Studio ANC Wireless Headphones',
+      wholesalePrice: 2399,
+      mrp: 5999,
+      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80',
+      category: 'Electronics & Audio'
+    });
+    setIsShareModalOpen(true);
+  };
 
   // Fetch catalog shelves on mount
   useEffect(() => {
@@ -149,9 +170,15 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="space-y-16 sm:space-y-24 pb-20 overflow-hidden font-sans">
+    <div className="space-y-12 sm:space-y-20 pb-20 overflow-hidden font-sans">
+      {/* ── 0A. Top Bank Offer Ticker Ribbon ─────────────────────────────────── */}
+      <BankOfferTicker />
+
+      {/* ── 0B. Flipkart Circular Category Story Rail ───────────────────────── */}
+      <CategoryStoryRail onOpenResellerModal={handleOpenResellerModal} />
+
       {/* ── 1. Editorial Hero Showcase ────────────────────────────────────────── */}
-      <section className="relative pt-6 sm:pt-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="relative pt-2 sm:pt-4 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="relative rounded-3xl bg-surface border border-line shadow-card overflow-hidden">
           {/* Subtle warm ambient radial background glow */}
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-soft/50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
@@ -230,56 +257,14 @@ export default function HomePage() {
               </motion.div>
             </motion.div>
 
-            {/* Right Column: Editorial Hero Visual Card */}
+            {/* Right Column: Flipkart Lightning Drop Deal Box */}
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
-              className="lg:col-span-5"
+              className="lg:col-span-5 flex items-center justify-center"
             >
-              <div className="relative rounded-2xl bg-canvas border border-line p-3 shadow-elevation group overflow-hidden">
-                <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-surface">
-                  <img
-                    src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80"
-                    alt="Editorial Featured Tech: Studio Acoustics"
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                    loading="eager"
-                  />
-
-                  {/* Gradient Overlay for Typography Poise */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
-
-                  {/* Floating Tag */}
-                  <div className="absolute top-3.5 left-3.5">
-                    <Badge color="accent" variant="solid" size="md">
-                      FEATURED CURATION
-                    </Badge>
-                  </div>
-
-                  {/* Bottom Editorial Caption */}
-                  <div className="absolute bottom-4 left-4 right-4 text-white space-y-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent">
-                      Acoustic Engineering
-                    </span>
-                    <h2 className="text-xl font-bold font-display text-white leading-tight">
-                      Aura Studio Wireless ANC
-                    </h2>
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="flex items-baseline gap-2 tabular-nums">
-                        <span className="text-lg font-black text-white">₹3,499</span>
-                        <span className="text-xs text-white/60 line-through">₹5,999</span>
-                      </div>
-                      <Link
-                        to="/search?category=electronics"
-                        className="text-xs font-semibold text-white hover:text-accent flex items-center gap-1 transition-colors"
-                      >
-                        <span>View Gear</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <LightningDrop onOpenResellerModal={handleOpenResellerModal} />
             </motion.div>
           </div>
         </div>
@@ -387,6 +372,9 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      {/* ── 3.5. Myntra Style Studio Lookbook ("Shop The Look") ───────────────── */}
+      <ShopTheLook onOpenResellerModal={handleOpenResellerModal} />
+
       {/* ── 4. Shelf A: Trending Now (ProductCard 2.0 Grid) ──────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
@@ -451,6 +439,9 @@ export default function HomePage() {
         )}
       </section>
 
+      {/* ── 4.5. Meesho Zero-Capital WhatsApp Reselling Hub ──────────────────── */}
+      <MeeshoResellerHub onOpenResellerModal={handleOpenResellerModal} />
+
       {/* ── 5. Social Proof: Customer & Seller Reviews Wall ──────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10">
@@ -507,6 +498,14 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── 5.5. Rigamart Tech Edge: Gold Scratch Card & Gemini AI Stylist ────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch">
+          <ScratchVoucherCard />
+          <GeminiStylistCard />
+        </div>
+      </section>
+
       {/* ── 6. Seller Conversion Banner ───────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-card bg-brand-soft border border-brand/20 p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -536,6 +535,13 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── Meesho 1-Tap WhatsApp Share Modal ── */}
+      <WhatsAppShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        product={shareModalProduct}
+      />
     </div>
   );
 }
