@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import api from '../utils/api.js';
 import { Button, Badge } from '../components/ui/index.js';
+import usePincode from '../hooks/usePincode.js';
 import {
   fadeInUp,
   staggerContainer,
@@ -95,6 +96,18 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
   const [errors, setErrors] = useState({});
   const [locating, setLocating] = useState(false);
   const [geoNotice, setGeoNotice] = useState(null);
+
+  const { city: autoCity, state: autoState, loading: pinLoading } = usePincode(form.pincode);
+  const [showAutoBadge, setShowAutoBadge] = useState(false);
+
+  useEffect(() => {
+    if (autoCity && autoState) {
+      setForm((p) => ({ ...p, city: autoCity, state: autoState }));
+      setShowAutoBadge(true);
+      const timer = setTimeout(() => setShowAutoBadge(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [autoCity, autoState]);
 
   const set = (k) => (e) =>
     setForm((p) => ({
@@ -253,7 +266,7 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
           {errors.street && <p className={errClass}>{errors.street}</p>}
         </div>
 
-        <div>
+        <div className="relative">
           <label className={labelClass}>City *</label>
           <input
             className={inputClass}
@@ -261,17 +274,33 @@ function AddressForm({ initial = emptyAddress, onSubmit, onCancel, isSaving }) {
             value={form.city}
             onChange={set('city')}
           />
+          {pinLoading && <Loader2 className="w-4 h-4 text-brand animate-spin absolute right-3 top-[28px]" />}
           {errors.city && <p className={errClass}>{errors.city}</p>}
         </div>
 
-        <div>
-          <label className={labelClass}>State *</label>
+        <div className="relative">
+          <label className={labelClass}>
+            State *
+            <AnimatePresence>
+              {showAutoBadge && (
+                <motion.span
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="inline-flex items-center gap-1 ml-2 text-[10px] text-success bg-success/10 px-1.5 py-0.5 rounded font-bold"
+                >
+                  <CheckCircle2 className="w-3 h-3" /> Auto-filled
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </label>
           <input
             className={inputClass}
             placeholder="State"
             value={form.state}
             onChange={set('state')}
           />
+          {pinLoading && <Loader2 className="w-4 h-4 text-brand animate-spin absolute right-3 top-[28px]" />}
           {errors.state && <p className={errClass}>{errors.state}</p>}
         </div>
 

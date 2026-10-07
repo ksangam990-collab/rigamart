@@ -41,6 +41,7 @@ import {
   modalContentVariants,
   badgePulse
 } from '../../utils/animations.js';
+import VoiceSearchButton from '../search/VoiceSearchButton.jsx';
 
 const RECENT_SEARCHES_KEY = 'rigamart_recent_searches';
 
@@ -718,7 +719,7 @@ export default function Navbar() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
-              className={`w-full bg-canvas hover:bg-surface focus:bg-surface rounded-xl pl-10 pr-24 border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all text-ink placeholder:text-muted/60 ${
+              className={`w-full bg-canvas hover:bg-surface focus:bg-surface rounded-xl pl-10 pr-32 border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all text-ink placeholder:text-muted/60 ${
                 isBannerCollapsed ? 'py-1.5 text-xs' : 'py-2 text-sm'
               }`}
             />
@@ -727,6 +728,18 @@ export default function Navbar() {
             ) : (
               <Search className="w-4 h-4 text-muted absolute left-3.5 pointer-events-none" />
             )}
+
+            {/* Voice Search Button */}
+            <VoiceSearchButton 
+              className={`absolute ${searchQuery ? 'right-24' : 'right-16'}`}
+              onResult={(transcript) => {
+                setSearchQuery(transcript);
+                saveRecentSearch(transcript);
+                navigate(`/search?q=${encodeURIComponent(transcript)}`);
+                setMobileMenuOpen(false);
+                setShowDropdown(false);
+              }}
+            />
 
             {/* Clear Button */}
             {searchQuery && (
@@ -1176,13 +1189,25 @@ export default function Navbar() {
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setShowDropdown(true)}
           onKeyDown={handleKeyDown}
-          className="w-full bg-canvas text-xs sm:text-sm rounded-xl pl-9 pr-14 py-2 border border-line focus:bg-surface focus:border-brand focus:outline-none transition-all text-ink placeholder:text-muted/60"
+          className="w-full bg-canvas text-xs sm:text-sm rounded-xl pl-9 pr-24 py-2 border border-line focus:bg-surface focus:border-brand focus:outline-none transition-all text-ink placeholder:text-muted/60"
         />
         {isSearching ? (
           <Loader2 className="w-4 h-4 text-brand animate-spin absolute left-3 pointer-events-none" />
         ) : (
           <Search className="w-4 h-4 text-muted absolute left-3 pointer-events-none" />
         )}
+        
+        <VoiceSearchButton 
+          className={`absolute ${searchQuery ? 'right-16' : 'right-10'}`}
+          onResult={(transcript) => {
+            setSearchQuery(transcript);
+            saveRecentSearch(transcript);
+            navigate(`/search?q=${encodeURIComponent(transcript)}`);
+            setMobileMenuOpen(false);
+            setShowDropdown(false);
+          }}
+        />
+
         {searchQuery && (
           <button
             type="button"

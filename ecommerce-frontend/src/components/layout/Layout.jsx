@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import BottomNav from './BottomNav';
 import PageTransition from '../common/PageTransition';
+import PwaInstallBanner from '../common/PwaInstallBanner';
 
 export default function Layout() {
   const location = useLocation();
@@ -37,6 +38,7 @@ export default function Layout() {
           </PageTransition>
         </AnimatePresence>
       </main>
+      <PwaInstallBanner />
       <Footer />
       <BottomNav />
     </div>

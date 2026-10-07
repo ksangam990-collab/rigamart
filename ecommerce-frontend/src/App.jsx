@@ -35,6 +35,7 @@ const SellPage = lazy(() => import('./pages/SellPage.jsx'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage.jsx'));
 const TermsPage = lazy(() => import('./pages/TermsPage.jsx'));
 const StyleguidePage = lazy(() => import('./pages/StyleguidePage.jsx'));
+const OrderSuccessPage = lazy(() => import('./pages/OrderSuccessPage.jsx'));
 
 
 function RouteLoadingFallback({ message = 'Loading...' }) {
@@ -138,6 +139,14 @@ export default function App() {
           />
 
           {/* Guest Auth Routes */}
+          <Route
+            path="order-success"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading Order Success..." />}>
+                <OrderSuccessPage />
+              </Suspense>
+            }
+          />
           <Route
             path="login"
             element={

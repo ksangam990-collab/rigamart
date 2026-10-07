@@ -10,13 +10,16 @@ import {
   X,
   CheckCircle,
   Sparkles,
-  Tag
+  Tag,
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import api from '../../utils/api.js';
 import { clearCart } from '../../features/cart/cartSlice.js';
 import Button from '../ui/Button.jsx';
 import Badge from '../ui/Badge.jsx';
 import { modalBackdropVariants, modalContentVariants } from '../../utils/animations.js';
+import usePincode from '../../hooks/usePincode.js';
 
 // Format Indian Currency standard
 const formatCurrency = (amount) => {
@@ -59,6 +62,9 @@ export default function CheckoutModal({
   const dispatch = useDispatch();
 
   const totalPayable = cart?.totalAmount || 0;
+  
+  // Use pincode auto-fill logic for the checkout modal (address section logic)
+  const { city: autoCity, state: autoState, loading: pinLoading } = usePincode(selectedAddress?.pincode || '');
 
   const handlePayment = async () => {
     if (!selectedAddress) {
@@ -85,7 +91,14 @@ export default function CheckoutModal({
         setSuccessMsg('Your Cash on Delivery order has been placed successfully!');
         setTimeout(() => {
           onClose();
-          navigate(`/orders/${orderData.order?._id || orderData._id || ''}`);
+          navigate('/order-success', {
+            state: {
+              orderId: orderData.order?._id || orderData._id,
+              orderNumber: orderData.order?.orderNumber || orderData.orderNumber || orderData.order?._id || orderData._id,
+              totalAmount: totalPayable,
+              paymentMethod: 'COD'
+            }
+          });
         }, 1500);
         return;
       }
@@ -117,7 +130,14 @@ export default function CheckoutModal({
             setSuccessMsg('Payment confirmed! Your order is being prepared for dispatch.');
             setTimeout(() => {
               onClose();
-              navigate(`/orders/${orderData.orderId}`);
+              navigate('/order-success', {
+                state: {
+                  orderId: orderData.orderId,
+                  orderNumber: orderData.orderId,
+                  totalAmount: totalPayable,
+                  paymentMethod: 'RAZORPAY'
+                }
+              });
             }, 1500);
           } catch (verifyErr) {
             setErrorMsg(
@@ -223,6 +243,11 @@ export default function CheckoutModal({
                   <strong className="text-ink font-bold">{selectedAddress.name}</strong> ({selectedAddress.mobile})<br />
                   {selectedAddress.street}, {selectedAddress.city}, {selectedAddress.state} &ndash;{' '}
                   <span className="font-bold tabular-nums">{selectedAddress.pincode}</span>
+                  {autoCity && autoState && (
+                    <span className="inline-flex items-center gap-1 ml-2 text-[10px] text-success bg-success/10 px-1.5 py-0.5 rounded font-bold">
+                      <CheckCircle2 className="w-3 h-3" /> Auto-filled
+                    </span>
+                  )}
                 </p>
               ) : (
                 <p className="text-warning font-semibold">No delivery address selected.</p>

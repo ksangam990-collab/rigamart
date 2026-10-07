@@ -19,10 +19,12 @@ import {
   Navigation,
   Loader2,
   Tag,
-  X
+  X,
+  CheckCircle2
 } from 'lucide-react';
 import api from '../utils/api.js';
 import { triggerConfetti } from '../utils/confetti.js';
+import usePincode from '../hooks/usePincode.js';
 import {
   fetchCart,
   updateCartQuantity,
@@ -73,6 +75,19 @@ export default function CartPage() {
   const [savingAddress, setSavingAddress] = useState(false);
   const [locating, setLocating] = useState(false);
   const [geoNotice, setGeoNotice] = useState(null);
+
+  const { city: autoCity, state: autoState, loading: pinLoading } = usePincode(addrPincode);
+  const [showAutoBadge, setShowAutoBadge] = useState(false);
+
+  useEffect(() => {
+    if (autoCity && autoState) {
+      setAddrCity(autoCity);
+      setAddrState(autoState);
+      setShowAutoBadge(true);
+      const timer = setTimeout(() => setShowAutoBadge(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [autoCity, autoState]);
 
   const handleUseCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -555,22 +570,40 @@ export default function CartPage() {
                         onChange={(e) => setAddrStreet(e.target.value)}
                         className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink sm:col-span-2 outline-none focus:border-brand focus:ring-1 focus:ring-brand"
                       />
-                      <input
-                        type="text"
-                        required
-                        placeholder="City"
-                        value={addrCity}
-                        onChange={(e) => setAddrCity(e.target.value)}
-                        className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-                      />
-                      <input
-                        type="text"
-                        required
-                        placeholder="State"
-                        value={addrState}
-                        onChange={(e) => setAddrState(e.target.value)}
-                        className="px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          required
+                          placeholder="City"
+                          value={addrCity}
+                          onChange={(e) => setAddrCity(e.target.value)}
+                          className="w-full px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                        />
+                        {pinLoading && <Loader2 className="w-4 h-4 text-brand animate-spin absolute right-3 top-1/2 -translate-y-1/2" />}
+                      </div>
+                      <div className="relative flex items-center">
+                        <input
+                          type="text"
+                          required
+                          placeholder="State"
+                          value={addrState}
+                          onChange={(e) => setAddrState(e.target.value)}
+                          className="w-full px-3 py-2 bg-surface border border-line rounded-lg text-xs text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                        />
+                        {pinLoading && <Loader2 className="w-4 h-4 text-brand animate-spin absolute right-3 top-1/2 -translate-y-1/2" />}
+                        <AnimatePresence>
+                          {showAutoBadge && (
+                            <motion.span
+                              initial={{ opacity: 0, x: -5 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0 }}
+                              className="absolute right-3 inline-flex items-center gap-1 text-[10px] text-success bg-success/10 px-1.5 py-0.5 rounded font-bold pointer-events-none"
+                            >
+                              <CheckCircle2 className="w-3 h-3" /> Auto-filled
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                      </div>
                       <input
                         type="text"
                         required
