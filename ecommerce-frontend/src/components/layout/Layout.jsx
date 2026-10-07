@@ -6,6 +6,7 @@ import Footer from './Footer';
 import BottomNav from './BottomNav';
 import PageTransition from '../common/PageTransition';
 import PwaInstallBanner from '../common/PwaInstallBanner';
+import CookieConsentBanner from '../common/CookieConsentBanner';
 
 export default function Layout() {
   const location = useLocation();
@@ -39,6 +40,7 @@ export default function Layout() {
         </AnimatePresence>
       </main>
       <PwaInstallBanner />
+      <CookieConsentBanner />
       <Footer />
       <BottomNav />
     </div>

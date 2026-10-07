@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { Mail, Lock, AlertCircle, ArrowRight, Loader2, Phone } from 'lucide-react';
+import { Mail, Lock, AlertCircle, ArrowRight, Loader2, Phone, Eye, EyeOff } from 'lucide-react';
 import { loginUser, clearError } from '../features/auth/authSlice.js';
 import Logo from '../components/common/Logo.jsx';
 import GoogleAuthButton from '../components/auth/GoogleAuthButton.jsx';
@@ -10,8 +10,14 @@ import GuestOtpModal from '../components/checkout/GuestOtpModal.jsx';
 import { Button } from '../components/ui/index.js';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => {
+    return localStorage.getItem('rigamart_remembered_email') || '';
+  });
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(() => {
+    return !!localStorage.getItem('rigamart_remembered_email');
+  });
   const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -25,6 +31,13 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(clearError());
+
+    // Save or clear remembered email
+    if (rememberMe) {
+      localStorage.setItem('rigamart_remembered_email', email.trim());
+    } else {
+      localStorage.removeItem('rigamart_remembered_email');
+    }
 
     const result = await dispatch(loginUser({ email, password }));
     if (loginUser.fulfilled.match(result)) {
@@ -74,20 +87,50 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-muted mb-1.5">
-              Password
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-muted">
+                Password
+              </label>
+              <Link
+                to="/forgot-password"
+                className="text-[11px] font-medium text-brand hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-line rounded-xl text-xs text-ink outline-none focus:bg-surface focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-muted"
+                className="w-full pl-10 pr-10 py-2.5 bg-canvas border border-line rounded-xl text-xs text-ink outline-none focus:bg-surface focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-muted"
               />
               <Lock className="w-4 h-4 text-muted absolute left-3.5 top-3 pointer-events-none" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-2.5 text-muted hover:text-ink transition-colors"
+                title={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
+          </div>
+
+          {/* Remember Me Checkbox */}
+          <div className="flex items-center justify-between pt-1">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 rounded border-line text-brand focus:ring-brand focus:ring-offset-0 transition-colors"
+              />
+              <span className="text-xs text-ink font-medium">Remember my login</span>
+            </label>
+            <span className="text-[11px] text-muted">Secured by JWT</span>
           </div>
 
           <Button

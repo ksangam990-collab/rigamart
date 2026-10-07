@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { Mail, Lock, User, Phone, AlertCircle, ArrowRight, Store, ShoppingBag } from 'lucide-react';
+import { Mail, Lock, User, Phone, AlertCircle, ArrowRight, Store, ShoppingBag, Eye, EyeOff } from 'lucide-react';
 import { registerUser, clearError } from '../features/auth/authSlice.js';
 import Logo from '../components/common/Logo.jsx';
 import GoogleAuthButton from '../components/auth/GoogleAuthButton.jsx';
@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [mobile, setMobile] = useState('');
   const [role, setRole] = useState('customer');
 
@@ -19,6 +20,17 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   const { isLoading, error } = useSelector((state) => state.auth);
+
+  // Compute password strength score (0 to 4)
+  const strengthScore = React.useMemo(() => {
+    if (!password) return 0;
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/\d/.test(password)) score++;
+    if (/[a-zA-Z]/.test(password)) score++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+    return score;
+  }, [password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,20 +156,75 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-muted mb-1.5">
-              Password (Min 6 Characters)
+              Password (Min 8 Characters)
             </label>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
-                minLength={6}
+                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 bg-canvas border border-line rounded-xl text-xs text-ink outline-none focus:bg-surface focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-muted"
+                className="w-full pl-10 pr-10 py-2.5 bg-canvas border border-line rounded-xl text-xs text-ink outline-none focus:bg-surface focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-muted"
               />
               <Lock className="w-4 h-4 text-muted absolute left-3.5 top-3 pointer-events-none" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-2.5 text-muted hover:text-ink transition-colors"
+                title={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
+
+            {/* Password Criteria & Strength Indicator */}
+            {password.length > 0 && (
+              <div className="mt-2.5 space-y-2 p-2.5 bg-canvas rounded-xl border border-line">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-muted font-medium">Password Strength:</span>
+                  <span
+                    className={`font-bold ${
+                      strengthScore <= 1
+                        ? 'text-danger'
+                        : strengthScore <= 3
+                        ? 'text-amber-500'
+                        : 'text-success'
+                    }`}
+                  >
+                    {strengthScore <= 1 ? 'Weak' : strengthScore <= 3 ? 'Medium' : 'Strong'}
+                  </span>
+                </div>
+                {/* Visual Bar */}
+                <div className="h-1.5 w-full bg-line rounded-full overflow-hidden flex gap-1">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${
+                      strengthScore <= 1
+                        ? 'w-1/3 bg-danger'
+                        : strengthScore <= 3
+                        ? 'w-2/3 bg-amber-500'
+                        : 'w-full bg-success'
+                    }`}
+                  />
+                </div>
+                {/* Live Criteria Checklist */}
+                <div className="grid grid-cols-2 gap-1.5 pt-1 text-[10px]">
+                  <span className={`flex items-center gap-1 ${password.length >= 8 ? 'text-success font-semibold' : 'text-muted'}`}>
+                    {password.length >= 8 ? '✓' : '○'} 8+ characters
+                  </span>
+                  <span className={`flex items-center gap-1 ${/\d/.test(password) ? 'text-success font-semibold' : 'text-muted'}`}>
+                    {/\d/.test(password) ? '✓' : '○'} At least 1 number
+                  </span>
+                  <span className={`flex items-center gap-1 ${/[A-Za-z]/.test(password) ? 'text-success font-semibold' : 'text-muted'}`}>
+                    {/[A-Za-z]/.test(password) ? '✓' : '○'} Letters included
+                  </span>
+                  <span className={`flex items-center gap-1 ${/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-success font-semibold' : 'text-muted'}`}>
+                    {/[!@#$%^&*(),.?":{}|<>]/.test(password) ? '✓' : '○'} Special symbol (optional)
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           <Button
@@ -165,6 +232,7 @@ export default function RegisterPage() {
             variant="primary"
             size="lg"
             isLoading={isLoading}
+            disabled={password.length > 0 && (password.length < 8 || !/\d/.test(password) || !/[A-Za-z]/.test(password))}
             className="w-full text-xs font-bold shadow-subtle"
           >
             <span>Create Account</span>

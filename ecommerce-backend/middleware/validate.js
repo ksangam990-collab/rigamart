@@ -24,10 +24,10 @@ const validateRegister = (req, res, next) => {
     });
   }
 
-  if (!password || password.length < 6) {
+  if (!password || password.length < 8 || !/^(?=.*[A-Za-z])(?=.*\d)/.test(password)) {
     return res.status(400).json({
       success: false,
-      message: 'Password must be at least 6 characters long',
+      message: 'Password must be at least 8 characters long and include both letters and numbers',
       data: null
     });
   }
@@ -132,10 +132,10 @@ const validateResetPassword = (req, res, next) => {
     });
   }
 
-  if (newPassword.length < 6) {
+  if (newPassword.length < 8 || !/^(?=.*[A-Za-z])(?=.*\d)/.test(newPassword)) {
     return res.status(400).json({
       success: false,
-      message: 'New password must be at least 6 characters long',
+      message: 'New password must be at least 8 characters long and include both letters and numbers',
       data: null
     });
   }

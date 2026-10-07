@@ -34,42 +34,54 @@ const app = express();
 connectDB();
 verifyEmailConfig();
 
-// Secure HTTP headers
-app.use(helmet());
+// Secure HTTP headers with explicit cross-origin policy
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    crossOriginEmbedderPolicy: false
+  })
+);
 
 // Trust reverse proxies (Render, AWS, Cloudflare) for secure cookies & HTTPS protocol detection
 app.set('trust proxy', 1);
 
-// Cross-Origin Resource Sharing setup
+// Cross-Origin Resource Sharing setup: strict domain whitelisting
 const configuredOrigins = process.env.CLIENT_URL
   ? process.env.CLIENT_URL.split(',').map((u) => u.trim())
   : [];
 
 const allowedOrigins = [
   ...configuredOrigins,
+  'https://rigamart-frontend.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
   'http://127.0.0.1:5173'
 ].filter(Boolean);
 
+// Strict regex matching for official Rigamart production & preview branches only
+const isAllowedRigamartDomain = (origin) => {
+  if (!origin) return true; // Server-to-server, curl, mobile native
+  if (allowedOrigins.includes(origin)) return true;
+  // Match https://rigamart-frontend.vercel.app or https://rigamart-frontend-<branch>.vercel.app
+  if (/^https:\/\/rigamart-frontend(-[a-z0-9-]+)?\.vercel\.app$/i.test(origin)) return true;
+  // Allow localhost during development only
+  if (process.env.NODE_ENV !== 'production' && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+    return true;
+  }
+  return false;
+};
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, or Postman),
-      // explicit client origins, and Vercel preview/production domains (*.vercel.app)
-      if (
-        !origin ||
-        allowedOrigins.includes(origin) ||
-        origin.endsWith('.vercel.app') ||
-        (process.env.NODE_ENV !== 'production' && origin.includes('localhost'))
-      ) {
+      if (isAllowedRigamartDomain(origin)) {
         return callback(null, true);
       }
-      return callback(new Error('Blocked by CORS policy'));
+      return callback(new Error('Blocked by CORS policy: Origin not authorized by Rigamart security gateway'));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
   })
 );
 

@@ -13,6 +13,7 @@ const {
   getMe,
   loginWithMobileOtp
 } = require('../controllers/authController');
+const { authLimiter, sensitiveOpLimiter } = require('../middleware/rateLimiter');
 const { protect } = require('../middleware/auth');
 const {
   validateRegister,
@@ -22,17 +23,17 @@ const {
   validateResetPassword
 } = require('../middleware/validate');
 
-// Public authentication routes
-router.post('/register', validateRegister, register);
-router.post('/login', validateLogin, login);
-router.post('/google', googleAuth); // Google OAuth & One-Tap Sign In
+// Public authentication routes with strict rate limiting & brute-force protection
+router.post('/register', authLimiter, validateRegister, register);
+router.post('/login', authLimiter, validateLogin, login);
+router.post('/google', authLimiter, googleAuth); // Google OAuth & One-Tap Sign In
 router.post('/logout', logout);
 router.post('/refresh-token', refreshToken);
-router.post('/send-otp', validateOtpRequest, sendOtp);
-router.post('/verify-otp', validateOtpVerify, verifyOtp);
-router.post('/verify-mobile-otp', loginWithMobileOtp);
-router.post('/forgot-password', validateOtpRequest, forgotPassword);
-router.post('/reset-password', validateResetPassword, resetPassword);
+router.post('/send-otp', sensitiveOpLimiter, validateOtpRequest, sendOtp);
+router.post('/verify-otp', sensitiveOpLimiter, validateOtpVerify, verifyOtp);
+router.post('/verify-mobile-otp', authLimiter, loginWithMobileOtp);
+router.post('/forgot-password', sensitiveOpLimiter, validateOtpRequest, forgotPassword);
+router.post('/reset-password', sensitiveOpLimiter, validateResetPassword, resetPassword);
 
 // Protected user routes
 router.get('/me', protect, getMe);
