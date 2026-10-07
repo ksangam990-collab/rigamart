@@ -33,10 +33,11 @@ const getProfile = async (req, res) => {
  */
 const updateProfile = async (req, res) => {
   try {
-    const { name, mobile } = req.body;
+    const { name, mobile, avatar } = req.body;
     const user = await User.findById(req.user._id);
 
     if (name) user.name = name.trim();
+    if (avatar !== undefined) user.avatar = avatar;
     if (mobile) {
       if (!/^[6-9]\d{9}$/.test(mobile.trim())) {
         return res.status(400).json({
@@ -59,6 +60,7 @@ const updateProfile = async (req, res) => {
           name: user.name,
           email: user.email,
           mobile: user.mobile,
+          avatar: user.avatar,
           role: user.role,
           isVerified: user.isVerified
         }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -17,7 +17,8 @@ import {
   Store,
   Navigation,
   Loader2,
-  X
+  X,
+  Camera
 } from 'lucide-react';
 import api from '../utils/api.js';
 import { Button, Badge } from '../components/ui/index.js';
@@ -497,11 +498,59 @@ export default function ProfilePage() {
   const [profileSuccess, setProfileSuccess] = useState(false);
   const [profileApiError, setProfileApiError] = useState('');
 
+  // Avatar Upload
+  const fileInputRef = useRef(null);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarError, setAvatarError] = useState('');
+
   // Address
   const [addresses, setAddresses] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [addSaving, setAddSaving] = useState(false);
   const [addApiError, setAddApiError] = useState('');
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setAvatarError('Please upload a valid image file (JPG, PNG, WebP).');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setAvatarError('Image size must be less than 5MB.');
+      return;
+    }
+
+    setAvatarUploading(true);
+    setAvatarError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const uploadRes = await api.post('/upload/avatar', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      const imageUrl =
+        uploadRes.data.data?.url ||
+        uploadRes.data.data?.secure_url ||
+        uploadRes.data.data?.image?.url;
+
+      if (imageUrl) {
+        const updateRes = await api.put('/users/profile', { avatar: imageUrl });
+        const updatedUser = updateRes.data.data?.user || {};
+        setProfile((prev) => ({ ...prev, avatar: imageUrl, ...updatedUser }));
+      }
+    } catch (err) {
+      setAvatarError(err.response?.data?.message || 'Failed to upload profile picture.');
+    } finally {
+      setAvatarUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const fetchProfile = useCallback(async () => {
     setIsLoading(true);
@@ -602,9 +651,42 @@ export default function ProfilePage() {
             <div className="bg-surface rounded-2xl border border-line shadow-subtle overflow-hidden">
               {/* Profile Header */}
               <div className="p-6 text-center border-b border-line bg-canvas/40">
-                <div className="w-18 h-18 rounded-full bg-brand-soft text-brand-dark font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-subtle ring-2 ring-brand/20">
-                  {getInitials(profile?.name || authUser?.name || 'U')}
+                <div className="relative w-20 h-20 mx-auto mb-3">
+                  <div className="w-20 h-20 rounded-full bg-brand-soft text-brand-dark font-black text-2xl flex items-center justify-center overflow-hidden shadow-subtle ring-2 ring-brand/20">
+                    {avatarUploading ? (
+                      <Loader2 className="w-6 h-6 animate-spin text-brand" />
+                    ) : profile?.avatar ? (
+                      <img
+                        src={profile.avatar}
+                        alt={profile?.name || 'Profile'}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      getInitials(profile?.name || authUser?.name || 'U')
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={avatarUploading}
+                    className="absolute bottom-0 right-0 p-1.5 bg-brand text-white rounded-full shadow-elevation hover:bg-brand-dark transition-all hover:scale-105"
+                    title="Upload profile picture"
+                  >
+                    <Camera className="w-3.5 h-3.5" />
+                  </button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleAvatarChange}
+                    accept="image/*"
+                    className="hidden"
+                  />
                 </div>
+
+                {avatarError && (
+                  <p className="text-[11px] text-danger mb-2 font-medium">{avatarError}</p>
+                )}
+
                 <h1 className="text-base font-bold text-ink truncate">
                   {profile?.name || authUser?.name}
                 </h1>

@@ -58,6 +58,19 @@ router.post(
   uploadMultipleImages
 );
 
+// User avatar photo upload (accessible by any authenticated user)
+router.post(
+  '/avatar',
+  protect,
+  uploadSingle,
+  handleUploadErrors,
+  (req, res, next) => {
+    req.body.folder = 'rigamart/avatars';
+    next();
+  },
+  uploadSingleImage
+);
+
 router.delete(
   '/:publicId(*)',
   protect,

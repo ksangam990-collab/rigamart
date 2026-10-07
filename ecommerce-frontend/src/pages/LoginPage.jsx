@@ -120,7 +120,7 @@ export default function LoginPage() {
           </div>
 
           {/* Remember Me Checkbox */}
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center pt-1">
             <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
@@ -130,7 +130,6 @@ export default function LoginPage() {
               />
               <span className="text-xs text-ink font-medium">Remember my login</span>
             </label>
-            <span className="text-[11px] text-muted">Secured by JWT</span>
           </div>
 
           <Button

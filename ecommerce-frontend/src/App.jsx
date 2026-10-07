@@ -36,6 +36,7 @@ const PrivacyPage = lazy(() => import('./pages/PrivacyPage.jsx'));
 const TermsPage = lazy(() => import('./pages/TermsPage.jsx'));
 const StyleguidePage = lazy(() => import('./pages/StyleguidePage.jsx'));
 const OrderSuccessPage = lazy(() => import('./pages/OrderSuccessPage.jsx'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage.jsx'));
 
 
 function RouteLoadingFallback({ message = 'Loading...' }) {
@@ -160,6 +161,16 @@ export default function App() {
             element={
               <PublicRoute>
                 <RegisterPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="forgot-password"
+            element={
+              <PublicRoute>
+                <Suspense fallback={<RouteLoadingFallback message="Loading Password Recovery..." />}>
+                  <ForgotPasswordPage />
+                </Suspense>
               </PublicRoute>
             }
           />

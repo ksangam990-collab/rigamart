@@ -896,8 +896,12 @@ export default function Navbar() {
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                   className="flex items-center gap-2 py-1 px-2.5 rounded-xl border border-line hover:border-muted/40 bg-surface hover:bg-canvas transition-colors text-sm font-medium text-ink shadow-subtle"
                 >
-                  <div className="w-6 h-6 rounded-full bg-brand-soft text-brand-dark font-bold text-xs flex items-center justify-center uppercase">
-                    {user.name.charAt(0)}
+                  <div className="w-6 h-6 rounded-full bg-brand-soft text-brand-dark font-bold text-xs flex items-center justify-center uppercase overflow-hidden ring-1 ring-brand/20">
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                    ) : (
+                      user.name.charAt(0)
+                    )}
                   </div>
                   <span className="hidden sm:inline max-w-[100px] truncate tracking-tight">{user.name}</span>
                   <ChevronDown
