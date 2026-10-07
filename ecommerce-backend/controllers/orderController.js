@@ -39,13 +39,21 @@ const getMyOrders = async (req, res) => {
   try {
     const { page, limit, skip, getPaginationMeta } = getPagination(req.query, 10);
 
+    const filterQuery = {
+      user: req.user._id,
+      $or: [
+        { 'paymentInfo.method': 'COD' },
+        { 'paymentInfo.status': { $in: ['Completed', 'Paid', 'Refunded'] } }
+      ]
+    };
+
     const [orders, totalCount] = await Promise.all([
-      Order.find({ user: req.user._id })
+      Order.find(filterQuery)
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .lean(),
-      Order.countDocuments({ user: req.user._id })
+      Order.countDocuments(filterQuery)
     ]);
 
     res.status(200).json({

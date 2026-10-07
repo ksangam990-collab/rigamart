@@ -109,17 +109,26 @@ export default function CheckoutModal({
         throw new Error('Razorpay SDK failed to load. Please check your internet connection.');
       }
 
+      const activeRazorpayKey =
+        orderData.keyId ||
+        orderData.razorpayKeyId ||
+        (typeof import.meta !== 'undefined' && import.meta.env?.VITE_RAZORPAY_KEY_ID) ||
+        'rzp_test_TgOmsOcLdCfz2U';
+
       const options = {
-        key: orderData.razorpayKeyId,
+        key: activeRazorpayKey,
         amount: orderData.amount,
         currency: orderData.currency || 'INR',
         name: 'Rigamart Marketplace',
-        description: `Order #${orderData.orderId}`,
+        description: `Order #${orderData.orderNumber || orderData.orderId}`,
         order_id: orderData.razorpayOrderId,
         handler: async function (response) {
           try {
-            // Verify payment signature
+            // Verify payment signature (send both snake_case and camelCase)
             await api.post('/payment/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
               razorpayOrderId: response.razorpay_order_id,
               razorpayPaymentId: response.razorpay_payment_id,
               razorpaySignature: response.razorpay_signature,
@@ -133,12 +142,12 @@ export default function CheckoutModal({
               navigate('/order-success', {
                 state: {
                   orderId: orderData.orderId,
-                  orderNumber: orderData.orderId,
+                  orderNumber: orderData.orderNumber || orderData.orderId,
                   totalAmount: totalPayable,
                   paymentMethod: 'RAZORPAY'
                 }
               });
-            }, 1500);
+            }, 1000);
           } catch (verifyErr) {
             setErrorMsg(
               verifyErr.response?.data?.message ||

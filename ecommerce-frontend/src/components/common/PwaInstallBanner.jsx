@@ -9,6 +9,7 @@ export default function PwaInstallBanner() {
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
+      window.__rigamart_pwa_prompt = e;
       setDeferredPrompt(e);
       
       const dismissedAt = localStorage.getItem('pwa-dismissed-at');

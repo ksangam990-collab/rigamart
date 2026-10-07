@@ -11,10 +11,25 @@ import {
 import Button from '../components/ui/Button.jsx';
 import Badge from '../components/ui/Badge.jsx';
 
+import api from '../utils/api.js';
+
 export default function OrderSuccessPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state;
+
+  const [orderInfo, setOrderInfo] = useState(() => {
+    if (state && state.orderId) {
+      return {
+        orderId: state.orderId,
+        orderNumber: state.orderNumber || state.orderId,
+        totalAmount: state.totalAmount || 0,
+        paymentMethod: state.paymentMethod || 'COD'
+      };
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState(!state?.orderId);
 
   const [waUpdates, setWaUpdates] = useState(() => {
     return localStorage.getItem('rigamart_wa_updates') === 'true';
@@ -23,10 +38,28 @@ export default function OrderSuccessPage() {
   const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
-    if (!state || !state.orderId) {
-      navigate('/my-orders', { replace: true });
+    if (!orderInfo) {
+      // Fallback: fetch user's most recently placed order
+      api.get('/orders/my-orders')
+        .then((res) => {
+          const latest = res.data?.data?.orders?.[0];
+          if (latest && latest._id) {
+            setOrderInfo({
+              orderId: latest._id,
+              orderNumber: latest.orderNumber || latest._id,
+              totalAmount: latest.totalAmount || 0,
+              paymentMethod: latest.paymentInfo?.method || 'COD'
+            });
+          } else {
+            navigate('/my-orders', { replace: true });
+          }
+        })
+        .catch(() => {
+          navigate('/my-orders', { replace: true });
+        })
+        .finally(() => setLoading(false));
     }
-  }, [state, navigate]);
+  }, [orderInfo, navigate]);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowConfetti(false), 3000);
@@ -39,11 +72,19 @@ export default function OrderSuccessPage() {
     localStorage.setItem('rigamart_wa_updates', isChecked);
   };
 
-  if (!state || !state.orderId) return null;
+  if (loading) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-brand border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
-  const { orderId, orderNumber, totalAmount, paymentMethod } = state;
+  if (!orderInfo || !orderInfo.orderId) return null;
+
+  const { orderId, orderNumber, totalAmount, paymentMethod } = orderInfo;
   const coinsEarned = Math.floor((totalAmount || 0) * 0.02);
-  const displayId = String(orderId).slice(-8).toUpperCase();
+  const displayId = String(orderNumber || orderId).slice(-8).toUpperCase();
 
   // Generate 30 random confetti pieces
   const confettiPieces = Array.from({ length: 30 }).map((_, i) => ({

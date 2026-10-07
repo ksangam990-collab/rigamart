@@ -201,7 +201,8 @@ const createOrder = async (req, res) => {
           razorpayOrderId: rzpOrder.id,
           amount: rzpOrder.amount, // in paise
           currency: rzpOrder.currency,
-          keyId: process.env.RAZORPAY_KEY_ID,
+          keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_TgOmsOcLdCfz2U',
+          razorpayKeyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_TgOmsOcLdCfz2U',
           totalAmount,
           discountPrice
         }
@@ -284,7 +285,10 @@ const createOrder = async (req, res) => {
  */
 const verifyPayment = async (req, res) => {
   try {
-    const { orderId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const razorpay_order_id = req.body.razorpay_order_id || req.body.razorpayOrderId;
+    const razorpay_payment_id = req.body.razorpay_payment_id || req.body.razorpayPaymentId;
+    const razorpay_signature = req.body.razorpay_signature || req.body.razorpaySignature;
+    const orderId = req.body.orderId || req.body.order_id;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
