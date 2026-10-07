@@ -726,7 +726,7 @@ export default function ProductDetailPage() {
         category={categoryName}
       />
 
-      {/* Gemini AI Product Assistant */}
+      {/* Rigamart Shopping Concierge */}
       <ProductAiAssistant
         product={product}
         onAddToCart={handleAddToCart}

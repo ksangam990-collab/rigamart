@@ -4,7 +4,7 @@ import {
   Sparkles,
   X,
   Send,
-  Bot,
+  MessageSquare,
   User,
   RotateCcw,
   Minus,
@@ -38,7 +38,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
       {
         id: 'welcome_msg',
         sender: 'ai',
-        text: `👋 Hi! I'm **Rigamart AI Assistant** for the **${product.name}**.\n\n` +
+        text: `👋 Hi! I'm **Rigamart Product Concierge** for the **${product.name}**.\n\n` +
           `Ask me anything about **sizing & fit**, **materials**, **warranty**, or **coupon discounts**!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
@@ -239,12 +239,12 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
               ? 'bg-ink text-surface hover:opacity-90'
               : 'bg-brand hover:bg-brand-dark text-white ring-2 ring-brand/20 shadow-brand/20'
           }`}
-          aria-label={isOpen ? 'Close AI Assistant' : 'Ask AI about this product'}
+          aria-label={isOpen ? 'Close Assistant' : 'Ask about this product'}
         >
           {isOpen ? (
             <>
               <X className="w-4 h-4" />
-              <span className="text-xs font-bold hidden sm:inline">Close AI</span>
+              <span className="text-xs font-bold hidden sm:inline">Close</span>
             </>
           ) : (
             <>
@@ -252,7 +252,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
                 <Sparkles className="w-4 h-4 text-warning fill-warning/30" />
               </div>
               <span className="text-xs font-bold tracking-wide">
-                Ask AI about this item
+                Ask about this item
               </span>
             </>
           )}
@@ -278,7 +278,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
                     <h3 className="text-xs font-bold tracking-tight text-white truncate">
-                      Rigamart AI Assistant
+                      Rigamart Concierge
                     </h3>
                     <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
                   </div>
@@ -353,7 +353,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
                           : 'bg-brand text-white shadow-2xs'
                       }`}
                     >
-                      {isUser ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
+                      {isUser ? <User className="w-3.5 h-3.5" /> : <Sparkles className="w-3.5 h-3.5" />}
                     </div>
 
                     {/* Bubble */}
@@ -389,7 +389,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
                   className="flex items-start gap-2.5"
                 >
                   <div className="w-7 h-7 rounded-xl bg-brand text-white flex items-center justify-center shrink-0">
-                    <Bot className="w-3.5 h-3.5" />
+                    <Sparkles className="w-3.5 h-3.5" />
                   </div>
                   <div className="bg-surface border border-line rounded-2xl rounded-tl-none p-3 shadow-2xs flex items-center gap-2 text-xs text-muted">
                     <div className="flex gap-1 items-center">
@@ -398,7 +398,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
                       <span className="w-1.5 h-1.5 bg-brand rounded-full animate-bounce" />
                     </div>
                     <span className="text-[11px] font-medium text-brand">
-                      Rigamart AI is analyzing specifications...
+                      Concierge is checking specifications...
                     </span>
                   </div>
                 </motion.div>
@@ -447,7 +447,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
                 type="submit"
                 disabled={isThinking || !inputText.trim()}
                 className="p-2.5 bg-brand hover:bg-brand-dark text-white rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-xs"
-                aria-label="Send question to AI"
+                aria-label="Send message"
               >
                 {isThinking ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -460,7 +460,7 @@ export default function ProductAiAssistant({ product, onAddToCart, onBuyNow }) {
             {/* Disclaimer Footer */}
             <div className="py-1.5 px-3 bg-canvas border-t border-line text-center text-[10px] text-muted flex items-center justify-center gap-1">
               <Sparkles className="w-2.5 h-2.5 text-brand" />
-              <span>Powered by Google Gemini API • Rigamart Verified</span>
+              <span>Rigamart Concierge • Verified Specifications</span>
             </div>
           </motion.div>
         )}

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Send, Bot, User, CheckCircle2, ChevronRight, Loader2 } from 'lucide-react';
+import { Sparkles, Send, User, CheckCircle2, ChevronRight, Loader2 } from 'lucide-react';
 import api from '../../utils/api.js';
 
 export default function GeminiStylistCard() {
@@ -8,7 +8,7 @@ export default function GeminiStylistCard() {
     {
       id: 'init-1',
       sender: 'ai',
-      text: 'Namaste! 🙏 I am your Rigamart AI Assistant. Ask me about sizing recommendations, fabric care, outfit coordination, or order delivery timelines!'
+      text: 'Namaste! 🙏 I am your Rigamart Style Advisor. Ask me about sizing recommendations, fabric care, outfit coordination, or order delivery timelines!'
     }
   ]);
   const [inputText, setInputText] = useState('');
@@ -85,7 +85,7 @@ export default function GeminiStylistCard() {
           </div>
           <div className="min-w-0">
             <h3 className="text-xs sm:text-sm font-bold text-ink truncate">
-              Rigamart AI Assistant
+              Rigamart Style Advisor
             </h3>
             <p className="text-[10px] sm:text-[11px] text-muted truncate">
               Smart shopping advisor, fit guide &amp; order assistant
@@ -94,7 +94,7 @@ export default function GeminiStylistCard() {
         </div>
 
         <span className="text-[10px] font-black uppercase bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 px-2.5 py-0.5 rounded-full shrink-0 tracking-wider">
-          ● AI Live
+          ● Live Advisor
         </span>
       </div>
 
@@ -112,7 +112,7 @@ export default function GeminiStylistCard() {
           >
             {m.sender === 'ai' && (
               <div className="w-5 h-5 rounded-full bg-brand text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">
-                AI
+                <Sparkles className="w-3 h-3" />
               </div>
             )}
             <div
@@ -130,7 +130,7 @@ export default function GeminiStylistCard() {
         {isThinking && (
           <div className="flex items-center gap-2 text-muted text-xs">
             <Loader2 className="w-4 h-4 animate-spin text-brand" />
-            <span>Rigamart AI is typing...</span>
+            <span>Advisor is typing...</span>
           </div>
         )}
       </div>
@@ -161,7 +161,7 @@ export default function GeminiStylistCard() {
           type="text"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          placeholder="Ask Rigamart AI about size, style, or orders..."
+          placeholder="Ask about size, style recommendations, or orders..."
           className="flex-1 bg-canvas border border-line rounded-xl px-3 py-2 text-xs text-ink focus:outline-none focus:ring-2 focus:ring-brand"
         />
         <button
