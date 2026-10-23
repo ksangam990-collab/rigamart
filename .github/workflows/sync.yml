@@ -1,0 +1,44 @@
+name: Sync Monorepo to Standalone Repositories
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ecommerce-backend/**'
+      - 'ecommerce-frontend/**'
+
+jobs:
+  sync-backend:
+    name: Sync Backend Repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rigamart monorepo
+        uses: actions/checkout@v4
+
+      - name: Push to rigamart-backend
+        run: |
+          git config --global user.name "ksangam990-collab"
+          git config --global user.email "ksangam990@gmail.com"
+          git clone https://x-access-token:${{ secrets.SYNC_PAT }}@github.com/ksangam990-collab/rigamart-backend.git /tmp/target-backend
+          rsync -av --delete --exclude='.git' ecommerce-backend/ /tmp/target-backend/
+          cd /tmp/target-backend
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "sync: auto-sync from rigamart monorepo ($GITHUB_SHA)" && git push origin main)
+
+  sync-frontend:
+    name: Sync Frontend Repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rigamart monorepo
+        uses: actions/checkout@v4
+
+      - name: Push to rigamart-frontend
+        run: |
+          git config --global user.name "ksangam990-collab"
+          git config --global user.email "ksangam990@gmail.com"
+          git clone https://x-access-token:${{ secrets.SYNC_PAT }}@github.com/ksangam990-collab/rigamart-frontend.git /tmp/target-frontend
+          rsync -av --delete --exclude='.git' ecommerce-frontend/ /tmp/target-frontend/
+          cd /tmp/target-frontend
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "sync: auto-sync from rigamart monorepo ($GITHUB_SHA)" && git push origin main)
