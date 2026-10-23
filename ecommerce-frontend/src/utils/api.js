@@ -27,9 +27,13 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
+// Determine clean baseURL without trailing slash
+const rawBaseURL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:5000/api';
+const baseURL = String(rawBaseURL).replace(/\/+$/, '');
+
 // Create configured Axios instance
 const api = axios.create({
-  baseURL: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:5000/api',
+  baseURL,
   withCredentials: true, // Enables httpOnly refresh token cookies transmission
   headers: {
     'Content-Type': 'application/json'

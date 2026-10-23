@@ -7,7 +7,7 @@ const connectDB = async () => {
   try {
     const mongoUri = process.env.MONGO_URI;
 
-    if (!mongoUri || mongoUri.includes('user:pass@cluster0')) {
+    if (!mongoUri || mongoUri.includes('user:pass@cluster0') || mongoUri.includes('<username>') || mongoUri.includes('<password>')) {
       console.warn(
         '⚠️  [DATABASE WARNING] Valid MONGO_URI not configured in .env. Schemas are ready, but database operations will fail until Atlas connection string is provided.'
       );

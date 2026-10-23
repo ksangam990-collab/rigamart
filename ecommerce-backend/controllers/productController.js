@@ -55,18 +55,24 @@ const getProducts = async (req, res) => {
     }
 
     // Filter by price range against indexed basePrice
-    if (minPrice !== undefined || maxPrice !== undefined) {
+    if (
+      (minPrice !== undefined && minPrice !== '' && !isNaN(Number(minPrice))) ||
+      (maxPrice !== undefined && maxPrice !== '' && !isNaN(Number(maxPrice)))
+    ) {
       filter.basePrice = {};
-      if (minPrice !== undefined && !isNaN(Number(minPrice))) {
+      if (minPrice !== undefined && minPrice !== '' && !isNaN(Number(minPrice))) {
         filter.basePrice.$gte = Number(minPrice);
       }
-      if (maxPrice !== undefined && !isNaN(Number(maxPrice))) {
+      if (maxPrice !== undefined && maxPrice !== '' && !isNaN(Number(maxPrice))) {
         filter.basePrice.$lte = Number(maxPrice);
+      }
+      if (Object.keys(filter.basePrice).length === 0) {
+        delete filter.basePrice;
       }
     }
 
     // Filter by minimum average customer rating
-    if (rating !== undefined && !isNaN(Number(rating))) {
+    if (rating !== undefined && rating !== '' && !isNaN(Number(rating))) {
       filter.avgRating = { $gte: Number(rating) };
     }
 

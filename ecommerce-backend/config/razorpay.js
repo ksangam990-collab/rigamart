@@ -35,12 +35,23 @@ const createRazorpayOrder = async (amountInRupees, receipt, notes = {}) => {
  * @returns {boolean} true if signature matches and is authentic
  */
 const verifyRazorpaySignature = (orderId, paymentId, signature) => {
+  const secret = process.env.RAZORPAY_KEY_SECRET;
+  if (!secret || !orderId || !paymentId || !signature) {
+    return false;
+  }
   const generatedSignature = crypto
-    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+    .createHmac('sha256', secret)
     .update(`${orderId}|${paymentId}`)
     .digest('hex');
 
-  return generatedSignature === signature;
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(generatedSignature, 'utf8'),
+      Buffer.from(signature, 'utf8')
+    );
+  } catch {
+    return false;
+  }
 };
 
 /**
