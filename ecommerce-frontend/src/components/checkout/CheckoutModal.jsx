@@ -112,8 +112,11 @@ export default function CheckoutModal({
       const activeRazorpayKey =
         orderData.keyId ||
         orderData.razorpayKeyId ||
-        (typeof import.meta !== 'undefined' && import.meta.env?.VITE_RAZORPAY_KEY_ID) ||
-        'rzp_test_TgOmsOcLdCfz2U';
+        (typeof import.meta !== 'undefined' && import.meta.env?.VITE_RAZORPAY_KEY_ID);
+
+      if (!activeRazorpayKey) {
+        throw new Error('Razorpay Key ID is not configured. Please select Cash on Delivery or configure your payment keys.');
+      }
 
       const options = {
         key: activeRazorpayKey,

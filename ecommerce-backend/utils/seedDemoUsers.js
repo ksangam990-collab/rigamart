@@ -33,6 +33,10 @@ const demoAccounts = [
 ];
 
 async function seedDemoUsers() {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('⛔ [SECURITY] Refusing to seed demo user accounts in production environment!');
+    process.exit(1);
+  }
   console.log('🌱 Seeding Rigamart Demo User Accounts...\n');
 
   try {

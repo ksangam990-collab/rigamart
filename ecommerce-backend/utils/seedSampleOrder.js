@@ -11,6 +11,10 @@ const Order = require('../models/Order');
 const { generateAccessToken } = require('./generateToken');
 
 async function seedSampleOrder() {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('⛔ [SECURITY] Refusing to seed sample order in production environment!');
+    process.exit(1);
+  }
   console.log('📦 Seeding Realistic Sample Order into Rigamart Database...\n');
 
   await mongoose.connect(process.env.MONGO_URI);

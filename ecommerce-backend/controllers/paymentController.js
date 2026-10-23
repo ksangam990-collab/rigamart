@@ -160,6 +160,14 @@ const createOrder = async (req, res) => {
 
     // Flow A: Razorpay Online Payment
     if (paymentMethod === 'RAZORPAY') {
+      if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+        return res.status(500).json({
+          success: false,
+          message: 'Razorpay payment gateway credentials are not configured on the server',
+          data: null
+        });
+      }
+
       const rzpOrder = await createRazorpayOrder(totalAmount, orderNumber, {
         userId: req.user._id.toString(),
         orderNumber
@@ -201,8 +209,8 @@ const createOrder = async (req, res) => {
           razorpayOrderId: rzpOrder.id,
           amount: rzpOrder.amount, // in paise
           currency: rzpOrder.currency,
-          keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_TgOmsOcLdCfz2U',
-          razorpayKeyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_TgOmsOcLdCfz2U',
+          keyId: process.env.RAZORPAY_KEY_ID,
+          razorpayKeyId: process.env.RAZORPAY_KEY_ID,
           totalAmount,
           discountPrice
         }
