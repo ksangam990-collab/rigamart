@@ -7,6 +7,7 @@ on:
     paths:
       - 'ecommerce-backend/**'
       - 'ecommerce-frontend/**'
+  workflow_dispatch:
 
 jobs:
   sync-backend:
