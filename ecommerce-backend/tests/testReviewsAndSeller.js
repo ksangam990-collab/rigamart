@@ -15,7 +15,7 @@ async function runReviewsAndSellerTests() {
   const Product = require('../models/Product');
   const Order = require('../models/Order');
   const Review = require('../models/Review');
-  const { generateAccessToken } = require('./generateToken');
+  const { generateAccessToken } = require('../utils/generateToken');
 
   const uniqueSuffix = Date.now().toString().slice(-6);
 

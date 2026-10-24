@@ -27,6 +27,8 @@ import {
   Layers
 } from 'lucide-react';
 import { logoutUser } from '../../features/auth/authSlice.js';
+import { resetCartState } from '../../features/cart/cartSlice.js';
+import { resetWishlistState } from '../../features/wishlist/wishlistSlice.js';
 import {
   fetchNotifications,
   fetchUnreadCount,
@@ -655,6 +657,8 @@ export default function Navbar() {
   const handleLogout = () => {
     dispatch(logoutUser());
     dispatch(resetNotificationState());
+    dispatch(resetCartState());
+    dispatch(resetWishlistState());
     setUserDropdownOpen(false);
     setNotificationDropdownOpen(false);
     navigate('/');

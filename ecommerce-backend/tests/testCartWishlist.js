@@ -14,7 +14,7 @@ async function runCartWishlistTests() {
   const Category = require('../models/Category');
   const Product = require('../models/Product');
   const Cart = require('../models/Cart');
-  const { generateAccessToken } = require('./generateToken');
+  const { generateAccessToken } = require('../utils/generateToken');
 
   const uniqueSuffix = Date.now().toString().slice(-6);
 

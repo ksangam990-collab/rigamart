@@ -16,7 +16,7 @@ async function runPaymentTests() {
   const Product = require('../models/Product');
   const Cart = require('../models/Cart');
   const Order = require('../models/Order');
-  const { generateAccessToken } = require('./generateToken');
+  const { generateAccessToken } = require('../utils/generateToken');
 
   const uniqueSuffix = Date.now().toString().slice(-6);
 

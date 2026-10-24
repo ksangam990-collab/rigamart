@@ -1,5 +1,5 @@
-import { store } from './src/store/index.js';
-import { setCredentials, logoutUser } from './src/features/auth/authSlice.js';
+import { store } from '../src/store/index.js';
+import { setCredentials, logoutUser } from '../src/features/auth/authSlice.js';
 import {
   resetCartState,
   fetchCart,
@@ -7,15 +7,15 @@ import {
   updateCartQuantity,
   removeFromCart,
   clearCart
-} from './src/features/cart/cartSlice.js';
+} from '../src/features/cart/cartSlice.js';
 import {
   resetWishlistState,
   fetchWishlist,
   toggleWishlist,
   addToWishlist,
   removeFromWishlist
-} from './src/features/wishlist/wishlistSlice.js';
-import api, { getAccessToken } from './src/utils/api.js';
+} from '../src/features/wishlist/wishlistSlice.js';
+import api, { getAccessToken } from '../src/utils/api.js';
 
 console.log('🧪 Starting Frontend Foundational Setup Test Suite...\n');
 let passed = 0;

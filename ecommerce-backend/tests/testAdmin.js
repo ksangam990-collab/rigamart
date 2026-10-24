@@ -14,7 +14,7 @@ async function runAdminTests() {
   const Category = require('../models/Category');
   const Product = require('../models/Product');
   const Order = require('../models/Order');
-  const { generateAccessToken } = require('./generateToken');
+  const { generateAccessToken } = require('../utils/generateToken');
 
   const uniqueSuffix = Date.now().toString().slice(-6);
 

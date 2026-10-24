@@ -8,7 +8,7 @@ const User = require('../models/User');
 const Category = require('../models/Category');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
-const { generateAccessToken } = require('./generateToken');
+const { generateAccessToken } = require('../utils/generateToken');
 
 async function seedSampleOrder() {
   if (process.env.NODE_ENV === 'production') {

@@ -9,6 +9,9 @@ on:
       - 'ecommerce-frontend/**'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   sync-backend:
     name: Sync Backend Repository
@@ -23,6 +26,8 @@ jobs:
           git config --global user.email "ksangam990@gmail.com"
           git clone https://x-access-token:${{ secrets.SYNC_PAT }}@github.com/ksangam990-collab/rigamart-backend.git /tmp/target-backend
           rsync -av --delete --exclude='.git' ecommerce-backend/ /tmp/target-backend/
+          cp render.yaml /tmp/target-backend/render.yaml
+          sed -i '/rootDir: ecommerce-backend/d' /tmp/target-backend/render.yaml
           cd /tmp/target-backend
           git add -A
           git diff --quiet && git diff --staged --quiet || (git commit -m "sync: auto-sync from rigamart monorepo ($GITHUB_SHA)" && git push origin main)

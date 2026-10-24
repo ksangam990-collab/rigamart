@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-const { getRefreshTokenCookieOptions } = require('./generateToken');
+const { getRefreshTokenCookieOptions } = require('../utils/generateToken');
 
 const BASE_URL = process.env.LIVE_API_URL || process.env.API_URL || 'http://localhost:5000/api';
 
@@ -173,7 +173,7 @@ async function runDeploymentPreflight() {
     // -------------------------------------------------------------------------
     const keepAliveModulePath = path.resolve(__dirname, 'keepAlive.js');
     if (fs.existsSync(keepAliveModulePath)) {
-      const { initKeepAlive } = require('./keepAlive');
+      const { initKeepAlive } = require('../utils/keepAlive');
       if (typeof initKeepAlive === 'function') {
         console.log('✅ 8. Keep-Alive Heartbeat Engine: PASS (initKeepAlive export verified for Render free tier)');
         passed++;

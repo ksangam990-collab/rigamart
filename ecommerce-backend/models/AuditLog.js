@@ -70,6 +70,8 @@ const auditLogSchema = new mongoose.Schema(
 
 // Compound indexes for high-speed admin querying and filtering
 auditLogSchema.index({ timestamp: -1 });
+// 90-day TTL index to preserve MongoDB Atlas storage
+auditLogSchema.index({ timestamp: 1 }, { expireAfterSeconds: 90 * 24 * 60 * 60 });
 auditLogSchema.index({ severity: 1, timestamp: -1 });
 auditLogSchema.index({ action: 1, timestamp: -1 });
 auditLogSchema.index({ 'actor.userId': 1, timestamp: -1 });

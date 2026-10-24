@@ -16,6 +16,7 @@ const connectDB = async () => {
 
     const conn = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000,
+      maxPoolSize: 10,
       autoIndex: true // Ensure indices are built in development
     });
 

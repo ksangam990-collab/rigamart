@@ -11,7 +11,7 @@ async function runUploadTests() {
 
   await mongoose.connect(process.env.MONGO_URI);
   const User = require('../models/User');
-  const { generateAccessToken } = require('./generateToken');
+  const { generateAccessToken } = require('../utils/generateToken');
 
   const uniqueSuffix = Date.now().toString().slice(-6);
 

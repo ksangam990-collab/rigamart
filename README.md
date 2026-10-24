@@ -69,12 +69,14 @@ rigamart/
 │   ├── middleware/                # JWT auth, role validation, multer upload
 │   ├── models/                    # Mongoose schemas (User, Product, Order, etc.)
 │   ├── routes/                    # API endpoints router
-│   ├── utils/                     # Test harnesses, PDF generator, email service
+│   ├── scripts/                   # Database seed and maintenance scripts
+│   ├── tests/                     # Integration tests and model validators
+│   ├── utils/                     # PDF generator, email service, token helpers
 │   ├── server.js                  # Main server entrypoint with trust-proxy
-│   ├── render.yaml                # Render Blueprint specification
 │   └── package.json
 │
 ├── ecommerce-frontend/            # React 18 + Vite Single Page Application
+│   ├── public/                    # PWA icons, payment badges, manifest
 │   ├── src/
 │   │   ├── components/            # UI components (Navbar, Footer, Modals, etc.)
 │   │   ├── features/              # Redux Toolkit slices (auth, cart, wishlist)
@@ -83,6 +85,7 @@ rigamart/
 │   │   ├── utils/                 # Axios API client with interceptors
 │   │   ├── App.jsx                # Route definitions & protected guards
 │   │   └── main.jsx               # Application entrypoint
+│   ├── tests/                     # Frontend state & contract test suites
 │   ├── vercel.json                # Vercel SPA routing rewrite rules
 │   ├── vite.config.js             # Vite bundler configuration
 │   ├── tailwind.config.js         # Custom brand theme & styling
@@ -152,13 +155,19 @@ npm run dev
 Rigamart includes automated contract and integration test harnesses verifying live endpoints:
 
 ```bash
-# 1. Run full frontend contract & Razorpay HMAC-SHA256 suite:
+# 1. Run frontend foundation suite:
 cd ecommerce-frontend
-node testStep14.js
+npm test # (or node tests/testFoundation.js)
 
-# 2. Run cloud deployment preflight checks:
+# 2. Run full frontend contract & Razorpay HMAC-SHA256 suite:
+node tests/testStep14.js
+
+# 3. Run backend model & schema validation:
 cd ../ecommerce-backend
-node utils/testDeploymentPreflight.js
+npm test # (or node tests/verifyModels.js)
+
+# 4. Run cloud deployment preflight checks:
+node tests/testDeploymentPreflight.js
 ```
 
 ---

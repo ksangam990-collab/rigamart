@@ -14,7 +14,7 @@ async function runCatalogTests() {
   const User = require('../models/User');
   const Category = require('../models/Category');
   const Product = require('../models/Product');
-  const { generateAccessToken } = require('./generateToken');
+  const { generateAccessToken } = require('../utils/generateToken');
 
   const uniqueSuffix = Date.now().toString().slice(-6);
 
