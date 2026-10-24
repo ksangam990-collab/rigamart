@@ -7,7 +7,6 @@ const auditLogSchema = new mongoose.Schema(
       required: [true, 'Audit action identifier is required'],
       trim: true,
       uppercase: true,
-      index: true
     },
     severity: {
       type: String,
@@ -15,8 +14,7 @@ const auditLogSchema = new mongoose.Schema(
         values: ['info', 'warning', 'critical'],
         message: '{VALUE} is not a valid audit severity'
       },
-      default: 'info',
-      index: true
+      default: 'info'
     },
     actor: {
       userId: {
@@ -58,8 +56,7 @@ const auditLogSchema = new mongoose.Schema(
     timestamp: {
       type: Date,
       default: Date.now,
-      immutable: true,
-      index: true
+      immutable: true
     }
   },
   {

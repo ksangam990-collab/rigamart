@@ -35,8 +35,10 @@ const app = express();
 app.use(compression());
 
 // Initialize MongoDB connection & SMTP verification
-connectDB();
-verifyEmailConfig();
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+  verifyEmailConfig();
+}
 
 // Secure HTTP headers with explicit cross-origin policy
 app.use(
@@ -188,10 +190,13 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
+let server;
+if (process.env.NODE_ENV !== 'test') {
+  server = app.listen(PORT, () => {
   console.log(`🚀 Rigamart Backend running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
   initKeepAlive();
-});
+  });
+}
 
 // Handle unhandled promise rejections gracefully
 process.on('unhandledRejection', (err) => {
