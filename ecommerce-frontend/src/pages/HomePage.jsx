@@ -249,17 +249,17 @@ export default function HomePage() {
         {/* ── 1. Hero Showcase (Desktop: 12-col festive banner, Mobile: Clean Flash Deal + Pills) ── */}
         <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Desktop Hero Showcase (12-col) */}
-        <div className="hidden lg:block relative rounded-3xl bg-surface border border-line shadow-card overflow-hidden">
+        <div className="hidden lg:block relative rounded-2xl bg-surface border border-line shadow-sm overflow-hidden">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-soft/50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
 
-          <div className="relative z-10 grid grid-cols-12 gap-12 p-10 lg:p-14 items-center">
+          <div className="relative z-10 grid grid-cols-12 gap-8 p-6 lg:p-8 items-center">
             {/* Left Column: Commercial Headline & Intent */}
             <motion.div
               variants={staggerContainer(0.08)}
               initial="hidden"
               animate="visible"
-              className="col-span-7 space-y-6"
+              className="col-span-7 space-y-4"
             >
               <motion.div variants={staggerItem}>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-soft text-brand-dark border border-brand/20 text-xs font-semibold tracking-tight shadow-subtle">
@@ -270,7 +270,7 @@ export default function HomePage() {
 
               <motion.h1
                 variants={staggerItem}
-                className="text-5xl lg:text-6xl font-black font-display tracking-tight text-ink leading-[1.08]"
+                className="text-3xl lg:text-4xl xl:text-[40px] font-extrabold font-display tracking-tight text-ink leading-[1.12]"
               >
                 Authentic Brands. <br />
                 <span className="text-brand">Direct Pricing.</span> Verified Sellers.
@@ -278,7 +278,7 @@ export default function HomePage() {
 
               <motion.p
                 variants={staggerItem}
-                className="text-muted text-base lg:text-lg max-w-xl leading-relaxed"
+                className="text-muted text-xs sm:text-sm max-w-lg leading-relaxed"
               >
                 Shop thousands of verified products from top artisans, verified manufacturers, and trusted brands across India with 100% buyer protection.
               </motion.p>
@@ -287,7 +287,7 @@ export default function HomePage() {
                 <Link to="/catalog">
                   <Button
                     variant="primary"
-                    size="lg"
+                    size="md"
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >
                     Explore All Collections
@@ -296,7 +296,7 @@ export default function HomePage() {
 
                 {!isAuthenticated && (
                   <Link to="/sell">
-                    <Button variant="secondary" size="lg" leftIcon={<Store className="w-4 h-4 text-muted" />}>
+                    <Button variant="secondary" size="md" leftIcon={<Store className="w-4 h-4 text-muted" />}>
                       Sell on Rigamart
                     </Button>
                   </Link>
@@ -304,8 +304,8 @@ export default function HomePage() {
               </motion.div>
 
               {/* Popular Searches Horizontal Row */}
-              <motion.div variants={staggerItem} className="pt-4 border-t border-line">
-                <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mb-2.5">
+              <motion.div variants={staggerItem} className="pt-3 border-t border-line">
+                <p className="text-[11px] font-semibold text-muted uppercase tracking-wider mb-1.5">
                   Popular Searches
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -313,7 +313,7 @@ export default function HomePage() {
                     <Link
                       key={pill.label}
                       to={pill.link}
-                      className="text-xs px-3 py-1.5 rounded-xl bg-canvas hover:bg-brand-soft text-ink hover:text-brand-dark border border-line transition-all duration-150 font-medium"
+                      className="text-[11px] px-2.5 py-1 rounded-lg bg-canvas hover:bg-brand-soft text-ink hover:text-brand-dark border border-line transition-all duration-150 font-medium"
                     >
                       {pill.label}
                     </Link>

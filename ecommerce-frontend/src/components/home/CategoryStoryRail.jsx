@@ -18,7 +18,7 @@ export default function CategoryStoryRail() {
     {
       id: 'mens',
       name: "Men's Wear",
-      badge: 'New',
+      badge: null,
       image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=mens-fashion',
       gradient: 'from-blue-500 to-indigo-600',
@@ -26,7 +26,7 @@ export default function CategoryStoryRail() {
     {
       id: 'womens',
       name: 'Ethnic Wear',
-      badge: 'Festive',
+      badge: null,
       image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=womens-ethnic',
       gradient: 'from-rose-400 to-pink-600',
@@ -34,7 +34,7 @@ export default function CategoryStoryRail() {
     {
       id: 'tech',
       name: 'Gadgets & Tech',
-      badge: 'ANC',
+      badge: null,
       image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=electronics',
       gradient: 'from-emerald-500 to-teal-600',
@@ -42,7 +42,7 @@ export default function CategoryStoryRail() {
     {
       id: 'footwear',
       name: 'Sneakers & Kicks',
-      badge: 'Trending',
+      badge: null,
       image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=footwear',
       gradient: 'from-amber-400 to-orange-500',
@@ -50,7 +50,7 @@ export default function CategoryStoryRail() {
     {
       id: 'home',
       name: 'Home Decor',
-      badge: 'Artisan',
+      badge: null,
       image: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=home-kitchen',
       gradient: 'from-cyan-400 to-blue-500',
@@ -58,7 +58,7 @@ export default function CategoryStoryRail() {
     {
       id: 'beauty',
       name: 'Beauty & Care',
-      badge: 'Glow',
+      badge: null,
       image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=beauty-health',
       gradient: 'from-pink-500 to-rose-500',
@@ -66,7 +66,7 @@ export default function CategoryStoryRail() {
     {
       id: 'kitchen',
       name: 'Kitchen & Dining',
-      badge: 'Smart',
+      badge: null,
       image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=home-kitchen',
       gradient: 'from-teal-400 to-emerald-600',
@@ -74,7 +74,7 @@ export default function CategoryStoryRail() {
     {
       id: 'offers',
       name: 'All Offers',
-      badge: '🏷️ Deals',
+      badge: '50% Off',
       image: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=200&auto=format&fit=crop&q=80',
       link: '/search?sort=newest',
       gradient: 'from-purple-500 to-indigo-600',
@@ -89,7 +89,7 @@ export default function CategoryStoryRail() {
   };
 
   return (
-    <nav aria-label="Product Categories" className="relative w-full bg-surface border-b border-line py-2.5 sm:py-3.5 select-none shadow-xs">
+    <nav aria-label="Product Categories" className="relative w-full bg-surface border-b border-line py-2 sm:py-2.5 select-none shadow-xs">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative group">
         
         {/* Left Arrow (Visible only on tablets when scrollable) */}
@@ -118,7 +118,7 @@ export default function CategoryStoryRail() {
               >
                 {/* Circular Story Bubble */}
                 <div
-                  className={`w-12 h-12 sm:w-16 sm:h-16 lg:w-[68px] lg:h-[68px] rounded-full p-[2px] sm:p-[2.5px] bg-gradient-to-tr ${cat.gradient} shadow-subtle group-hover/bubble:shadow-md transition-shadow relative`}
+                  className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full p-[2px] sm:p-[2.5px] bg-gradient-to-tr ${cat.gradient} shadow-subtle group-hover/bubble:shadow-md transition-shadow relative`}
                 >
                   <div className="w-full h-full rounded-full overflow-hidden bg-surface p-[1.5px] sm:p-[2px]">
                     <img
@@ -131,7 +131,7 @@ export default function CategoryStoryRail() {
 
                   {/* Pulsing Dot or Pill on Bubble */}
                   {cat.badge && (
-                    <span className="absolute -bottom-1 -right-0.5 bg-amber-400 text-amber-950 font-black text-[8px] sm:text-[9px] px-1 sm:px-1.5 py-0.2 rounded-full border border-surface shadow-2xs whitespace-nowrap">
+                    <span className="absolute -bottom-1 -right-0.5 bg-rose-500 text-white font-extrabold text-[8px] sm:text-[8.5px] px-1.5 py-0.2 rounded-full border border-surface shadow-2xs whitespace-nowrap">
                       {cat.badge}
                     </span>
                   )}
