@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
-import { loginWithGoogle, clearError } from '../../features/auth/authSlice.js';
+import { loginWithGoogle, clearError, setAuthError } from '../../features/auth/authSlice.js';
 
 export default function GoogleAuthButton({
   mode = 'login',
@@ -98,6 +98,8 @@ export default function GoogleAuthButton({
           if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
           if (tokenResponse?.error) {
             setLocalLoading(false);
+            const errDetail = tokenResponse.error_description || tokenResponse.error;
+            dispatch(setAuthError(`Google Sign-In Error (${errDetail}). Please ensure ${window.location.origin} is added to Authorized JavaScript Origins in Google Cloud Console.`));
             return;
           }
           if (tokenResponse?.access_token) {
@@ -108,8 +110,16 @@ export default function GoogleAuthButton({
         },
         error_callback: (error) => {
           if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
-          console.warn('Google sign-in popup closed or cancelled:', error);
+          console.warn('Google sign-in popup error:', error);
           setLocalLoading(false);
+          const type = error?.type || '';
+          if (type === 'popup_blocked_by_browser') {
+            dispatch(setAuthError('Google Sign-In popup was blocked by your browser. Please allow popups for this site and try again.'));
+          } else if (type === 'popup_closed_by_user') {
+            // User closed the popup window
+          } else {
+            dispatch(setAuthError(`Google Sign-In notice: ${error?.message || type || 'Popup closed'}. Ensure ${window.location.origin} is authorized in Google Cloud Console.`));
+          }
         }
       });
     } catch (err) {
