@@ -52,6 +52,7 @@ const configuredOrigins = process.env.CLIENT_URL
 
 const allowedOrigins = [
   ...configuredOrigins,
+  'https://rigamart.vercel.app',
   'https://rigamart-frontend.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
@@ -62,8 +63,8 @@ const allowedOrigins = [
 const isAllowedRigamartDomain = (origin) => {
   if (!origin) return true; // Server-to-server, curl, mobile native
   if (allowedOrigins.includes(origin)) return true;
-  // Match https://rigamart-frontend.vercel.app or https://rigamart-frontend-<branch>.vercel.app
-  if (/^https:\/\/rigamart-frontend(-[a-z0-9-]+)?\.vercel\.app$/i.test(origin)) return true;
+  // Match https://rigamart.vercel.app, https://rigamart-frontend.vercel.app, or branch preview deployments
+  if (/^https:\/\/rigamart(-frontend)?(-[a-z0-9-]+)?\.vercel\.app$/i.test(origin)) return true;
   // Allow localhost during development only
   if (process.env.NODE_ENV !== 'production' && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
     return true;

@@ -26,6 +26,14 @@ export default function GoogleAuthButton({
 
   const redirectPath = location.state?.from?.pathname || '/';
 
+  const triggerRedirectFallback = () => {
+    const redirectUri = window.location.origin + '/login';
+    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&response_type=token&scope=email%20profile%20openid&prompt=select_account`;
+    window.location.href = oauthUrl;
+  };
+
   // Handle Google Credential Response
   const handleCredentialResponse = async (credential) => {
     if (!credential) {
@@ -111,14 +119,17 @@ export default function GoogleAuthButton({
         error_callback: (error) => {
           if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
           console.warn('Google sign-in popup error:', error);
-          setLocalLoading(false);
           const type = error?.type || '';
-          if (type === 'popup_blocked_by_browser') {
-            dispatch(setAuthError('Google Sign-In popup was blocked by your browser. Please allow popups for this site and try again.'));
-          } else if (type === 'popup_closed_by_user') {
+          if (type === 'popup_failed_to_open' || type === 'popup_blocked_by_browser') {
+            console.info('Popup blocked by browser. Automatically falling back to full-page Google Sign-In...');
+            triggerRedirectFallback();
+            return;
+          }
+          setLocalLoading(false);
+          if (type === 'popup_closed_by_user') {
             // User closed the popup window
           } else {
-            dispatch(setAuthError(`Google Sign-In notice: ${error?.message || type || 'Popup closed'}. Ensure ${window.location.origin} is authorized in Google Cloud Console.`));
+            dispatch(setAuthError(`Google Sign-In notice: ${error?.message || type || 'Authentication cancelled'}.`));
           }
         }
       });
@@ -190,8 +201,13 @@ export default function GoogleAuthButton({
               setLocalLoading(false);
             }
           },
-          error_callback: () => {
-            setLocalLoading(false);
+          error_callback: (err) => {
+            const type = err?.type || '';
+            if (type === 'popup_failed_to_open' || type === 'popup_blocked_by_browser') {
+              triggerRedirectFallback();
+            } else {
+              setLocalLoading(false);
+            }
           }
         });
         tokenClientRef.current = client;
