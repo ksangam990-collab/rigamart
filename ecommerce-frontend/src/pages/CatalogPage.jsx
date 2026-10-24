@@ -60,11 +60,25 @@ export default function CatalogPage() {
     setTempMaxPrice(maxPrice);
   }, [minPrice, maxPrice]);
 
-  // Fetch categories for sidebar
+  // Fetch categories for sidebar with sessionStorage cache
   useEffect(() => {
+    try {
+      const cached = sessionStorage.getItem('rigamart_categories');
+      if (cached) {
+        setCategories(JSON.parse(cached));
+        return;
+      }
+    } catch {}
+
     api
       .get('/categories')
-      .then((res) => setCategories(res.data.data?.categories || []))
+      .then((res) => {
+        const cats = res.data.data?.categories || [];
+        setCategories(cats);
+        try {
+          sessionStorage.setItem('rigamart_categories', JSON.stringify(cats));
+        } catch {}
+      })
       .catch(() => {});
   }, []);
 

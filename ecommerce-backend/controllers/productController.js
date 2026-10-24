@@ -107,6 +107,7 @@ const getProducts = async (req, res) => {
     // Pagination
     const { page, limit, skip, getPaginationMeta } = getPagination(req.query, 12);
 
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=30');
     const [products, totalCount] = await Promise.all([
       Product.find(filter)
         .populate('category', 'name slug')

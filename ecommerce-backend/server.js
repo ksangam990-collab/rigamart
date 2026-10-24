@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const compression = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -29,6 +30,9 @@ const hpp = require('hpp');
 const { globalLimiter, authLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
+
+// Compress all HTTP response bodies (gzip / brotli)
+app.use(compression());
 
 // Initialize MongoDB connection & SMTP verification
 connectDB();

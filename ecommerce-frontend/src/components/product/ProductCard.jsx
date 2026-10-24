@@ -18,7 +18,7 @@ const formatCurrency = (amount) => {
   }).format(amount || 0);
 };
 
-export default function ProductCard({ product, className }) {
+function ProductCard({ product, className }) {
   const [justAdded, setJustAdded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showGuestOtp, setShowGuestOtp] = useState(false);
@@ -279,13 +279,17 @@ export default function ProductCard({ product, className }) {
       </div>
 
       {/* Guest OTP Drawer / Modal if quick adding while unauthenticated */}
-      <GuestOtpModal
-        isOpen={showGuestOtp}
-        onClose={() => setShowGuestOtp(false)}
-        onSuccess={handleGuestOtpSuccess}
-        title="Add to Cart with Mobile"
-        subtitle="Enter your mobile number for a 1-tap checkout experience."
-      />
+      {showGuestOtp && (
+        <GuestOtpModal
+          isOpen={showGuestOtp}
+          onClose={() => setShowGuestOtp(false)}
+          onSuccess={handleGuestOtpSuccess}
+          title="Add to Cart with Mobile"
+          subtitle="Enter your mobile number for a 1-tap checkout experience."
+        />
+      )}
     </>
   );
 }
+
+export default React.memo(ProductCard);

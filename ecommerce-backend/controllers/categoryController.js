@@ -50,6 +50,7 @@ const getCategories = async (req, res) => {
     const { tree = 'false', activeOnly = 'true' } = req.query;
     const filter = activeOnly === 'true' ? { isActive: true } : {};
 
+    res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
     const categories = await Category.find(filter)
       .populate('parent', 'name slug')
       .sort({ name: 1 })
