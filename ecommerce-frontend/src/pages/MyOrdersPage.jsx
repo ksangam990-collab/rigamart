@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../features/cart/cartSlice.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Package,
@@ -26,11 +28,31 @@ const formatCurrency = (amount) => {
 };
 
 export default function MyOrdersPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [downloadingId, setDownloadingId] = useState(null);
   const [confirmCancelId, setConfirmCancelId] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
+
+  const getStepIndex = (status) => {
+    const map = { pending: 0, processing: 1, shipped: 2, delivered: 3 };
+    return map[status] ?? 0;
+  };
+
+  const handleBuyAgain = async (item) => {
+    const productId = item.product?._id || item.productId;
+    if (!productId) return;
+    await dispatch(
+      addToCart({
+        productId,
+        variantId: item.variantId || item.product?.variants?.[0]?._id,
+        quantity: 1
+      })
+    );
+    navigate('/cart');
+  };
 
   const fetchOrders = async () => {
     setIsLoading(true);
@@ -298,6 +320,49 @@ export default function MyOrdersPage() {
                   </div>
                 </div>
 
+                {/* Visual Order Stepper Timeline */}
+                {order.status !== 'cancelled' && (
+                  <div className="px-5 sm:px-6 py-3 bg-canvas border-b border-line">
+                    <div className="flex items-center justify-between max-w-md mx-auto relative">
+                      {['Placed', 'Processing', 'Dispatched', 'Delivered'].map((step, sIdx) => {
+                        const currentStep = getStepIndex(order.status);
+                        const isDone = sIdx <= currentStep;
+                        const isCurrent = sIdx === currentStep;
+
+                        return (
+                          <div key={step} className="flex flex-col items-center relative z-10">
+                            <div
+                              className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold transition-all ${
+                                isDone
+                                  ? 'bg-emerald-500 text-white shadow-2xs'
+                                  : 'bg-surface text-muted border border-line'
+                              }`}
+                            >
+                              {isDone ? '✓' : sIdx + 1}
+                            </div>
+                            <span
+                              className={`text-[10px] mt-1 font-semibold tracking-tight whitespace-nowrap ${
+                                isCurrent ? 'text-brand font-bold' : isDone ? 'text-ink' : 'text-muted'
+                              }`}
+                            >
+                              {step}
+                            </span>
+                          </div>
+                        );
+                      })}
+                      {/* Connecting progress bar line */}
+                      <div className="absolute top-2.5 left-3 right-3 h-0.5 bg-line -z-0">
+                        <div
+                          className="h-full bg-emerald-500 transition-all duration-500"
+                          style={{
+                            width: `${(getStepIndex(order.status) / 3) * 100}%`
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Ordered Items */}
                 <div className="divide-y divide-line/60 px-5 sm:px-6 py-4">
                   {items.map((item, idx) => {
@@ -347,10 +412,18 @@ export default function MyOrdersPage() {
                           </div>
                         </div>
 
-                        <div className="sm:text-right">
+                        <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 w-full sm:w-auto">
                           <span className="text-sm font-bold text-ink block tabular-nums">
                             {formatCurrency((item.price || 0) * (item.quantity || 1))}
                           </span>
+                          <button
+                            type="button"
+                            onClick={() => handleBuyAgain(item)}
+                            className="inline-flex items-center gap-1 text-[11px] font-bold text-brand hover:underline cursor-pointer"
+                          >
+                            <ShoppingBag className="w-3 h-3" />
+                            <span>Buy Again</span>
+                          </button>
                         </div>
                       </div>
                     );

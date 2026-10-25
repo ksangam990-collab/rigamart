@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { Mail, Lock, AlertCircle, ArrowRight, Loader2, Phone, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, AlertCircle, ShieldCheck, ArrowRight, Loader2, Phone, Eye, EyeOff } from 'lucide-react';
 import { loginUser, clearError } from '../features/auth/authSlice.js';
 import Logo from '../components/common/Logo.jsx';
 import GoogleAuthButton from '../components/auth/GoogleAuthButton.jsx';
@@ -174,6 +174,12 @@ export default function LoginPage() {
           <Link to="/register" className="font-bold text-brand hover:underline">
             Create an account
           </Link>
+        </div>
+
+        {/* Bank-Grade Security Trust Ribbon */}
+        <div className="pt-3 border-t border-line flex items-center justify-center gap-2 text-[10.5px] text-muted font-medium">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+          <span>Secured by 256-bit SSL &amp; Google Identity Services</span>
         </div>
       </motion.div>
 
