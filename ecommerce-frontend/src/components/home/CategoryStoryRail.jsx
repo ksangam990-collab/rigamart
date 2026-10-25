@@ -13,63 +13,56 @@ export default function CategoryStoryRail() {
       badge: '🔥 Hot',
       image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=200&auto=format&fit=crop&q=80',
       link: '/search?sort=newest',
-      gradient: 'from-amber-500 via-rose-500 to-brand',
+      highlight: true
     },
     {
       id: 'mens',
       name: "Men's Wear",
       badge: null,
       image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200&auto=format&fit=crop&q=80',
-      link: '/search?category=mens-fashion',
-      gradient: 'from-blue-500 to-indigo-600',
+      link: '/search?category=mens-fashion'
     },
     {
       id: 'womens',
       name: 'Ethnic Wear',
       badge: null,
       image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=200&auto=format&fit=crop&q=80',
-      link: '/search?category=womens-ethnic',
-      gradient: 'from-rose-400 to-pink-600',
+      link: '/search?category=womens-ethnic'
     },
     {
       id: 'tech',
       name: 'Gadgets & Tech',
       badge: null,
       image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=200&auto=format&fit=crop&q=80',
-      link: '/search?category=electronics',
-      gradient: 'from-emerald-500 to-teal-600',
+      link: '/search?category=electronics'
     },
     {
       id: 'footwear',
       name: 'Sneakers & Kicks',
       badge: null,
       image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80',
-      link: '/search?category=footwear',
-      gradient: 'from-amber-400 to-orange-500',
+      link: '/search?category=footwear'
     },
     {
       id: 'home',
       name: 'Home Decor',
       badge: null,
       image: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=200&auto=format&fit=crop&q=80',
-      link: '/search?category=home-kitchen',
-      gradient: 'from-cyan-400 to-blue-500',
+      link: '/search?category=home-kitchen'
     },
     {
       id: 'beauty',
       name: 'Beauty & Care',
       badge: null,
       image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&auto=format&fit=crop&q=80',
-      link: '/search?category=beauty-health',
-      gradient: 'from-pink-500 to-rose-500',
+      link: '/search?category=beauty-health'
     },
     {
       id: 'kitchen',
       name: 'Kitchen & Dining',
       badge: null,
       image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=200&auto=format&fit=crop&q=80',
-      link: '/search?category=home-kitchen',
-      gradient: 'from-teal-400 to-emerald-600',
+      link: '/search?category=home-kitchen'
     },
     {
       id: 'offers',
@@ -77,7 +70,7 @@ export default function CategoryStoryRail() {
       badge: '50% Off',
       image: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=200&auto=format&fit=crop&q=80',
       link: '/search?sort=newest',
-      gradient: 'from-purple-500 to-indigo-600',
+      highlight: true
     }
   ];
 
@@ -105,47 +98,51 @@ export default function CategoryStoryRail() {
         {/* Story Rail Container: Evenly distributed across desktop, swipeable on mobile */}
         <div
           ref={scrollRef}
-          className="flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-none py-1 px-1 scroll-smooth lg:justify-between lg:gap-2 lg:overflow-visible"
+          className="flex items-center gap-3.5 sm:gap-5 overflow-x-auto scrollbar-none py-1 px-1 scroll-smooth lg:justify-between lg:gap-2 lg:overflow-visible"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {categories.map((cat) => {
             const content = (
               <motion.div
-                whileHover={{ y: -3, scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 380, damping: 24 }}
-                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group/bubble w-[68px] sm:w-[76px] lg:w-auto"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ duration: 0.15 }}
+                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group/bubble w-[66px] sm:w-[74px] lg:w-auto"
               >
-                {/* Circular Story Bubble */}
+                {/* Clean Circular Story Bubble with Uniform Studio Border */}
                 <div
-                  className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full p-[2px] sm:p-[2.5px] bg-gradient-to-tr ${cat.gradient} shadow-subtle group-hover/bubble:shadow-md transition-shadow relative`}
+                  className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-[60px] lg:h-[60px] rounded-full p-[2px] transition-all duration-200 relative ${
+                    cat.highlight
+                      ? 'bg-gradient-to-tr from-amber-400 via-rose-500 to-brand p-[2.5px] shadow-sm'
+                      : 'bg-canvas border-2 border-slate-200 dark:border-slate-800 group-hover/bubble:border-brand shadow-2xs group-hover/bubble:shadow-md'
+                  }`}
                 >
-                  <div className="w-full h-full rounded-full overflow-hidden bg-surface p-[1.5px] sm:p-[2px]">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-surface p-[1px]">
                     <img
                       src={cat.image}
                       alt={cat.name}
-                      className="w-full h-full object-cover rounded-full group-hover/bubble:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover rounded-full group-hover/bubble:scale-108 transition-transform duration-300"
                       loading="lazy"
                     />
                   </div>
 
-                  {/* Pulsing Dot or Pill on Bubble */}
+                  {/* Pulsing Pill on Bubble */}
                   {cat.badge && (
-                    <span className="absolute -bottom-1 -right-0.5 bg-rose-500 text-white font-extrabold text-[8px] sm:text-[8.5px] px-1.5 py-0.2 rounded-full border border-surface shadow-2xs whitespace-nowrap">
+                    <span className="absolute -bottom-1 -right-0.5 bg-rose-600 text-white font-extrabold text-[8px] sm:text-[8.5px] px-1.5 py-0.2 rounded-full border border-surface shadow-2xs whitespace-nowrap">
                       {cat.badge}
                     </span>
                   )}
                 </div>
 
                 {/* Title */}
-                <span className="text-[10px] sm:text-xs font-semibold text-center line-clamp-1 max-w-[72px] sm:max-w-[90px] lg:max-w-none leading-tight text-ink group-hover/bubble:text-brand transition-colors">
+                <span className="text-[11px] sm:text-xs font-semibold text-slate-700 dark:text-slate-200 group-hover/bubble:text-brand transition-colors text-center tracking-tight leading-tight whitespace-nowrap">
                   {cat.name}
                 </span>
               </motion.div>
             );
 
             return (
-              <Link key={cat.id} to={cat.link} className="shrink-0 no-underline">
+              <Link key={cat.id} to={cat.link} className="focus:outline-none">
                 {content}
               </Link>
             );
@@ -161,7 +158,6 @@ export default function CategoryStoryRail() {
         >
           <ChevronRight className="w-4 h-4" />
         </button>
-
       </div>
     </nav>
   );

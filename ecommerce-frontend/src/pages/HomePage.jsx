@@ -254,53 +254,67 @@ export default function HomePage() {
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
 
           <div className="relative z-10 grid grid-cols-12 gap-8 p-6 lg:p-8 items-center">
-            {/* Left Column: Commercial Headline & Intent */}
+            {/* Left Column: High-Converting Festive Shopping Showcase */}
             <motion.div
               variants={staggerContainer(0.08)}
               initial="hidden"
               animate="visible"
-              className="col-span-7 space-y-4"
+              className="col-span-7 space-y-3.5"
             >
               <motion.div variants={staggerItem}>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-soft text-brand-dark border border-brand/20 text-xs font-semibold tracking-tight shadow-subtle">
-                  <Sparkles className="w-3.5 h-3.5 text-brand" />
-                  <span>Mega Festive Season Live • Up to 70% Off</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 text-xs font-bold tracking-tight shadow-2xs">
+                  <Sparkles className="w-3.5 h-3.5 text-rose-500" />
+                  <span>Festive Carnival Live • Flat 50% - 80% Off</span>
                 </div>
               </motion.div>
 
               <motion.h1
                 variants={staggerItem}
-                className="text-3xl lg:text-4xl xl:text-[40px] font-extrabold font-display tracking-tight text-ink leading-[1.12]"
+                className="text-3xl lg:text-4xl xl:text-[42px] font-black font-display tracking-tight text-ink leading-[1.12]"
               >
-                Authentic Brands. <br />
-                <span className="text-brand">Direct Pricing.</span> Verified Sellers.
+                India's Premier <br />
+                <span className="bg-gradient-to-r from-brand via-blue-600 to-indigo-600 bg-clip-text text-transparent">Festive Shopping Hub.</span>
               </motion.h1>
 
               <motion.p
                 variants={staggerItem}
                 className="text-muted text-xs sm:text-sm max-w-lg leading-relaxed"
               >
-                Shop thousands of verified products from top artisans, verified manufacturers, and trusted brands across India with 100% buyer protection.
+                Discover 50,000+ curated fashion drops, studio audio, ethnic wear, and home styles direct from verified Indian artisans & manufacturers.
               </motion.p>
 
-              <motion.div variants={staggerItem} className="flex items-center gap-3 pt-2">
+              <motion.div variants={staggerItem} className="flex items-center gap-3 pt-1">
                 <Link to="/catalog">
                   <Button
                     variant="primary"
                     size="md"
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >
-                    Explore All Collections
+                    Shop Mega Deals
                   </Button>
                 </Link>
 
-                {!isAuthenticated && (
-                  <Link to="/sell">
-                    <Button variant="secondary" size="md" leftIcon={<Store className="w-4 h-4 text-muted" />}>
-                      Sell on Rigamart
-                    </Button>
-                  </Link>
-                )}
+                <Link to="/search?category=womens-ethnic">
+                  <Button variant="secondary" size="md">
+                    Festive Wardrobe
+                  </Button>
+                </Link>
+              </motion.div>
+
+              {/* Micro Trust Pills */}
+              <motion.div variants={staggerItem} className="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-muted font-medium">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-canvas border border-line text-ink">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                  100% Genuine
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-canvas border border-line text-ink">
+                  <RotateCcw className="w-3.5 h-3.5 text-blue-500" />
+                  7-Day Returns
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-canvas border border-line text-ink">
+                  <Truck className="w-3.5 h-3.5 text-amber-500" />
+                  Express Metro Delivery
+                </span>
               </motion.div>
 
               {/* Popular Searches Horizontal Row */}

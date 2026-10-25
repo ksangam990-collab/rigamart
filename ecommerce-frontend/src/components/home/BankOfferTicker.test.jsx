@@ -10,8 +10,9 @@ describe('BankOfferTicker UI Component', () => {
     expect(screen.getByText('BANK OFFER')).toBeInTheDocument();
   });
 
-  it('renders deliver-to metro location info badge', () => {
+  it('renders buyer protection and supercoins info badge', () => {
     render(<BankOfferTicker />);
-    expect(screen.getByText(/Deliver to/i)).toBeInTheDocument();
+    expect(screen.getByText(/Buyer Protection/i)).toBeInTheDocument();
+    expect(screen.getByText(/SuperCoins/i)).toBeInTheDocument();
   });
 });

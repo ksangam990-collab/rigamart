@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShoppingCart,
+  MapPin,
   Heart,
   User,
   Search,
@@ -673,17 +674,25 @@ export default function Navbar() {
             : 'border-b border-line'
         }`}
       >
-        {/* Top Banner for Trust / Free Delivery (hidden on mobile for maximum vertical space, collapses smoothly on desktop) */}
+        {/* Top Notification & Trust Bar */}
         <div
-          className={`hidden sm:block bg-brand text-white text-xs text-center font-medium tracking-wide transition-all duration-300 overflow-hidden ${
+          className={`hidden sm:block bg-gradient-to-r from-blue-700 via-brand to-indigo-700 text-white text-[11px] font-medium tracking-wide transition-all duration-300 overflow-hidden ${
             isBannerCollapsed
               ? 'max-h-0 py-0 opacity-0 pointer-events-none'
-              : 'max-h-10 py-1.5 px-4 opacity-100'
+              : 'max-h-8 py-1 px-4 opacity-100'
           }`}
         >
-          <span className="opacity-90">
-            Super Saver Delivery: Free shipping across India on orders above ₹500
-          </span>
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+              <span><strong>Festive Grand Carnival:</strong> Extra ₹300 Off on First UPI Order with code <strong>SUPERFESTIVE</strong></span>
+            </span>
+            <span className="hidden md:flex items-center gap-3 opacity-90 text-[10.5px]">
+              <span>🚚 Free Express Metro Shipping above ₹500</span>
+              <span className="w-1 h-1 rounded-full bg-white/40" />
+              <Link to="/help" className="hover:underline">24x7 Support</Link>
+            </span>
+          </div>
         </div>
 
         {/* Main Navbar Bar (Standard 56px on mobile, 64px on desktop) */}
@@ -693,8 +702,8 @@ export default function Navbar() {
               isBannerCollapsed ? 'h-14' : 'h-14 sm:h-16'
             }`}
           >
-          {/* Brand Logo */}
-          <div className="flex items-center shrink-0">
+          {/* Brand Logo & Location Pill */}
+          <div className="flex items-center gap-3 shrink-0">
             <Link to="/" className="flex items-center py-1 group focus:outline-none" aria-label="Rigamart Homepage">
               <motion.div
                 whileHover={{ scale: 1.02 }}
@@ -705,6 +714,18 @@ export default function Navbar() {
                 <Logo variant="full" size="responsive" />
               </motion.div>
             </Link>
+
+            {/* Desktop Location Selector (Amazon/Flipkart Style) */}
+            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-surface hover:bg-canvas text-ink transition-colors cursor-pointer border border-line shadow-2xs group">
+              <MapPin className="w-3.5 h-3.5 text-brand shrink-0 group-hover:scale-110 transition-transform" />
+              <div className="flex flex-col text-left leading-none">
+                <span className="text-[9px] text-muted font-medium">Deliver to</span>
+                <span className="text-[11px] font-bold text-ink tracking-tight flex items-center gap-0.5">
+                  Bengaluru 560001
+                  <ChevronDown className="w-2.5 h-2.5 text-muted" />
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Desktop Spotlight Search Bar */}
