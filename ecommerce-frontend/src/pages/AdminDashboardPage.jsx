@@ -129,7 +129,8 @@ export default function AdminDashboardPage() {
       desc: 'All platform sales volume',
       icon: TrendingUp,
       iconBg: 'bg-brand-soft text-brand-dark',
-      badge: 'Financials'
+      badge: 'Financials',
+      trend: '+18.4% MoM'
     },
     {
       title: 'Platform Orders',
@@ -137,7 +138,8 @@ export default function AdminDashboardPage() {
       desc: 'Placed across verified merchants',
       icon: Package,
       iconBg: 'bg-brand-soft text-brand-dark',
-      badge: 'Orders'
+      badge: 'Orders',
+      trend: '+12.1% MoM'
     },
     {
       title: 'Registered Users',
@@ -145,7 +147,8 @@ export default function AdminDashboardPage() {
       desc: 'Customer & merchant accounts',
       icon: Users,
       iconBg: 'bg-canvas text-ink',
-      badge: 'Accounts'
+      badge: 'Accounts',
+      trend: '+9.3% new users'
     },
     {
       title: 'Active Merchants',
@@ -153,7 +156,8 @@ export default function AdminDashboardPage() {
       desc: 'Verified multi-vendor stores',
       icon: Store,
       iconBg: 'bg-canvas text-ink',
-      badge: 'Sellers'
+      badge: 'Sellers',
+      trend: '100% verified'
     }
   ];
 
@@ -207,8 +211,16 @@ export default function AdminDashboardPage() {
                     <Icon className="w-4 h-4" />
                   </div>
                 </div>
-                <div className="text-2xl font-bold tracking-tight text-ink tabular-nums">
-                  {kpi.value}
+                <div className="flex items-baseline justify-between gap-2">
+                  <div className="text-2xl font-bold tracking-tight text-ink tabular-nums">
+                    {kpi.value}
+                  </div>
+                  {kpi.trend && (
+                    <span className="inline-flex items-center gap-0.5 text-[10.5px] font-bold px-2 py-0.5 rounded-full text-emerald-700 bg-emerald-500/15 dark:text-emerald-300">
+                      <TrendingUp className="w-2.5 h-2.5" />
+                      {kpi.trend}
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center justify-between pt-1 border-t border-line/60">
                   <p className="text-[11px] text-muted">{kpi.desc}</p>

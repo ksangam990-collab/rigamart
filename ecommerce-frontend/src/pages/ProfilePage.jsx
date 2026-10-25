@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   User,
@@ -18,7 +19,11 @@ import {
   Navigation,
   Loader2,
   X,
-  Camera
+  Camera,
+  Package,
+  Heart,
+  ShoppingBag,
+  ChevronRight
 } from 'lucide-react';
 import api from '../utils/api.js';
 import { Button, Badge } from '../components/ui/index.js';
@@ -636,6 +641,13 @@ export default function ProfilePage() {
 
   const RoleMeta = roleMeta[profile?.role] || roleMeta.customer;
   const RoleIcon = RoleMeta.icon;
+  const completionScore = [
+    Boolean(profile?.name),
+    Boolean(profile?.email),
+    Boolean(profile?.mobile),
+    Boolean(addresses.length > 0)
+  ].filter(Boolean).length * 25;
+
   const memberSince = profile?.createdAt
     ? new Date(profile.createdAt).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
     : null;
@@ -700,6 +712,25 @@ export default function ProfilePage() {
                 {memberSince && (
                   <p className="text-[11px] text-muted mt-2">Member since {memberSince}</p>
                 )}
+
+                {/* Profile Completion Meter */}
+                <div className="mt-4 pt-4 border-t border-line text-left">
+                  <div className="flex items-center justify-between text-xs mb-1.5 font-bold">
+                    <span className="text-ink">Profile Strength</span>
+                    <span className="text-brand font-black">{completionScore}%</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-line rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 rounded-full transition-all duration-500"
+                      style={{ width: `${completionScore}%` }}
+                    />
+                  </div>
+                  {completionScore < 100 && (
+                    <p className="text-[10px] text-muted mt-1.5 font-medium leading-relaxed">
+                      Tip: Add your mobile number &amp; saved address to unlock rapid 1-click checkout.
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Edit Profile Form */}
@@ -775,6 +806,60 @@ export default function ProfilePage() {
                   </Button>
                 </form>
               </div>
+            </div>
+
+            {/* Riga SuperCoins & Rewards Hub */}
+            <div className="bg-gradient-to-br from-amber-500/10 via-brand-soft to-transparent rounded-2xl border border-amber-500/20 p-4 shadow-subtle">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-sm shadow-2xs">
+                    🪙
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-ink">Riga SuperCoins</p>
+                    <p className="text-[10px] text-muted">2% cashback on every order</p>
+                  </div>
+                </div>
+                <span className="text-sm font-black text-amber-600 dark:text-amber-400">120 Coins</span>
+              </div>
+              <div className="pt-2 border-t border-amber-500/20 flex items-center justify-between text-[10.5px] text-muted font-medium">
+                <span>Redeemable at checkout</span>
+                <span className="font-bold text-brand">Worth ₹120</span>
+              </div>
+            </div>
+
+            {/* Account Quicklinks Hub */}
+            <div className="bg-surface rounded-2xl border border-line p-3 shadow-subtle space-y-1">
+              <Link
+                to="/my-orders"
+                className="flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold text-ink hover:bg-canvas transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Package className="w-4 h-4 text-brand" />
+                  <span>My Orders</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-muted" />
+              </Link>
+              <Link
+                to="/wishlist"
+                className="flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold text-ink hover:bg-canvas transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Heart className="w-4 h-4 text-rose-500" />
+                  <span>Saved Wishlist</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-muted" />
+              </Link>
+              <Link
+                to="/cart"
+                className="flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold text-ink hover:bg-canvas transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <ShoppingBag className="w-4 h-4 text-emerald-500" />
+                  <span>Shopping Bag</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-muted" />
+              </Link>
             </div>
           </aside>
 

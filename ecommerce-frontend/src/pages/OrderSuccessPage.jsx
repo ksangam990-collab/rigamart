@@ -169,15 +169,15 @@ export default function OrderSuccessPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="relative bg-gradient-to-r from-amber-50 to-amber-100/50 border border-amber-200 rounded-2xl p-4 text-center overflow-hidden group"
+          className="relative bg-gradient-to-r from-amber-500/10 to-amber-500/20 border border-amber-500/30 rounded-2xl p-4 text-center overflow-hidden group shadow-2xs"
         >
-          <div className="absolute inset-0 bg-amber-400/10 animate-pulse" />
+          <div className="absolute inset-0 bg-amber-400/10 animate-pulse pointer-events-none" />
           <div className="relative z-10">
-            <p className="text-sm font-bold text-amber-700 flex items-center justify-center gap-1.5">
-              <span>✨</span> You earned {coinsEarned} Rigamart Coins on this order!
+            <p className="text-sm font-bold text-amber-700 dark:text-amber-300 flex items-center justify-center gap-1.5">
+              <span>🪙</span> You earned {coinsEarned} Riga SuperCoins on this order!
             </p>
-            <p className="text-[10px] text-amber-600/80 mt-1">
-              Coins can be used on your next purchase for instant discounts.
+            <p className="text-[10.5px] text-amber-800/80 dark:text-amber-200/80 mt-1 font-medium">
+              SuperCoins will be credited automatically upon delivery for instant checkout discounts.
             </p>
           </div>
         </motion.div>

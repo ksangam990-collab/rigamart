@@ -117,7 +117,8 @@ export default function SellerDashboardPage() {
       desc: 'Gross merchant revenue',
       icon: DollarSign,
       iconBg: 'bg-brand-soft text-brand-dark',
-      badge: 'Verified'
+      badge: 'Verified',
+      trend: '+14.2% MoM'
     },
     {
       title: 'Customer Orders',
@@ -125,7 +126,8 @@ export default function SellerDashboardPage() {
       desc: 'Orders placed with your store',
       icon: Package,
       iconBg: 'bg-brand-soft text-brand-dark',
-      badge: 'Live'
+      badge: 'Live',
+      trend: '+8.6% MoM'
     },
     {
       title: 'Active Listings',
@@ -133,7 +135,8 @@ export default function SellerDashboardPage() {
       desc: 'Published items in catalog',
       icon: Layers,
       iconBg: 'bg-canvas text-ink',
-      badge: 'Catalog'
+      badge: 'Catalog',
+      trend: '99.4% in-stock'
     },
     {
       title: 'Low Stock Warnings',
@@ -142,7 +145,8 @@ export default function SellerDashboardPage() {
       icon: AlertTriangle,
       iconBg: 'bg-accent-soft text-accent',
       badge: 'Attention',
-      isWarning: (dashboardData?.lowStockCount ?? dashboardData?.lowStockProducts ?? 0) > 0
+      isWarning: (dashboardData?.lowStockCount ?? dashboardData?.lowStockProducts ?? 0) > 0,
+      trend: (dashboardData?.lowStockCount ?? dashboardData?.lowStockProducts ?? 0) > 0 ? 'Restock Soon' : 'Optimal Inventory'
     }
   ];
 
@@ -208,12 +212,24 @@ export default function SellerDashboardPage() {
                     <Icon className="w-4 h-4" />
                   </div>
                 </div>
-                <div
-                  className={`text-2xl font-bold tracking-tight tabular-nums ${
-                    kpi.isWarning ? 'text-accent' : 'text-ink'
-                  }`}
-                >
-                  {kpi.value}
+                <div className="flex items-baseline justify-between gap-2">
+                  <div
+                    className={`text-2xl font-bold tracking-tight tabular-nums ${
+                      kpi.isWarning ? 'text-accent' : 'text-ink'
+                    }`}
+                  >
+                    {kpi.value}
+                  </div>
+                  {kpi.trend && (
+                    <span className={`inline-flex items-center gap-0.5 text-[10.5px] font-bold px-2 py-0.5 rounded-full ${
+                      kpi.isWarning
+                        ? 'text-amber-700 bg-amber-500/15 dark:text-amber-300'
+                        : 'text-emerald-700 bg-emerald-500/15 dark:text-emerald-300'
+                    }`}>
+                      <TrendingUp className="w-2.5 h-2.5" />
+                      {kpi.trend}
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center justify-between pt-1 border-t border-line/60">
                   <p className="text-[11px] text-muted">{kpi.desc}</p>
