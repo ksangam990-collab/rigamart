@@ -717,6 +717,12 @@ export default function CartPage() {
                           <div className="text-xs font-semibold text-muted pt-0.5 tabular-nums">
                             {formatCurrency(unitPrice)} <span className="font-normal text-[11px]">each</span>
                           </div>
+
+                          {/* Express Delivery Promise */}
+                          <div className="flex items-center gap-1.5 text-[10.5px] text-emerald-600 dark:text-emerald-400 font-semibold pt-0.5">
+                            <Truck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                            <span>Express Delivery: Within 24-48h</span>
+                          </div>
                         </div>
                       </div>
 

@@ -51,6 +51,15 @@ export default function CatalogPage() {
   const maxPrice = searchParams.get('maxPrice') || '';
   const inStockOnly = searchParams.get('inStock') === 'true';
 
+  const hasActiveFilters = Boolean(
+    keyword ||
+    selectedCategory ||
+    selectedRating ||
+    minPrice ||
+    maxPrice ||
+    inStockOnly
+  );
+
   const [tempMinPrice, setTempMinPrice] = useState(minPrice);
   const [tempMaxPrice, setTempMaxPrice] = useState(maxPrice);
 
@@ -496,7 +505,70 @@ export default function CatalogPage() {
         </aside>
 
         {/* Main Product Showcase Grid Column */}
-        <main className="lg:col-span-3 space-y-8">
+        <main className="lg:col-span-3 space-y-6">
+          {/* Active Filter Chips Bar (Instant Dismissible Pills) */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap items-center gap-2 p-2.5 bg-surface rounded-xl border border-line shadow-2xs text-xs">
+              <span className="text-[11px] font-bold text-muted uppercase tracking-wider pl-1">
+                Active Filters:
+              </span>
+              {selectedCategory && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-soft text-brand-dark text-[11px] font-semibold border border-brand/20">
+                  <span>Category: {selectedCategory}</span>
+                  <button onClick={() => updateFilter('category', '')} className="hover:text-danger cursor-pointer">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+              {keyword && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-soft text-brand-dark text-[11px] font-semibold border border-brand/20">
+                  <span>&quot;{keyword}&quot;</span>
+                  <button onClick={() => updateFilter('q', '')} className="hover:text-danger cursor-pointer">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+              {minPrice && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-soft text-brand-dark text-[11px] font-semibold border border-brand/20">
+                  <span>Min: ₹{minPrice}</span>
+                  <button onClick={() => updateFilter('minPrice', '')} className="hover:text-danger cursor-pointer">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+              {maxPrice && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-soft text-brand-dark text-[11px] font-semibold border border-brand/20">
+                  <span>Max: ₹{maxPrice}</span>
+                  <button onClick={() => updateFilter('maxPrice', '')} className="hover:text-danger cursor-pointer">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+              {selectedRating && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 text-[11px] font-semibold border border-amber-300 dark:border-amber-700">
+                  <span>{selectedRating}★ &amp; Above</span>
+                  <button onClick={() => updateFilter('rating', '')} className="hover:text-danger cursor-pointer">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+              {inStockOnly && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold border border-emerald-300 dark:border-emerald-800">
+                  <span>In Stock Only</span>
+                  <button onClick={() => updateFilter('inStock', '')} className="hover:text-danger cursor-pointer">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={clearAllFilters}
+                className="ml-auto text-[11px] font-bold text-danger hover:underline cursor-pointer px-2 py-0.5"
+              >
+                Clear All
+              </button>
+            </div>
+          )}
           {isLoading ? (
             /* Skeleton Loading Grid matching exact aspect ratio */
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4 md:gap-6">

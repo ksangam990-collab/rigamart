@@ -15,7 +15,8 @@ import {
   Store,
   Ruler,
   AlertCircle,
-  Share2
+  Share2,
+  Sparkles
 } from 'lucide-react';
 import api from '../utils/api.js';
 import { addToCart } from '../features/cart/cartSlice.js';
@@ -64,6 +65,20 @@ export default function ProductDetailPage() {
   const [otpActionType, setOtpActionType] = useState('buyNow');
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const [zoomStyle, setZoomStyle] = useState({ display: 'none' });
+  const [copiedShare, setCopiedShare] = useState(false);
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product?.name || 'Rigamart',
+        url: window.location.href
+      }).catch(() => {});
+    } else {
+      navigator.clipboard?.writeText(window.location.href);
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 2000);
+    }
+  };
 
   const mainCtaRef = useRef(null);
 
@@ -409,15 +424,27 @@ export default function ProductDetailPage() {
               {product.name}
             </h1>
 
-            {/* Ratings & Customer Reviews Summary */}
-            <div className="flex items-center gap-3 mt-3">
-              <div className="inline-flex items-center gap-1 bg-brand text-white text-xs font-bold px-2 py-0.5 rounded tabular-nums">
-                <span>{(product.avgRating || 0).toFixed(1)}</span>
-                <Star className="w-3 h-3 fill-accent text-accent" />
+            {/* Ratings & Customer Reviews Summary + Share Button */}
+            <div className="flex items-center justify-between gap-3 mt-3 flex-wrap">
+              <div className="flex items-center gap-3">
+                <div className="inline-flex items-center gap-1 bg-brand text-white text-xs font-bold px-2 py-0.5 rounded tabular-nums">
+                  <span>{(product.avgRating || 0).toFixed(1)}</span>
+                  <Star className="w-3 h-3 fill-accent text-accent" />
+                </div>
+                <span className="text-xs text-muted tabular-nums">
+                  ({product.numReviews || 0} Verified Reviews)
+                </span>
               </div>
-              <span className="text-xs text-muted tabular-nums">
-                ({product.numReviews || 0} Verified Customer Reviews)
-              </span>
+
+              <button
+                type="button"
+                onClick={handleShare}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface hover:bg-canvas text-xs font-medium text-muted hover:text-ink border border-line transition-colors shadow-2xs cursor-pointer"
+                title="Share this product"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{copiedShare ? 'Copied!' : 'Share'}</span>
+              </button>
             </div>
           </div>
 
@@ -436,6 +463,22 @@ export default function ProductDetailPage() {
                 Save {formatCurrency(Math.round(mrp) - price)} ({discountPercent}% off)
               </span>
             )}
+          </div>
+
+          {/* Key Value & Trust Highlights Strip */}
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold text-ink">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-line shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>100% Original Brand Assured</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-line shadow-2xs">
+              <Truck className="w-3.5 h-3.5 text-blue-500" />
+              <span>Free Delivery ₹500+</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-line shadow-2xs">
+              <RotateCcw className="w-3.5 h-3.5 text-emerald-500" />
+              <span>7-Day Return &amp; Exchange</span>
+            </span>
           </div>
 
           {/* Dynamic Variant Selector */}
