@@ -78,7 +78,7 @@ export default function LightningDrop({ product: customProduct }) {
 
   return (
     <>
-      <div className="w-full bg-surface border border-line rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-card relative overflow-hidden">
+      <div className="w-full bg-surface border border-line rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 shadow-card relative overflow-hidden">
         {/* Ambient Top Glow */}
         <div className="absolute top-0 right-0 w-44 h-44 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
 
@@ -189,7 +189,7 @@ export default function LightningDrop({ product: customProduct }) {
         <div className="hidden sm:block space-y-3.5">
           {/* Product Visual Showcase */}
           <div className="relative group">
-            <div className="aspect-[16/10] w-full rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 relative max-h-[170px]">
+            <div className="aspect-[16/10] w-full rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 relative max-h-[130px]">
               <img
                 src={deal.image}
                 alt={deal.name}

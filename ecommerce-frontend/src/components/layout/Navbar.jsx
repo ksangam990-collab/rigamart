@@ -716,7 +716,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Location Selector (Amazon/Flipkart Style) */}
-            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-surface hover:bg-canvas text-ink transition-colors cursor-pointer border border-line shadow-2xs group">
+            <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-surface hover:bg-canvas text-ink transition-colors cursor-pointer border border-line shadow-2xs group">
               <MapPin className="w-3.5 h-3.5 text-brand shrink-0 group-hover:scale-110 transition-transform" />
               <div className="flex flex-col text-left leading-none">
                 <span className="text-[9px] text-muted font-medium">Deliver to</span>
@@ -744,7 +744,7 @@ export default function Navbar() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
-              className={`w-full bg-canvas hover:bg-surface focus:bg-surface rounded-xl pl-10 pr-32 border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all text-ink placeholder:text-muted/60 ${
+              className={`w-full bg-canvas hover:bg-surface focus:bg-surface rounded-xl pl-10 pr-20 border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all text-ink placeholder:text-muted/60 ${
                 isBannerCollapsed ? 'py-1.5 text-xs' : 'py-2 text-sm'
               }`}
             />
@@ -756,7 +756,7 @@ export default function Navbar() {
 
             {/* Voice Search Button */}
             <VoiceSearchButton 
-              className={`absolute ${searchQuery ? 'right-24' : 'right-16'}`}
+              className={`absolute ${searchQuery ? 'right-18' : 'right-11'}`}
               onResult={(transcript) => {
                 setSearchQuery(transcript);
                 saveRecentSearch(transcript);
@@ -771,7 +771,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={handleClearSearch}
-                className="absolute right-16 p-1 text-muted hover:text-ink rounded-full hover:bg-line/40 transition-colors"
+                className="absolute right-11 p-1 text-muted hover:text-ink rounded-full hover:bg-line/40 transition-colors"
                 title="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
@@ -779,7 +779,7 @@ export default function Navbar() {
             )}
 
             {/* Keyboard Shortcut Pill (⌘K) */}
-            <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-muted bg-surface border border-line rounded absolute right-2 pointer-events-none">
+            <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-muted bg-surface border border-line rounded absolute right-2.5 pointer-events-none">
               ⌘K
             </kbd>
 

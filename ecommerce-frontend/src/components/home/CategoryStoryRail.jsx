@@ -11,9 +11,8 @@ export default function CategoryStoryRail() {
       id: 'deals',
       name: 'Top Deals',
       badge: '🔥 Hot',
-      image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=200&auto=format&fit=crop&q=80',
-      link: '/search?sort=newest',
-      highlight: true
+      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&auto=format&fit=crop&q=80',
+      link: '/search?sort=newest'
     },
     {
       id: 'mens',
@@ -65,12 +64,11 @@ export default function CategoryStoryRail() {
       link: '/search?category=home-kitchen'
     },
     {
-      id: 'offers',
-      name: 'All Offers',
-      badge: '50% Off',
-      image: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=200&auto=format&fit=crop&q=80',
-      link: '/search?sort=newest',
-      highlight: true
+      id: 'accessories',
+      name: 'Watches & Acc.',
+      badge: null,
+      image: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=200&auto=format&fit=crop&q=80',
+      link: '/search?category=accessories'
     }
   ];
 
@@ -110,13 +108,7 @@ export default function CategoryStoryRail() {
                 className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group/bubble w-[66px] sm:w-[74px] lg:w-auto"
               >
                 {/* Clean Circular Story Bubble with Uniform Studio Border */}
-                <div
-                  className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-[60px] lg:h-[60px] rounded-full p-[2px] transition-all duration-200 relative ${
-                    cat.highlight
-                      ? 'bg-gradient-to-tr from-amber-400 via-rose-500 to-brand p-[2.5px] shadow-sm'
-                      : 'bg-canvas border-2 border-slate-200 dark:border-slate-800 group-hover/bubble:border-brand shadow-2xs group-hover/bubble:shadow-md'
-                  }`}
-                >
+                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[58px] lg:h-[58px] rounded-full p-[2px] transition-all duration-200 relative bg-canvas border-2 border-line hover:border-brand shadow-2xs hover:shadow-subtle">
                   <div className="w-full h-full rounded-full overflow-hidden bg-surface p-[1px]">
                     <img
                       src={cat.image}
@@ -128,7 +120,7 @@ export default function CategoryStoryRail() {
 
                   {/* Pulsing Pill on Bubble */}
                   {cat.badge && (
-                    <span className="absolute -bottom-1 -right-0.5 bg-rose-600 text-white font-extrabold text-[8px] sm:text-[8.5px] px-1.5 py-0.2 rounded-full border border-surface shadow-2xs whitespace-nowrap">
+                    <span className="absolute -top-1 -right-1 bg-rose-600 text-white font-extrabold text-[8px] sm:text-[8.5px] px-1.5 py-0.2 rounded-full border border-surface shadow-2xs whitespace-nowrap">
                       {cat.badge}
                     </span>
                   )}

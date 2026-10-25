@@ -241,11 +241,8 @@ export default function HomePage() {
       {/* ── 0A. Circular Category Story Rail (Primary Category Navigation) ── */}
       <CategoryStoryRail />
 
-      {/* ── 0B. Top Bank Offer & Delivery Ticker Ribbon (Desktop Only) ─────── */}
-      <BankOfferTicker />
-
       {/* ── Main Page Content Stream ────────────────────────────────────────── */}
-      <div className="space-y-8 sm:space-y-12 pt-3 sm:pt-6">
+      <div className="space-y-6 sm:space-y-10 pt-3 sm:pt-4">
         {/* ── 1. Hero Showcase (Desktop: 12-col festive banner, Mobile: Clean Flash Deal + Pills) ── */}
         <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Desktop Hero Showcase (12-col) */}
@@ -253,7 +250,7 @@ export default function HomePage() {
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-soft/50 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
 
-          <div className="relative z-10 grid grid-cols-12 gap-8 p-6 lg:p-8 items-center">
+          <div className="relative z-10 grid grid-cols-12 gap-6 lg:gap-8 p-5 lg:p-6 items-center">
             {/* Left Column: High-Converting Festive Shopping Showcase */}
             <motion.div
               variants={staggerContainer(0.08)}
