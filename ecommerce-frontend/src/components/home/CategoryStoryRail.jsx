@@ -105,15 +105,15 @@ export default function CategoryStoryRail() {
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ duration: 0.15 }}
-                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group/bubble w-[70px] sm:w-[76px] lg:w-auto"
+                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group/bubble w-[72px] sm:w-[76px] lg:w-auto"
               >
                 {/* Clean Circular Story Bubble with Uniform Studio Border */}
-                <div className="w-13 h-13 sm:w-14 sm:h-14 lg:w-[58px] lg:h-[58px] rounded-full p-[2px] transition-all duration-200 relative bg-canvas border-2 border-line hover:border-brand shadow-2xs hover:shadow-subtle">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-surface p-[1px]">
+                <div className="w-[52px] h-[52px] sm:w-[58px] sm:h-[58px] lg:w-[60px] lg:h-[60px] aspect-square rounded-full shrink-0 p-[2px] transition-all duration-200 relative bg-canvas border-2 border-line hover:border-brand shadow-2xs hover:shadow-subtle flex items-center justify-center">
+                  <div className="w-full h-full aspect-square rounded-full overflow-hidden bg-surface p-[1px] flex items-center justify-center">
                     <img
                       src={cat.image}
                       alt={cat.name}
-                      className="w-full h-full object-cover rounded-full group-hover/bubble:scale-108 transition-transform duration-300"
+                      className="w-full h-full aspect-square object-cover rounded-full group-hover/bubble:scale-108 transition-transform duration-300"
                       loading="lazy"
                     />
                   </div>
