@@ -1213,48 +1213,40 @@ export default function Navbar() {
         <input
           ref={mobileInputRef}
           type="text"
-          placeholder="Search products, brands, or categories..."
+          placeholder="Search products, brands..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setShowDropdown(true)}
           onKeyDown={handleKeyDown}
-          className="w-full bg-canvas text-xs sm:text-sm rounded-xl pl-9 pr-24 py-2 border border-line focus:bg-surface focus:border-brand focus:outline-none transition-all text-ink placeholder:text-muted/60"
+          className="w-full bg-canvas text-xs sm:text-sm rounded-xl pl-9 pr-10 py-2 border border-line focus:bg-surface focus:border-brand focus:outline-none transition-all text-ink placeholder:text-muted/60 shadow-2xs"
         />
         {isSearching ? (
           <Loader2 className="w-4 h-4 text-brand animate-spin absolute left-3 pointer-events-none" />
         ) : (
           <Search className="w-4 h-4 text-muted absolute left-3 pointer-events-none" />
         )}
-        
-        <VoiceSearchButton 
-          className={`absolute ${searchQuery ? 'right-16' : 'right-10'}`}
-          onResult={(transcript) => {
-            setSearchQuery(transcript);
-            saveRecentSearch(transcript);
-            navigate(`/search?q=${encodeURIComponent(transcript)}`);
-            setMobileMenuOpen(false);
-            setShowDropdown(false);
-          }}
-        />
 
-        {searchQuery && (
+        {searchQuery ? (
           <button
             type="button"
             onClick={handleClearSearch}
-            className="absolute right-8 p-1 text-muted hover:text-ink rounded-full transition-colors"
+            className="absolute right-2.5 p-1 text-muted hover:text-ink rounded-full transition-colors"
             title="Clear search"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-4 h-4" />
           </button>
+        ) : (
+          <VoiceSearchButton 
+            className="absolute right-2.5"
+            onResult={(transcript) => {
+              setSearchQuery(transcript);
+              saveRecentSearch(transcript);
+              navigate(`/search?q=${encodeURIComponent(transcript)}`);
+              setMobileMenuOpen(false);
+              setShowDropdown(false);
+            }}
+          />
         )}
-        <motion.button
-          type="submit"
-          whileTap={{ scale: 0.92 }}
-          className="absolute right-1.5 p-1.5 text-muted hover:text-brand transition-colors rounded-lg flex items-center justify-center"
-          aria-label="Submit search"
-        >
-          <Search className="w-4 h-4 text-brand" />
-        </motion.button>
 
         {/* Mobile Predictive Dropdown */}
         <SearchSuggestionsDropdown

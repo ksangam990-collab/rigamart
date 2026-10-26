@@ -30,14 +30,14 @@ export default function CategoryStoryRail() {
     },
     {
       id: 'tech',
-      name: 'Gadgets & Tech',
+      name: 'Electronics',
       badge: null,
       image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=electronics'
     },
     {
       id: 'footwear',
-      name: 'Sneakers & Kicks',
+      name: 'Footwear',
       badge: null,
       image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=footwear'
@@ -51,21 +51,21 @@ export default function CategoryStoryRail() {
     },
     {
       id: 'beauty',
-      name: 'Beauty & Care',
+      name: 'Beauty',
       badge: null,
       image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=beauty-health'
     },
     {
       id: 'kitchen',
-      name: 'Kitchen & Dining',
+      name: 'Kitchen',
       badge: null,
       image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=home-kitchen'
     },
     {
       id: 'accessories',
-      name: 'Watches & Acc.',
+      name: 'Watches',
       badge: null,
       image: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=200&auto=format&fit=crop&q=80',
       link: '/search?category=accessories'
@@ -96,7 +96,7 @@ export default function CategoryStoryRail() {
         {/* Story Rail Container: Evenly distributed across desktop, swipeable on mobile */}
         <div
           ref={scrollRef}
-          className="flex items-center gap-3.5 sm:gap-5 overflow-x-auto scrollbar-none py-1 px-1 scroll-smooth lg:justify-between lg:gap-2 lg:overflow-visible"
+          className="flex items-center gap-4 sm:gap-6 overflow-x-auto scrollbar-none py-1.5 px-3 scroll-smooth lg:justify-between lg:gap-2 lg:overflow-visible"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {categories.map((cat) => {
@@ -105,10 +105,10 @@ export default function CategoryStoryRail() {
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ duration: 0.15 }}
-                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group/bubble w-[66px] sm:w-[74px] lg:w-auto"
+                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group/bubble w-[70px] sm:w-[76px] lg:w-auto"
               >
                 {/* Clean Circular Story Bubble with Uniform Studio Border */}
-                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[58px] lg:h-[58px] rounded-full p-[2px] transition-all duration-200 relative bg-canvas border-2 border-line hover:border-brand shadow-2xs hover:shadow-subtle">
+                <div className="w-13 h-13 sm:w-14 sm:h-14 lg:w-[58px] lg:h-[58px] rounded-full p-[2px] transition-all duration-200 relative bg-canvas border-2 border-line hover:border-brand shadow-2xs hover:shadow-subtle">
                   <div className="w-full h-full rounded-full overflow-hidden bg-surface p-[1px]">
                     <img
                       src={cat.image}
@@ -127,7 +127,7 @@ export default function CategoryStoryRail() {
                 </div>
 
                 {/* Title */}
-                <span className="text-[11px] sm:text-xs font-semibold text-slate-700 dark:text-slate-200 group-hover/bubble:text-brand transition-colors text-center tracking-tight leading-tight whitespace-nowrap">
+                <span className="text-[11px] sm:text-xs font-semibold text-slate-700 dark:text-slate-200 group-hover/bubble:text-brand transition-colors text-center tracking-tight leading-tight truncate max-w-[70px] sm:max-w-none">
                   {cat.name}
                 </span>
               </motion.div>
