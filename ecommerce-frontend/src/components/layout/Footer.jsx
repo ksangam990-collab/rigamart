@@ -100,7 +100,8 @@ export default function Footer() {
               <h4 className="text-[11px] font-bold text-white uppercase tracking-wider mb-2.5">Customer Care</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><Link to="/help" className="hover:text-white transition-colors">Help Center &amp; FAQs</Link></li>
-                <li><Link to="/my-orders" className="hover:text-white transition-colors">Track Your Order</Link></li>
+                <li><Link to="/track-order" className="hover:text-white transition-colors">Track Your Order</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us &amp; Grievance</Link></li>
                 <li><Link to="/help#returns" className="hover:text-white transition-colors">7-Day Free Returns</Link></li>
                 <li><Link to="/help#delivery" className="hover:text-white transition-colors">Shipping Policies</Link></li>
                 <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
@@ -225,7 +226,8 @@ export default function Footer() {
             <h3 className="text-white font-bold text-sm tracking-wider uppercase mb-4">Customer Care</h3>
             <ul className="space-y-2 text-xs">
               <li><Link to="/help" className="hover:text-white transition-colors">Help Center &amp; FAQs</Link></li>
-              <li><Link to="/my-orders" className="hover:text-white transition-colors">Track Order</Link></li>
+              <li><Link to="/track-order" className="hover:text-white transition-colors">Track Order</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us &amp; Grievance</Link></li>
               <li><Link to="/help#returns" className="hover:text-white transition-colors">Returns &amp; Refunds</Link></li>
               <li><Link to="/help#delivery" className="hover:text-white transition-colors">Shipping Policies</Link></li>
               <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>

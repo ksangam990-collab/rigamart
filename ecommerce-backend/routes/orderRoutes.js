@@ -10,10 +10,14 @@ const {
   getSellerReturns,
   updateReturnStatus,
   getAllOrders,
-  getInvoice
+  getInvoice,
+  trackPublicOrder
 } = require('../controllers/orderController');
 const { protect } = require('../middleware/auth');
 const { authorize } = require('../middleware/roleCheck');
+
+// Public tracking endpoint (accessible without login, authenticated via Order ID + Mobile)
+router.get('/track/public', trackPublicOrder);
 
 // All order endpoints require an authenticated user session
 router.use(protect);

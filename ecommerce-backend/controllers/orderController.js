@@ -819,6 +819,102 @@ const updateReturnStatus = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Public Order Tracking (By Order ID/Number & Registered Mobile)
+ * @route   GET /api/orders/track/public
+ * @access  Public
+ */
+const trackPublicOrder = async (req, res) => {
+  try {
+    const { orderId, phone } = req.query;
+
+    if (!orderId || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Both Order ID and registered 10-digit mobile number are required.',
+        data: null
+      });
+    }
+
+    const cleanOrderId = String(orderId).trim();
+    const cleanPhone = String(phone).trim().replace(/\D/g, '').slice(-10);
+
+    if (cleanPhone.length !== 10) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid 10-digit mobile number.',
+        data: null
+      });
+    }
+
+    const queryConditions = [
+      { orderNumber: cleanOrderId },
+      { orderNumber: `RM-${cleanOrderId}` },
+      { orderNumber: new RegExp(cleanOrderId.replace(/^RM-/, '') + '$', 'i') }
+    ];
+
+    if (cleanOrderId.match(/^[0-9a-fA-F]{24}$/)) {
+      queryConditions.push({ _id: cleanOrderId });
+    }
+
+    const order = await Order.findOne({
+      $or: queryConditions,
+      'shippingAddress.mobile': new RegExp(cleanPhone + '$')
+    })
+      .select('orderNumber status statusTimeline items totalAmount paymentInfo shippingAddress createdAt estimatedDelivery')
+      .lean();
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'No matching order found for the provided Order ID and Mobile number. Please double check your details.',
+        data: null
+      });
+    }
+
+    const mobileRaw = order.shippingAddress?.mobile || cleanPhone;
+    const maskedMobile = mobileRaw.length >= 4 
+      ? mobileRaw.slice(0, 2) + '******' + mobileRaw.slice(-2) 
+      : '******';
+
+    const sanitizedDestination = {
+      city: order.shippingAddress?.city || 'Metro City',
+      state: order.shippingAddress?.state || 'India',
+      pincode: order.shippingAddress?.pincode || 'Verified Pincode',
+      maskedMobile
+    };
+
+    res.status(200).json({
+      success: true,
+      message: 'Order tracking details retrieved successfully',
+      data: {
+        orderNumber: order.orderNumber,
+        status: order.status,
+        statusTimeline: order.statusTimeline || [],
+        createdAt: order.createdAt,
+        totalAmount: order.totalAmount,
+        paymentMethod: order.paymentInfo?.method || 'PREPAID',
+        paymentStatus: order.paymentInfo?.status || 'Completed',
+        destination: sanitizedDestination,
+        items: (order.items || []).map((item) => ({
+          name: item.name,
+          image: item.image,
+          quantity: item.quantity,
+          price: item.price,
+          size: item.size,
+          color: item.color
+        }))
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Failed to retrieve order tracking: ${error.message}`,
+      data: null
+    });
+  }
+};
+
 module.exports = {
   getMyOrders,
   getOrderById,
@@ -829,5 +925,6 @@ module.exports = {
   getSellerReturns,
   updateReturnStatus,
   getAllOrders,
-  getInvoice
+  getInvoice,
+  trackPublicOrder
 };

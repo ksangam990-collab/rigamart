@@ -35,6 +35,8 @@ const SellPage = lazy(() => import('./pages/SellPage.jsx'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage.jsx'));
 const TermsPage = lazy(() => import('./pages/TermsPage.jsx'));
 const StyleguidePage = lazy(() => import('./pages/StyleguidePage.jsx'));
+const TrackOrderPage = lazy(() => import('./pages/TrackOrderPage.jsx'));
+const ContactPage = lazy(() => import('./pages/ContactPage.jsx'));
 const OrderSuccessPage = lazy(() => import('./pages/OrderSuccessPage.jsx'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage.jsx'));
 
@@ -135,6 +137,22 @@ export default function App() {
             element={
               <Suspense fallback={<RouteLoadingFallback message="Loading Styleguide..." />}>
                 <StyleguidePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="track-order"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading Order Tracking..." />}>
+                <TrackOrderPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="contact"
+            element={
+              <Suspense fallback={<RouteLoadingFallback message="Loading Customer Support..." />}>
+                <ContactPage />
               </Suspense>
             }
           />
