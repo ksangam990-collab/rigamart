@@ -827,7 +827,7 @@ export default function CartPage() {
                           <span className="font-mono text-xs font-bold text-brand-dark">
                             {appliedCoupon.code}
                           </span>
-                          <Badge variant="brand" size="sm">
+                          <Badge color="brand" variant="subtle" size="sm">
                             APPLIED
                           </Badge>
                         </div>

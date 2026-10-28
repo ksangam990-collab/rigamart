@@ -307,7 +307,7 @@ export default function SellerDashboardPage() {
             <RotateCcw className="w-4 h-4" />
             Returns &amp; Disputes
             {returns.length > 0 && (
-              <Badge variant="warning" size="sm">
+              <Badge color="warning" variant="subtle" size="sm">
                 {returns.length}
               </Badge>
             )}

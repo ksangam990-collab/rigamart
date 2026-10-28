@@ -109,13 +109,13 @@ export default function MyOrdersPage() {
     switch (status) {
       case 'Delivered':
         return (
-          <Badge variant="success" size="sm" className="gap-1">
+          <Badge color="success" variant="subtle" size="sm" className="gap-1">
             <CheckCircle2 className="w-3.5 h-3.5" /> Delivered
           </Badge>
         );
       case 'Shipped':
         return (
-          <Badge variant="brand" size="sm" className="gap-1">
+          <Badge color="brand" variant="subtle" size="sm" className="gap-1">
             <Truck className="w-3.5 h-3.5" /> Out for Delivery
           </Badge>
         );
@@ -127,25 +127,25 @@ export default function MyOrdersPage() {
         );
       case 'Placed':
         return (
-          <Badge variant="warning" size="sm" className="gap-1">
+          <Badge color="warning" variant="subtle" size="sm" className="gap-1">
             <Clock className="w-3.5 h-3.5" /> Order Placed
           </Badge>
         );
       case 'Cancelled':
         return (
-          <Badge variant="danger" size="sm" className="gap-1">
+          <Badge color="danger" variant="subtle" size="sm" className="gap-1">
             <XCircle className="w-3.5 h-3.5" /> Cancelled
           </Badge>
         );
       case 'Return Requested':
         return (
-          <Badge variant="warning" size="sm" className="gap-1">
+          <Badge color="warning" variant="subtle" size="sm" className="gap-1">
             <RotateCcw className="w-3.5 h-3.5" /> Return Requested
           </Badge>
         );
       case 'Returned':
         return (
-          <Badge variant="success" size="sm" className="gap-1">
+          <Badge color="success" variant="subtle" size="sm" className="gap-1">
             <CheckCircle2 className="w-3.5 h-3.5" /> Returned & Refunded
           </Badge>
         );

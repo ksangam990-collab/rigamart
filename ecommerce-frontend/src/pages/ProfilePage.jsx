@@ -391,7 +391,7 @@ function AddressCard({ addr, onEdit, onDelete }) {
           <div className="flex items-center gap-2 flex-wrap">
             <p className="text-sm font-bold text-ink">{addr.name}</p>
             {addr.isDefault && (
-              <Badge variant="brand" size="sm" className="gap-1">
+              <Badge color="brand" variant="subtle" size="sm" className="gap-1">
                 <Star className="w-2.5 h-2.5" /> Default
               </Badge>
             )}

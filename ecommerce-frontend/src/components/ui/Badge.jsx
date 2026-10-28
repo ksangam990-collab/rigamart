@@ -51,8 +51,16 @@ export function Badge({
     md: 'text-xs px-2.5 py-1 rounded-full font-medium tracking-tight',
   };
 
-  const currentVariant = variantClasses[variant] || variantClasses.subtle;
-  const colorStyle = currentVariant[color] || currentVariant.brand;
+  // Support passing color name in variant prop (e.g. variant="danger" or variant="warning")
+  let resolvedVariant = variant;
+  let resolvedColor = color;
+  if (!variantClasses[variant] && variantClasses.subtle[variant]) {
+    resolvedColor = variant;
+    resolvedVariant = 'subtle';
+  }
+
+  const currentVariant = variantClasses[resolvedVariant] || variantClasses.subtle;
+  const colorStyle = currentVariant[resolvedColor] || currentVariant.brand;
 
   return (
     <span
@@ -68,7 +76,7 @@ export function Badge({
         <span
           className={cn(
             'w-1.5 h-1.5 rounded-full shrink-0',
-            dotClasses[color] || dotClasses.brand
+            dotClasses[resolvedColor] || dotClasses.brand
           )}
           aria-hidden="true"
         />

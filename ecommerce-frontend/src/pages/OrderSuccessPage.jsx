@@ -195,16 +195,16 @@ export default function OrderSuccessPage() {
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-muted">Payment Method:</span>
-            <Badge variant="brand" size="sm">{paymentMethod}</Badge>
+            <Badge color="brand" variant="subtle" size="sm">{paymentMethod}</Badge>
           </div>
           
           <div className="grid grid-cols-2 gap-2 pt-2 border-t border-line">
-            <Button variant="outline" size="sm" as={Link} to={`/orders/${orderId}`} className="text-xs">
+            <Link to={`/orders/${orderId}`} className="inline-flex items-center justify-center h-8 px-3 text-xs rounded-lg border border-brand text-brand hover:bg-brand-soft transition-all font-medium">
               <Download className="w-3.5 h-3.5 mr-1" /> Invoice
-            </Button>
-            <Button variant="outline" size="sm" as={Link} to={`/orders/${orderId}`} className="text-xs">
+            </Link>
+            <Link to={`/track-order?orderId=${orderNumber || orderId}`} className="inline-flex items-center justify-center h-8 px-3 text-xs rounded-lg border border-brand text-brand hover:bg-brand-soft transition-all font-medium">
               <PackageCheck className="w-3.5 h-3.5 mr-1" /> Track
-            </Button>
+            </Link>
           </div>
         </motion.div>
 

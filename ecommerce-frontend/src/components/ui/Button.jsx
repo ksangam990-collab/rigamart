@@ -12,6 +12,8 @@ const variantClasses = {
     'bg-transparent text-ink hover:bg-brand-soft/60 active:bg-brand-soft focus-visible:ring-brand',
   destructive:
     'bg-danger text-white hover:bg-danger/90 active:bg-danger/90 shadow-subtle focus-visible:ring-danger',
+  danger:
+    'bg-danger text-white hover:bg-danger/90 active:bg-danger/90 shadow-subtle focus-visible:ring-danger',
   accent:
     'bg-accent text-ink hover:brightness-95 active:brightness-90 shadow-subtle font-semibold focus-visible:ring-accent',
 };

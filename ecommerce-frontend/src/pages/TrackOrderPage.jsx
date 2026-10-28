@@ -221,8 +221,8 @@ export default function TrackOrderPage() {
         {trackingData && (
           <motion.div
             variants={fadeInUp}
-            initial="initial"
-            animate="animate"
+            initial="hidden"
+            animate="visible"
             className="space-y-6"
           >
             {/* Order Summary Header Card */}

@@ -449,7 +449,7 @@ export default function OrderDetailPage() {
                 </div>
               </div>
 
-              <Badge variant="warning" size="sm">
+              <Badge color="warning" variant="subtle" size="sm">
                 {order.returnRequest.status === 'Requested' && 'Pending Seller Review'}
                 {order.returnRequest.status === 'Approved' && 'Return Approved'}
                 {order.returnRequest.status === 'Pickup_Scheduled' && 'Courier Pickup Scheduled'}
